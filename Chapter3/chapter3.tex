@@ -5,8 +5,13 @@
 \chapter{Summary of Included Papers}
 \label{chap:summary_of_included_papers}
 
-\noindent \lipsum[1]
+\noindent 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Paper I - ...}
-\label{sec:paper1}
+
+\begingroup
+\renewcommand\thesection{\Alph{section}} % for changing section numbering to alphabetic
+\input{Chapter3/paperA}
+\input{Chapter3/paperB}
+\input{Chapter3/paperC}
+
+\endgroup
