@@ -14,7 +14,6 @@
 \usepackage{epstopdf}
 \usepackage{subfig}
 \usepackage{cite}
-\usepackage{hyperref}
 \usepackage{graphicx}
 \usepackage{bm}	%Command \bm{make bold}
 \usepackage{algorithm}
@@ -24,6 +23,12 @@
 \usepackage[x11names]{xcolor}
 \usepackage{lipsum}
 
+\hypersetup{
+	colorlinks = true,
+	citecolor = {blue},
+	%menubordercolor = {blue},
+	%linkbordercolor = {blue},
+}
 
 \usepackage{tikz}
 \usetikzlibrary{tikzmark,calc,decorations.pathreplacing}
@@ -94,7 +99,11 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%% TABLE OF CONTENTS %%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begingroup
+\hypersetup{hidelinks} % to remove hyperlink color on contents
 \tableofcontents
+\endgroup
+%\tableofcontents
 
 %% MK: Add List of Figures & Tables?
 
