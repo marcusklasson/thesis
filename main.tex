@@ -25,6 +25,7 @@
 
 % my packages
 \usepackage{comment}
+\usepackage{afterpage} % for changing page color before included papers
 
 \hypersetup{
 	colorlinks = true,
@@ -39,8 +40,29 @@
 \newcommand{\Height}{2}
 \newcommand{\Width}{2}
 
-\renewcommand{\labelitemi}{\textcolor{IndianRed3}{\bfseries\textbullet}}
 
+\makeatletter
+%\@addtoreset{section}{part}
+%\renewcommand\part{\thispagestyle{empty}}
+%%% All this for removing page number on part environment
+%%% See https://latex.org/forum/viewtopic.php?t=4293
+\renewcommand\part{%
+	\if@openright
+	\cleardoublepage
+	\else
+	\clearpage
+	\fi
+	\thispagestyle{empty}%
+	\if@twocolumn
+	\onecolumn
+	\@tempswatrue
+	\else
+	\@tempswafalse
+	\fi
+	\null\vfil
+	\secdef\@part\@spart}
+%%%
+\makeatother
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%% Document starts here %%%%%%%%
@@ -129,9 +151,10 @@
 \renewcommand{\bibname}{References}% changes default name Bibliography to References
 \bibliography{Refs} % References file
 
+
 \part{Included Papers}
-\chapter{Paper A}
-hej
+\input{PaperA/paperA}
+\input{PaperB/paperB}
 	
 
 %--------------------------------------------------
