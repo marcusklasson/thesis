@@ -1,4 +1,11 @@
 \section{Machine Learning} 
 \label{sec:machine_learning}
 
-In this section, we give a brief introduction to basics in machine learning and some mathematical notation that will be used in this chapter. The overall goal is to learn some phenomena from a set of data points $\{x_1, \dots, x_N\}$. hej11 11111111111
+In this section, we give a brief introduction to basics in machine learning and some mathematical notation that will be used in this chapter. The overall goal is to learn some phenomena from a set of $N$ data points $X = \{\vx_1, \dots, \vx_N\}$ where $\vx_i \in \R^{D}$ has $D$ dimensions for $1 \leq i \leq N$. The learning part is referred to as the training phase where we the goal is to fit the machine learning model to the data points, or observations, $X$. The objective of the training phase is determined by what the target task is tasks that we wish to solve using the model. Next, we give a brief description of three paradigms in machine learning with different end goals depending on what we wish to explore.
+
+\paragraph{Supervised Learning.} Many types of data have a corresponding target $\vy$ that explains the content of each data point. Cases where the target comes from a discrete number of classes and the goal is to determine which class that the data point corresponds to are called classification problem. An classic example of a classification problem is distinguishing whether there is a cat or dog in images. If the target $\vy$ is a continuous valued variable and the goal is to predict this value, then we have a regression problem, where an example can be predicting the outdoor temperature tomorrow given the current temperature. The goal for both of these problems is to learn a function $f(\vx)$ that can classify or predict the given target data as accurately as possible. 
+
+\paragraph{Unsupervised Learning.} For some problems, we may only have the data points for our disposal where we are interested in finding some patterns in the given data. The goal in unsupervised learning problems can be to discover similar groups with clustering techniques, or estimating the distribution of the data known as density estimation. The practitioner typically needs to define some assumptions about the data, e.g., how the similarity between two data points should be measured, before we can execute the algorithm for discovering the patterns.
+
+\paragraph{Reinforcement Learning.}    
+
