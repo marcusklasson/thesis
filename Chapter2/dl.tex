@@ -5,9 +5,25 @@ Neural networks is a class of machine learning models which popularity have grow
 
 \MK{Feel like I would like to include some brief info on CNNs and RNNs, but just a paragraph long for each. Maybe also describe the Autoencoders a bit. }
 
-\subsection{Deep Generative Models}
-\label{sec:deep_generative_models}
+\subsection{Variational Autoencoders}
+\label{sec:variational_autoencoders}
+
+Generative models are used for approximating a data distribution $p_{data}$ from a given set of samples $\gD$. In most cases, we parameterize the distribution with $\vtheta$ and learn the parameters from the given data by minimizing some distance metric between the estimated distribution $p_{\vtheta}$ and $p_{data}$. In deep generative models, the distribution $p_{\theta}$ is parameterized by a neural network where the parameters $\vtheta$ represent the weights and biases in the network. These models can be broadly divided into three classes of models, namely Variational Autoencoders (VAEs)~\cite{kingma2013auto}, Generative Adversarial Networks (GANs)~\cite{goodfellow2014generative}, and Normalizing Flows~\cite{rezende2015variational}. Their commonality is that they are based on latent variable models where it is assumed that the observed data is generated from some hidden process from a simpler distribution than $p_{data}$. However, which class of models to select depends on the application and the goals with the task. In this thesis, we focus on VAEs because of their capability of learning lower-dimensional representations.
+
+A key ingredient in learning generative models is to introduce a latent variable $\vz$ where we assume that $\vz$ is related to the observed variable $\vx$ through the data generation process. We can still estimate the parameterized distribution when introducing the latent variables since
+\begin{align}
+	p_{\vtheta}(\vx) = \int p_{\vtheta}(\vx, \vz) \,d\vz = \int p_{\vtheta}(\vx | \vz) p(\vz) \,d\vz,
+\end{align}
+where we incorporate $\vz$ to obtain the joint distribution $p_{\vtheta}(\vx, \vz)$ and use the chain rule for probabilities to obtain the likelihood $p_{\vtheta}(\vx | \vz)$ and the prior distribution $p(\vz)$. The prior $p(\vz)$ is where we can define our assumption of how the underlying hidden reasons are distributed by selecting a simple and well-known distribution for this space, e.g., a Gaussian distribution. The goal with latent variable models is often to compute the posterior $p_{\vtheta}(\vz | \vx)$ over the latent variables given the data $\vx$ which can be done using Bayes' rule
+\begin{align}
+	p_{\vtheta}(\vz | \vx) = \frac{p_{\vtheta}(\vx | \vz) p(\vz)}{p_{\vtheta}(\vx)}. 
+\end{align}
+Unfortunately, the evidence $p_{\vtheta}(\vx)$ is very hard to compute as it requires calculating the integral $\int p_{\vtheta}(\vx, \vz) \,d\vz$ over all dimensions of the latent variable space. To overcome this issue, we will propose a distribution $q_{\vz}$ that should approximate the true psoterior $p_{\vtheta}(\vz | \vx)$. Varitional Inference (VI)~\cite{blei2017variational, zhang2018advances} is a method for approximating probabilty densities through optimization which is used in VAEs for approximating the posterior. Next, we give a description of how the posteiror is approximated.
+%The approximation can either be done using Markov Chain Monte Carlo (MCMC)~\cite{andrieu2003introduction} or Variational Inference (VI)~\cite{blei2017variational, zhang2018advances}. In MCMC, the idea is to use an easy-to-sample proposal distribution to draw samples that are used approximating the target distribution, while VI is a method for approximating probabilty densities through optimization. 
+
 
 
 
 \subsection{Multi-view Learning}
+
+
