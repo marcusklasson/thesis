@@ -3,3 +3,22 @@
 \label{sec:paperC}
 
 \textbf{Authors:} Marcus Klasson, Hedvig Kjellström, Cheng Zhang. 
+
+\paragraph{Summary.}
+Replay-based continual learning (CL) has shown to be successful in mitigating catastrophic forgetting, where most works focus on improving the sample quality in the commonly small replay memory. However, in many real-world applications, replay memories would be limited by constraints on processing time rather than storage capacity as most organizations store all historical data in the cloud. Inspired by human learning, we demonstrate that scheduling over the time to replay is critical to the final performance with finite memory resources. To this end, we propose to learn the time to learn for a CL system, in which we learn schedules over which tasks to replay at different times. We use Monte Carlo tree search to illustrate this idea and show that our method can be combined with any replay-based method and memory selection technique. We perform extensive evaluation showing that learning replay schedules can significantly improve the performance compared to baselines without learned scheduling. Our results indicate that the learned schedules are also consistent with human learning insights.
+
+
+
+
+Replay-based methods in CL is a common approach to mitigate forgetting previously learned tasks by using small set of data from old tasks of known items that the model can rehearse itself on when learning about new tasks. In many real-world scenarios, there can be a large amount of data available on the cloud that has been used for learning the classifiers. However, since we wish the system to adapt to new knowledge fast without forgetting, we need a method for selecting which tasks to rehearse on from a large amount of data available such that the system maintains high overall performance. To this end, we propose replay scheduling where we learn schedules over which tasks to select for replay. 
+
+%To the best of our knowledge, we are the first to address this scenario in continual learning literature and we hope that it can adjust current research closer to real-world needs. We show that considering the time to replay is important in this continual learning scenario where historical data is available but processing time is limited. 
+
+%In ~\cite{klasson2021learn}, we addressed the scenario where the goal is to select which classes to rehearse on from a large amount of data to mitigate catastrophic forgetting in classifiers. 
+\MK{Need to re-write this nicely so that I add that we propose a new CL setting to bring CLÖ research closer to real-world needs.}
+
+
+\paragraph{Author Contributions.} 
+CZ presented the idea and MK and CZ contributed to formalizing the methodology. 
+MK performed all the experiments. 
+All authors took part in discussing the results and contributed to writing the manuscript. 
