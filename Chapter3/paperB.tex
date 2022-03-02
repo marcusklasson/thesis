@@ -1,5 +1,17 @@
 
-\section{Using Variational Multi-view Learning for Classification of Grocery Items}
+\section{Using Variational Multi-View Learning for Classification of Grocery Items}
 \label{sec:paperB}
 
 \textbf{Authors:} Marcus Klasson, Cheng Zhang, Hedvig Kjellström. 
+
+\paragraph{Summary.} 
+We investigate whether training image classifiers can benefit from learning joint representations of grocery items using multi-view learning over the natural images and web-scraped information of the grocery items in the Grocery Store dataset (see Paper \ref{sec:paperA}). We employ a deep multi-view model based on VAEs called Variational Canonical Correlation Analysis (VCCA)~\cite{wang2016deep} for learning joint representations of the different data types, i.e., natural images, iconic images, and text descriptions. We performed a thorough ablation study over all data types to demonstrate how they contribute individually to enhancing the classification performance. Furthermore, we apply two classification approaches where we (i) train the classifier on the joint latent representations, and (ii) using a generative classifier by incorporating a class decoder to the VCCA model that can be used for classifying images. 
+
+We performed a thorough ablation study over all data types to demonstrate how they contribute individually to enhancing the classification performance. To gain further insights into our results, we visualized the learned representations of the grocery items from VCCA and discussed how the iconic images and text descriptions help the model to better distinguish between the groceries. Our results show that the iconic images help to group the items based on their color and shape while text descriptions separate the items based on differences in ingredients and flavor. Finally, we concluded that utilizing the iconic images and text descriptions yielded better classification results than only using natural images. 
+
+
+\paragraph{Author Contributions.} 
+CZ and HK presented the idea and all authors contributed to formalizing the methodology. 
+MK performed all the experiments and created the visualizations. 
+All authors took part in discussing the results.
+All authors contributed to writing the manuscript. 
