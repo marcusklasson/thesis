@@ -11,7 +11,7 @@ One of the main goals with machine learning is to have models that generalize to
 
 There are several approaches for enabling better generalization for deep learning models. A good start is to collect datasets that are similar and represent the events in the environment where the model will be deployed. Related to this, one can also collect different data types from various modalities, such as visual signals in the form of images and video as well as natural language which can be written or spoken, if these are available in the data collection process and are sensible for the task to be solved. Multimodal machine learning opens up the possibility of learning correspondences between the different data types to gain better understanding of the phenomenon of interest~\cite{baltruvsaitis2018multimodal, xu2013survey}, which can help the model to be more accurate and robust. However, in order to enhance the utility of machine learning models, they should be capable of continuously updating their knowledge as many environments where object recognition is useful are ever-changing~\cite{delange2021continual, parisi2019continual}. We should build models that can add new objects of interest to recognize as well as delete concepts that are obsolete or non-relevant. It would also be useful if we could update models with personalized objects to recognize to narrow down the scope of items to recognize for object recognizers to make the tasks easier.  
 
-In this chapter, we cover related works on datasets on object recognition both with iamge and text data in Section XX. Next, we provide a description of machine learning, especially deep learning, models that were used in the included papers in Section XX. In Section XX, we discuss the setting of continual learning for updating the knowledge of machine learning models that is aiming to make the models capable of handling ever-changing environments as a step towards to enabling life-long learning. 
+In this chapter, we cover related works on datasets on object recognition both with image and text data in Section \ref{sec:datasets_for_object_recognition}. Next, we provide a description of machine learning, especially deep learning, models that were used in the included papers in Section \ref{sec:machine_learning} and \ref{sec:deep_learning}. In Section \ref{sec:continual_learning}, we discuss the setting of continual learning for updating the knowledge of machine learning models that is aiming to make the models capable of handling ever-changing environments as a step towards to enabling life-long learning. 
 
 
 
@@ -31,9 +31,8 @@ In this chapter, we cover related works on datasets on object recognition both w
 % Deep Learning introduction
 \input{Chapter2/dl}
 
-
-\section{Continual Learning in Neural Networks}
-\label{sec:continual_learning}
+% Continual Learning introduction
+\input{Chapter2/cl}
 
 
 
