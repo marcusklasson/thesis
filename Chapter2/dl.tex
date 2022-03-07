@@ -40,6 +40,11 @@ where we applied Jensen's inequality between the third and fourth line to obtain
 where the second term is the Kullback-Leibler (KL) divergence between the approximate posterior and the prior. The KL divergence can be computed exactly when selecting both $q_{\vphi}(\vz | \vx)$ and $p(\vz)$ to be Gaussian densities, while the expectation of the log-likelihood can be estimated with Monte Carlo approximation. Furthermore, the reparameterization trick~\cite{kingma2013auto, rezende2014stochastic} is used to enable computing the gradients through the sampling step when estimating the log-likelihood that can be used for backpropagation. 
 
 
-\subsection{Multi-view Learning}
+\subsection{Multi-View Learning}
+
+Humans make use of many different sensory signals to recognize objects in the world. Visual signals are rich in the sense they convey the identity of objects. But even without vision capabilities, we can use touch, smell, and sound to ease the recognition problem of a near item, or even text for describing the features of objects. Combining each of these signals should help us obtain better recognition performance as we are adding information. This is a popular approach in machine learning to improve the recognition performance by utilizing various \textit{modalities} and \textit{views}. The difference between a modality and a view is that modalities refers to the way in which something happens or is experienced~\cite{baltruvsaitis2018multimodal}, e.g., natural language that can be written or spoken and visual signals in the form of images and videos, while views can be broadly defined as any sensor stream of a scene or event~\cite{salzmann2010factorized}. Example of views can be images taken from different camera view points or different environments, as long as the camera sensors are different. Another example are written or spoken languages where each language is considered its own view. In the rest of this section, we will discuss multi-view learning rather than multimodal learning as we utilize images from two different views in Paper \ref{sec:paperB} when training classifiers. 
+
+
+
 
 
