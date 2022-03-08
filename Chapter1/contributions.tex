@@ -7,7 +7,9 @@ In this section, we summarize the contributions of each of the included papers a
 \subsection{Paper A: A Hierarchical Grocery Store Image Dataset with Visual and Semantic Labels}
 \label{sec:paperA}
 
-\textbf{Authors:} Marcus Klasson, Cheng Zhang, Hedvig Kjellström. 
+\begin{enumerate}
+	\item[] \textbf{Marcus Klasson}, Cheng Zhang, Hedvig Kjellström. In \textit{IEEE Winter Conference on Applications of Computer Vision (WACV) 2019}.
+\end{enumerate}
 
 \paragraph{Summary}
 We collect a dataset with natural images of raw and refrigerated grocery items taken in grocery stores in Stockholm, Sweden, for evaluating image classification models on a challenging real-world scenario. The data collection was performed by taking photos of groceries with a mobile phone to simulate a scenario of grocery shopping using an assistive vision app. Furthermore, we downloaded iconic images and text descriptions of each grocery item by web-scraping a grocery store website to enhance the dataset with information describing the semantics of each individual item. the items are grouped based on their type, e.g., apple, juice, etc., to provide the dataset with a hierarchical labeling structure. 
@@ -22,7 +24,9 @@ CZ and HK presented the idea and the data collection procedure for the natural i
 \subsection{Paper B: Using Variational Multi-View Learning for Classification of Grocery Items}
 \label{sec:paperB}
 
-\textbf{Authors:} Marcus Klasson, Cheng Zhang, Hedvig Kjellström. 
+\begin{enumerate}
+	\item[] \textbf{Marcus Klasson}, Cheng Zhang, Hedvig Kjellström. In \textit{Patterns, Volume 1(8) (2020)}.
+\end{enumerate}
 
 \paragraph{Summary} 
 We investigate whether training image classifiers can benefit from learning joint representations of grocery items using multi-view learning over the natural images and web-scraped information of the grocery items in the Grocery Store dataset (see Paper \ref{sec:paperA}). We employ a deep multi-view model based on VAEs called Variational Canonical Correlation Analysis (VCCA)~\cite{wang2016deep} for learning joint representations of the different data types, i.e., natural images, iconic images, and text descriptions. We performed a thorough ablation study over all data types to demonstrate how they contribute individually to enhancing the classification performance. Furthermore, we apply two classification approaches where we (i) train the classifier on the joint latent representations, and (ii) using a generative classifier by incorporating a class decoder to the VCCA model that can be used for classifying images. 
@@ -40,7 +44,9 @@ All authors contributed to writing the manuscript.
 \subsection{Paper C: Learn the Time to Learn: Replay Scheduling for Continual Learning}
 \label{sec:paperC}
 
-\textbf{Authors:} Marcus Klasson, Hedvig Kjellström, Cheng Zhang. 
+\begin{enumerate}
+	\item[] \textbf{Marcus Klasson}, Cheng Zhang, Hedvig Kjellström. Submitted to \textit{International Conference on Machine Learning (ICML) 2022}.
+\end{enumerate}
 
 \paragraph{Summary}
 In this paper, we show that learning the time to replay different tasks can be critical for continual learning (CL) performance in replay-based methods. As the main assumption in replay-based CL is that only a small set of historical data can be re-visited for mitigating catastrophic forgetting, most works have focused on improving the sample quality of the replay memory. However, in many real-world applications, historical data is accessible at all times, e.g., by storing it on the cloud. But although all historical data could be stored, retraining machine learning systems on a daily basis is prohibitive due to processing times and operational costs. Therefore, small replay memories are still needed in CL to mitigate catastrophic forgetting when learning new tasks. To this end, we propose to learn the time to learn for a CL system, in which we learn schedules over which tasks to replay at different times. Inspired by human learning, we demonstrate that scheduling over the time to replay is critical to the final CL performance with finite memory resources. We then illustrate our idea with scheduling over which tasks to replay by learning such policy with Monte Carlo tree search. We perform extensive evaluation showing that learning replay schedules can significantly improve the performance compared to baselines without learned scheduling. We also show that our method can be combined with any replay-based method and memory selection technique. Finally, our results indicate that the learned schedules are also consistent with human learning insights.
@@ -56,7 +62,11 @@ All authors took part in discussing the results and contributed to writing the m
 \subsection{Paper D: Meta Policy Learning for Replay Scheduling in Continual Learning}
 \label{sec:paperD}
 
-\textbf{Authors:} Marcus Klasson, Hedvig Kjellström, Cheng Zhang. 
+\begin{enumerate}
+	\item[] \textbf{Marcus Klasson}, Cheng Zhang, Hedvig Kjellström. Under preparation for conference submission.
+\end{enumerate}
+
+%\textbf{Authors:} Marcus Klasson, Hedvig Kjellström, Cheng Zhang. 
 
 \paragraph{Summary} 
 
