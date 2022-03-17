@@ -7,7 +7,7 @@ Furthermore, we demonstrate in Paper B how more easily accessible information ab
 
 A valuable feature of assistive vision systems is the capability of adapting to new object classes. 
 The main challenge here is to avoid catastrophically forgetting previously learned knowledge when the classifier is updated with new classes. 
-In Paper C, we propose a new continual learning setting for replay-based methods that aligns with real-world needs where constraints are placed on processing time rather than the storage capacity of old samples. 
+In Paper C, we propose a new continual learning setting for replay-based methods that aligns well with real-world needs where constraints are placed on processing time rather than the storage capacity of old samples. 
 %Replay methods mitigate this problem efficiently by mixing previous data samples from a limited memory buffer with the training samples of the new classes during learning. In Paper C, we propose a new continual learning setting that is close to real-world needs where constraints are placed on processing time rather than the storage capacity of old samples. 
 We then study the timing of replaying certain tasks and show that learning replay schedules over which tasks to replay can be critical for the final classification performance in our proposed setting. 
 Finally, in Paper D, we present a method based on reinforcement learning for learning a policy for selecting which tasks to replay at different times. The benefit of our learned replay scheduling policy is that it can be applied to any new continual learning scenario for mitigating catastrophic forgetting in a classifier without additional computational cost. 
