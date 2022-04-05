@@ -5,15 +5,18 @@
 \chapter{Introduction}
 \label{chap:introduction}
 
-Vision is probably the most important sense that humans possess. Our society is built on having this ability. For example, if we would like to cross a street, there are thick colored stripes on the road or signs above head height that indicate where the cross walk is located such that we can cross the street in an appropriate way. Another example is how we communicate through text where words and sentences are composed by structured sequences of symbols that constitute a specific language. Much media and entertainment, such as computers, television, and theatres, with performers acting various scenes requires our capability to see. Furthermore, it has been shown that being able to create visual images facilitate reading comprehension for middle school struggling readers~\cite{hibbing2003picture}. 
-Possessing normal vision capabilities basically makes our lives easier when it comes to performing actions to reach various goals, communicating with other people, and learning new concepts.  
+Vision is probably the most important of all senses that humans possess. Our society is built on having this ability. For example, if we would like to cross a street, there are thick colored stripes on the road or signs above head height that indicate where the cross walk is located such that we can cross the street in an appropriate way. Another example is how we use text to communicate with each other, where words and sentences are composed by structured sequences of symbols that constitute a specific language. 
+%Much media and entertainment, such as computers, television, and theatres, with performers acting various scenes requires our capability to see. 
+Furthermore, it has been shown that learning from both images and text can improve comprehension over learning from text only~\cite{eitel2013picture, hibbing2003picture}. 
+%it has been shown that being able to create visual images facilitate reading comprehension for middle school struggling readers~\cite{hibbing2003picture}. 
+Possessing normal vision capabilities basically make everyday tasks easier when it comes to reaching destinations in the world, communicating with other people, and learning new concepts.  
 
-In 2020, it was estimated to be 43.3 million people who are blind and 295 million people with moderate to severe visual impairment in the world~\cite{bourne2021trends}. To enhance the mobility of visually impaired (VI) people, there exist various kinds of assistive devices and tools, such as screen readers and Braille typewriter machines, for supporting them with receiving information and communicating through text. More recently, several computer vision-based assistive vision tools have emerged in the form of wearable devices and mobile applications for helping VIs with tasks where visual information is a must, for example, wayfinding in natural environments~\cite{coughlan2009functional, kacorri2018environmental, loomis2020assisting} and object recognition~\cite{ahmetovic2020recog, kacorri2017teachable, lee2019hands}. 
+In 2020, it was estimated to be 43.3 million people who are blind and 295 million people with moderate to severe visual impairment in the world~\cite{bourne2021trends}. To enhance the mobility of visually impaired (VI) people, there exist various kinds of assistive devices and tools, such as screen readers and Braille typewriter machines, for supporting them with receiving information and communicating through text. More recently, several computer vision-based assistive vision tools have emerged in the form of wearable devices and mobile applications for helping VIs with tasks where visual information is a must, for example, object recognition~\cite{ahmetovic2020recog, jafri2014computer, kacorri2017teachable} and wayfinding in natural environments~\cite{coughlan2009functional, kacorri2018environmental, loomis2020assisting} and . 
 
-Despite the recent successes in computer vision~\cite{he2016deep, redmon2017yolo9000, xu2015show}, these methods can face several challenges when deployed in the real world which makes their recognition performance suffer. For example, it can be difficult for the method to distinguish between similar items on a fine-grained level, such as different brands of apples and pears, as well as performing robustly in environments with noisy backgrounds and poor lighting. 
-Part of the reason for such challenges is that specifying a model of the visual world that has been injected with knowledge about the rich complexity that can exist in images is very difficult~\cite{szeliski2010computer}. Therefore, there is a necessity for developing computer vision methods that can recognize various appearances of objects, adapt to changes of known objects, and learn what new objects look like as well as executing these tasks in a robust and time-efficient manner. 
+Despite the recent successes in computer vision~\cite{he2016deep, redmon2017yolo9000, xu2015show}, these methods can face several challenges when deployed in the real-world which makes their recognition performance suffer. For example, it can be difficult for the methods to distinguish between similar items on a fine-grained level, such as different brands of apples and pears, as well as performing robustly in environments with noisy backgrounds and poor lighting. 
+Part of the reason for such challenges is that specifying a model of the visual world that has been injected with knowledge about the rich complexity that can exist in images is very difficult~\cite{szeliski2010computer}. Therefore, there is a necessity for developing computer vision methods that can recognize different appearances of objects, adapt to changes of known objects, and learn what new objects look like. At the same time, these tasks should be possible to execute in a time-efficient and robust manner. 
 
-In this thesis, we address the challenges on robustness in fine-grained classification as well as how the method can learn to recognize new object classes. We will begin this introduction by briefly describing vision impairments in Section \ref{sec:vision_impairments}, followed by a summary of computer vision-based assistive technologires in Section \ref{sec:cv_based_assistive_tech}. Then we describe the scope of the thesis in Section \ref{sec:scope_of_thesis} and summarize the contributions of the included papers in Section \ref{sec:contributions}. Finally, we give the thesis outline in Section \ref{sec:outline} to the rest of the thesis. 
+In this thesis, we address the challenges on robustness in fine-grained classification as well as how the method can learn to recognize new object classes. We will begin this introduction by briefly describing vision impairments in Section \ref{sec:vision_impairments}, followed by a summary of assistive vision technologires in Section \ref{sec:assistive_vision}. Then we describe the scope of the thesis in Section \ref{sec:scope_of_thesis} and summarize the contributions of the included papers in Section \ref{sec:contributions}. Finally, in Section \ref{sec:outline}, we give the outline to the rest of the contents in this thesis. 
 
 
 %Vision is one of the most important senses that humans possess. It is an amazing process of how the eyes and brain translate light waves into interpreted images of our surroundings. Reflected light waves from objects are bent, or refracted, when passing through the cornea, then bent again passing through the lens and eventually hits the retina. The image is translated into impulses that travels to the brain, more specifically the occipital lobe, through the optic nerve such that the image can be interpreted. The shape of eyes affect how we things in the world are seen and kept in focus. For people with normal vision, the light waves hits the retina at the focal point where the light waves coincide. However, the eyes are longer for nearsighted eyes which moves the focal point closer to the lens such that the light waves are more spread out across the retina. For farsighted people, the eyes are shorter which moves the focal point behind the retina. Luckily, the position of the focal point can be corrected for both near- and farsighted eyes by placing a concave and convex lens respectively in front of the eyes, e.g., by using eyeglasses. However, there exist many severe cases of low vision where not even eyeglasses can help where other kinds of help is necessary for assisting the people in situations where vision is a necessity. 
@@ -27,9 +30,9 @@ In this thesis, we address the challenges on robustness in fine-grained classifi
 
 \section{Vision Impairments}\label{sec:vision_impairments}
 
-Vision impairment (VI) is defined as the decrease of one's ability to see from various distances [citation WHO ICD]. There are different types of VIs ranging from various degrees of blindness to having issues with seeing from far or near distances. The visual capabilities are in general assessed by measuring the \textit{visual acuity} (sharpness) of seeing, for example, a letter or symbol, from some fixed distance. The visual acuity measured differently based on whether near- or far-sighted VI is assessed. For far-sighted VI, the visual acuity is calculated by the ratio between the distance that the subject can see the item and the distance a normal-sighted person could recognize the item. When assessing near-sighted VI, one checks the font size of letters that the subject can see using a standardized point system for measuring the symbol size [world report on vision]. Worth noting is that to be considered having a VI, it is taken into account whether the the vision capabilities are possible to correct with eye-glasses or contact lenses [citeation here].   
+Vision impairment (VI) is defined as the decrease of one's ability to see from various distances~\cite{who2022international}. There are different types of VIs ranging from various degrees of blindness to having issues with seeing from far or near distances. The visual capabilities are in general assessed by measuring the \textit{visual acuity} (sharpness) of seeing, for example, a letter or symbol, from some fixed distance. The visual acuity measured differently based on whether near- or far-sighted VI is assessed. For far-sighted VI, the visual acuity is calculated by the ratio between the distance that the subject can see the item and the distance a normal-sighted person could recognize the item. When assessing near-sighted VI, one checks the font size of letters that the subject can see using a standardized point system for measuring the symbol size~\cite{who2019world}. %Worth noting is that to be considered having a VI, it is taken into account whether the the vision capabilities are possible to correct with eye-glasses or contact lenses [citeation here].   
 
-In 2020, it was estimated that 338 million people possess moderate to severe VI globally, including 43 million people that are blind [Bourne et al]. 
+In 2020, it was estimated that 338 million people possess moderate to severe VI globally, including 43 million people that are blind~\cite{bourne2021trends}. 
 Furthermore, the World Health Organization (WHO) have estimated that at least 2.2 billion people live with a near or distance VI, where at least 1 billion cases could have been prevented or yet has to be addressed~\cite{who2019world}. The untreated cases are projected to grow to 1.7 billion people by 2050 mainly due to population growth in the world as well as increased aging among the populations~\cite{bourne2021trends}. 
 The leading causes for vision loss are uncorrected refractive errors, untreated cataracts, age-related macular degenerationm, glaucoma, diabetic retinopathy, where 90\% of such cases are preventable and treatable~\cite{steinmetz2021causes}. The causes for vision loss also differs between countries and areas with different incomes.  
 
@@ -63,7 +66,9 @@ There exists several tools for assisting VI people with everyday tasks. The \tex
 
 Cameras are used by people with VIs, including blindness, to record events and memories similarly as normal-sighted people~\cite{jayant2011supporting}. This has opened up for opportunities where VI people can use their cameras for more than recording events, for example, object recognition, document text recognition, and color identification. Object recognition has been shown to be considered an everyday challenge, where VI people would like to ask questions about objects where visual information is necessary for identification~\cite{brady2013visual}. For example, it can be very difficult to distinguish between different containers and packages that have similar shapes but different content without being able to see. These findings have encouraged development of technical aids that use computer vision for assisting VI people. 
 
-In the last decade, we have seen several variants of assistive vision technologies emerging on the market. There exist many applications for mobile phones where various visual tasks have been cramped in into the app, such as object and face recognition, barcode scanning, color and currency identification, and text recognition~\cite{microsoft2017seeing} [taptapsee, google lookout]. Moreover, there exists wearable devices with similar capabilities as the mobile phone apps [orcam, Envision AI] that also use computer vision for assistance. An alternative to the computer vision-based apps there are other mobile applications where VI users can have a video call with sighted volunteers that help them with any kind of task requiring visual capabilities [be my eyes]. Despite that these assistive vision technologies has opened up for VI people being more independent, there remains several challenges to tackle regarding system requirements (computing on device, internet connection, update to new classes) and privacy concerns (can other people overhear what I'm asking about, and are other people OK with that I take photos in the public for helping myself?).  
+In the last decade, we have seen several variants of assistive vision technologies emerging on the market. There exist many applications for mobile phones where various visual tasks have been cramped in into the app, such as object and face recognition, barcode scanning, color and currency identification, and text recognition~\cite{microsoft2017seeing, clary2018lookout, cloudsight2013taptapsee, envision2018app}. Moreover, there exists wearable devices with similar capabilities as the mobile phone apps~\cite{orcam2019myeye, envision2020glasses} that also use computer vision for assistance. An alternative to the computer vision-based apps there are other mobile applications where VI users can have a video call with sighted volunteers that help them with any kind of task requiring visual capabilities~\cite{bemyeyes2017be, aira2017aira}. Despite that these assistive vision technologies has opened up for VI people being more independent, there remains several challenges to tackle regarding system requirements~\cite{chiu2020assessing, kacorri2017people, pellegrini2019latent} %(Add REFs on "computing on device, internet connection, update to new classes") 
+and privacy concerns~\cite{ahmed2015privacy, gurari2019vizwiz, hoyle2014privacy}.
+% (Add REFs on "can other people overhear what I'm asking about, and are other people OK with that I take photos in the public for helping myself?").  
 
 Current assistive vision technologies face several challenges that needs to be tackled to enhance their utility for VI people. In the past decade, machine learning techniques have been applied successfully to various computer vision tasks such as object recognition, generating scene descriptions, and visual question answering [ADD REFS]. In addition to better computer hardware, the main reason for these successes is the immense data collection and annotation that is required for obtaining large-scale computer vision datasets. However, the annotation becomes even more costly if the object classes should be separated based on fine-grained details about the objects, which makes it challenging for assistive vision systems to provide users with further information about objects than the general object class. Another challenge is how to update the assistive vision devices with information about new objects to recognize and ensuring that the system is still able to recognize the previous known items correctly. Furthermore, assistive vision devices should have the ability to answer questions about the surroundings of the user, should perform in real-time and be robust when applied in different environments, as well as ensuring privacy for the user.
 
@@ -90,7 +95,7 @@ Current assistive vision technologies face several challenges that needs to be t
 
 \section{Scope of Thesis}\label{sec:scope_of_thesis}
 
-This thesis is focused on two applications for machine learning and computer vision-based assistive technologies, namely \textit{fine-grained classification}~\cite{wei2021fine} and \textit{continual learning}~\cite{delange2021continual, parisi2019continual}. Fine-grained classification involves identifying subcategories and details of general object classes, which can be important when distinguishing between visually similar items. An example is when one has to distinguish between two juice packages from the same brand where the main ingredients are apples and oranges in the packages. The general setting in fine-grained classification is that all data and classes to learn are given all at once to the classifier to learn, but can be extended to the continual learning setting where the classes to learn are divided into tasks that are learned at different points in time. Continual learning methods are used for updating the classifier's current knowledge with information about the new classes and making sure that the classifier remembers the previously learned classes. The common denominator of these fields is classification, but both fields have challenges of their own that has to be addressed before adding such features into assistive vision devices. Hence, we will describe the individual challenges that we have focused on next. 
+This thesis is focused on two applications for machine learning and computer vision-based assistive technologies, namely \textit{fine-grained classification}~\cite{wei2021fine} and \textit{continual learning}~\cite{delange2021continual, parisi2019continual}. Fine-grained classification involves identifying subcategories and details of general object classes, which can be important when distinguishing between visually similar items. An example is when one has to distinguish between two juice packages from the same brand where the main ingredients are apples and oranges in the packages. The general setting in fine-grained classification is that all data and classes to learn are given all at once to the classifier to learn, but can be extended to the continual learning setting where the classes to learn are divided into tasks that are learned at different points in time. Continual learning methods are used for updating the classifier's current knowledge with information about the new classes and making sure that the classifier remembers the previously learned classes. The common denominator of these fields is classification, but both have challenges of their own that has to be addressed before adding such features into assistive vision devices. Next, we describe the challenges that we have focused on in this thesis. 
 
 %The advantage with continual learning is that retraining on the whole catalog with objects of interest can be avoided whenever the system must be capable of recognizing a new object. The general setting in fine-grained classification is that all data and classes to learn are given all at once to the classifier to learn, while data of new classes to learn are given to the classifier at different points in time in the continual learning setting. Fine-grained classification is focused on learning classifiers that recognize details of items to provide users with particular information about the items of interest, while continual learning is more about updating the classifier with new objects to recognize in a certain order. 
 
@@ -99,15 +104,17 @@ This thesis is focused on two applications for machine learning and computer vis
 \subsection{Fine-grained Classification}
 
 
-One main challenge for fine-grained classification is the data collection procedure and there are several reasons for this. Firstly, the annotation of the collected data becomes more time-consuming as the annotators must know about specific details about the objects to label the data as accurately as possible. Secondly, as fine-grained classes might be rare, there might be few examples per class that the classifier can learn from to discriminate between the objects. 
-
-We focus on the specific application of grocery shopping with an assistive vision app which fits well into the setting of fine-grained classification. Grocery items usually require visual information to distinguish between them, for example, when one needs to know how the ingredients differ in two juice packages. This also goes for raw grocery items where it might be difficult for a VI customer to tell the difference between two different brands of green apples unless the customer knows how the apples smell or how the texture of their peel differs when touching them. Furthermore, situations in the grocery store environment can disturb the recognition performance for the assistive vision device, for example, when multiple and misplaced items appear in the camera view and also when there are poor lighting settings in some areas of the store. Collecting training data that covers all possible scenarios that can occur in the store would be a cumbersome procedure. Our goal is to reduce the need for training data in the grocery stores by collecting web-scraped information about the items and use this for easing the learning of the classifier. 
+One main challenge for fine-grained classification is the data collection procedure and there are several reasons for this. Firstly, the annotation of the collected data becomes more time-consuming as the annotators must know specific details about the objects to label the data as accurately as possible. Secondly, as fine-grained classes might be rare, there might be few examples per class that the classifier can learn from to discriminate between the objects. An application where an assistive vision device would need to learn fine-grained classes from sparse datasets is grocery shopping for helping VI people~\cite{jafri2014computer, lanigan2006trinetra}. Grocery items usually require visual information to distinguish between them, for example, when one needs to know how the ingredients differ in two juice packages. This also goes for raw grocery items where it might be difficult for a VI customer to tell the difference between two different brands of green apples unless the customer knows how the apples smell or how the texture of their peel differs when touching them. Furthermore, situations in the grocery store environment can disturb the recognition performance of the assistive vision device, for example, when multiple and misplaced items appear in the camera view and also when there are poor lighting settings in some areas of the store. Collecting training data that covers all possible scenarios that can occur in the store would be a cumbersome procedure. Our goal is to reduce the need for training data in the grocery stores by collecting web-scraped information about the items and using this for easing the learning of the classifier. 
 
 \subsection{Continual Learning}
 
-The main challenge in continual learning is called \textit{catastrophic forgetting}~\cite{mccloskey1989catastrophic} which means that the classifier will overwrite previously learned knowledge with new information about the new objects of interest during learning. Therefore, we must use additional training techniques that prevents this forgetting effect to maintain the recognition performance on all classes during the lifespan of the classifier. A simple yet efficient approach in continual learning on how to mitigate catastrophic forgetting is replay-based methods~\cite{chaudhry2019tiny, hayes2021replay}. The main assumption is that we are allowed to keep a low number of examples from every seen class in a small memory buffer. The idea is then to mix the old examples with the training data from new classes, such that we learn the new classes and aim to retain the performance on the old classes by replaying the memory examples for the classifier. 
+The main challenge in continual learning is called \textit{catastrophic forgetting}~\cite{mccloskey1989catastrophic} which means that the classifier will overwrite previously learned knowledge with information about the new objects of interest during learning. Therefore, we must use additional training techniques that prevents this forgetting effect to maintain the recognition performance on all classes during the lifespan of the classifier. A simple yet efficient approach in continual learning for mitigating catastrophic forgetting is replay-based methods~\cite{chaudhry2019tiny, hayes2021replay}. The main assumption is that we are allowed to keep a low number of examples from every seen class in a small memory buffer. The idea is then to mix the old examples with the training data from new classes, such that we learn the new classes and aim to retain the performance on the old classes by replaying the memory examples for the classifier. 
 
-Most previous works on replay-based continual learning have focused on improving the quality of which examples that should be stored in the memory~\cite{chaudhry2019tiny, chrysakis2020online, hayes2019memory} and also on enhancing the storage capacity by storing compressed features of data rather than the raw data~\cite{hayes2020remind, iscen2020memory, pellegrini2019latent}. However, the time to replay different tasks have been ignored even if the timing of rehearsal has been shown to be very important for humans to retain memory on various tasks~\cite{dempster1989spacing, hawley2008comparison, landauer1978optimum, smolen2016right}. Furthermore, in contrast to the constraint on the small memory size, machine learning systems used in real-world applications may be limited by processing times rather than data storage capacity [Add REFs]. In such settings, the challenge to tackle becomes how to select what data from the huge storage to replay. We show that learning schedules over which tasks to replay at different times can be crucial for continual learning performance in this setting. 
+Most previous works on replay-based continual learning ignores the time to replay certain tasks. However, the timing of rehearsal has been shown to be very important for humans to retain memory on various tasks~\cite{dempster1989spacing, ebbinghaus2013memory, hawley2008comparison, landauer1978optimum, smolen2016right}. Moreover, in contrast to the constraint on the small memory size, machine learning systems used in real-world applications may be limited by processing times rather than data storage capacity [Add REFs]. In such settings, there is a need for methods that select what data from the huge storage to replay as the problem of catastrophic forgetting still remains. Our goal is to demonstrate that scheduling over which tasks to replay can be crucial for continual learning performance in this setting. Hence, we will need to develop efficient methods that can automatically propose replay schedules that mitigate catastophic forgetting in classifiers to enable this strategy in real-world settings. 
+
+
+
+%Most previous works on replay-based continual learning have focused on improving the quality of which examples that should be stored in the memory~\cite{chaudhry2019tiny, chrysakis2020online, hayes2019memory} and also on enhancing the storage capacity by storing compressed features of data rather than the raw data~\cite{hayes2020remind, iscen2020memory, pellegrini2019latent}. However, the time to replay different tasks have been ignored even if the timing of rehearsal has been shown to be very important for humans to retain memory on various tasks~\cite{dempster1989spacing, hawley2008comparison, landauer1978optimum, smolen2016right}. Furthermore, in contrast to the constraint on the small memory size, machine learning systems used in real-world applications may be limited by processing times rather than data storage capacity [Add REFs]. In such settings, the challenge to tackle becomes how to select what data from the huge storage to replay. We show that learning schedules over which tasks to replay at different times can be crucial for continual learning performance in this setting. 
 
 
 
@@ -119,45 +126,121 @@ Most previous works on replay-based continual learning have focused on improving
 
 
 % Thesis contributions
-\input{Chapter1/contributions}
-
-% Thesis outline
-\input{Chapter1/outline}
+%\input{Chapter1/contributions}
 
 
-\begin{comment}
-Here is an example for referencing figure \ref{EnergySources}. Example of citing \cite{BP2019} and \cite{Chen2016}.
-%%%%%%%%%%%%%% Figure: Energy sources
+\section{Thesis Contributions}
+\label{sec:contributions}
+
+In this section, we provide summaries of the included papers as well as stating the contributions of each author to the manuscripts. 
+
+
+\subsection{\underline{Paper A}: A Hierarchical Grocery Store Image Dataset with Visual and Semantic Labels}
+\label{sec:paperA}
+
 \begin{figure}[h]
-	\centering
-	\includegraphics[scale=0.6]{Figs/Ch1_EnergySources.png}
-	\caption{The world's energy consumption by fuel in 2017. }
-	\label{EnergySources}
+	\centering 
+	\includegraphics[width=0.33\textwidth]{example-image-a}
+	\caption{\MK{Paper A could have a picture of the hierarchical structure of the dataset and/or a Google Maps picture over the stores I visited perhaps.}}
+	\label{fig:paperA}
 \end{figure}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Section}
-Example of a table
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% Table: Tokamaks
-\begin{table}[t!]
-	\centering
-	\caption{List of experimental tokamaks worldwide. Note: ITER is currently under construction and the first plasma is predicted for 2025-2028.}
-	\begin{tabular}{ccccc}
-		\hline
-		\textbf{Name} & \textbf{Location} & \textbf{B-field} & \textbf{Major/minor radius}  \\
-		\hline
-		JET     & England      & 4.0 T & 3.0 m / 1.3 m \\
-		ITER    & France       & 5.3 T & 6.2 m / 2.0 m \\
-		AUG		& Germany      & 3.1 T & 1.7 m / 0.7 m \\
-		WEST	& France	   & 3.7 T & 2.5 m / 0.5 m \\
-		TCV     & Switzerland  & 1.5 T & 0.9 m / 0.3 m \\
-		DIII-D  & USA          & 2.2 T & 1.7 m / 0.7 m \\
-		TFTR 	& USA          & 6.0 T & 2.5 m / 0.9 m \\
-		JT-60   & Japan        & 4.0 T & 3.4 m / 1.0 m \\
-		K-STAR  & South Korea  & 3.5 T & 1.8 m / 0.5 m \\
-		EAST    & China        & 3.5 T & 1.9 m / 0.5 m \\
-		\hline
-	\end{tabular}
-	\label{TokamakTable}
-\end{table}
-\end{comment}
+\begin{enumerate}
+	\item[] \textbf{Marcus Klasson}, Cheng Zhang, Hedvig Kjellström. In \textit{IEEE Winter Conference on Applications of Computer Vision (WACV) 2019}.
+\end{enumerate}
+
+\paragraph{Summary}
+We collect a dataset with natural images of raw and refrigerated grocery items taken in grocery stores in Stockholm, Sweden, for evaluating image classification models on a challenging real-world scenario. The data collection was performed by taking photos of groceries with a mobile phone to simulate a scenario of grocery shopping using an assistive vision app. Furthermore, we downloaded iconic images and text descriptions of each grocery item by web-scraping a grocery store website to enhance the dataset with information describing the semantics of each individual item. the items are grouped based on their type, e.g., apple, juice, etc., to provide the dataset with a hierarchical labeling structure. 
+
+We provide benchmark results evaluated using pre-trained and fine-tuned CNNs for image classification. Moreover, we take an initial step towards utilizing the rich product information in the dataset by training the classifiers with representations where both natural and iconic images have been combined through a multi-view VAE. 
+
+
+\paragraph{Author Contributions}
+CZ and HK presented the idea and the data collection procedure for the natural images and web-scraped information. MK performed the data collection including visiting the grocery stores for taking the natural images and the web-scraping of the grocery store website for iconic images and text descriptions. MK performed all the experiments. All authors contributed to discussing the results and contributed to writing the manuscript. 
+
+
+\subsection{\underline{Paper B}: Using Variational Multi-View Learning for Classification of Grocery Items}
+\label{sec:paperB}
+
+\begin{figure}[h]
+	\centering 
+	\includegraphics[width=0.33\textwidth]{example-image-b}
+	\caption{\MK{Paper B could perhaps show some PCA visualizations.}}
+	\label{fig:paperB}
+\end{figure}
+
+\begin{enumerate}
+	\item[] \textbf{Marcus Klasson}, Cheng Zhang, Hedvig Kjellström. In \textit{Patterns, Volume 1(8) (2020)}.
+\end{enumerate}
+
+\paragraph{Summary} 
+We investigate whether training image classifiers can benefit from learning joint representations of grocery items using multi-view learning over the natural images and web-scraped information of the grocery items in the Grocery Store dataset (see Paper \ref{sec:paperA}). We employ a deep multi-view model based on VAEs called Variational Canonical Correlation Analysis (VCCA)~\cite{wang2016deep} for learning joint representations of the different data types, i.e., natural images, iconic images, and text descriptions. We performed a thorough ablation study over all data types to demonstrate how they contribute individually to enhancing the classification performance. Furthermore, we apply two classification approaches where we (i) train the classifier on the joint latent representations, and (ii) using a generative classifier by incorporating a class decoder to the VCCA model that can be used for classifying images. 
+
+We performed a thorough ablation study over all data types to demonstrate how they contribute individually to enhancing the classification performance. To gain further insights into our results, we visualized the learned representations of the grocery items from VCCA and discussed how the iconic images and text descriptions help the model to better distinguish between the groceries. Our results show that the iconic images help to group the items based on their color and shape while text descriptions separate the items based on differences in ingredients and flavor. Finally, we concluded that utilizing the iconic images and text descriptions yielded better classification results than only using natural images. 
+
+
+\paragraph{Author Contributions} 
+CZ and HK presented the idea and all authors contributed to formalizing the methodology. 
+MK performed all the experiments and created the visualizations. 
+All authors took part in discussing the results.
+All authors contributed to writing the manuscript. 
+
+
+\subsection{\underline{Paper C}: Learn the Time to Learn: Replay Scheduling for Continual Learning}
+\label{sec:paperC}
+
+\begin{figure}[h]
+	\centering 
+	\includegraphics[width=0.33\textwidth]{example-image-c}
+	\caption{ \MK{Paper C could illustrate the new CL setup with a figure that shows a network and a scheduler that needs to fetch a small replay memory from a huge pool of historical data.}}
+	\label{fig:paperC}
+\end{figure}
+
+\begin{enumerate}
+	\item[] \textbf{Marcus Klasson}, Hedvig Kjellström, Cheng Zhang. Submitted to \textit{International Conference on Machine Learning (ICML) 2022}.
+\end{enumerate}
+
+\paragraph{Summary}
+In this paper, we show that learning the time to replay different tasks can be critical for continual learning (CL) performance in replay-based methods. As the main assumption in replay-based CL is that only a small set of historical data can be re-visited for mitigating catastrophic forgetting, most works have focused on improving the sample quality of the replay memory. However, in many real-world applications, historical data is accessible at all times, e.g., by storing it on the cloud. But although all historical data could be stored, retraining machine learning systems on a daily basis is prohibitive due to processing times and operational costs. Therefore, small replay memories are still needed in CL to mitigate catastrophic forgetting when learning new tasks. To this end, we propose to learn the time to learn for a CL system, in which we learn schedules over which tasks to replay at different times. Inspired by human learning, we demonstrate that scheduling over the time to replay is critical to the final CL performance with finite memory resources. We then illustrate our idea with scheduling over which tasks to replay by learning such policy with Monte Carlo tree search. We perform extensive evaluation showing that learning replay schedules can significantly improve the performance compared to baselines without learned scheduling. We also show that our method can be combined with any replay-based method and memory selection technique. Finally, our results indicate that the learned schedules are also consistent with human learning insights.
+
+
+
+\paragraph{Author Contributions} 
+CZ presented the idea and MK and CZ contributed to formalizing the methodology. 
+MK performed all the experiments. 
+All authors took part in discussing the results and contributed to writing the manuscript. 
+
+
+\subsection{\underline{Paper D}: Meta Policy Learning for Replay Scheduling in Continual Learning}
+\label{sec:paperD}
+
+\begin{figure}[h]
+	\centering 
+	\includegraphics[width=0.33\textwidth]{example-image-golden}
+	\caption{ \MK{Paper D could show illustration of the RL agent scheduler that gets performance measures as input and outputs an action proportion of how to select the replay memory. RL agent could also have a replay buffer where data is collected from several environments. Maybe it can also show the test case, so that it would be two separated "at training/test phase". }}
+	\label{fig:paperD}
+\end{figure}
+
+\begin{enumerate}
+	\item[] \textbf{Marcus Klasson}, Hedvig Kjellström, Cheng Zhang. Under preparation for conference submission.
+\end{enumerate}
+
+
+
+\paragraph{Summary} 
+In this paper, we propose a reinforcement learning-based method for learning policies for replay scheduling that can be applied in new continual learning scenarios. We demonstrated in Paper C that learning the time to replay different tasks is important in continual learning. However, a replay scheduling policy that can be applied in any continual learning scenario is currently absent, which makes replay scheduling infeasible in real-world scenarios. To this end, we propose using reinforcement learning to enable learning general policies that can generalize across different data domains. 
+The learned policy can then propose replay schedule that efficiently mitigate catastrophic forgetting to improve the continual learning performance without any additional computational cost in the new domain. We compare the learned policies to several replay scheduling baselines and show that the learned policies can improve the continual learning performance given task orders and datasets unseen during training. 
+
+
+\paragraph{Author Contributions} 
+CZ presented the idea and MK and CZ contributed to formalizing the methodology. 
+MK performed all the experiments. 
+All authors took part in discussing the results and contributed to writing the manuscript. 
+
+
+
+% Thesis outline
+\section{Thesis Outline}\label{sec:outline}
+The rest of the thesis is organized as follows. We provide some background and preliminaries on the machine learning methodology used in this thesis in Chapter \ref{chap:background}. Chapter 3 is focused on our contributions in fine-grained classification where we first describe the related work in this field followed by explaining the frameworks used in our work. Similarly, in Chapter 4, we focus on our contributions in continual learning by first describing the related work to place our contributions in context and then describing the framework we used for enabling replay scheduling in continual learning. Finally, in Chapter 5, we provide our conclusions of the presented works and present some research directions that we believe would be interesting to look deeper into in the future. 
+
+\MK{todo: fix references to chapters!}
