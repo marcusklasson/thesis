@@ -1,4 +1,4 @@
-\documentclass[electronic]{kthesis}
+\documentclass[electronic, oldfontcommands]{kthesis}
 
 %%%%%%%%%%%%%%%%%
 %%%% PACKAGES %%%
@@ -27,6 +27,16 @@
 \usepackage{comment}
 \usepackage{afterpage} % for changing page color before included papers
 \input{math_commands}
+\usepackage{multirow}
+
+% https://tex.stackexchange.com/questions/2441/how-to-add-a-forced-line-break-inside-a-table-cell
+\usepackage{array}
+\usepackage{makecell}
+
+\renewcommand\theadalign{bc}
+\renewcommand\theadfont{\bfseries}
+\renewcommand\theadgape{\Gape[4pt]}
+\renewcommand\cellgape{\Gape[4pt]}
 
 \newcommand{\mk}[1]{{\color{purple} #1}}
 \newcommand{\MK}[1]{\textbf{\color{purple} MK: #1}} 

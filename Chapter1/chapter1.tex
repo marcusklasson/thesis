@@ -70,7 +70,7 @@ In the last decade, we have seen several variants of assistive vision technologi
 and privacy concerns~\cite{ahmed2015privacy, gurari2019vizwiz, hoyle2014privacy}.
 % (Add REFs on "can other people overhear what I'm asking about, and are other people OK with that I take photos in the public for helping myself?").  
 
-Current assistive vision technologies face several challenges that needs to be tackled to enhance their utility for VI people. In the past decade, machine learning techniques have been applied successfully to various computer vision tasks such as object recognition, generating scene descriptions, and visual question answering [ADD REFS]. In addition to better computer hardware, the main reason for these successes is the immense data collection and annotation that is required for obtaining large-scale computer vision datasets. However, the annotation becomes even more costly if the object classes should be separated based on fine-grained details about the objects, which makes it challenging for assistive vision systems to provide users with further information about objects than the general object class. Another challenge is how to update the assistive vision devices with information about new objects to recognize and ensuring that the system is still able to recognize the previous known items correctly. Furthermore, assistive vision devices should have the ability to answer questions about the surroundings of the user, should perform in real-time and be robust when applied in different environments, as well as ensuring privacy for the user.
+Current assistive vision technologies face several challenges that needs to be tackled to enhance their utility for VI people. In the past decade, machine learning techniques have been applied successfully to various computer vision tasks such as object recognition~\cite{krizhevsky2012imagenet, he2016deep, dosovitskiy2020image}, generating scene descriptions~\cite{xu2015show, johnson2016densecap, anderson2018bottom}, and visual question answering~\cite{antol2015vqa, hudson2019gqa, hu2019language}. In addition to better computer hardware, the main reason for these successes is the immense data collection and annotation that is required for obtaining large-scale computer vision datasets. However, the annotation becomes even more costly if the object classes should be separated based on fine-grained details about the objects, which makes it challenging for assistive vision systems to provide users with further information about objects than the general object class. Another challenge is how to update the assistive vision devices with information about new objects to recognize and ensuring that the system is still able to recognize the previous known items correctly. Furthermore, assistive vision devices should have the ability to answer questions about the surroundings of the user, should perform in real-time and be robust when applied in different environments, as well as ensuring privacy for the user.
 
 
 
@@ -138,12 +138,19 @@ In this section, we provide summaries of the included papers as well as stating 
 \subsection{\underline{Paper A}: A Hierarchical Grocery Store Image Dataset with Visual and Semantic Labels}
 \label{sec:paperA}
 
-\begin{figure}[h]
-	\centering 
-	\includegraphics[width=0.33\textwidth]{example-image-a}
-	\caption{\MK{Paper A could have a picture of the hierarchical structure of the dataset and/or a Google Maps picture over the stores I visited perhaps.}}
-	\label{fig:paperA}
-\end{figure}
+\begin{table}[t]
+	\centering
+	\caption{Here is a table with the data views for Paper A. }
+	\vspace{-10pt}
+	\setlength{\fboxsep}{0pt} 
+	\setlength{\fboxrule}{0.33pt}
+	\input{Chapter1/tables/dataset_paperA}
+	\label{tab:paperA}
+	%\vspace{-7mm}
+\end{table}
+
+
+
 
 \begin{enumerate}
 	\item[] \textbf{Marcus Klasson}, Cheng Zhang, Hedvig Kjellström. In \textit{IEEE Winter Conference on Applications of Computer Vision (WACV) 2019}.
