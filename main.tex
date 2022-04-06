@@ -12,7 +12,7 @@
 \usepackage{amsmath,mathrsfs}
 \usepackage{amssymb}  % assumes amsmath package installed
 \usepackage{epstopdf}
-\usepackage{subfig}
+%\usepackage{subfig} % Error I got: Package subcaption Error: This package can't be used in cooperation(subcaption) with the subfig package. \subcaption@CheckCompatibility
 \usepackage{cite}
 \usepackage{graphicx}
 \usepackage{bm}	%Command \bm{make bold}
@@ -27,7 +27,8 @@
 \usepackage{comment}
 \usepackage{afterpage} % for changing page color before included papers
 \input{math_commands}
-\usepackage{multirow}
+\usepackage{subcaption}
+%\usepackage{multirow}
 
 % https://tex.stackexchange.com/questions/2441/how-to-add-a-forced-line-break-inside-a-table-cell
 \usepackage{array}
