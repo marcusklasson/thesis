@@ -1,8 +1,52 @@
 \begin{abstract}
-\noindent \lipsum[1]
+\noindent In recent years, computer vision-based assistive systems have enabled visually impaired people to use automatic object recognition on their mobile phones. 
+These systems should be capable of recognizing objects that are important for the user on a fine-grained level. 
+To this end, we have focused on the particular application of classifying food items which can be challenging for blind/low-vision people since visual information is often required for distinguishing between similar items. 
+In Paper A, we present a challenging image dataset of groceries taken in grocery stores where each item is hierarchically labeled to capture the fine-grained structure of the various items. 
+Furthermore, we demonstrate in Paper B how more easily accessible information about the items, such as web-scraped images and text descriptions, can be utilized for enhancing the classification performance of groceries compared to only using the real-world images for training. 
+
+A valuable feature of assistive vision systems is the capability of adapting to new object classes. 
+The main challenge here is to avoid catastrophically forgetting previously learned knowledge when the classifier is updated with new classes. 
+In Paper C, we propose a new continual learning setting for replay-based methods that aligns well with real-world needs where constraints are placed on processing time rather than the storage capacity of old samples. 
+%Replay methods mitigate this problem efficiently by mixing previous data samples from a limited memory buffer with the training samples of the new classes during learning. In Paper C, we propose a new continual learning setting that is close to real-world needs where constraints are placed on processing time rather than the storage capacity of old samples. 
+We then study the timing of replaying certain tasks and show that learning replay schedules over which tasks to replay can be critical for the final classification performance in our proposed setting. 
+Finally, in Paper D, we present a method based on reinforcement learning for learning a policy for selecting which tasks to replay at different times. The benefit of our learned replay scheduling policy is that it can be applied to any new continual learning scenario for mitigating catastrophic forgetting in a classifier without additional computational cost. 
+
+To conclude, I will discuss some potential future directions for the development of the next generation of computer vision-based assistive technologies. 
+
+
+%which have been mostly ignored in the literature, can have a high influence on the final classification performance. We then propose a new continual learning setting where scheduling over which tasks to replay becomes important 
+
+
+%, where replay methods common approach to mitigate this problem is by using replay methods which involve mixing a small set of previous data samples with the samples from the new classes to learn during training.
+
+%In the second part of my work, I have focused on continually learning new object classes where the main challenge is to avoid forgetting previously learned knowledge when the classifier is updated with new classes. 
+
+%A common approach to mitigate this problem is by using replay methods which involve mixing a small set of previous data samples with the samples from the new classes to learn during training. However, current replay methods have ignored the time of when to replay certain tasks, which would be essential for fast adaptation in settings where constraints are set on training time rather than storage capacity of old samples. In Paper C, we show that learning the time to learn which tasks to replay can be critical for the CL performance in this setting. 
+
+%In Paper D, we present a method for learning a policy for selecting which tasks to replay at different times with reinforcement learning.      
+
+%Finally, I will discuss future directions and potential research questions for the development of the next generation of computer vision-based assistive technologies. 
+
+
+\bigskip \bigskip
+
+
+
+
+
+
+
+%50\%:
+%The recent advances in computer vision have made it possible to develop vision-based assistive devices to aid visually impaired people with object recognition in different environments. A particular application where assistive vision would be useful is to help the visually impaired with fine-grained classification of food items since visual information is often required to distinguish between similar items. 
+%Enabling image classification models to work in this setting requires collecting large amounts of images of food items which is an expensive process in several ways. In the first part of my work, I have shown how more easily accessible information about food items, such as web-scraped images and text descriptions, can be used for enhancing the classification performance of groceries compared to training using natural images only. 
+
+%A valuable feature of assistive vision devices is the capability of adapting to new object classes. The key challenge is to avoid overwriting previous knowledge when the model is updated with new classes, which is called catastrophic forgetting. In the second part of my work, I aim to mitigate this problem using replay methods, which involve mixing previous data samples with incoming samples from new classes during training. 
+
+%Finally, I will discuss a future third part consisting of approaches for scaling replay methods to larger datasets and how to deploy our models in mobile devices.
 		
 \end{abstract}
 	
 \bigskip \bigskip \bigskip \bigskip \bigskip
 	
-\setlength{\leftskip}{0.3 cm} \textbf {Keywords:} Lorem, Ipsum, Dolor, Sit, Amet
+\setlength{\leftskip}{0.3 cm} \textbf {Keywords:} Visual Recognition, Fine-grained Classification, Continual Learning, Visually Impaired People, Assistive Technologies
