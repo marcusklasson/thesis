@@ -3,11 +3,13 @@
 %*******************************************************************************
 
 \chapter{Fine-grained Classification}
-%\chapter{Summary of Included Papers}
-%\label{chap:summary_of_included_papers}
+\label{chap:finegrained_classification}
 
 %% Write about Paper A and B in a coherent way
-\section{Introduction}
+
+This chapter presents an approach for enhancing fine-grained classification performance of grocery items by using web-scraped information. We focus on classification of grocery items due to applicability in assistive vision and its potential to enhance the independence of visually impaired (VI) people [ADD groceries/shopping/object recognition for VI REFs]. Initially, we were interested in learning classifiers with natural images taken in the grocery stores combined with web-scraped information about the grocery items, such as iconic images and text descriptions from supermarket websites. Using iconic images have been used in grocery image classification earlier [ADD grocery paper REFs], however, utilizing text descriptions was as far we know absent for this application even if it has been successfully applied in other image classification problems [ADD REFs, Bujwid and Sullivan, AwA dataset, or other Attribute datasets]. Thus, we collected our own dataset of grocery items images using a mobile phone camera as well as web-scraped images and text descriptions to study whether this multi-view approaches would benefit training the classifiers (Section 2). We then select a multi-view learning framework based on the Variational Autoender (VAE) for investigating how the different data views affect the fine-grained classification performance (Section 3). 
+
+%\section{Introduction}
 \section{Related Work}
 \section{Dataset Collection}
 \section{Representation Learning}
