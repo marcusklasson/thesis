@@ -62,7 +62,28 @@ We have complemented the image dataset with external information from the web of
 \end{table}
 
 
-\section{Representation Learning}
+\section{Multi-view Representation Learning of Grocery Items}
+
+This section describes the approach we took for learning representations of grocery items that are shared across the available data types. We employ a deep latent variable model called Variational Canonical Correlation Analysis~\cite{wang2016deep} (VCCA) for learning the shared representation. The main assumption in VCCA is that each data view have been generated from the same latent space. The goal then is to learn this latent space that captures the correspondences between all views into representations shared across the views for the grocery items. This representation can then be utilized for enhance the learning more accurate classifiers as well as for performing tasks such as synthesis and prediction of novel images. Next, we describe how to enable learning the shared latent space. 
+
+Capturing variations from each view in the learned representation is performed by predicting the original views from the latent space. To obtain the latent representation, we extract the representation by encoding the natural images with neural network. The extracted representation is then used for predicting each view individually by inputting the representation through separate neural networks. Note that we only use the natural images for extracting the latent representation here since it is the only view that is available at test time when we want to use the learned classifier in the grocery store. We have two options for exploiting the new representation to train classifiers. The first option is to train the classifier with the latent representations after we have learned the latent space as described above. The second option is to train the classifier and learning the latent space simultaneously by adding an additional classifier network predicting the class label with the latent representation as input. 
+
+\MK{TO-DO: Need to introduce the ELBO. I should also add a figure of the architecture for extra clarity on the method. }
+%Latent variable models similar to VCCA have been successful in applications where some views are on class-specific levels and the same across all instances of the class. An example of such view could be the label of a digit or letter, as well as the attributes of animals that are the same for all images of every class in the datasets~\cite{wah2011cub, lampert2009learning}. 
+
+% where we can exploit the new representation to learn more accurate classifiers. 
+
+%The new representation can be used for learning more accurate classifiers.  
+
+ 
+
+%The architecture that we used is shown in Figure X.   
+
+%learning joint representation of the different data types.
+
+%we take an encoder-decoder approach as these have been successful in applications with data with images and class-specific additional data types. this is in contrast to webly supervised methods where the web data usually has many instances per class. 
+
+%we use shared subspace learning approach from multi-view learning because it is a simple approach that gives us a joint representation across the views that we can use for training classifiers. This also opens up for using generative modeling approaches 
 
 
 \section{Experiments}
