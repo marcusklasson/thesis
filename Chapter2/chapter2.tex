@@ -20,12 +20,21 @@ Throughout this thesis, we take a machine learning approach to solve tasks by tu
 
 \section{Problem Settings in Machine Learning}
 
-Machine learning problems can be divided into three main fields, namely, \textit{supervised learning}, \textit{unsupervised learning}, and \textit{reinforcement learning}. Since this thesis includes work from each of these problem settings, we will briefly introduce these topics to provide the reader with context on the tasks that we are trying to solve. 
+Machine learning problems can be divided into three main fields, namely, \textit{supervised learning}, \textit{unsupervised learning}, and \textit{reinforcement learning} (RL). Since this thesis includes work from each of these problem settings, we will briefly introduce these topics to provide the reader with context on the tasks that we are trying to solve. 
 
-\paragraph{Supervised Learning.} In this setting, we are given a dataset $\{(\vx^{(i)}, \vy^{(i)})\}_{i=1}^{N}$ where each data example $\vx^{(i)}$ is accompanied with a target $\vy^{(i)}$. The goal is to estimate a function $f_{\vtheta}(\vx)$ that assigns the correct target to each example in the training set as accurately as possible. In classification problems, each target belongs to one of $K$ discrete categories, such that $\vy = \{1, \dots, K\}$, and we want to predict which of the categories that new data belongs to. Classification tasks will be involved in all included papers of this thesis wherein Paper A and B [Add REFs] we focus on assigning the correct product category to images of grocery items. Another problem type in supervised learning is regression where the targets are continuous and real-valued. An example of a regression task is to predict the outdoors temperature tomorrow given the observed temperature today. 
+\MK{TO-DO: Add references to papers and sections!}
+\paragraph{Supervised Learning.} In this setting, we are given a dataset $\{(\vx^{(i)}, \vy^{(i)})\}_{i=1}^{N}$ where each data example $\vx^{(i)}$ is accompanied with a target $\vy^{(i)}$. The goal is to estimate a function $f_{\vtheta}(\vx)$ that assigns the correct target to each example in the training set as accurately as possible. In classification problems, each target belongs to one of $K$ discrete categories, such that $\vy = \{1, \dots, K\}$, and we want to predict which of the categories that new data belongs to. Classification tasks will be involved in all included papers of this thesis wherein Paper A and B we focus on assigning the correct product category to images of grocery items. Another problem type in supervised learning is regression where the targets are continuous and real-valued. An example of a regression task is to predict the outdoors temperature tomorrow given the observed temperature today. 
 
-\paragraph{Unsupervised Learning.}
+\paragraph{Unsupervised Learning.} Here, we are given a dataset $\{\vx^{(i)}\}_{i=1}^{N}$ without access to any corresponding targets. The goal in this unsupervised setting may then be to find hidden structures in the given dataset. For example, we might be interested in discovering groups of similar examples with \textit{clustering} techniques, or we may want to use \textit{density estimation} where we approximate the true data distribution $p_{data}$ with a parametric distribution $p_{\vtheta}$ using the collected dataset, or we may want to project high-dimensional data into two or three dimensions for \textit{visualization} purposes. We will get back to these goals when we introduce representation learning in Section X. 
 
+\paragraph{Reinforcement Learning.} For these problems, we have a \textit{learning agent} that wants reach a goal in an environment by performing a given set of actions. After performing an action, the agent observes the state of the environment and receives a reward from the environment saying how good or bad the taken action was to reach the goal. The objective for the agent is to maximize the reward signal within the time the agent reaches the goal. The agent then has to learn a policy for deciding which actions to perform in certain situations in the environment. The policy $\pi_{\vtheta}(\va | \vs)$ is a mapping from perceived states $\vs$ in the environment to actions $\va$ that should maximize the reward signal. An example of a task that can be framed as a RL problem is the so called Mountain Car problem, where the agent is a car that is trying to drive up to the top of a hill. The state represents the position and velocity of the car and the agent must take actions that will move the car forward or backwards. The objective is to reach the goal with as little time as possible, and the agent is encouraged to do so by the environment by sending the agent a negative reward for every time step that passes without reaching the top of the hill. We will return to the RL framework later when we describe the prerequisites for Paper D. 
+
+There exist many different methods for solving problems within these three fields. In this thesis, we employ deep learning methods which has been successfully applied in each field by representing the models with deep neural networks~\cite{he2016deep, bengio2013representation, mnih2015human}.
+
+%that is trying to maximize a reward signal $r$ by performing a given set of actions in an environment to reach a specific goal. The agent observes the state of the environment 
+
+
+%In this paradigm, we are concerned with decision-making where the goal is to take actions that maximize some reward. The decision-making is modeled by a policy which bases the action selection on observations that are collected by interacting with the task environment through the selected actions. One main challenge is how to handle the trade-off between exploration of different actions in new situations and exploitation by selecting actions where the agent already has experienced good reward signals. Furthermore, the reward signal can be received either in dense or sparse forms, where sparse rewards are typically more challenging to learn from and are less sample-efficient. 
 
 
 \section{Deep Learning}
@@ -33,10 +42,12 @@ Machine learning problems can be divided into three main fields, namely, \textit
 \subsection{Deep Neural Networks}
 % MLP, CNN, RNN
 
-\subsection{Image Classification}
+\subsection{Autoencoders}
+
+%\subsection{Image Classification}
 % discuss how DNNs are used for classification, maybe mention settings in classification, fine-grained, continual learning and refer them to future chapters
 
-\subsection{Representation Learning}
+%\subsection{Representation Learning}
 % Autoencoders, VAEs
 
 
