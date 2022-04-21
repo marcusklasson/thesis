@@ -27,7 +27,7 @@ Machine learning problems can be divided into three main fields, namely, \textit
 
 \paragraph{Unsupervised Learning.} Here, we are given a dataset $\{\vx^{(i)}\}_{i=1}^{N}$ without access to any corresponding targets. The goal in this unsupervised setting may then be to find hidden structures in the given dataset. For example, we might be interested in discovering groups of similar examples with \textit{clustering} techniques, or we may want to use \textit{density estimation} where we approximate the true data distribution $p_{data}$ with a parametric distribution $p_{\vtheta}$ using the collected dataset, or we may want to project high-dimensional data into two or three dimensions for \textit{visualization} purposes. We will get back to these goals when we introduce representation learning in Section X. 
 
-\paragraph{Reinforcement Learning.} For these problems, we have a \textit{learning agent} that wants reach a goal in an environment by performing a given set of actions. After performing an action, the agent observes the state of the environment and receives a reward from the environment saying how good or bad the taken action was to reach the goal. The objective for the agent is to maximize the reward signal within the time the agent reaches the goal. The agent then has to learn a policy for deciding which actions to perform in certain situations in the environment. The policy $\pi_{\vtheta}(\va | \vs)$ is a mapping from perceived states $\vs$ in the environment to actions $\va$ that should maximize the reward signal. An example of a task that can be framed as a RL problem is the so called Mountain Car problem, where the agent is a car that is trying to drive up to the top of a hill. The state represents the position and velocity of the car and the agent must take actions that will move the car forward or backwards. The objective is to reach the goal with as little time as possible, and the agent is encouraged to do so by the environment by sending the agent a negative reward for every time step that passes without reaching the top of the hill. We will return to the RL framework later when we describe the prerequisites for Paper D. 
+\paragraph{Reinforcement Learning.} For these problems, we have a \textit{learning agent} that wants reach a goal in an environment by performing a given set of actions. After performing an action, the agent observes the state of the environment and receives a reward from the environment saying how good or bad the taken action was to reach the goal. The objective for the agent is to maximize the reward signal within the time the agent reaches the goal. The agent then has to learn a policy for deciding which actions to perform in certain situations in the environment. The policy $\pi_{\vtheta}(\va | \vs)$ is a mapping from perceived states $\vs$ in the environment to actions $\va$ that should maximize the reward signal. An example of a task that can be framed as a RL problem is the so called Mountain Car problem, where the agent is a car that is trying to drive up to the top of a hill. The state represents the position and velocity of the car and the agent must take actions that will move the car forward or backwards. The objective is to reach the goal with as little time as possible, and the agent is encouraged to do so by the environment by sending the agent a negative reward for every time step that passes without reaching the top of the hill. We will return to the RL framework later when we describe the prerequisites for Paper D. \vspace{1mm}
 
 There exist many different methods for solving problems within these three fields. In this thesis, we employ deep learning methods which has been successfully applied in each field by representing the models with deep neural networks~\cite{he2016deep, bengio2013representation, mnih2015human}.
 
@@ -40,6 +40,7 @@ There exist many different methods for solving problems within these three field
 \section{Deep Learning}
 
 \subsection{Deep Neural Networks}
+In this section, we will briefly introduce some different types of neural networks that can be used for classification problems. 
 % MLP, CNN, RNN
 
 \subsection{Autoencoders}
@@ -48,7 +49,7 @@ There exist many different methods for solving problems within these three field
 % discuss how DNNs are used for classification, maybe mention settings in classification, fine-grained, continual learning and refer them to future chapters
 
 %\subsection{Representation Learning}
-% Autoencoders, VAEs
+% Autoencoders, VAEs, mention multimodal VAEs and VCCA
 
 
 \subsection{Deep Reinforcement Learning}
