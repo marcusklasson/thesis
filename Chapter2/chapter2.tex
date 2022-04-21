@@ -7,7 +7,7 @@
 
 The goal with this chapter is to provide the reader with preliminaries that are useful for comprehending the included papers. We assume that the reader has some knowledge in calculus, linear algebra, and probability theory, but we intend to keep it on a basic level. First, we give the notation that will be used throughout the thesis. Then, we will introduce a selection of related works to place the thesis into context. 
 
-\section{Notation}\label{sec:notation}
+\section{Notation and Terminology}\label{sec:notation}
 
 We will begin by providing some algebraic notation that will be used for representing various types of data in the thesis. Scalars (both integer and real) are denoted by italic letters such as $a$. Vectors are denoted by lowercase bold italic letters such as $\vx$, where all vectors are assumed to be column vectors. A superscript $T$ denotes the transpose of a vector or matrix, such that $\vx^{T}$ becomes a row vector. Matrices are denoted as uppercase bold italic letters such as $\mW$. The notation $(w_1, \dots, w_m)$ denotes a row vector with $m$ elements, where the corresponding column vector is denoted as $(w_1, \dots, w_m)^{T}$. 
 
@@ -15,10 +15,43 @@ A dataset is denoted by the set $\gD = \{\vx^{(1)}, \dots, \vx^{(N)} \}$, where 
 
 %Perhaps can skip spaces and use $\vy \in \{1, \dots, C\}$ to represent the labels and $\vx \in \mathbb{R}$, since I don't really use $\gX$ anywhere but in the RL part for state and action spaces but perhaps it's good to introduce the space notation then...
 
-The tasks of interest involves estimating some probability distribution from data. In classification tasks, we are given pairs $(\vx, \vy)$ of data with an associated target label and are asked to assign one of $k$ categories to input $\vx$. Hence, our goal is to estimate the conditional probability distribution $p(\vy | \vx)$ over the target label $\vy$ given the input data $\vx$. Commonly, the distribution $p_{\vtheta}(\vy | \vx)$ is parameterized by $\vtheta$. One can also write $p_{\vtheta}(\vy | \vx)$ as a function $f_{\vtheta}(\vx): \sR \rightarrow \{1, \dots, k\}$, such that $f_{\vtheta}(\vx) = p_{\vtheta}(\vy | \vx)$, where $f$ is a function that predicts target labels $\vy$ from inputs $\vx$ by performing a mapping between the input and target spaces. Our goal is to update the parameters $\vtheta$ such that they a loss function $\gL(\vtheta)$ is minimized. A typical loss for classification tasks is the cross-entropy loss which can be minimized by taking the gradient of $\gL$ w.r.t. the parameters $\vtheta$. 
+Throughout this thesis, we take a machine learning approach to solve tasks by tuning an adaptive model using a dataset called the \textit{training set}. In our case, we will represent the model with a function $f_{\vtheta}(\vx)$ that allows us to predict outcomes of events/data $\vx$ from the task of interest. The parameters $\vtheta$ expresses the function and we use machine learning algorithms for tuning parameters with the given dataset during the training phase. Once the model is trained, we often enter the \textit{test phase} where we want to evaluate the model by predicting outcomes on an unseen dataset called the \textit{test set}. The ability to predict outcomes of new data that is different from the examples seen during training is called \textit{generalization}, which is a central goal for most applications in machine learning and pattern recognition. 
 
 
-\MK{TO-DO: How to describe computing the loss and updating the parameters? Maybe the stanford CNN course has some nice explanations?}
+\section{Problem Settings in Machine Learning}
+
+Machine learning problems can be divided into three main fields, namely, \textit{supervised learning}, \textit{unsupervised learning}, and \textit{reinforcement learning}. Since this thesis includes work from each of these problem settings, we will briefly introduce these topics to provide the reader with context on the tasks that we are trying to solve. 
+
+\paragraph{Supervised Learning.} In this setting, we are given a dataset $\{(\vx^{(i)}, \vy^{(i)})\}_{i=1}^{N}$ where each data example $\vx^{(i)}$ is accompanied with a target $\vy^{(i)}$. The goal is to estimate a function $f_{\vtheta}(\vx)$ that assigns the correct target to each example in the training set as accurately as possible. In classification problems, each target belongs to one of $K$ discrete categories, such that $\vy = \{1, \dots, K\}$, and we want to predict which of the categories that new data belongs to. Classification tasks will be involved in all included papers of this thesis wherein Paper A and B [Add REFs] we focus on assigning the correct product category to images of grocery items. Another problem type in supervised learning is regression where the targets are continuous and real-valued. An example of a regression task is to predict the outdoors temperature tomorrow given the observed temperature today. 
+
+\paragraph{Unsupervised Learning.}
+
+
+
+\section{Deep Learning}
+
+\subsection{Deep Neural Networks}
+% MLP, CNN, RNN
+
+\subsection{Image Classification}
+% discuss how DNNs are used for classification, maybe mention settings in classification, fine-grained, continual learning and refer them to future chapters
+
+\subsection{Representation Learning}
+% Autoencoders, VAEs
+
+
+\subsection{Deep Reinforcement Learning}
+%% talk about notation, then go into DQN, actor-critic methods and PPO briefly
+
+%  our goal will be to tune an adaptive model  
+
+
+%The tasks of interest involves estimating some probability distribution from data. In classification tasks, we are given pairs $(\vx, \vy)$ of data with an associated target label and are asked to assign one of $k$ categories to input $\vx$. Hence, our goal is to estimate the conditional probability distribution $p(\vy | \vx)$ over the target label $\vy$ given the input data $\vx$. Commonly, the distribution $p_{\vtheta}(\vy | \vx)$ is parameterized by $\vtheta$. One can also write $p_{\vtheta}(\vy | \vx)$ as a function $f_{\vtheta}(\vx): \sR \rightarrow \{1, \dots, k\}$, such that $f_{\vtheta}(\vx) = p_{\vtheta}(\vy | \vx)$, where $f$ is a function that predicts target labels $\vy$ from inputs $\vx$ by performing a mapping between the input and target spaces. Our goal is to update the parameters $\vtheta$ such that they a loss function $\gL(\vtheta)$ is minimized. A typical loss for classification tasks is the cross-entropy loss which can be minimized by taking the gradient of $\gL$ w.r.t. the parameters $\vtheta$. 
+
+
+%\MK{TO-DO: How to describe computing the loss and updating the parameters? Maybe the stanford CNN course has some nice explanations?}
+
+
 
 
 %The goal with this thesis is to provide machine learning methods for recognizing objects from images. Machine learning is a field within Artificial Intelligence where computer programs learns from experiences how to make predictions in new situations. There are three essential parts to enable the computer to make predictions with machine learning. Firstly, we need data representing the scenarios where we have objects that we wish to predict what they are. Secondly, we need a model that learns how to make the decisions based on the provided data. Thirdly, we need a learning algorithm for fitting the model to the data we have such that good and sensible decisions can be made on future data. Machine learning has proven to be successful on various types of data, including, images and video, text, and audio, and there exists many different kinds of models and algorithms for learning decision-making from data. 
@@ -29,15 +62,15 @@ The tasks of interest involves estimating some probability distribution from dat
 
 %In this chapter, we cover related works on datasets on object recognition both with image and text data in Section \ref{sec:datasets_for_object_recognition}. Next, we provide a description of machine learning, especially deep learning, models that were used in the included papers in Section \ref{sec:machine_learning} and \ref{sec:deep_learning}. In Section \ref{sec:continual_learning}, we discuss the setting of continual learning for updating the knowledge of machine learning models that is aiming to make the models capable of handling ever-changing environments as a step towards to enabling life-long learning. 
 
-\section{Machine Learning Basics}
+%\section{Machine Learning Basics}
 
-\section{Deep Learning}
+%\section{Deep Learning}
 
-\subsection{Autoencoders}
+%\subsection{Autoencoders}
 
-\section{Reinforcement Learning}
+%\section{Reinforcement Learning}
 
-\subsection{Monte Carlo Tree Search}
+%\subsection{Monte Carlo Tree Search}
 
 %Data -> Modeling -> Evaluation/Generalization
 
