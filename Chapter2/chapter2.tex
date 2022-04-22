@@ -39,9 +39,37 @@ There exist many different methods for solving problems within these three field
 
 \section{Deep Learning}
 
+In this section, we give a brief overview of deep learning~\cite{goodfellow2016deep} which is the main building block for the models we use in this thesis. Deep learning contains a family of machine learning models based on neural networks that are parametric function approximators used for representing some function of interest. Much of the successes of deep learning methods have been in supervised learning settings, especially in applications where there are large amounts of labelled data and sufficiently large model in terms of number of parameters in the network. In the following sections, we will introduce the deep learning frameworks and models that we have used in this thesis.   
+
+%For many applications, neural networks have been shown to  that are used for representing functions  are parametric function approximators. 
+
 \subsection{Deep Neural Networks}
-In this section, we will briefly introduce some different types of neural networks that can be used for classification problems. 
+
+Neural networks is a class of machine learning models which popularity have grown immensely due to their ability to learn from large and high-dimensional datasets. Moreover, neural networks have been successfully applied in various number of fields in computer vision~\cite{he2016deep, krizhevsky2012imagenet}, natural language processing~\cite{devlin2018bert}, and reinforcement learning~\cite{mnih2015human, silver2016mastering}. These models are constructed by stacking layers of parameters that extract intermediate representations of the input data. The last layer outputs the target answer from the queried input and is specific for the task. For example, in image classification, the last layer outputs class scores representing which class the image is most likely to belong to. 
+
+Next, we will describe three popular types of neural networks, namely, multilayer perceptrons (MLPs), convolutional neural networks (CNNs), and recurrent neural networks (RNNs). \MK{TO-DO: It would be nice to have some simple illustrations of how the networks process the data, I can take inspiration from how other people have done it.}
+
+\paragraph{Multilayer Perceptrons.} The simplest form of feedforward neural networks is the MLP. Let the vector $\vx = (x_1, \dots, x_d)^{T}$ be some form of data where $x_i$ is the $i$-th feature for $i = 1, \dots, d$. Every layer in the MLP constitutes of weights $\mW$ that are used for transforming the input such that the output reveals some hidden structure useful for solving the task of interest. The transformation is performed with a matrix multiplication, i.e., $\vh = \mW \vx$, to receive the intermediate representation $\vh$. An essential part for enabling neural networks to learn non-linear functions is to add an activation function right after the matrix multiplication of each layer. Otherwise, the neural network would only be capable of learning linear functions since the matrix multiplication is a linear mapping. A common activation function is the $a(\vx) = \max(0, \vx)$, or the so called Rectified Linear Unit (ReLU) activation, which outputs $\vx$ when $\vx > 0$ or otherwise zero. By stacking two layers together in a neural network with a ReLU activation, we then obtain the representation $\vh = \mW_2\max(0,  \mW_1\vx)$. Note here that this representation could be predicted class scores, such that $\vh = \hat{\vy}$, if we would use two-layer MLP for a classication task. 
+
+\paragraph{Convolutional Neural Networks.} For data where the spatial order of each feature can be salient for prediction tasks such as image classification, we need a network that can capture relationships between features. CNNs are special kinds of neural networks that can process data with grid-like structures. Convolutional layers constitutes of a set of filters with adaptable weight parameters. To produce the output, we slide each filter across the input across the width and height of the input and compute dot products between the filter weights and the input at any position. Each filter will then produce a 2-dimensional feature map that gives the responses of that filter at every spatial position. The 2-dimensional feature maps from all filters are then stacked depth-wise to obtain the output volume. The obtained feature maps are often downsampled along their spatial dimensions using a pooling operation after the activation function. The parameter sharing in convolutional layers where each weight in a filter is applied to every position of the input comes from the idea that if some visual features are important in one part of the image, it should intuitively be useful at some other location as well. Furthermore, this design choice also makes the model require fewer parameters and a lower number of operations to compute the outputs.
+
+%Intuitively, the network will learn filters that activate when they see some type of visual feature such as edges in early layers, and eventually object parts in later layers that are discriminative . 
+
+%Convolutional layers provide three important properties that can help the model, namely, sparse interactions, parameter sharing, and equivariant representations~\cite{goodfellow2016deep}. In MLPs, the matrix multiplication makes every output unit interact with every input unit. In contrast, CNNs typically establishes sparse interactions between the output and input by making the filter smaller than the input. This means that the model needs fewer parameters and fewer number of operations to compute the output. Furthermore, each weight is applied to every position of the input (except perhaps boundary pixels depending design choices of the layer) compared to in MLPs where a weight is multiplied with one element and never revisited.   
+
+%An intuitive example is to detect edges in an image with pixels around local region rather than using pixels 
+
+%Each filter operates on local regions of the input by computing the dot product between the weights and the local input region. The output is a feature map obtained by computing the dot product between the weights and the input by sliding the filter weights across the whole input.  same weights are slid across the whole input to obtain a feature map weights in a filter , where the dot product of the  
+
+%, we The MLP operates on each input feature individually. Hence, the order of the features is ignored. However, in images, we know that pixels can have strong relationships between each other where, for instance, two neighboring pixels often have similar color and may belong to the same object that we wish to recognize. 
+
+
+\paragraph{Recurrent Neural Networks.} For handling sequential data, we need to take into account that data on previous points in time may have an effect on future outcomes.  
+
+%In this section, we will briefly introduce some different types of neural networks that can be used for classification problems. 
 % MLP, CNN, RNN
+
+%Now, we know how to feed the networks with input data to answer queries, but how do we update the parameters of the model? % short info on backpropagation what it is
 
 \subsection{Autoencoders}
 
