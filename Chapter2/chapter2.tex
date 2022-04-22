@@ -64,7 +64,25 @@ Next, we will describe three popular types of neural networks, namely, multilaye
 %, we The MLP operates on each input feature individually. Hence, the order of the features is ignored. However, in images, we know that pixels can have strong relationships between each other where, for instance, two neighboring pixels often have similar color and may belong to the same object that we wish to recognize. 
 
 
-\paragraph{Recurrent Neural Networks.} For handling sequential data, we need to take into account that data on previous points in time may have an effect on future outcomes.  
+\paragraph{Recurrent Neural Networks.} RNNs are a family of neural network models specialized for processing sequences of data. Similar to CNNs, these models use parameter sharing by applying the same weights across several time steps. The parameter sharing is important in RNNs as it enables the model to handle different sequence lengths as well as being capable of recognizing relevant information that can appear at different locations in the sequence. Many RNNs follow the same procedure through the equation $\vh^{(t)} = f_{\vtheta}(\vh^{(t-1)}, \vx^{(t)})$, where the RNN produces the current state $\vh^{(t)}$ by incorporating the input data $\vx^{(t)}$ at time $t$ into the previous hidden state $\vh^{(t-1)}$. Hence, the hidden state $\vh^{(t)}$ will now contain information about the whole past sequence up to time $t$. In most applications, there will be an extra output layer that reads the information from state $\vh^{(t)}$ to make predictions. An example application for RNNs is predicting the next word in a sentence given previous words, where the RNN should store the necessary information about previous words to predict the rest of the sentence. A common choice of RNN model is the Long Short-Term Memory~\cite{hochreiter1997long} (LSTM) which mitigates problems with vanishing gradients during the training phase. \vspace{1mm}
+
+For training deep networks, \textit{loss} functions are used for measuring how well the network performs to solve the task of interest. In classification tasks, the cross-entropy loss is commonly used where the predicted class scores $\hat{\vy}$ are compared against the true target class $\vy$,
+\begin{align}
+	\gL_{CE}(\vy, \hat{\vy}) = -\sum_{k=1}^{K} \vy[k] \log \hat{\vy}[k],
+\end{align}
+where the true target vector $\vy$ uses a one-hot representation where the true class $i$ is denoted in the vector by setting the $i$-th element in $\vy$ to one, as in $\vy[i] = 1$, and zero elsewhere.
+
+ 
+
+Now when we know more about different variants of deep networks, we need to describe how to update the parameters during training to make accurate predictions.  
+
+In order to train 
+
+Training the networks is performed with an algorithm called \textit{backpropagation}. 
+
+
+
+% For handling sequential data, we need to take into account that data on previous points in time may have an effect on future outcomes.  
 
 %In this section, we will briefly introduce some different types of neural networks that can be used for classification problems. 
 % MLP, CNN, RNN
