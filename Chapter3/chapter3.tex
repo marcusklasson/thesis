@@ -61,14 +61,31 @@ We have complemented the image dataset with external information from the web of
 	%\vspace{-7mm}
 \end{table}
 
+\section{Fine-grained Classification of Grocery Items}
 
-\section{Multi-view Representation Learning of Grocery Items}
+This section describes the approaches we used for classification of grocery items from the available data types in the collected dataset. We begin by introducing the problem setting, followed by describing the methods for learning representations from the available data views. 
+
+\subsection{Problem Setting}
+
+The application we are focusing on is grocery shopping with an assistive vision device. The device could for instance be a mobile phone app where the groceries are recognized by an in-built image classifier from natural images taken with the camera. Training such image classifier to be robust in grocery store environments would typically require an immense amount of labeled training examples of all available groceries. To reduce the need for labeled training data, we aim to combine the collected natural images with web-scraped information about the groceries when training the classifier. The goal is that incorporating the web-scraped information should help the classifier to learn fine-grained details about the items to enhance the classification performance and robustness. 
+
+The available data views that are available for training image classifiers is denoted as follows:
+\begin{itemize}[itemsep=0em,topsep=1pt]
+	\item $\vx$: Natural images of the grocery items in the grocery stores.
+	\item $\vy$: Class labels of grocery items from corresponding natural images.
+	\item $\vi$: Iconic images of the grocery items scraped from a supermarket website.
+	\item $\vw$: Text description of the grocery items scraped from the same supermarket website as $\vi$.
+\end{itemize}
+The simplest approach is to take a standard supervised approach and train a CNN from the natural image and class label pairs. An alternative is leverage from CNNs pre-trained on a large dataset, such as Imagenet~\cite{deng2009imagenet}, and fine-tune the final classification layer to the grocery item recognition task~\cite{sharif2014cnn}. We use ideas from multi-view learning~\cite{xu2013survey} and VAEs~\cite{kingma2013auto} for learning joint representations from the available data views that can be used for training the image classifiers, which we present in the next section.  
+
+
+\subsection{Multi-view Representation Learning of Grocery Items}
 
 This section describes the approach we took for learning representations of grocery items that are shared across the available data types. We employ a deep latent variable model called Variational Canonical Correlation Analysis~\cite{wang2016deep} (VCCA) for learning the shared representation. The main assumption in VCCA is that each data view have been generated from the same latent space. The goal then is to learn this latent space that captures the correspondences between all views into representations shared across the views for the grocery items. This representation can then be utilized for enhance the learning more accurate classifiers as well as for performing tasks such as synthesis and prediction of novel images. Next, we describe how to enable learning the shared latent space. 
 
 Capturing variations from each view in the learned representation is performed by predicting the original views from the latent space. To obtain the latent representation, we extract the representation by encoding the natural images with neural network. The extracted representation is then used for predicting each view individually by inputting the representation through separate neural networks. Note that we only use the natural images for extracting the latent representation here since it is the only view that is available at test time when we want to use the learned classifier in the grocery store. We have two options for exploiting the new representation to train classifiers. The first option is to train the classifier with the latent representations after we have learned the latent space as described above. The second option is to train the classifier and learning the latent space simultaneously by adding an additional classifier network predicting the class label with the latent representation as input. 
 
-\MK{TO-DO: Need to introduce the ELBO. I should also add a figure of the architecture for extra clarity on the method. }
+\MK{TO-DO: I should add a figure of the architecture for extra clarity on the method. }
 %Latent variable models similar to VCCA have been successful in applications where some views are on class-specific levels and the same across all instances of the class. An example of such view could be the label of a digit or letter, as well as the attributes of animals that are the same for all images of every class in the datasets~\cite{wah2011cub, lampert2009learning}. 
 
 % where we can exploit the new representation to learn more accurate classifiers. 
