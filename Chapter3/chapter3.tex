@@ -108,24 +108,43 @@ In this section, we summarize the main results from the experimental study in Pa
 
 Next, we focus on a certain set of classes to inspect to gain more insights in how the additional data views affect the latent space. First, we focus on the green and red apples classes to inspect how the views handle visually different items in color. In Figure \ref{fig:latent_space_visualizations}(d-f), we plot the latent representations for the three models but highlight the green and red apple classes by plotting them as green and red dots respectively. All other classes are plotted as smaller blue dots. We see that both VCCA$_{\vx \vi}$ and VCCA$_{\vx \vw}$ manages to separate the apple classes better than VAE$_{\vx}$, where adding the iconic images yields the most clear separation. Next, we want to study the benefits of the text descriptions. We focus on some yoghurt and juice package classes that are visually similar but have very different ingredients and flavors. In Figure \ref{fig:latent_space_visualizations}(g-i), we plot the latent representations for the three models again where the yoghurt and juice classes are plotted in green and yellow colored dots respectively. Here, we see that VCCA$_{\vx \vw}$ manages to separate these items better than VCCA$_{\vx \vw}$ due to the differences in the text descriptions between the selected package classes. 
 
+\begin{figure}[t]
+	\centering
+	\input{Chapter3/figures/latent_space_visualizations}
+	\vspace{-2mm}
+	\caption{ Visualizations of the latent representations from VAE$_\vx$, VCCA$_{\vx\vi}$, and VCCA$_{\vx\vw}$ projected in 2-dimensional space with PCA. In (a-c), we show the latent representations plotted using the iconic images of the corresponding object class. In (d-f), we illustrate how the iconic images structures the items based on visual similarities by focusing on the \textcolor{ForestGreen}{green} and \textcolor{RedOrange}{red} apple classes in the dataset plotted in their corresponding colors. Similarly, in (g-i), we show how the text descriptions structure items based on ingredients and flavor by focusing on visually similar yoghurt (\textcolor{ForestGreen}{green}) and juice (\textcolor{GreenYellow}{yellow}) packages. The \textcolor{blue}{blue} dots corresponds to all other grocery item classes. } 
+	\label{fig:latent_space_visualizations}
+	\vspace{-3mm}
+\end{figure}
+
 %Conclusions on visualizations: ​
 
 %Iconic image structures items based on visual similarities​
 
 %Text description structures items based on ingredients and flavor
 
-\paragraph{Iconic Image Generation. }
-* generating the iconic images for providing explanations of misclassifications
-
-
-
-\begin{figure}[t]
+\begin{wrapfigure}{r}{0.41\textwidth}
 	\centering
-	\input{Chapter3/figures/latent_space_visualizations}
-	\caption{ Visualizations of the latent representations from VAE$_\vx$, VCCA$_{\vx\vi}$, and VCCA$_{\vx\vw}$ projected in 2-dimensional space with PCA. In (a-c), we show the latent representations plotted using the iconic images of the corresponding object class. In (d-f), we illustrate how the iconic images structures the items based on visual similarities by focusing on the \textcolor{ForestGreen}{green} and \textcolor{RedOrange}{red} apple classes in the dataset plotted in their corresponding colors. Similarly, in (g-i), we show how the text descriptions structure items based on ingredients and flavor by focusing on visually similar yoghurt (\textcolor{ForestGreen}{green}) and juice (\textcolor{GreenYellow}{yellow}) packages. The \textcolor{blue}{blue} dots corresponds to all other grocery item classes. } 
-	\label{fig:latent_space_visualizations}
+	\vspace{-5mm}
+	\begin{tabular}{c c c c}
+		\hline \\[-5mm]
+		\thead{\scriptsize Natural \\[-2mm] \scriptsize Image} & \thead{\scriptsize Iconic \\[-2mm] \scriptsize Image} & \thead{\scriptsize Decoded \\[-2mm] \scriptsize Image} \\[-1mm]
+		%\scriptsize{{\bf Natural Image}} & \scriptsize{{\bf Iconic Image}} & \scriptsize{{\bf Decoded Image}}  \\
+		\hline \\[-3mm]
+		\includegraphics[width=12mm, height=12mm]{Chapter3/figures/decoded_iconic_images/Orange-Bell-Pepper_008.jpg} & \includegraphics[width=12mm, height=12mm]{Chapter3/figures/iconic_image_figures/Orange-Bell-Pepper_Iconic.jpg} & \includegraphics[width=12mm, height=12mm]{Chapter3/figures/decoded_iconic_images/vcca_xiwy/orange_bell_pepper_image2191.png}  \\[-0.7mm] 
+		\hline \\[-3mm]
+		\includegraphics[width=12mm, height=12mm]{Chapter3/figures/decoded_iconic_images/Anjou_015.jpg} & \includegraphics[width=12mm, height=12mm]{Chapter3/figures/iconic_image_figures/Anjou-Pear_Clean.jpg} & \includegraphics[width=12mm, height=12mm]{Chapter3/figures/decoded_iconic_images/vcca_xiwy/anjou_pear_image849.png} \\[-0.7mm]
+		\hline
+	\end{tabular}
 	\vspace{-3mm}
-\end{figure}
+	\caption{Examples of decoded iconic images from VCCA$_{\vx \vi \vw \vy}$ with their corresponding natural image and true iconic image.}
+	\vspace{-2mm}
+	\label{fig:decoded_iconic_images}
+\end{wrapfigure} 
+\paragraph{Iconic Image Generation.} The iconic image decoder can provide explanations for the predicted classes. Figure \ref{fig:decoded_iconic_images} shows two examples of decoded iconic images from two natural images where the class labels are \textit{Orange Bell Pepper} and \textit{Anjou Pear}. On the first row, we see that VCCA$_{\vx \vi \vw \vy}$ has recognized the green bell peppers in the natural image and generated a mixed orange and green bell pepepr in the iconic image. On the second row, we see that the decoded iconic image is a \textit{Granny Smith} apple instead of a pear which was the true class. The classifier consequently predicts the natural image to be a \textit{Granny Smith} apple. Hence, the iconic image decoder can be used as a tool for providing an intuition of why the classifier made an error. 
+
+
+
 
 \section{Discussion}
 
