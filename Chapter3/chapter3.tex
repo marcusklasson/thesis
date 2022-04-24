@@ -86,17 +86,9 @@ This section describes the approach we took for learning representations of groc
 Capturing variations from each view in the learned representation is performed by predicting the original views from the latent space. To obtain the latent representation, we extract the representation by encoding the natural images with neural network. The extracted representation is then used for predicting each view individually by inputting the representation through separate neural networks. Note that we only use the natural images for extracting the latent representation here since it is the only view that is available at test time when we want to use the learned classifier in the grocery store. We have two options for exploiting the new representation to train classifiers. The first option is to train the classifier with the latent representations after we have learned the latent space as described above. The second option is to train the classifier and learning the latent space simultaneously by adding an additional classifier network predicting the class label with the latent representation as input. 
 
 \MK{TO-DO: I should add a figure of the architecture for extra clarity on the method. }
-%Latent variable models similar to VCCA have been successful in applications where some views are on class-specific levels and the same across all instances of the class. An example of such view could be the label of a digit or letter, as well as the attributes of animals that are the same for all images of every class in the datasets~\cite{wah2011cub, lampert2009learning}. 
+%The architecture that we used is shown in Figure X. 
 
-% where we can exploit the new representation to learn more accurate classifiers. 
 
-%The new representation can be used for learning more accurate classifiers.  
-
- 
-
-%The architecture that we used is shown in Figure X.   
-
-%learning joint representation of the different data types.
 
 %we take an encoder-decoder approach as these have been successful in applications with data with images and class-specific additional data types. this is in contrast to webly supervised methods where the web data usually has many instances per class. 
 
@@ -104,17 +96,46 @@ Capturing variations from each view in the learned representation is performed b
 
 
 \section{Experiments}
+
+In this section, we summarize the main results from the experimental study in Paper B. We performed an ablation study with VCCA over the combinations of available data views to investigate how each data view contributes to the classification performance. First, we present results on fine-grained classification performance between the compared methods. Then, we provide insights in how the web-scraped icnoc images and text descriptions contribute to the boosting the classification performance by visualizing their the joint latent spaces. Finally, we demonstrate how the iconic image decoder in VCCA can be used for explaining the misclassifications by generating iconic images from natural images at test time. 
+
+\paragraph{Fine-grained Classification Results.} Adding the web-scraped views in VCCA improves the classification performance over approaches that only utilize the natural images and class labels. ​
+
+
+* fine-grained classification plus superclass classification
+
+\paragraph{Visualization of Latent Space.} The web-scraped iconic images and text descriptions structures the grocery items based on view-specific similarities in the latent space that are beneficial for fine-grained classification. In Figure \ref{fig:latent_space_visualizations}, we illustrate how adding either the iconic image $\vi$ or the text description $\vw$ changes the structure of the latent space, where we have used PCA to project the latent representations into a 2-dimensional space. In Figure \ref{fig:latent_space_visualizations}(a-c), we have plotted the corresponding iconic image for all latent representations of models VAE$_{\vx}$, VCCA$_{\vx \vi}$, VCCA$_{\vx \vw}$ for visualization purposes. The latent space for VAE$_{\vx}$ separates raw and packaged grocery items into two separate clusters. When adding the iconic image in VCCA$_{\vx \vi}$, we observe that the latent space becomes structured according to the color of the items. For VCCA$_{\vx \vw}$, the latent space becomes structured according to the ingredients of the items, where we see in the raw food cluster that bell peppers are placed in the upper region while apples are in the lower region. 
+
+Next, we focus on a certain set of classes to inspect to gain more insights in how the additional data views affect the latent space. First, we focus on the green and red apples classes to inspect how the views handle visually different items in color. In Figure \ref{fig:latent_space_visualizations}(d-f), we plot the latent representations for the three models but highlight the green and red apple classes by plotting them as green and red dots respectively. All other classes are plotted as smaller blue dots. We see that both VCCA$_{\vx \vi}$ and VCCA$_{\vx \vw}$ manages to separate the apple classes better than VAE$_{\vx}$, where adding the iconic images yields the most clear separation. Next, we want to study the benefits of the text descriptions. We focus on some yoghurt and juice package classes that are visually similar but have very different ingredients and flavors. In Figure \ref{fig:latent_space_visualizations}(g-i), we plot the latent representations for the three models again where the yoghurt and juice classes are plotted in green and yellow colored dots respectively. Here, we see that VCCA$_{\vx \vw}$ manages to separate these items better than VCCA$_{\vx \vw}$ due to the differences in the text descriptions between the selected package classes. 
+
+%Conclusions on visualizations: ​
+
+%Iconic image structures items based on visual similarities​
+
+%Text description structures items based on ingredients and flavor
+
+\paragraph{Iconic Image Generation. }
+* generating the iconic images for providing explanations of misclassifications
+
+
+
+\begin{figure}[t]
+	\centering
+	\input{Chapter3/figures/latent_space_visualizations}
+	\caption{ Visualizations of the latent representations from VAE$_\vx$, VCCA$_{\vx\vi}$, and VCCA$_{\vx\vw}$ projected in 2-dimensional space with PCA. In (a-c), we show the latent representations plotted using the iconic images of the corresponding object class. In (d-f), we illustrate how the iconic images structures the items based on visual similarities by focusing on the \textcolor{ForestGreen}{green} and \textcolor{RedOrange}{red} apple classes in the dataset plotted in their corresponding colors. Similarly, in (g-i), we show how the text descriptions structure items based on ingredients and flavor by focusing on visually similar yoghurt (\textcolor{ForestGreen}{green}) and juice (\textcolor{GreenYellow}{yellow}) packages. The \textcolor{blue}{blue} dots corresponds to all other grocery item classes. } 
+	\label{fig:latent_space_visualizations}
+	\vspace{-3mm}
+\end{figure}
+
 \section{Discussion}
 
+Weaknesses:
+\begin{itemize}[noitemsep,topsep=0pt]
+	\item Use video data over natural images for easing dataset collection and user experience with app and classifier
+	\item make use of text descriptions better, separation in latent space is not very clear
+	\item web-scraped views only have one instance, so modeling the view-specific variations is non-trivial how to do. We did try it but learning is not ideal.
+\end{itemize}
 
-\noindent 
-%In this chapter, we provide a summaries of the included paper for this thesis. Paper \ref{sec:paperA} and \ref{sec:paperB} are connected through the Grocery Store dataset where we present the work and then perform an ablation study over which modalities in the dataset that are useful for training classifiers. In Paper \ref{sec:paperC} and \ref{sec:paperD}, we focus on continual learning (CL) and present a new setting that aims to fill the gap between CL research and real-world problems as well as a method for doing so. 
 
-%\begingroup
-%\renewcommand\thesection{\Alph{section}} % for changing section numbering to alphabetic
-%\input{Chapter3/paperA}
-%\input{Chapter3/paperB}
-%\input{Chapter3/paperC}
-%\input{Chapter3/paperD}
 
-%\endgroup
+
