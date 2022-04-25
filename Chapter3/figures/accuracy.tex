@@ -1,0 +1,140 @@
+% This file was created with tikzplotlib v0.10.1.
+
+\pgfplotsset{compat=1.11,
+	/pgfplots/ybar legend/.style={
+		/pgfplots/legend image code/.code={%
+			\draw[##1,/tikz/.cd,yshift=-0.25em]
+			(0cm,0cm) rectangle (3pt,0.8em);},
+	},
+}
+
+\begin{tikzpicture}
+	
+\tikzstyle{every node}=[font=\footnotesize]
+
+\definecolor{crimson2143940}{RGB}{214,39,40}
+\definecolor{darkgray176}{RGB}{176,176,176}
+\definecolor{darkorange25512714}{RGB}{255,127,14}
+\definecolor{forestgreen4416044}{RGB}{44,160,44}
+\definecolor{lightgray204}{RGB}{204,204,204}
+\definecolor{mediumpurple148103189}{RGB}{148,103,189}
+\definecolor{orchid227119194}{RGB}{227,119,194}
+\definecolor{steelblue31119180}{RGB}{31,119,180}
+
+\begin{axis}[
+height=\figheight,
+legend cell align={left},
+legend columns=2,
+legend style={
+  fill opacity=0.8,
+  draw opacity=1,
+  text opacity=1,
+  at={(1.02,0.97)},
+  anchor=north west,
+  draw=lightgray204,
+  font=\scriptsize
+},
+minor xtick={},
+minor ytick={62.5,67.5,72.5,77.5},
+tick align=outside,
+width=\figwidth,
+x grid style={darkgray176},
+xlabel={},
+xmajorticks=false,
+xmin=-0.725, xmax=9.725,
+xtick style={color=black},
+xtick={-2,0,2,4,6,8,10},
+y grid style={darkgray176},
+ylabel={Accuracy (\%)},
+yminorgrids,
+ymajorgrids,
+ymin=59, ymax=81,
+ytick pos=left,
+ytick style={color=black},
+ytick={60,65,70,75,80},
+yticklabels={60,65,70,75,80}
+]
+\draw[draw=black,fill=steelblue31119180,opacity=0.85] (axis cs:-0.25,0) rectangle (axis cs:0.25,67.33);
+\addlegendimage{ybar,ybar legend,draw=black,fill=steelblue31119180,opacity=0.85}
+\addlegendentry{DenseNet}
+
+\draw[draw=black,fill=darkorange25512714,opacity=0.85] (axis cs:0.75,0) rectangle (axis cs:1.25,71.67);
+\addlegendimage{ybar,ybar legend,draw=black,fill=darkorange25512714,opacity=0.85}
+\addlegendentry{Softmax}
+
+\draw[draw=black,fill=forestgreen4416044,opacity=0.85] (axis cs:1.75,0) rectangle (axis cs:2.25,69.2);
+\addlegendimage{ybar,ybar legend,draw=black,fill=forestgreen4416044,opacity=0.85}
+\addlegendentry{VAE$_{\vx}$}
+
+\draw[draw=black,fill=forestgreen4416044,opacity=0.85,postaction={pattern=north east lines, fill opacity=0.85}] (axis cs:2.75,0) rectangle (axis cs:3.25,70.72);
+\addlegendimage{ybar,ybar legend,draw=black,fill=forestgreen4416044,opacity=0.85,postaction={pattern=north east lines, fill opacity=0.85}}
+\addlegendentry{VCCA$_{\vx \vy}$}
+
+\draw[draw=black,fill=crimson2143940,opacity=0.85] (axis cs:3.75,0) rectangle (axis cs:4.25,77.02);
+\addlegendimage{ybar,ybar legend,draw=black,fill=crimson2143940,opacity=0.85}
+\addlegendentry{VCCA$_{\vx \vi}$}
+
+\draw[draw=black,fill=crimson2143940,opacity=0.85,postaction={pattern=north east lines, fill opacity=0.85}] (axis cs:4.75,0) rectangle (axis cs:5.25,77.22);
+\addlegendimage{ybar,ybar legend,draw=black,fill=crimson2143940,opacity=0.85,postaction={pattern=north east lines, fill opacity=0.85}}
+\addlegendentry{VCCA$_{\vx \vi \vy}$}
+
+\draw[draw=black,fill=mediumpurple148103189,opacity=0.85] (axis cs:5.75,0) rectangle (axis cs:6.25,75.37);
+\addlegendimage{ybar,ybar legend,draw=black,fill=mediumpurple148103189,opacity=0.85}
+\addlegendentry{VCCA$_{\vx \vw}$}
+
+\draw[draw=black,fill=mediumpurple148103189,opacity=0.85,postaction={pattern=north east lines, fill opacity=0.85}] (axis cs:6.75,0) rectangle (axis cs:7.25,74.72);
+\addlegendimage{ybar,ybar legend,draw=black,fill=mediumpurple148103189,opacity=0.85,postaction={pattern=north east lines, fill opacity=0.85}}
+\addlegendentry{VCCA$_{\vx \vw \vy}$}
+
+\draw[draw=black,fill=orchid227119194,opacity=0.85] (axis cs:7.75,0) rectangle (axis cs:8.25,77.51);
+\addlegendimage{ybar,ybar legend,draw=black,fill=orchid227119194,opacity=0.85}
+\addlegendentry{VCCA$_{\vx \vi \vw}$}
+
+
+\draw[draw=black,fill=orchid227119194,opacity=0.85,postaction={pattern=north east lines, fill opacity=0.85}] (axis cs:8.75,0) rectangle (axis cs:9.25,77.78);
+\addlegendimage{ybar,ybar legend,draw=black,fill=orchid227119194,opacity=0.85,postaction={pattern=north east lines, fill opacity=0.85}}
+\addlegendentry{VCCA$_{\vx \vi \vw \vy}$}
+
+\path [draw=black, semithick]
+(axis cs:0,65.98)
+--(axis cs:0,68.68);
+
+\path [draw=black, semithick]
+(axis cs:1,71.39)
+--(axis cs:1,71.95);
+
+\path [draw=black, semithick]
+(axis cs:2,68.74)
+--(axis cs:2,69.66);
+
+\path [draw=black, semithick]
+(axis cs:3,70.16)
+--(axis cs:3,71.28);
+
+\path [draw=black, semithick]
+(axis cs:4,76.51)
+--(axis cs:4,77.53);
+
+\path [draw=black, semithick]
+(axis cs:5,76.67)
+--(axis cs:5,77.77);
+
+\path [draw=black, semithick]
+(axis cs:6,74.91)
+--(axis cs:6,75.83);
+
+\path [draw=black, semithick]
+(axis cs:7,73.87)
+--(axis cs:7,75.57);
+
+\path [draw=black, semithick]
+(axis cs:8,77)
+--(axis cs:8,78.02);
+
+\path [draw=black, semithick]
+(axis cs:9,77.33)
+--(axis cs:9,78.23);
+
+\end{axis}
+
+\end{tikzpicture}
