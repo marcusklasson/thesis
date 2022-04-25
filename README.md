@@ -26,3 +26,12 @@ sudo apt-get install texlive-science
 The command ```sudo apt-get install texlive-full``` also exists, but I tried it and it took quite some time to install everything, so I decided to cancel installing everything.
 
 But the KTH template compiled after I had installed those things from texlive!
+
+
+### Error eps file
+If you get this error "Package pdftex.def Error: File `KTHLogo-eps-converted-to.pdf' not found: using draft setting.", it's becuase package epstopdf isnot installed. So you can fix it by executing:
+```
+sudo apt install texlive-font-utils
+```
+
+
