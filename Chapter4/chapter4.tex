@@ -29,18 +29,44 @@ We introduce the notation of our problem setting which resembles the traditional
 where $\gL(\cdot)$ is the loss function, which in our case is the cross-entropy loss.  
 When learning task $t$, the network $f_{\vtheta}$ is at risk of catastrophically forgetting the previous $t-1$ tasks. The forgetting effect shows as the decrease in task accuracy between time steps, for example, $A_{t, i} < A_{t, i-1}$ where $A_{t, i}$ is the accuracy for task $t$ at time step $i$. Replay-based methods mitigate catastrophic forgetting by storing a few number of examples from historical tasks in an external memory. The network $f_{\vtheta}$ is then allowed to fetch old examples from the memory and mix these with the current task dataset to remind itself about the previous tasks during training. 
 
-In the new problem setting, we assume that historical data from old tasks are accessible at any time step. However, we can only fill a small replay memory $\gM$ with $M$ historical samples for replaying old tasks due to processing time constraints prohibiting re-using all historical data at the same time. The challenge then becomes how to know which tasks to include in the replay memory that efficiently retain the previous knowledge when learning new tasks. We decide to fill the replay memory with $M$ historical samples using sequence of task proportions $(a_1, \dots, a_{t-1})$ where $\sum_{i=1}^{t-1} a_i = 1$ and $a_{i} \geq 0$. The number of samples from task $i$ to place in $\gM$ is given by $a_i \cdot M$. In the next section, we introduce a method for selecting the task proportions of which old tasks to replay. 
+In the new problem setting, we assume that historical data from old tasks are accessible at any time step. However, we can only fill a small replay memory $\gM$ with $M$ historical samples for replaying old tasks due to processing time constraints prohibiting re-using all historical data at the same time. The challenge then becomes how to know which tasks to include in the replay memory that efficiently retain the previous knowledge when learning new tasks. We decide to fill the replay memory with $M$ historical samples using sequence of task proportions $(p_1, \dots, p_{t-1})$ where $\sum_{i=1}^{t-1} p_i = 1$ and $p_{i} \geq 0$. The number of samples from task $i$ to place in $\gM$ is given by $p_i \cdot M$. In the next section, we introduce a method for selecting the task proportions of which old tasks to replay. 
 
 
 \paragraph{Comparison to Traditional CL.} The new setting has several similarities to the traditional CL setting. Both settings share the fundamental setting that the data arrive in streams and re-training on all historical data is prohibited. Also, the goal that the model should perform well both historical tasks and tasks associated with new data remains the same. In replay-based CL, we also share the same constraints that the memory size is limited. However, we argue that this limitation is mainly associated with compute rather than of storage. Our assumption aligns with the real-world where data storage is cheap and easy to maintain, but retraining large machine learning models is computationally expensive. The only difference is that we allow filling the limited replay memory from historical data or some other external memory. Here, we argue that historical data is stored rather than deleted in many real-world settings~\cite{bailis2017macrobase}. Thus, we should keep the limited memory assumption for training but allow access to historical data to fill the replay memory to make CL align with real-world needs.
-\MK{this paragraph can be written in a more humble way.}
+\MK{this paragraph can be written in a more humble way, more like "this is something worth to investigate"}
+
+
 
 \subsection{Replay Scheduling for Mitigating Catastrophic Forgetting}
 
+In this section, we describe our replay scheduling method for selecting the replay memory at different time steps. A replay schedule is defined as a sequence $S = (\vp_1, \dots, \vp_{T-1})$, where $\vp_i = (p_1, \dots, p_{T-1})$ for $1 \leq i \leq T-1$ is the sequence of task proportions for determining how many samples per task to fill the replay memory with at time step $i$. To make the selection of task proportions tractable, we construct an action space with a discrete number of choices for the task proportions from historical tasks. 
+
+\paragraph{Discrete Action Space Construction.} We show the procudre for creating the discrete action space in Algorithm \ref{alg:action_space_discretization}. At task $i$, we have $i-1$ historical tasks that we can choose from. We then generate all possible bin vectors $\vb_i = [b_1, \dots, b_{i}] \in \gB_i$ of size $i$ where each element are a task index $1, ..., i$. We sort all bin vectors by the order of task indices and only keep the unique bin vectors. For example, at $i=2$, the unique choices of vectors are $[1,1], [1,2], [2,2]$, where $[1,1]$ indicates that all samples in the replay memory should be from task 1, $[1,2]$ indicates that half memory is from task 1 and the other half are from task etc. The task proportions are then computed by counting the number of occurrences of each task index in $\vb_i$ and dividing by $i$, such that $\vp_i = \texttt{bincount}(\vb_i) / (i)$. From this specification, we have built a tree $\gT$ with different task proportions that can be selected at different time steps. We construct a replay schedule $S$ by traversing through $\gT$ and select a task proportion on every level to append to $S$. We can then evaluate the replay schedule $S$ by training a network on the CL task sequence and use $S$ to compose the replay memory to use for mitigating catastrophic fogretting at every task. 
+
+
+\begin{algorithm}[t]
+	\caption{Discretization of action space with task proportions}
+	\label{alg:action_space_discretization}
+	\begin{algorithmic}[1]
+		\Require Number of tasks $T$
+		\State $\gT = ()$ \Comment{Initialize sequence for storing actions}
+		\For{$i = 1, \dots, T-1$}
+		\State $\gP_i = \{\}$ \Comment{Set for storing task proportions at $i$}
+		\State $\gB = \texttt{combinations}([1:i], i)$ \Comment{Get bin vectors of size $i$ with bins $1, ..., i$}
+		\State $\bar{\gB} = \texttt{unique}(\texttt{sort}(\gB))$ \Comment{Only keep unique bin vectors}
+		\For{$\vb_i \in \hat{\gB}$}
+		\State $\vp_i = \texttt{bincount}(\vb_i) / i$ \Comment{Calculate task proportion}
+		\State $\gP_i = \gP_i \cup \{ \vp_i \}$ \Comment{Add task proportion to set}
+		\EndFor
+		\State $\gT[i] = \gP_i$ \Comment{Add set of task proportions to action sequence}
+		\EndFor
+		\State \Return $\gT$ \Comment{Return action sequence as discrete action space}
+	\end{algorithmic}
+\end{algorithm}
 
 
 
-%CZ comment in reviews: Comparing our setting with the traditional continual learning setting, we share the fundamental setting that the data comes in streams and we cannot re-train on all historical data. Also, we share the common goal that the model should do well both in tasks with historical data and tasks associated with new data. In memory-based continual learning, we also share the same constraints that the memory size is limited where we argue that this limitation is mainly associated with compute instead of storage which aligns with the real-world where data storage is cheap and easy but retraining large ML models is computationally expensive where the time would not allow. The only difference is that we allow filling this limited memory from historical data or another external memory. Here, we argue that historical data are never thrown away in real-world settings. Thus, to make continual learning align with real-world needs, we should keep the limited memory assumption for training but allow access to historical data to fill this memory.
+
 
 
 %% Have sectiobn for MCTS. include a limitations paragraph there that can be referred to later in Discussion. It kind of bridges over well to the meta-policy learning too. Say that we will use MCTS for studying if scheduling is important in this new setting.
