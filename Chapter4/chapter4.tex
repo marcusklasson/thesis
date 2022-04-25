@@ -21,31 +21,30 @@ In this section, we introduce a slightly new CL setting considering the real-wor
 
 \subsection{Problem Setting}
 
+We introduce the notation of our problem setting which resembles the traditional CL setting for image classification. We let a neural network $f_{\vtheta}$, parameterized by $\vtheta$, learn $T$ tasks from the datasets $\gD_1, \dots, \gD_T$ arriving sequentially one at a time. The $t$-th dataset $\gD_t = \{(\vx_{t}^{(i)}, \vy_{t}^{(i)})\}_{i=1}^{N_{t}}$ consists of $N_t$ samples where $\vx_{t}^{(i)}$ and $\vy_{t}^{(i)}$ are the $i$-th data point and class label respectively. The training objective at task $t$ is given by 
+\vspace{-2mm}
+\begin{align}
+	\underset{\vtheta}{\text{min}} \sum_{i=1}^{N_t} \gL(f_{\vtheta}(\vx_t^{(i)}), \vy_{t}^{(i)}),
+\end{align}
+where $\gL(\cdot)$ is the loss function, which in our case is the cross-entropy loss.  
+When learning task $t$, the network $f_{\vtheta}$ is at risk of catastrophically forgetting the previous $t-1$ tasks. The forgetting effect shows as the decrease in task accuracy between time steps, for example, $A_{t, i} < A_{t, i-1}$ where $A_{t, i}$ is the accuracy for task $t$ at time step $i$. Replay-based methods mitigate catastrophic forgetting by storing a few number of examples from historical tasks in an external memory. The network $f_{\vtheta}$ is then allowed to fetch old examples from the memory and mix these with the current task dataset to remind itself about the previous tasks during training. 
+
+In the new problem setting, we assume that historical data from old tasks are accessible at any time step. However, we can only fill a small replay memory $\gM$ with $M$ historical samples for replaying old tasks due to processing time constraints prohibiting re-using all historical data at the same time. The challenge then becomes how to know which tasks to include in the replay memory that efficiently retain the previous knowledge when learning new tasks. We decide to fill the replay memory with $M$ historical samples using sequence of task proportions $(a_1, \dots, a_{t-1})$ where $\sum_{i=1}^{t-1} a_i = 1$ and $a_{i} \geq 0$. The number of samples from task $i$ to place in $\gM$ is given by $a_i \cdot M$. In the next section, we introduce a method for selecting the task proportions of which old tasks to replay. 
+
+
+\paragraph{Comparison to Traditional CL.} The new setting has several similarities to the traditional CL setting. Both settings share the fundamental setting that the data arrive in streams and re-training on all historical data is prohibited. Also, the goal that the model should perform well both historical tasks and tasks associated with new data remains the same. In replay-based CL, we also share the same constraints that the memory size is limited. However, we argue that this limitation is mainly associated with compute rather than of storage. Our assumption aligns with the real-world where data storage is cheap and easy to maintain, but retraining large machine learning models is computationally expensive. The only difference is that we allow filling the limited replay memory from historical data or some other external memory. Here, we argue that historical data is stored rather than deleted in many real-world settings~\cite{bailis2017macrobase}. Thus, we should keep the limited memory assumption for training but allow access to historical data to fill the replay memory to make CL align with real-world needs.
+\MK{this paragraph can be written in a more humble way.}
+
+\subsection{Replay Scheduling for Mitigating Catastrophic Forgetting}
+
+
 
 
 %CZ comment in reviews: Comparing our setting with the traditional continual learning setting, we share the fundamental setting that the data comes in streams and we cannot re-train on all historical data. Also, we share the common goal that the model should do well both in tasks with historical data and tasks associated with new data. In memory-based continual learning, we also share the same constraints that the memory size is limited where we argue that this limitation is mainly associated with compute instead of storage which aligns with the real-world where data storage is cheap and easy but retraining large ML models is computationally expensive where the time would not allow. The only difference is that we allow filling this limited memory from historical data or another external memory. Here, we argue that historical data are never thrown away in real-world settings. Thus, to make continual learning align with real-world needs, we should keep the limited memory assumption for training but allow access to historical data to fill this memory.
 
 
+%% Have sectiobn for MCTS. include a limitations paragraph there that can be referred to later in Discussion. It kind of bridges over well to the meta-policy learning too. Say that we will use MCTS for studying if scheduling is important in this new setting.
 
-
-Here, we introduce the notation of our problem setting which resembles the traditional CL setting for image classification. We let a neural network $f_{\vtheta}$, parameterized by $\vtheta$, learn $T$ tasks sequentially from the datasets $\gD_1, \dots, \gD_T$ arriving one at a time. %given their corresponding task datasets $\gD_1, \dots, \gD_T$ arriving in order. 
-The $t$-th dataset $\gD_t = \{(\vx_{t}^{(i)}, y_{t}^{(i)})\}_{i=1}^{N_{t}}$ consists of $N_t$ samples where $\vx_{t}^{(i)}$ and $y_{t}^{(i)}$ are the $i$-th data point and class label respectively. The training objective at task $t$ is given by 
-%\vspace{-2mm}
-\begin{align}
-	\underset{\vtheta}{\text{min}} \sum_{i=1}^{N_t} \ell(f_{\vtheta}(\vx_t^{(i)}), y_{t}^{(i)}),
-\end{align}
-where $\ell(\cdot)$ is the loss function, e.g., cross-entropy loss in our case. 
-When learning task $t$, the network $f_{\vtheta}$ is at risk of catastrophically forgetting the previous $t-1$ tasks.  
-%Since $\gD_t$ is only accessible at time step $t$, the network $f_{\vtheta}$ is at risk of catastrophically forgetting the previous $t-1$ tasks when learning the current task. 
-Replay-based methods mitigate forgetting historical tasks by storing old examples in an external replay memory, that is mixed with the current task dataset during training. 
-%Replay-based continual learning methods mitigate the forgetting of old tasks by storing old examples in an external replay memory, that is mixed with the current task dataset during training. 
-Next, we describe our method for constructing this replay memory.  
-
-We assume that historical data from old tasks are accessible at any time step $t$. However, since the historical data is prohibitively large, we can only fill a small replay memory $\gM$ with $M$ historical samples for replay due to processing time constraints. 
-The challenge is how to fill the replay memory with $M$ samples that efficiently retain the knowledge of old tasks when learning new tasks. We focus on selecting the samples on task-level by deciding on the task proportion $(a_1, \dots, a_{t-1})$ of samples to fetch from each task, where $a_{i} \geq 0$ is the proportion of $M$ examples from task $i$ to place in $\gM$ and $\sum_{i=1}^{t-1} a_i = 1$. Consequently, we need a method for choosing these task proportions of which old tasks to replay. 
-To simplify this selection, we construct a discrete set of choices for possible task proportions that can be used for constructing the replay memory $\gM$.
-%telling how many samples from each task to use when constructing the replay memory $\gM$.
-%To simplify this selection, we construct a discrete set of choices for possible task proportions telling how many samples from each task to use when constructing the replay memory $\gM$. 
 
 \section{Meta-Policy Learning for Replay Scheduling}
 \section{Experiments}
