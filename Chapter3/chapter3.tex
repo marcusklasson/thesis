@@ -25,7 +25,7 @@ Learning fine-grained details about objects often requires large amounts of labe
 
 \subsection{Multi-view Learning}
 %\paragraph{Multi-view Learning.} 
-Learning from several data sources and modalities % CCA, Autoencoders, VCCA, multimodal VAEs
+\MK{TO-DO: Learning from several data sources and modalities. Briefly on multi-view learning approchaes and VCCA.} % CCA, Autoencoders, VCCA, multimodal VAEs
 
 
 
@@ -158,16 +158,15 @@ Next, we focus on a certain set of classes to inspect to gain more insights in h
 
 
 
-
 \section{Discussion}
 
-Weaknesses:
-\begin{itemize}[noitemsep,topsep=0pt]
-	\item Use video data over natural images for easing dataset collection and user experience with app and classifier
-	\item make use of text descriptions better, separation in latent space is not very clear
-	\item web-scraped views only have one instance, so modeling the view-specific variations is non-trivial how to do. We did try it but learning is not ideal.
-\end{itemize}
+In the experiments, we showed that utilizing the web-scraped information with VCCA can enhance the performance of grocery item classifiers. This shows that the cheaper web-scraped views can serve as a good alternative for improving classification performance over collecting more natural images in the grocery stores. Furthermore, we illustrated how the iconic images and text descriptions affects the structure of the latent space based on view-specific information. More specifically, the iconic images structures the latent space after visual similarities such as colors and shapes, while the text descriptions pushes items with similar ingredients and flavors closer to each other in the latent space. Finally, we demonstrated how the iconic images can be used for providing potential explanations for misclassifications, which could help us detect hard classes and give us indications of how robust the latent representations are to classifying images with different classes. 
 
+We observed that utilizing the iconic images in VCCA affects the classification performance significantly better than the text descriptions. Potentially, this is due to the text description view to be more noisy than the iconic images as there are few words that are relevant to the recognition task. However, the text descriptions could be utilized more efficiently, for example by pre-processing the text to keep words describing fine-grained details about the items as well as removing stop words ('the', 'it', 'and', etc.) and other irrelevant words. A second option would be to use attention mechanisms~\cite{luong2015effective, vaswani2017attention} that helps the model to learn which words to emphasize on when learning the joint latent representations. We could also encode the text into a single-vector embedding with various methods~\cite{mikolov2013distributed, pennington2014glove, lan2019albert} and replace the RNN with an MLP predicting in the embedding space which the text embedding the natural image is closes to. 
+
+Regarding the dataset collection, we have suggested extensions on how to provide more useful information about the items to improve the recognition task. Firstly, it would be valuable to download instances of iconic images and text descriptions from more supermarket websites to potentially allow the VCCA model to capture more view-specific variations into the learned representations. Secondly, the model should be extended to handle video data rather than still images. This would require record videos with the mobile phone camera in the grocery stores to properly evaluate the classifiers. Nevertheless, the extension to video would be beneficial for user experience of the recognition app since the classifier would receive more chances to classify the items correctly by utilizing multiple frames. 
+
+Finally, the Grocery store dataset could be extended to zero/few-shot learning~\cite{xian2018zero, wang2020generalizing} and continual learning~\cite{delange2021continual, parisi2019continual} settings. Such applications are important for assistive vision devices to build data-efficient and adaptable systems that improves their usability in real-world scenarios. 
 
 
 
