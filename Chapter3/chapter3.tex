@@ -99,8 +99,7 @@ Capturing variations from each view in the learned representation is performed b
 
 In this section, we summarize the main results from the experimental study in Paper B. We performed an ablation study with VCCA over the combinations of available data views to investigate how each data view contributes to the classification performance. First, we present results on fine-grained classification performance between the compared methods. Then, we provide insights in how the web-scraped icnoc images and text descriptions contribute to the boosting the classification performance by visualizing their the joint latent spaces. Finally, we demonstrate how the iconic image decoder in VCCA can be used for explaining the misclassifications by generating iconic images from natural images at test time. 
 
-\paragraph{Fine-grained Classification Results.} Adding the web-scraped views in VCCA improves the classification performance over approaches that only utilize the natural images and class labels. ​
-
+We compare the VCCA models against two CNN baselines that uses the DenseNet~\cite{huang2017densely} architecture. The first baseline is a DenseNet trained from scratch on the dataset, and the second baseline is a Softmax classifier trained from image features extracted from a DenseNet pre-trained on ImageNet. We denote which data views that are used by VCCA using subscripts. For instance, VCCA$_{\vx \vi \vw}$ means that the natural images $\vx$, iconic images $\vi$, and text descriptions $\vw$ are utilized for learning the joint latent representation. These VCCA models uses the two-stage classifier setup with steps 1) train VCCA on the data views, and 2) train 1-layer MLP classifier using the extracted latent representations from VCCA and the corresponding class labels. We also compare against VAE$_{\vx}$ only using the natural images $\vx$ trained in this setting. The VCCA models with class label decoders are denoted by using $\vy$ in the subscript, such as VCCA$_{\vx \vi \vw \vy}$. 
 
 \begin{figure}[t]
 	\centering
@@ -108,10 +107,13 @@ In this section, we summarize the main results from the experimental study in Pa
 	\setlength{\figheight}{.22\textheight}
 	\input{Chapter3/figures/accuracy}
 	\vspace{-2mm}
-	\caption{Testing}
-	\label{fig:testing}
+	\caption{Fine-grained accuracies on the Grocery Store dataset for all classification methods. We show the means and standard deviations averaged over 5 seeds. Adding the iconic image $\vi$ and text description $\vw$ for learning joint representations with VCCA improves the classification performance over approaches that only utilize the natural images and class labels.}
+	\label{fig:fine_grained_classification_results}
 	\vspace{-4mm}
 \end{figure}
+
+\paragraph{Fine-grained Classification Results.} Adding the web-scraped views in VCCA improves the classification performance over approaches that only utilize the natural images and class labels. Figure \ref{fig:fine_grained_classification_results} shows a bar plot over the fine-grained accuracies achieved by all classification methods. Among the methods only using natural images and class labels, we see that the Softmax baseline performs best, which could be due to some information loss when compressing the images into as low-dimensional latent representations with VAE$_{\vx}$ and VCCA$_{\vx \vy}$. The performance of VCCA significantly improves over Softmax when the iconic image $\vi$ and text description $\vw$ are used, which shows that both data views are useful for enhancing the fine-grained classification performance. Comparing VCCA$_{\vx \vi}$ and VCCA$_{\vx \vw}$, we see that utilizing the iconic image has an advantage over using the text description for improving the performance. This could be due to the fact that the text descriptions are providing information on ingredients and flavors rather than visual appearance. Combining both $\vi$ and $\vw$ achieves on par performance as only utilizing the iconic image, which could potentially be improved by filtering the text descriptions for obtaining words relevant for describing the fine-grained details of the items. Finally, we observe that both classification options for VCCA performs similar, which could potentially be since $\vi$ and $\vw$ acts as labels since there is only a single instance of these views for all classes.  
+
 
 
 \paragraph{Visualization of Latent Space.} The web-scraped iconic images and text descriptions structures the grocery items based on view-specific similarities in the latent space that are beneficial for fine-grained classification. In Figure \ref{fig:latent_space_visualizations}, we illustrate how adding either the iconic image $\vi$ or the text description $\vw$ changes the structure of the latent space, where we have used PCA to project the latent representations into a 2-dimensional space. In Figure \ref{fig:latent_space_visualizations}(a-c), we have plotted the corresponding iconic image for all latent representations of models VAE$_{\vx}$, VCCA$_{\vx \vi}$, VCCA$_{\vx \vw}$ for visualization purposes. The latent space for VAE$_{\vx}$ separates raw and packaged grocery items into two separate clusters. When adding the iconic image in VCCA$_{\vx \vi}$, we observe that the latent space becomes structured according to the color of the items. For VCCA$_{\vx \vw}$, the latent space becomes structured according to the ingredients of the items, where we see in the raw food cluster that bell peppers are placed in the upper region while apples are in the lower region. 
@@ -122,7 +124,7 @@ Next, we focus on a certain set of classes to inspect to gain more insights in h
 	\centering
 	\input{Chapter3/figures/latent_space_visualizations}
 	\vspace{-2mm}
-	\caption{ Visualizations of the latent representations from VAE$_\vx$, VCCA$_{\vx\vi}$, and VCCA$_{\vx\vw}$ projected in 2-dimensional space with PCA. In (a-c), we show the latent representations plotted using the iconic images of the corresponding object class. In (d-f), we illustrate how the iconic images structures the items based on visual similarities by focusing on the \textcolor{ForestGreen}{green} and \textcolor{RedOrange}{red} apple classes in the dataset plotted in their corresponding colors. Similarly, in (g-i), we show how the text descriptions structure items based on ingredients and flavor by focusing on visually similar yoghurt (\textcolor{ForestGreen}{green}) and juice (\textcolor{GreenYellow}{yellow}) packages. The \textcolor{blue}{blue} dots corresponds to all other grocery item classes. } 
+	\caption{ Visualizations of the latent representations from VAE$_\vx$, VCCA$_{\vx\vi}$, and VCCA$_{\vx\vw}$ projected in 2-dimensional space with PCA. In (a-c), we show the latent representations plotted using the iconic images of the corresponding object class. In (d-f), we illustrate how the iconic images structures the items based on visual similarities by focusing on the \textcolor{ForestGreen}{green} and \textcolor{RedOrange}{red} apple classes in the dataset plotted in their corresponding colors. Similarly, in (g-i), we show how the text descriptions structure items based on ingredients and flavor by focusing on visually similar yoghurt (\textcolor{ForestGreen}{green}) and juice (\textcolor{GreenYellow}{yellow}) packages. The \textcolor{blue}{blue} dots correspond to all other grocery item classes. } 
 	\label{fig:latent_space_visualizations}
 	\vspace{-3mm}
 \end{figure}
@@ -133,7 +135,7 @@ Next, we focus on a certain set of classes to inspect to gain more insights in h
 
 %Text description structures items based on ingredients and flavor
 
-\begin{wrapfigure}{r}{0.41\textwidth}
+\begin{wrapfigure}{r}{0.44\textwidth}
 	\centering
 	\vspace{-5mm}
 	\begin{tabular}{c c c c}
@@ -141,14 +143,15 @@ Next, we focus on a certain set of classes to inspect to gain more insights in h
 		\thead{\scriptsize Natural \\[-2mm] \scriptsize Image} & \thead{\scriptsize Iconic \\[-2mm] \scriptsize Image} & \thead{\scriptsize Decoded \\[-2mm] \scriptsize Image} \\[-1mm]
 		%\scriptsize{{\bf Natural Image}} & \scriptsize{{\bf Iconic Image}} & \scriptsize{{\bf Decoded Image}}  \\
 		\hline \\[-3mm]
-		\includegraphics[width=12mm, height=12mm]{Chapter3/figures/decoded_iconic_images/Orange-Bell-Pepper_008.jpg} & \includegraphics[width=12mm, height=12mm]{Chapter3/figures/iconic_image_figures/Orange-Bell-Pepper_Iconic.jpg} & \includegraphics[width=12mm, height=12mm]{Chapter3/figures/decoded_iconic_images/vcca_xiwy/orange_bell_pepper_image2191.png}  \\[-0.7mm] 
+		\includegraphics[width=13mm, height=13mm]{Chapter3/figures/decoded_iconic_images/Orange-Bell-Pepper_008.jpg} & \includegraphics[width=13mm, height=13mm]{Chapter3/figures/iconic_image_figures/Orange-Bell-Pepper_Iconic.jpg} & \includegraphics[width=13mm, height=13mm]{Chapter3/figures/decoded_iconic_images/vcca_xiwy/orange_bell_pepper_image2191.png}  \\[-0.7mm] 
 		\hline \\[-3mm]
-		\includegraphics[width=12mm, height=12mm]{Chapter3/figures/decoded_iconic_images/Anjou_015.jpg} & \includegraphics[width=12mm, height=12mm]{Chapter3/figures/iconic_image_figures/Anjou-Pear_Clean.jpg} & \includegraphics[width=12mm, height=12mm]{Chapter3/figures/decoded_iconic_images/vcca_xiwy/anjou_pear_image849.png} \\[-0.7mm]
+		\includegraphics[width=13mm, height=13mm]{Chapter3/figures/decoded_iconic_images/Anjou_015.jpg} & \includegraphics[width=13mm, height=13mm]{Chapter3/figures/iconic_image_figures/Anjou-Pear_Clean.jpg} & \includegraphics[width=13mm, height=13mm]{Chapter3/figures/decoded_iconic_images/vcca_xiwy/anjou_pear_image849.png} \\[-0.7mm]
 		\hline
 	\end{tabular}
 	\vspace{-3mm}
+	\captionsetup{width=.9\linewidth}
 	\caption{Examples of decoded iconic images from VCCA$_{\vx \vi \vw \vy}$ with their corresponding natural image and true iconic image.}
-	\vspace{-2mm}
+	\vspace{-3mm}
 	\label{fig:decoded_iconic_images}
 \end{wrapfigure} 
 \paragraph{Iconic Image Generation.} The iconic image decoder can provide explanations for the predicted classes. Figure \ref{fig:decoded_iconic_images} shows two examples of decoded iconic images from two natural images where the class labels are \textit{Orange Bell Pepper} and \textit{Anjou Pear}. On the first row, we see that VCCA$_{\vx \vi \vw \vy}$ has recognized the green bell peppers in the natural image and generated a mixed orange and green bell pepper in the iconic image. On the second row, we see that the decoded iconic image is a \textit{Granny Smith} apple instead of a pear which was the true class. The classifier consequently predicts the natural image to be a \textit{Granny Smith} apple. Hence, the iconic image decoder can be used as a tool for providing an intuition of why the classifier made an error. 
