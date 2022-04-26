@@ -13,7 +13,13 @@ This chapter introduces the idea of replay scheduling for mitigating catastrophi
 \MK{TO-DO: Motivate replay scheduling from mobile phone perspective, perhaps from perspective that phones can store lots of data but how to select which classes to replay. Maybe it should also be from the computational perspective, that we want such scheduling policy to work in many scenarios without additional compute cost for the policy learning. }
 
 %\section{Introduction}
-\section{Related Work}
+\section{Related Work}\label{ch4/sec:related_work}
+
+In this section, we give an overview of previous works related to Paper C and D. We begin by describing different approaches in CL, especially replay-based approaches, and then discuss meta-learning policies and generalization in RL.
+
+\paragraph{Continual Learning.} There exist many different approaches in CL for mitigating catastrophic forgetting in neural networks. In general, these approaches can be divided into three main cores, namely, \textit{regularization-based}, \textit{arcitecture-based}, and \textit{replay-based} methods. Regularization-based methods are mainly focused on applying regularization techniques on parameters important for recognizing old tasks and fit the remaining parameters to new tasks [Add REFs]. Knowledge distillation methods also belong to these approaches where classification logits are used for regularizing the output units for previous tasks in the network [Add REFs].  
+
+
 % General CL papers, add new papers that you have seen. Then Replay/memory-based CL approaches, add new and contrastive approaches. Perhaps something on meta-policy learning approaches, would be useful to tell how we use reinforcement learning here
 
 \section{Replay Scheduling in Continual Learning} 
