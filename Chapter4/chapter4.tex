@@ -10,6 +10,8 @@ This chapter introduces the idea of replay scheduling for mitigating catastrophi
 %A simple, yet effcient, approach to mitigate catastrophically forgetting past tasks is to add some 
 %Replay scheduling involves selecting which tasks to fetch examples from and add to a replay memory at different times. The replay memory is then mixed with a batch of examples from the current task to learn to help the network to remember the previously learned tasks selected by the scheduler. 
 
+\MK{TO-DO: Motivate replay scheduling from mobile phone perspective, perhaps from perspective that phones can store lots of data but how to select which classes to replay. Maybe it should also be from the computational perspective, that we want such scheduling policy to work in many scenarios without additional compute cost for the policy learning. }
+
 %\section{Introduction}
 \section{Related Work}
 % General CL papers, add new papers that you have seen. Then Replay/memory-based CL approaches, add new and contrastive approaches. Perhaps something on meta-policy learning approaches, would be useful to tell how we use reinforcement learning here
@@ -74,6 +76,10 @@ We are interested in studying whether the time to replay different tasks is impo
 
 
 \section{Meta-Policy Learning for Replay Scheduling}
+
+
+
+
 \section{Experiments}
 \section{Discussion}
 
