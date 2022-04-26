@@ -1,52 +1,48 @@
 
-\begin{comment}
 
-%%% Prepage before chapter
-\begin{flushright}
-\textbf{Paper A} \\
 
-\textbf{Hierarchical Grocery Image Dataset} \\
-
-In \textit{Winter Conference on computer vision Applications (WACV), 2019.}
-
-\end{flushright}
-\pagecolor{cyan}\afterpage{\nopagecolor}
-	
-\end{comment}
-
-\renewcommand*{\bibname}{References}
-\renewcommand*{\thechapter}{A}  % use A, B, C for chapter numbers
-\renewcommand{\chaptername}{Paper} % A chapter is now called Paper
-\renewcommand*{\thepage}{A\arabic{page}}
-\setcounter{page}{1}
+%\renewcommand{\thechapter}{A}  % use A, B, C for chapter numbers
+%\renewcommand{\chaptername}{Paper} % A chapter is now called Paper
+%\renewcommand\thesection{\arabic{section}}
+%\renewcommand*{\thepage}{A\arabic{page}}
+%\setcounter{page}{1}
+%\setcounter{section}{0}
 
 %%% Paper content
 
 \chapter{
-	\centering{
-		Name for Paper A
-}}
-\begin{center}
-	\large{Marcus Klasson, Cheng Zhang, Hedvig Kjellström}
-\end{center}
+	\centering{A Hierarchical Grocery Store Image Dataset with Visual and Semantic Labels}
+}
+\chaptermark{Hierarchical Grocery Store Image Dataset}
+\vspace{-1cm}
+\large{\textbf{Marcus Klasson}} \\
+\large{\textit{Robotics, Perception, and Learning, EECS}} \\
+\large{\textit{KTH Royal Institute of Technology, Stockholm, Sweden}} \\
+
+\noindent\large{\textbf{Cheng Zhang}} \\
+\large{\textit{Microsoft Research}} \\
+\large{\textit{Cambridge, United Kingdom}} \\
+
+\noindent\large{\textbf{Hedvig Kjellstr\"{o}m}} \\
+\large{\textit{Robotics, Perception, and Learning, EECS}} \\
+\large{\textit{KTH Royal Institute of Technology, Stockholm, Sweden}} 
+%\begin{center}
+%	\large{Marcus Klasson, Cheng Zhang, Hedvig Kjellström} \\
+%	\small{HGej hej}
+%\end{center}
 \vspace{5pt}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}
-	%\printinunitsof{in}\prntlen{\linewidth}
-	Abstract aby stract
-	
+	Image classification models built into visual support systems and other assistive devices need to provide accurate predictions about their environment. We focus on an application of assistive technology for people with visual impairments, for daily activities such as shopping or cooking. In this paper, we provide a new benchmark dataset for a challenging task in this application -- classification of fruits, vegetables, and refrigerated products, e.g. milk packages and juice cartons, in grocery stores. To enable the learning process to utilize multiple sources of structured information, this dataset not only contains a large volume of natural images but also includes the corresponding information of the product from an online shopping website. Such information encompasses the hierarchical structure of the object classes, as well as an iconic image of each type of object. This dataset can be used to train and evaluate image classification models for helping visually impaired people in natural environments. Additionally, we provide benchmark results evaluated on pretrained convolutional neural networks often used for image understanding purposes, and also a multi-view variational autoencoder, which is capable of utilizing the rich product information in the dataset.
 \end{abstract}
 
-%\setcounter{section}{0}
-\section{Introduction}\label{sec:paperA_introduction}
-hej hej här är en artikel
+%%% Contents
+\input{PaperA/sections/introduction}
+\input{PaperA/sections/related-work}
 
-\newpage
-
-what do you think this is?
-
-\newpage 
-hello hello city 
+\renewcommand*{\bibname}{References}
+\bibliographystyleA{unsrt}
+\bibliographyA{References/paperA}
