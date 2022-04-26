@@ -169,12 +169,33 @@ CZ and HK presented the idea and the data collection procedure for the natural i
 \subsection{\underline{Paper B}: Using Variational Multi-View Learning for Classification of Grocery Items}
 \label{sec:paperB}
 
+\begin{comment}
+	
+
 \begin{figure}[t]
 	\centering
-	\input{Chapter1/figures/paperB_pca_latents_visualization}
-	\caption{\MK{Make this fig smaller! E.g. only show VAE and VCCA xiwy latent spaces to show difference.} \small{Visualizations of the latent representations projected in 2D space with PCA to illustrate how the latent space changes when learning the latent representations from either the iconic images $\vi$ or the text descriptions $\vw$ in addition to the natural images $\vx$. In the first column, we show the latent representations plotted using the iconic images of the corresponding object class for VAE$_\vx$, VCCA$_{\vx\vi}$, and VCCA$_{\vx\vw}$, where the subscript on the models indicates which data views that were utilized. In the second column, we focus on the red and green apple classes in the dataset to demonstrate how the iconic images separates these items based on their different colors. Similarly, in the third column, we focus on the visually similar juice (yellow dots) and yoghurt (green dots) packages to demonstrate how the text descriptions separates these items based on their different ingredients and flavors. The blue dots corresponds to all other grocery item classes. } }
+	\begin{subfigure}[b]{0.3\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{Chapter1/pics_paperB/pca_latents_vae_seed2}
+		\vspace{-7mm}
+		\caption{VAE$_{\vx}$}
+		\label{fig:pca_latents_vae}
+	\end{subfigure} 
+	\hspace{-5mm}
+	%\hfill
+	\begin{subfigure}[b]{0.3\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{Chapter1/pics_paperB/pca_latents_vcca_xiwy_seed2}
+		\vspace{-7mm}
+		\caption{VCCA$_{\vx \vi \vw \vy}$ }
+		\label{fig:pca_latents_vcca_xiwy}
+	\end{subfigure}
+	\vspace{-2mm}
+	\captionsetup{width=.56\textwidth}
+	\caption{Visualizations of the latent representations projected in 2D space with PCA from models VAE$_{\vx}$ and VCCA$_{\vx \vi \vw \vy}$. We plot the corresponding iconic image for each latent representation for visualization purposes. We observe that VCCA$_{\vx \vi \vw \vy}$ structures the items based on visual similarities by incorporating the web-scraped information into the latent representations, while VAE$_{\vx}$ only manages to separate the items into two clusters of raw and packaged items. }
 	\label{fig:paperB_pca_latents}
 \end{figure}
+\end{comment}
 
 %Visualizations of the latent representations from the test set, where we plot the iconic image of the corresponding object classes. We also plot the PCA projection of the natural image features from the off-the-shelf DenseNet169 in Figure \ref{fig:pca_densenet}. All models have been initialized with the same random seed before training. Abbreviations: VAE, Variational Autoencoder; VCCA, Variational Canonical Correlation Analysis.
 
@@ -187,7 +208,36 @@ CZ and HK presented the idea and the data collection procedure for the natural i
 \paragraph{Summary} 
 We investigate whether training image classifiers can benefit from learning joint representations of grocery items using multi-view learning over the natural images and web-scraped information of the grocery items in the Grocery Store dataset (see Paper \ref{sec:paperA}). We employ a deep multi-view model based on VAEs called Variational Canonical Correlation Analysis (VCCA)~\cite{wang2016deep} for learning joint representations of the different data types, i.e., natural images, iconic images, and text descriptions. We performed a thorough ablation study over all data types to demonstrate how they contribute individually to enhancing the classification performance. Furthermore, we apply two classification approaches where we (i) train the classifier on the joint latent representations, and (ii) using a generative classifier by incorporating a class decoder to the VCCA model that can be used for classifying images. 
 
-We performed a thorough ablation study over all data types to demonstrate how they contribute individually to enhancing the classification performance. To gain further insights into our results, we visualized the learned representations of the grocery items from VCCA and discussed how the iconic images and text descriptions help the model to better distinguish between the groceries. Our results show that the iconic images help to group the items based on their color and shape while text descriptions separate the items based on differences in ingredients and flavor. Figure \ref{fig:paperB_pca_latents} shows visualizations of the latent representations projected in 2-dimensional space using Principal Component Analysis (PCA), where we illustrate how the latents change when adding either the iconic image or text description into the VCCA model. Finally, we concluded that utilizing the iconic images and text descriptions yielded better classification results than only using natural images. 
+\begin{wrapfigure}[14]{r}[-4mm]{0.5\textwidth}
+	\centering
+	\vspace{-5mm}
+	\begin{subfigure}[b]{0.26\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{Chapter1/pics_paperB/pca_latents_vae_seed2}
+		\vspace{-7mm}
+		\caption{VAE$_{\vx}$}
+		\label{fig:pca_latents_vae}
+	\end{subfigure} 
+	\hspace{-5mm}
+	%\hfill
+	\begin{subfigure}[b]{0.26\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{Chapter1/pics_paperB/pca_latents_vcca_xiwy_seed2}
+		\vspace{-7mm}
+		\caption{VCCA$_{\vx \vi \vw \vy}$ }
+		\label{fig:pca_latents_vcca_xiwy}
+	\end{subfigure}
+	\vspace{-6mm}
+	\captionsetup{width=.46\textwidth}
+	\caption{Visualizations of the latent representations projected in 2D space with PCA from models VAE$_{\vx}$ and VCCA$_{\vx \vi \vw \vy}$, where we plot the corresponding iconic image for each latent representation. 
+	%for visualization purposes. 
+	We observe that VCCA$_{\vx \vi \vw \vy}$ structures the items based on visual similarities by incorporating the web-scraped information into the learning. 
+	%We observe that VCCA$_{\vx \vi \vw \vy}$ structures the items based on visual similarities by incorporating the web-scraped information into the latent representations, while VAE$_{\vx}$ only manages to separate the items into two clusters of raw and packaged items. 
+	}
+	%\vspace{-3mm}
+	\label{fig:paperB_pca_latents}
+\end{wrapfigure} 
+We performed a thorough ablation study over all data types to demonstrate how they contribute individually to enhancing the classification performance. To gain further insights into our results, we visualized the learned representations of the grocery items from VCCA and discussed how the iconic images and text descriptions help the model to better distinguish between the groceries. Our results show that the iconic images help to group the items based on their color and shape while text descriptions separate the items based on differences in ingredients and flavor. Figure \ref{fig:paperB_pca_latents} shows visualizations of the latent representations projected in 2-dimensional space using Principal Component Analysis (PCA), where we illustrate how the latents change when adding the iconic image and text description into the VCCA model. Finally, we concluded that utilizing the iconic images and text descriptions yielded better classification results than only using natural images. 
 
 
 \paragraph{Author Contributions} 
