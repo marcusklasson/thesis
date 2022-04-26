@@ -8,7 +8,7 @@
 \usepackage{enumerate}  % for capital latin numbers in the list of papers
 \usepackage[font=footnotesize]{caption}   % to align the table caption to the right/left
 \usepackage{lscape}
-\usepackage{hyperref}  %for references
+%\usepackage{hyperref}  %for references
 \usepackage{amsmath,mathrsfs}
 \usepackage{amssymb}  % assumes amsmath package installed
 \usepackage{epstopdf}
@@ -32,6 +32,26 @@
 \usepackage[shortlabels]{enumitem}
 \usepackage{multirow}
 \usepackage{wrapfig}
+
+%\usepackage{natbib}         %% load this, too
+
+%%% From Taras
+%\usepackage[resetlabels, labeled]{multibib}
+\usepackage[resetlabels]{multibib}
+\usepackage{hyperref}  %for references
+%\newcites{OV}{References}
+\newcites{A}{References}
+
+%\newcites{B}{References}
+%\newcites{C}{References}
+%\newcites{D}{References}
+%\newcites{E}{References}
+%\newcites{F}{References}
+
+
+
+%\usepackage[square, sort&compress, comma, numbers]{natbib}
+
 
 % https://tex.stackexchange.com/questions/2441/how-to-add-a-forced-line-break-inside-a-table-cell
 \usepackage{array}
@@ -67,6 +87,8 @@
 \newlength{\figwidth}
 
 
+%\usepackage{subfiles}
+
 \makeatletter
 %\@addtoreset{section}{part}
 %\renewcommand\part{\thispagestyle{empty}}
@@ -88,12 +110,15 @@
 	\null\vfil
 	\secdef\@part\@spart}
 %%%
+%\newcommand{\insubfile}[1]{\ifx\@onlypreamble\@notprerr\else#1\fi}
 \makeatother
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%% Document starts here %%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
+	
+\newcommand*{\BuildingFromMainFile}{}
 	
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%% First and second pages %%%%%%%%%%%%
@@ -174,15 +199,36 @@
 %------------------------------------------------
 % CREATING THE BIBLIOGRAPHY
 %------------------------------------------------
-%\bibliographystyle{ieeetr}
-\bibliographystyle{unsrt} % plain is also good
+\bibliographystyle{unsrt}
+%\bibliographystyle{unsrt} % plain is also good
 %\renewcommand{\bibname}{References}% changes default name Bibliography to References
 \bibliography{References/references} % References file
 
 
 \part{Included Papers}
+
+\renewcommand{\thechapter}{\Alph{chapter}}  % use A, B, C for chapter numbers
+\renewcommand{\thesection}{\arabic{section}} % use numbers for sections
+%\renewcommand{\thefigure}{\arabic{figure}}
+\setcounter{chapter}{0}  % first paper should be paper A
+%\titleformat{\chapter}[block]{}{}{10pt}{\huge\centering\bfseries}{}  % format of chapter headline
+\renewcommand{\chaptername}{Paper} % A chapter is now called Paper
+\renewcommand\bibsection{\section*{\refname}}
+\setcounter{secnumdepth}{3}
+
+
+\renewcommand*{\thepage}{A\arabic{page}}
+\setcounter{page}{1}
+\setcounter{section}{0}
 \input{PaperA/paperA}
+\cleardoublepage
+
+
+\renewcommand*{\thepage}{B\arabic{page}}
+\setcounter{page}{1}
+\setcounter{section}{0}
 \input{PaperB/paperB}
+\cleardoublepage
 	
 
 %--------------------------------------------------
