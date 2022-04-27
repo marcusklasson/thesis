@@ -80,7 +80,7 @@ where $\eta$ is the learning rate which is an important parameter for SGD determ
 
 
 
-\subsection{Autoencoders}
+\subsection{Deep Autoencoders}
 
 A common architecture type for deep learning in unsupervised learning are autoencoders for learning hidden representations of unlabeled data. Autoencoders are commonly used for dimensionality reduction of high-dimensional data, where the lower-dimensional representation can be used for classification tasks, or to visualize hidden structures in the data that are hard to reveal from the original input data. The objective of the model is to reconstruct the original input data. The network architecture is built using two networks called \textit{encoder} and \textit{decoder} with a bottleneck layer between the networks for extracting the hidden representation $\vh$. The encoder and decoder architectures can be of any neural network type, such as MLPs, CNNs, or RNNs, that fits the given dataset. The encoder is used for obtaining the hidden representation of the input data, while the decoder tries to reconstruct the original input from the obtained representation. Therefore, the idea is that the learned representation should contain the relevant information for reconstructing the data. 
 
@@ -117,6 +117,9 @@ Multimodal autoencoders have frequently been extended to deep generative models,
 
 \subsection{Deep Reinforcement Learning}
 \MK{TO-DO: Related works for Paper D. After writing Chapter 4 on CL}
+
+In this section, we give a brief overview to Reinforcement Learning~\cite{sutton2018reinforcement} (RL) and introduce some approaches for how to incorporate deep neural networks in RL. 
+
 %% talk about notation, then go into DQN, actor-critic methods and PPO briefly
 
 %  our goal will be to tune an adaptive model  

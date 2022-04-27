@@ -116,7 +116,7 @@ Limitations here are of course that we potentially need lots of data for learnin
   
 \subsection{Problem Setting}
 
-We let the environment where the agent gathers experiences represent a network  and a dataset $\gD_{1:T}$ of $T$ tasks that $f_{\vphi}$ should learn in a CL setting. The dataset is split into training, validation, and test sets as $\gD_{1:T} = \{\gD_{1:T}^{(train)}, \gD_{1:T}^{(val)}, \gD_{1:T}^{(test)}\}$ respectively. The training sets $\gD_{1:T}^{(train)}$ are for the network to learn all $T$ tasks sequentially, while the $\gD_{1:T}^{(val)}$ are for evaluating how well the network performs on each task during training. The task performances on the validation sets can be used for dense rewards to the RL agent. The test sets are for final evaluation and are unseen during training as standard practice to avoid overfitting . 
+We let the environment where the agent gathers experiences represent a network  and a dataset $\gD_{1:T}$ of $T$ tasks that $f_{\vphi}$ should learn in a CL setting. The dataset is split into training, validation, and test sets as $\gD_{1:T} = \{\gD_{1:T}^{(train)}, \gD_{1:T}^{(val)}, \gD_{1:T}^{(test)}\}$ respectively. The training sets $\gD_{1:T}^{(train)}$ are for the network to learn all $T$ tasks sequentially, while the $\gD_{1:T}^{(val)}$ are for evaluating how well the network performs on each task during training. The task performances on the validation sets can be used for dense rewards to the RL agent. The test sets are for final evaluation and are unseen during training as standard practice to avoid overfitting.  
 
 
 
