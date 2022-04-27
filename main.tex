@@ -20,7 +20,7 @@
 \usepackage{algpseudocode}
 %\usepackage{algpascal} % didn't work with algorithmic environment
 \usepackage{multicol}
-\usepackage[dvipsnames]{xcolor}
+\usepackage[dvipsnames,table]{xcolor}
 \usepackage{lipsum}
 %\usepackage[dvipsnames]{xcolor}
 % my packages
@@ -218,6 +218,10 @@
 
 
 \renewcommand*{\thepage}{A\arabic{page}}
+% for removing the chapter letter in front of figure, table, and equation references
+\renewcommand{\thefigure}{\arabic{figure}}
+\renewcommand{\thetable}{\arabic{table}}
+\renewcommand{\theequation}{\arabic{equation}}
 \setcounter{page}{1}
 \setcounter{section}{0}
 \input{PaperA/paperA}
