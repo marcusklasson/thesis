@@ -40,6 +40,8 @@ More recent works have focused on evolving the memory samples through data augme
 
 % General CL papers, add new papers that you have seen. Then Replay/memory-based CL approaches, add new and contrastive approaches. Perhaps something on meta-policy learning approaches, would be useful to tell how we use reinforcement learning here
 
+\paragraph{Similarities and Differences between Continual Learning and other fields.} \MK{A short and cozy table fo this, similar to survey by Delange etal 2021}
+
 \section{Replay Scheduling in Continual Learning} 
 
 In this section, we introduce a slightly new CL setting considering the real-world needs where all historical data can be available since data storage is cheap. However, the amount of compute is limited when the model is updated on new data due to operational costs. Hence, it is impossible for the model to leverage from all the available historical data to mitigate catastrophic forgetting. The goal then becomes to learn how we can select subsets of historical data for replay to efficiently reduce forgetting of the old tasks. We will refer to these subsets of historical data as the \textit{replay memory} throughout this chapter. The size of the replay memory affects the processing time when learning new tasks as well as the allowed time for the training phase. When composing the replay memory, we focus on determining the number of samples to draw from the seen tasks in the historical data rather than selecting single stored instances. Next, we introduce the problem setting in more detail as well as the notation of the new CL setting. 
@@ -100,8 +102,22 @@ We are interested in studying whether the time to replay different tasks is impo
 
 
 \section{Meta Policy Learning for Replay Scheduling}
+\label{sec:meta_policy_learning_for_replay_scheduling}
 
-In this section, we present an RL-based framework to learn policies for selecting which tasks to replay in CL scenarios. We are interested in learning a policy that can be transferred to new CL scenarios, such as new task orders and new datasets, without any additional computational cost for updating on the new domain. We take a meta-learning approach where the policy learns from episodes of experience collected from training a classifier in CL settings. The experience from the environment is represented as the classification performance on each seen task in the dataset. The policy receives the task performances for basing its action on which task that needs to be replayed at the next time step. 
+In this section, we present an RL-based framework to learn policies for selecting which tasks to replay in CL scenarios. We are interested in learning such policy that can be transferred to new CL scenarios, such as new task orders and new datasets, without any additional computational cost for updating on the new domain. We take a meta-learning approach where the policy learns from episodes of experience collected from training a classifier in CL settings. The experience from the environment is represented as the classification performance on each seen task in the dataset. The policy receives the task performances for basing its action on which task that needs to be replayed at the next time step. Our goal is to obtain a policy that can generalize to be used for replay scheduling in new CL scenarios to mitigate catastrophic forgetting. Next, we describe in more detail how the framework for learning this policy works.
+
+%By learning from gathering experience, the policy learns better for the future on how to select the tasks to replay. However, as 
+
+\MK{Is this how it should be motivated?}
+Imagine the scenario that we can collect experiences from many users applying their phone to CL scenarios for learning different objects to recognize sequentially. Assume that we can store the collected data (limitation here is privacy!), the models will suffer from catastrophic forgetting as they are trained in CL scenario. But we can then use the collected data to train a replay scheduling policy. The learned policy can then be transferred to new users using their phone in CL settings and the policy is used for mitigating catastrophic forgetting in their environment without additional computational cost. 
+
+Limitations here are of course that we potentially need lots of data for learning a policy that generalizes. Additionally, we need lots of training time and hyperparameter tuning as we are dealing with RL. Also, we need to store the data somewhere which is cheap, but it must be secure due to privacy concerns. An alternative there could be to store features instead of raw data, which is not completely flawless (I think that it's possible to revert features back to the real data to some extent) but at least it is a safer alternative. Another option for the data needed can be to gather experience from simulated environments and benchmark datasets. As the policy only takes in states with task performances, we can make use mixes of benchmark datasets and data from real contributing users. 
+
+  
+\subsection{Problem Setting}
+
+We let the environment where the agent gathers experiences represent a network  and a dataset $\gD_{1:T}$ of $T$ tasks that $f_{\vphi}$ should learn in a CL setting. The dataset is split into training, validation, and test sets as $\gD_{1:T} = \{\gD_{1:T}^{(train)}, \gD_{1:T}^{(val)}, \gD_{1:T}^{(test)}\}$ respectively. The training sets $\gD_{1:T}^{(train)}$ are for the network to learn all $T$ tasks sequentially, while the $\gD_{1:T}^{(val)}$ are for evaluating how well the network performs on each task during training. The task performances on the validation sets can be used for dense rewards to the RL agent. The test sets are for final evaluation and are unseen during training as standard practice to avoid overfitting . 
+
 
 
 
@@ -109,6 +125,8 @@ In this section, we present an RL-based framework to learn policies for selectin
 
 
 \section{Experiments}
+
+
 \section{Discussion}
 
 

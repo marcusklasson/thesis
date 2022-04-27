@@ -215,21 +215,22 @@
 \renewcommand{\chaptername}{Paper} % A chapter is now called Paper
 \renewcommand\bibsection{\section*{\refname}}
 \setcounter{secnumdepth}{3}
+\addtocontents{toc}{\setcounter{tocdepth}{0}} % removing sections in toc
 
 
-\renewcommand*{\thepage}{A\arabic{page}}
+%\renewcommand*{\thepage}{A\arabic{page}}
 % for removing the chapter letter in front of figure, table, and equation references
 \renewcommand{\thefigure}{\arabic{figure}}
 \renewcommand{\thetable}{\arabic{table}}
 \renewcommand{\theequation}{\arabic{equation}}
-\setcounter{page}{1}
+%\setcounter{page}{1}
 \setcounter{section}{0}
 \input{PaperA/paperA}
 \cleardoublepage
 
 
-\renewcommand*{\thepage}{B\arabic{page}}
-\setcounter{page}{1}
+%\renewcommand*{\thepage}{B\arabic{page}}
+%\setcounter{page}{1}
 \setcounter{section}{0}
 \input{PaperB/paperB}
 \cleardoublepage
