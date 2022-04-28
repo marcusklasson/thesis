@@ -118,9 +118,29 @@ Multimodal autoencoders have frequently been extended to deep generative models,
 %% talk about notation, then go into DQN, actor-critic methods and PPO briefly
 \subsection{Deep Reinforcement Learning}\label{sec:deep_rl}
 
-In this section, we give a brief overview to Reinforcement Learning~\cite{sutton2018reinforcement} (RL) and introduce some approaches for how to incorporate deep neural networks in RL. We begin by outlining the notation for the problem setup in RL that will be used in Paper D. Next, we introduce two popular methods for learning RL policies, namely, Deep Q-Networks~\cite{mnih2013playing, mnih2015human} (DQNs) and actor-critic methods~\cite{mnih2016asynchronous, schulman2017proximal}. 
+In this section, we give a brief overview to Reinforcement Learning~\cite{sutton2018reinforcement} (RL) and introduce some approaches for how to incorporate deep neural networks in RL. We begin by outlining the notation for the problem setup in RL that will be used in Paper D. Next, we introduce two popular methods for learning RL policies, namely, Deep Q-Networks~\cite{mnih2013playing, mnih2015human} (DQNs) and policy-based methods~\cite{mnih2016asynchronous, schulman2017proximal}. 
 
-The RL setup considers an agent interacting with an environment $\gE$ over a number of discrete time steps. At each time step $t$, the agent receives a state $s_t$ and selects an action $a_t$ from a set of possible actions $\gA$. The action is selected according to a policy $\pi$ which is a mapping from states $s_t$ to actions $a_t$. After taking action $a_t$, the agent receives the next state $s_{t+1}$ and a scalar reward $r_t$. This procedure is continued until the agent reaches a terminal state in which the procedure can be restarted.  
+The RL setup considers an agent interacting with an environment $\gE$ over a number of discrete time steps. The environment is modeled with a Markov Decision Process~\cite{bellman1957markovian} represented as a tuple $(\gS, \gA, P, R, \gamma)$, where $\gS$ is the state space, $\gA$ an action space, $P(s' | s, a)$ is the state-to-state transition probability distribution with $s, s' \in \gS$, $R(s, a)$ is the reward function, and $\gamma \in [0, 1)$ is the discount factor. At each time step $t$, the agent receives a state $s_t$ from the environment, selects an action $a_t \in \gA$ using a policy $\pi_{\vtheta}(a | s)$ parameterized by $\vtheta$, and enters the next state $s_{t+1}$ with transition probability $P(s_{t+1} | s_t, a_t)$ and receives a numerical reward following $r_t$ from the environment. This procedure is repeated until the agent reaches a terminal state in which the procedure can be restarted. The return $G_t = \sum_{k=0}^{\infty} \gamma^{k} r_{t+k}$ is the discounted accumulated reward from time step $t$. The goal of the agent is to maximize the expected return from every state $s_t$. 
+
+The action value $Q^{\pi}(s, a) = \E[G_t | s_t=s, a]$  is the expected return for selecting action $a$ in state $s$ and following policy $\pi$. The optimal action value $Q^{*}(s, a) = \max_{\pi} Q^{\pi}(s, a)$
+is defined as the maximum action value for state $s$ and action $a$ for any given policy $\pi$. Similarly,
+the value function $V^{\pi}(s) = \E[G_t | s_t=s]$ defines the expected return following policy $\pi$ from state $s$. In value-based RL methods, the action value function $Q_{\vtheta}(s, a)$ is represented using function approximators, such as neural networks, parameterized by $\vtheta$. A popular algorithm for updating the parameters $\vtheta$ is Q-learning~\cite{watkins1992q} where the goal is to directly approximate the optimal action value function as $Q^{*}(s, a) \approx Q_{\vtheta}(s, a)$. The parameters $\vtheta$ are learned by iteratively minimizing the loss
+\begin{align}
+	\gL(\vtheta_i) = \left( r + \max_{a'} Q_{\vtheta_{i-1}}(s', a') - Q_{\vtheta_{i}}(s, a) \right)^2 .
+\end{align}
+Next, we briefly introduce some popular algorithms in deep RL. 
+
+\paragraph{Deep Q-Networks.} The Deep Q-Network~\cite{mnih2013playing, mnih2015human} (DQN) is common algorithm for RL problems with discrete action spaces and high-dimensional state spaces where the Q-function is parameterized by a neural network. This method requires some additional steps for stabilizing the learning process, including the usage of target networks~\cite{mnih2013playing}, applying L1-smoothing to the loss, and using experience replay~\cite{lin1992self} to sample training data stored in a replay buffer. Furthermore, the DQN can incorporate extensions that are also helpful for stable learning such as correcting the action value estimates~\cite{van2016deep} and imrpoving generalization across actions~\cite{wang2016dueling}. 
+
+\paragraph{Policy-based Methods.}   
+
+%s unknown, so we collect data from the environment to learn a function $Q_{\vtheta}(s, a)$ parameterized by $\vtheta$ that estimates the Q-function by minimizing the loss $L(\vtheta) = (y_t - Q_{\vtheta}(s_t, a_t))^2$ where $y_t = r_t + \gamma \max_{a'} Q_{\vtheta}(s_{t+1}, a')$. The learned Q-function is parameterized by a neural network to ease the estimation in problems with high-dimensional state spaces. To stabilize the learning, DQNs use target networks from previous iterations to compute the target values $y_t$, incorporates experience replay~\citep{lin1992self}, and can apply Double Q-learning~\citep{van2016deep} to mitigate overestimation of the state-action values.  
+
+%The action is selected according to a policy $\pi$ which is a mapping from states $s_t$ to actions $a_t$. After taking action $a_t$, the agent receives the next state $s_{t+1}$ and a scalar reward $r_t$. This procedure is continued until the agent reaches a terminal state in which the procedure can be restarted.  
+
+% representing the configurations of the agent itself and its surrounding 
+
+%At each time step $t$, the agent receives a state $s_t$ and selects an action $a_t$ from a set of possible actions $\gA$. The action is selected according to a policy $\pi$ which is a mapping from states $s_t$ to actions $a_t$. After taking action $a_t$, the agent receives the next state $s_{t+1}$ and a scalar reward $r_t$. This procedure is continued until the agent reaches a terminal state in which the procedure can be restarted.  
 
 
  
