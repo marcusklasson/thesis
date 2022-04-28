@@ -116,9 +116,9 @@ Limitations here are of course that we potentially need lots of data for learnin
   
 \subsection{Problem Setting}
 
-We let the environment where the agent gathers experiences represent a network  and a dataset $\gD_{1:T}$ of $T$ tasks that $f_{\vphi}$ should learn in a CL setting. The dataset is split into training, validation, and test sets as $\gD_{1:T} = \{\gD_{1:T}^{(train)}, \gD_{1:T}^{(val)}, \gD_{1:T}^{(test)}\}$ respectively. The training sets $\gD_{1:T}^{(train)}$ are for the network to learn all $T$ tasks sequentially, while the $\gD_{1:T}^{(val)}$ are for evaluating how well the network performs on each task during training. The task performances on the validation sets can be used for dense rewards to the RL agent. The test sets are for final evaluation and are unseen during training as standard practice to avoid overfitting.  
+We consider the setting where an agent selects replay schedules to mitigate catastrophic forgetting in a classifier trained in the CL setting. The environment that the agent interacts with contains a network $f_{\vphi}$ and a dataset $\gD_{1:T}$ of $T$ tasks that $f_{\vphi}$ should learn in sequential order. The dataset is split into training, validation, and test sets as $\gD_{1:T} = \{\gD_{1:T}^{(train)}, \gD_{1:T}^{(val)}, \gD_{1:T}^{(test)}\}$ respectively. The training sets $\gD_{1:T}^{(train)}$ are for the network to learn all $T$ tasks sequentially, while the $\gD_{1:T}^{(val)}$ are for evaluating how well the network performs on each task during training. The task performances on the validation sets can be used for dense rewards to the RL agent. The test sets are for final evaluation and are unseen during training as standard practice to avoid overfitting.  
 
-
+We consider having a distribution $p(E)$ of Markov Decision Process~\cite{bellman1957markovian} (MDP) where the MDP is represented as a tuple $E_i = (\gS_i, \gA, P_i, R_i, \mu_i, \gamma)$ consisting of the state space $\gS_i$, action space $\gA$, state transition probability $P_i(s' | s, a)$, reward function $R_i(s, a)$, initial state distribution $\mu_i(s_0)$, and discount factor $\gamma$. For training, we assume that we have access to a fixed set of training environments $\gE_{\text{train}} = \{E_1, \dots, E_K\}$, where $E_i \sim p(E)$ for $i=1, ..., K$. 
 
 
 
