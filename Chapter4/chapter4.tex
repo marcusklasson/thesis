@@ -127,9 +127,7 @@ The goal for the agent is to maximize the accumulated returns in each training e
 
 \subsection{Deep Q-Networks for Learning Replay Scheduling Policy}
 
-We employ 
-
-
+We employ DQNs for learning the policy for replay scheduling. The architecture takes states as input and outputs action values for the valid actions at the current time step $t$. We define the states $s$ as a vector with the validation performance of every seen task, where we use the validation accuracy to represent the task performance. We use zero-padding on the vector elements in the states that represent the performance for future tasks. The states can also be represented by other performance metrics, for example, the accuracy difference between time steps or forgetting measures such as backward transfer~\cite{lopez2017gradient} (BWT). For the actions, we use the discrete action space built using Algorithm \ref{alg:action_space_discretization} such that the action space $\gA_t$ is time-dependent and grows per seen task. To handle the growing action space, we assume that we know the total number of actions such that the DQN can use a fixed output layer. Therefore, we use action masking on the predicted action values to prevent the DQN from selecting invalid actions. 
 
 \begin{algorithm}[t]
 	\caption{Learning replay scheduling policy with DQN}
@@ -139,30 +137,34 @@ We employ
 		\Require $\vtheta$: DQN parameters
 		\State $\gB = \{\}$ \Comment{Initialize replay buffer}
 		\For{$i = 1, \dots, n_{\text{episodes}}$}
-			\State $s_1^{i} \sim \mu_i \, \forall E_i \in \gE_{\train}$ \Comment{Get initial states}
-			\For{$t=1, \dots, T-1$}
-				\For{$E_i \in \gE_{\train}$}
-					\State $a_t^{i} = \argmax_{a' \in \gA_t} Q_{\vtheta}(s_t^{i}, a')$ \Comment{Get actions from states}
-					\State $r_t^{i}, s_{t+1}^{i} = \texttt{CLStep}(t, a_t^{i}, E_i)$
-					\State $\gB = \gB \cup \{s_{t}^{i}, a_{t}^{i}, r_{t}^{i}, s_{t+1}^{i}\}$ \Comment{Store transition in buffer}
-					\State $(s_j, a_j, r_j, s_{j+1}) \stackrel{B}{\sim} \gB$ \Comment{Get mini-batch of $B$ samples from buffer}					
-					\State $\vtheta \leftarrow \vtheta - \eta \nabla_{\vtheta} (r_t + \max_{a'} Q_{\vtheta^{-}}(s_{j+1}, a') - Q_{\vtheta}(s_j, a_j))$ \Comment{Update DQN}
-				\EndFor
-			\EndFor 
+		\State $s_1^{i} \sim \mu_i \, \forall E_i \in \gE_{\train}$ \Comment{Get initial states}
+		\For{$t=1, \dots, T-1$}
+		\For{$E_i \in \gE_{\train}$}
+		\State $a_t^{i} = \argmax_{a' \in \gA_t} Q_{\vtheta}(s_t^{i}, a')$ \Comment{Get actions from states}
+		\State $r_t^{i}, s_{t+1}^{i} = \texttt{CLStep}(t, a_t^{i}, E_i)$
+		\State $\gB = \gB \cup \{s_{t}^{i}, a_{t}^{i}, r_{t}^{i}, s_{t+1}^{i}\}$ \Comment{Store transition in buffer}
+		\State $(s_j, a_j, r_j, s_{j+1}) \stackrel{B}{\sim} \gB$ \Comment{Get mini-batch of $B$ samples from buffer}					
+		\State $\vtheta \leftarrow \vtheta - \eta \nabla_{\vtheta} (r_t + \max_{a'} Q_{\vtheta^{-}}(s_{j+1}, a') - Q_{\vtheta}(s_j, a_j))$ \Comment{Update DQN}
+		\EndFor
+		\EndFor 
 		\EndFor
 		\State \Return $\vtheta$ \Comment{Return DQN}
 		
-	\Statex
-	
-	\Function{\texttt{CLStep}}{$t$, $a_{t}$, $E$}
-	\State $\gM_t \leftarrow \texttt{SampleMemory}(a_t)$ \Comment{Sample historical data from action}
-	\State $f_{\vphi}^{E} \leftarrow \texttt{Train}(f_{\vphi}^{E}, \gD_{t+1}^{\train}, \gM_t)$ \Comment{Train network on current task with replay}
-	\State $r_t \leftarrow \frac{1}{t+1} \sum_{i=1}^{t+1} A_{i}^{\val}$ \Comment{Compute reward from validation datasets}
-	\State $s_{t+1} \leftarrow \texttt{GetState}(f_{\vphi}^{E}, \gD_{1:t+1}^{\val})$ \Comment{Get next state from validation performance}
-	\State \Return $r_t$, $s_{t+1}$ \Comment{Return reward and next state}
-	\EndFunction
+		\Statex
+		
+		\Function{\texttt{CLStep}}{$t$, $a_{t}$, $E$}
+		\State $\gM_t \leftarrow \texttt{SampleMemory}(a_t)$ \Comment{Sample historical data from action}
+		\State $f_{\vphi}^{E} \leftarrow \texttt{Train}(f_{\vphi}^{E}, \gD_{t+1}^{\train}, \gM_t)$ \Comment{Train network on current task with replay}
+		\State $r_t \leftarrow \frac{1}{t+1} \sum_{i=1}^{t+1} A_{i}^{\val}$ \Comment{Compute reward from validation datasets}
+		\State $s_{t+1} \leftarrow \texttt{GetState}(f_{\vphi}^{E}, \gD_{1:t+1}^{\val})$ \Comment{Get next state from validation performance}
+		\State \Return $r_t$, $s_{t+1}$ \Comment{Return reward and next state}
+		\EndFunction
 	\end{algorithmic}
 \end{algorithm}
+
+We outline the procedure for training the DQN on multiple CL environments in Algorithm \ref{alg:learning_replay_scheduling_policy_with_dqn}. 
+
+
 
 \section{Experiments}
 
