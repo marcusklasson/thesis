@@ -116,13 +116,53 @@ Limitations here are of course that we potentially need lots of data for learnin
   
 \subsection{Problem Setting}
 
-We consider the setting where an agent selects replay schedules to mitigate catastrophic forgetting in a classifier trained in the CL setting. The environment that the agent interacts with contains a network $f_{\vphi}$ and a dataset $\gD_{1:T}$ of $T$ tasks that $f_{\vphi}$ should learn in sequential order. The dataset is split into training, validation, and test sets as $\gD_{1:T} = \{\gD_{1:T}^{(train)}, \gD_{1:T}^{(val)}, \gD_{1:T}^{(test)}\}$ respectively. The training sets $\gD_{1:T}^{(train)}$ are for the network to learn all $T$ tasks sequentially, while the $\gD_{1:T}^{(val)}$ are for evaluating how well the network performs on each task during training. The task performances on the validation sets can be used for dense rewards to the RL agent. The test sets are for final evaluation and are unseen during training as standard practice to avoid overfitting.  
+We consider the setting where an agent selects replay schedules to mitigate catastrophic forgetting in a classifier trained in the CL setting. The environment that the agent interacts with contains a network $f_{\vphi}$ and a dataset $\gD_{1:T}$ of $T$ tasks that $f_{\vphi}$ should learn in sequential order. The dataset is split into training, validation, and test sets as $\gD_{1:T} = \{\gD_{1:T}^{\train}, \gD_{1:T}^{\val}, \gD_{1:T}^{\test}\}$ respectively. The training sets $\gD_{1:T}^{\train}$ are for the network to learn all $T$ tasks sequentially, while the $\gD_{1:T}^{\val}$ are for evaluating how well the network performs on each task during training. The task performances on the validation sets can be used for dense rewards to the RL agent. The test sets are for final evaluation and are unseen during training as standard practice to avoid overfitting.  
 
-We consider having a distribution $p(E)$ of Markov Decision Process~\cite{bellman1957markovian} (MDP) where the MDP is represented as a tuple $E_i = (\gS_i, \gA, P_i, R_i, \mu_i, \gamma)$ consisting of the state space $\gS_i$, action space $\gA$, state transition probability $P_i(s' | s, a)$, reward function $R_i(s, a)$, initial state distribution $\mu_i(s_0)$, and discount factor $\gamma$. For training, we assume that we have access to a fixed set of training environments $\gE_{\text{train}} = \{E_1, \dots, E_K\}$, where $E_i \sim p(E)$ for $i=1, ..., K$. 
+We consider having a distribution $p(E)$ of Markov Decision Process~\cite{bellman1957markovian} (MDP) where the MDP is represented as a tuple $E_i = (\gS_i, \gA, P_i, R_i, \mu_i, \gamma)$ consisting of the state space $\gS_i$, action space $\gA$, state transition probability $P_i(s' | s, a)$, reward function $R_i(s, a)$, initial state distribution $\mu_i(s_0)$, and discount factor $\gamma$. For training, we assume that we have access to a fixed set of training environments $\gE_{\train} = \{E_1, \dots, E_K\}$, where $E_i \sim p(E)$ for $i=1, ..., K$. Each environment $E_i$ contains of a network $f_{\vphi}$ and $T$ datasets $\gD_{1:T}$ where the $t$-th dataset is learned at time step $t$. We let the dynamics of the environments depend on the network initialization and the task order of the datasets. The states $s$ are given by the validation performance on each task from $f_{\vphi}$ which can be accuracies. Hence, the state space $\gS_i$ depends on the parameter initialization for $\vphi$. Regarding the datasets, we allow the task orders in the datasets $\gD_{1:T}$ to be shuffled for each sampled environment $E_i \sim p(E)$. Therefore, the state space is also affected by the task order as this can yield different CL performances. We assume that the action space is the same for every environment as the agent will interact with each training environment in $\gE_{\train}$. 
+
+The goal for the agent is to maximize the accumulated returns in each training environment. The reward is given by the CL performance. We assume that we have a dense reward that we can compute from the validation sets at each time step $t$. We are therefore after a policy that works well on all environments. The intention for learning such policy is that it should generalize across environments of new CL settings, such as new task orders and datasets. As we are not allowed to go back in time in CL, we are not allowed to query the testing environments during the transfer. Hence we must apply the policy in a zero-shot setting where tuning the policy on the testing environment is prohibited.
+
+
+\MK{TO-DO: Add algorithm of procedure in this part to hopefully make it easier to follow.}
+
+\subsection{Deep Q-Networks for Learning Replay Scheduling Policy}
+
+We employ 
 
 
 
-
+\begin{algorithm}[t]
+	\caption{Learning replay scheduling policy with DQN}
+	\label{alg:learning_replay_scheduling_policy_with_dqn}
+	\begin{algorithmic}[1]
+		\Require $\gE_{\train}$: Training environments
+		\Require $\vtheta$: DQN parameters
+		\State $\gB = \{\}$ \Comment{Initialize replay buffer}
+		\For{$i = 1, \dots, n_{\text{episodes}}$}
+			\State $s_1^{i} \sim \mu_i \, \forall E_i \in \gE_{\train}$ \Comment{Get initial states}
+			\For{$t=1, \dots, T-1$}
+				\For{$E_i \in \gE_{\train}$}
+					\State $a_t^{i} = \argmax_{a' \in \gA_t} Q_{\vtheta}(s_t^{i}, a')$ \Comment{Get actions from states}
+					\State $r_t^{i}, s_{t+1}^{i} = \texttt{CLStep}(t, a_t^{i}, E_i)$
+					\State $\gB = \gB \cup \{s_{t}^{i}, a_{t}^{i}, r_{t}^{i}, s_{t+1}^{i}\}$ \Comment{Store transition in buffer}
+					\State $(s_j, a_j, r_j, s_{j+1}) \stackrel{B}{\sim} \gB$ \Comment{Get mini-batch of $B$ samples from buffer}					
+					\State $\vtheta \leftarrow \vtheta - \eta \nabla_{\vtheta} (r_t + \max_{a'} Q_{\vtheta^{-}}(s_{j+1}, a') - Q_{\vtheta}(s_j, a_j))$ \Comment{Update DQN}
+				\EndFor
+			\EndFor 
+		\EndFor
+		\State \Return $\vtheta$ \Comment{Return DQN}
+		
+	\Statex
+	
+	\Function{\texttt{CLStep}}{$t$, $a_{t}$, $E$}
+	\State $\gM_t \leftarrow \texttt{SampleMemory}(a_t)$ \Comment{Sample historical data from action}
+	\State $f_{\vphi}^{E} \leftarrow \texttt{Train}(f_{\vphi}^{E}, \gD_{t+1}^{\train}, \gM_t)$ \Comment{Train network on current task with replay}
+	\State $r_t \leftarrow \frac{1}{t+1} \sum_{i=1}^{t+1} A_{i}^{\val}$ \Comment{Compute reward from validation datasets}
+	\State $s_{t+1} \leftarrow \texttt{GetState}(f_{\vphi}^{E}, \gD_{1:t+1}^{\val})$ \Comment{Get next state from validation performance}
+	\State \Return $r_t$, $s_{t+1}$ \Comment{Return reward and next state}
+	\EndFunction
+	\end{algorithmic}
+\end{algorithm}
 
 \section{Experiments}
 
