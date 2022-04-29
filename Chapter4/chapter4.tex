@@ -142,7 +142,7 @@ We employ DQNs for learning the policy for replay scheduling. The architecture t
 		\For{$E_i \in \gE_{\train}$}
 		\State $a_t^{i} = \argmax_{a' \in \gA_t} Q_{\vtheta}(s_t^{i}, a')$ \Comment{Get actions from states}
 		\State $r_t^{i}, s_{t+1}^{i} = \texttt{CLStep}(t, a_t^{i}, E_i)$
-		\State $\gB = \gB \cup \{s_{t}^{i}, a_{t}^{i}, r_{t}^{i}, s_{t+1}^{i}\}$ \Comment{Store transition in buffer}
+		\State $\gB = \gB \cup \{(s_{t}^{i}, a_{t}^{i}, r_{t}^{i}, s_{t+1}^{i})\}$ \Comment{Store transition in buffer}
 		\State $(s_j, a_j, r_j, s_{j+1}) \stackrel{B}{\sim} \gB$ \Comment{Get mini-batch of $B$ samples from buffer}					
 		\State $\vtheta \leftarrow \vtheta - \eta \nabla_{\vtheta} (r_t + \max_{a'} Q_{\vtheta^{-}}(s_{j+1}, a') - Q_{\vtheta}(s_j, a_j))$ \Comment{Update DQN}
 		\EndFor
@@ -162,7 +162,17 @@ We employ DQNs for learning the policy for replay scheduling. The architecture t
 	\end{algorithmic}
 \end{algorithm}
 
-We outline the procedure for training the DQN on multiple CL environments in Algorithm \ref{alg:learning_replay_scheduling_policy_with_dqn}. 
+We outline the procedure for training the DQN on multiple CL environments in Algorithm \ref{alg:learning_replay_scheduling_policy_with_dqn}. The main idea to obtain a policy that generalize is to train it on several environments with different dynamics for learning from more diverse training data~\cite{zhang2018dissection}. We let the DQN store transitions $(s_{t}^{i}, a_{t}^{i}, r_{t}^{i}, s_{t+1}^{i})$ from all environments in the same experience replay buffer $\gB$ to use for training the network. The first step is to receive the intial state $s_1$ for all environments by training the network $f_{\vphi}$ on the first dataset $\gD_1^{\train}$ in each environment, such that $s_{1}^{i} = [A_{1,1}^{\val}, 0, ..., 0]$. The DQN then selects the action $a_t$ for the current environment from the input state or selects a random action with probability $\epsilon$. The agent retrieves the reward and next state by training the environment-specific network $f_{\vphi}^{i}$ on the current task $t$ in \texttt{CLStep}. Before training starts, the action $a_{t}^{i}$ is used for sampling the replay memory $\gM_t$ using the task proportions $(\vp_1, \dots, \vp_{T-1})$ translated from $a_{t}^{i}$. The replay memory is then used for mitigating catastrophic forgetting when training on the current task. After training, the agent obtains the reward from the reward function 
+\begin{align}
+	R(s, a) = \frac{1}{t} \sum_{i=1}^{t} A_{t, i}^{\val},
+\end{align}
+where $A_{t, i}^{\val}$ is the validation accuracy on task $i$ after $f_{\vphi}$ has learned task $t$. The next state is also obtained by utilizing the validation accuracies up to task $t$, such as $s_{t+1}^{i} = [A_{t, 1}^{\val}, ..., A_{t, t}^{\val}, 0, ..., 0] \in [0, 1]^{T-1}$. The DQN is then updated by sampling a mini-batch of $B$ samples from the shared buffer $\gB$ and taking a gradient step to minimize the loss
+\begin{align}
+	\gL_{\text{DQN}}(\vtheta) = r_t + \max_{a'} Q_{\vtheta^{-}}(s_{j+1}, a') - Q_{\vtheta}(s_j, a_j), 
+\end{align}  
+where $\vtheta^{-}$ is target network which is copy of the parameters $\vtheta$ from some previous time step. By using the shared replay buffer, the DQN is trained on diverse set of environments that can generalize well to new environments with unseen dynamics from an unseen task order or a new dataset. 
+
+
 
 
 
