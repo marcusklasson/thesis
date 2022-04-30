@@ -1,0 +1,14 @@
+
+
+\section{Replay Scheduling Monte Carlo Tree Search Algorithm}\label{app:rs_mcts_algorithm}
+
+%%% MCTS ALGORITHMS
+%\input{appendix/rs_mcts_algorithm}
+\input{appendix/pseudocode_rs_mcts_algorithm_new}
+
+We provide pseudo-code in Algorithm \ref{alg:replay_scheduling_mcts} outlining the steps for our method Replay Scheduling Monte Carlo tree search (RS-MCTS) described in the main paper (Section \ref{sec:mcts_for_replay_scheduling}). The MCTS procedure selects actions over which task proportions to fill the replay memory with at every task, where the selected task proportions are stored in the replay schedule $S$. The schedule is then passed to \textsc{EvaluateReplaySchedule$(\cdot)$} where the continual learning part executes the training with replay memories filled according to the schedule. The reward for the schedule $S$ is the average validation accuracy over all tasks after learning task $T$, i.e., ACC, which is backpropagated through the tree to update the statistics of the selected nodes. The schedule $S_{best}$ yielding the best ACC score is returned to be used for evaluation on the held-out test sets.
+
+The function $\textsc{GetReplayMemory}(\cdot)$ is the policy for retrieving the replay memory $\gM$ from the historical data given the task proportion $\va$. The number of samples per task determined by the task proportions are rounded up or down accordingly to fill $\gM$ with $M$ replay samples in total. 
+The function $\textsc{GetTaskProportion}(\cdot)$ simply returns the task proportion that is related to given node.
+
+

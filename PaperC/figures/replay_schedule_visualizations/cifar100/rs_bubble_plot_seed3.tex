@@ -1,0 +1,60 @@
+
+\pgfplotsset{every axis title/.append style={at={(0.5,0.92)}}}
+\pgfplotsset{every tick label/.append style={font=\tiny}}
+\pgfplotsset{every major tick/.append style={major tick length=2pt}}
+\pgfplotsset{every axis x label/.append style={at={(0.5,-0.10)}}}
+\pgfplotsset{every axis y label/.append style={at={(-0.10,0.5)}}}
+\begin{tikzpicture}
+\tikzstyle{every node}=[font=\scriptsize]
+
+\begin{axis}[title={},
+height=\figheight,
+minor xtick={},
+minor ytick={},
+tick align=outside,
+tick pos=left,
+width=\figwidth,
+x grid style={white!69.0196078431373!black},
+grid=major,
+xlabel={Current Task},
+xmin=1.5, xmax=20.5,
+xtick style={color=black},
+xtick={2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20},
+xticklabels={2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20},
+xticklabel style = {font=\tiny},
+y grid style={white!69.0196078431373!black},
+ylabel={Replayed Task},
+%ylabel style={at={(0.5,0.0)},
+ymin=0.25, ymax=19.5,
+ytick style={color=black},
+ytick={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19},
+yticklabels={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19},
+yticklabel style = {font=\tiny},
+]
+\addplot+[
+mark=*,
+only marks,
+scatter,
+scatter src=explicit,
+scatter/@pre marker code/.code={%
+  \expanded{%
+    \noexpand\definecolor{thispointdrawcolor}{RGB}{\drawcolor}%
+    \noexpand\definecolor{thispointfillcolor}{RGB}{\fillcolor}%
+  }%
+  \scope[draw=thispointdrawcolor, fill=thispointfillcolor]%
+},
+visualization depends on={\thisrow{sizedata}/5 \as \perpointmarksize},
+visualization depends on={value \thisrow{draw} \as \drawcolor},
+visualization depends on={value \thisrow{fill} \as \fillcolor},
+%visualization depends on=
+%{5*cos(deg(x)) \as \perpointmarksize},
+scatter/@pre marker code/.append style=
+{/tikz/mark size=\perpointmarksize}
+]
+table[x=x, y=y, meta=sizedata]{figures/replay_schedule_visualizations/cifar100/table_seed3.dat};
+\end{axis}
+
+\end{tikzpicture}
+
+
+

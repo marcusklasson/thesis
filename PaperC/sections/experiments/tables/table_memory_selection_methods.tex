@@ -1,0 +1,134 @@
+
+\begin{table*}[t]
+\footnotesize
+\centering
+\caption{
+Performance comparison with ACC between RS-MCTS (Ours), Random scheduling (Random), Equal Task Schedule (ETS), and Heuristic Scheduling (Heuristic) with various memory selection methods evaluated across all datasets. 
+%We use 'S' and 'P' as short for 'Split' and 'Permuted' for the datasets. 
+Replay memory sizes are $M=10$ and $M=100$ for the 5-task and 10/20-task datasets respectively. We report the mean and standard deviation averaged over 5 seeds. Ours performs better or on par with the baselines on most datasets and selection methods, where MoF yields the best results %performance 
+in general.
+}
+%\vspace{-3mm}
+%\setlength{\tabcolsep}{5pt}
+\scalebox{0.87}{
+\begin{tabular}{l l c c c c c c}
+    \toprule
+     & & \multicolumn{3}{c}{{\bf 5-task Datasets}} & \multicolumn{3}{c}{{\bf 10- and 20-task Datasets}} \\
+    \cmidrule(lr){3-5} \cmidrule(lr){6-8}
+    {\bf Selection} & {\bf Method} & S-MNIST & S-FashionMNIST & S-notMNIST & P-MNIST & S-CIFAR-100 & S-miniImagenet \\
+    \midrule 
+    \multirow{4}{*}{Uniform} & Random & 95.91 {\scriptsize ($\pm$ 1.56)}  & 95.82 {\scriptsize ($\pm$ 1.45)} & 92.39 {\scriptsize ($\pm$ 1.29)} & 72.44 {\scriptsize ($\pm$ 1.15)} & 53.99 {\scriptsize ($\pm$ 0.51)} & 48.08 {\scriptsize ($\pm$ 1.36)} \\
+     & ETS  & 94.02 {\scriptsize ($\pm$ 4.25)} &  95.81 {\scriptsize ($\pm$ 3.53)} & 91.01 {\scriptsize ($\pm$ 1.39)} & 71.09 {\scriptsize ($\pm$ 2.31)} & 47.70 {\scriptsize ($\pm$ 2.16)} & 46.97 {\scriptsize ($\pm$ 1.24)} \\
+     & Heuristic &  96.02 {\scriptsize ($\pm$ 2.32)} &  97.09 {\scriptsize ($\pm$ 0.62)} & 91.26 {\scriptsize ($\pm$ 3.99)} & {\bf 76.68} {\scriptsize ($\pm$ 2.13)} & {\bf 57.31} {\scriptsize ($\pm$ 1.21)} & 49.66 {\scriptsize ($\pm$ 1.10)} \\
+     & Ours &  {\bf 97.93} {\scriptsize ($\pm$ 0.56)} &  {\bf 98.27} {\scriptsize ($\pm$ 0.17)} & {\bf 94.64} {\scriptsize ($\pm$ 0.39)} & 76.34 {\scriptsize ($\pm$ 0.98)} & 56.60 {\scriptsize ($\pm$ 1.13)} & {\bf 50.20} {\scriptsize ($\pm$ 0.72)} \\
+    \midrule 
+    \multirow{4}{*}{$k$-means} & Random & 94.24 {\scriptsize ($\pm$ 3.20)} & 96.30 {\scriptsize ($\pm$ 1.62)} & 91.64 {\scriptsize ($\pm$ 1.39)} & 74.30 {\scriptsize ($\pm$ 1.43)} & 53.18 {\scriptsize ($\pm$ 1.66)} & 49.47 {\scriptsize ($\pm$ 2.70)}  \\ 
+     & ETS  & 92.89 {\scriptsize ($\pm$ 3.53)} & 96.47 {\scriptsize ($\pm$ 0.85)} & {\bf 93.80} {\scriptsize ($\pm$ 0.82)} & 69.40 {\scriptsize ($\pm$ 1.32)} & 47.51 {\scriptsize ($\pm$ 1.14)} & 45.82 {\scriptsize ($\pm$ 0.92)} \\
+     & Heuristic &  96.28 {\scriptsize ($\pm$ 1.68)} &  95.78 {\scriptsize ($\pm$ 1.50)}  & 91.75 {\scriptsize ($\pm$ 0.94)} & 75.57 {\scriptsize ($\pm$ 1.18)} & 54.31 {\scriptsize ($\pm$  3.94)} & 49.25 {\scriptsize ($\pm$ 1.00)} \\
+    & Ours & {\bf 98.20} {\scriptsize ($\pm$ 0.16)} & {\bf 98.48} {\scriptsize ($\pm$ 0.26)} &  93.61 {\scriptsize ($\pm$ 0.71)} & {\bf 77.74} {\scriptsize ($\pm$ 0.80)} & {\bf 56.95} {\scriptsize ($\pm$ 0.92)} & {\bf 50.47} {\scriptsize ($\pm$ 0.85)} \\  
+    \midrule 
+    \multirow{4}{*}{$k$-center} & Random & 96.40 {\scriptsize ($\pm$ 0.68)} & 95.57 {\scriptsize ($\pm$ 3.16)}  & 92.61 {\scriptsize ($\pm$ 1.70)} & 71.41 {\scriptsize ($\pm$ 2.75)} & 48.46 {\scriptsize ($\pm$ 0.31)} & 44.76 {\scriptsize ($\pm$ 0.96)} \\ 
+     & ETS  & 94.84 {\scriptsize ($\pm$ 1.40)} & 97.28 {\scriptsize ($\pm$ 0.50)} & 91.08 {\scriptsize ($\pm$ 2.48)} & 69.11 {\scriptsize ($\pm$ 1.69)} & 44.13 {\scriptsize ($\pm$ 1.06)} & 41.35 {\scriptsize ($\pm$ 1.23)} \\
+     & Heuristic & 94.55 {\scriptsize ($\pm$ 2.79)} & 94.08 {\scriptsize ($\pm$ 3.72)} & 92.06 {\scriptsize ($\pm$ 1.20)} & 74.33 {\scriptsize ($\pm$ 2.00)} & 50.32 {\scriptsize ($\pm$ 1.97)} & 44.13 {\scriptsize ($\pm$ 0.95)} \\
+     & Ours & {\bf 98.24} {\scriptsize ($\pm$ 0.36)} & {\bf 98.06} {\scriptsize ($\pm$ 0.35)} & {\bf 94.26} {\scriptsize ($\pm$ 0.37)} & {\bf 76.55} {\scriptsize ($\pm$ 1.16)} & {\bf 51.37} {\scriptsize ($\pm$ 1.63)} & {\bf 46.76} {\scriptsize ($\pm$ 0.96)}  \\  
+    \midrule 
+    \multirow{4}{*}{MoF} & Random & 95.18 {\scriptsize ($\pm$ 3.18)} & 95.76 {\scriptsize ($\pm$ 1.41)}  & 91.33 {\scriptsize ($\pm$ 1.75)} & 77.96 {\scriptsize ($\pm$ 1.84)} & 61.93 {\scriptsize ($\pm$ 1.05)} & 54.50 {\scriptsize ($\pm$ 1.33)} \\ 
+     & ETS & 97.04 {\scriptsize ($\pm$ 1.23)} & 96.48 {\scriptsize ($\pm$ 1.33)} & 92.64 {\scriptsize ($\pm$ 0.87)} & 77.62 {\scriptsize ($\pm$ 1.12)} & 60.43 {\scriptsize ($\pm$ 1.17)} & 56.12 {\scriptsize ($\pm$ 1.12)} \\
+     & Heuristic & 96.46 {\scriptsize ($\pm$ 2.41)} &  95.84 {\scriptsize ($\pm$ 0.89)} & 93.24 {\scriptsize ($\pm$ 0.77)} & 77.27 {\scriptsize ($\pm$ 1.45)} & 55.60 {\scriptsize ($\pm$ 2.70)} & 52.30 {\scriptsize ($\pm$ 0.59)} \\
+     & Ours & {\bf 98.37} {\scriptsize ($\pm$ 0.24)} & {\bf 97.84} {\scriptsize ($\pm$ 0.32)} & {\bf 94.62} {\scriptsize ($\pm$ 0.42)} & {\bf 81.58} {\scriptsize ($\pm$ 0.75)} & {\bf 64.22} {\scriptsize ($\pm$ 0.65)} & {\bf 57.70} {\scriptsize ($\pm$ 0.51)} \\
+    \bottomrule
+\end{tabular}
+}
+\vspace{-3mm}
+\label{tab:results_memory_selection_methods}
+\end{table*}
+
+\begin{comment}
+\begin{table*}[t]
+\footnotesize
+\centering
+\caption{
+Performance comparison between RS-MCTS (Ours), Random scheduling (Random), Equal Task Schedule (ETS), and Heuristic Scheduling (Heuristic) with various memory selection methods evaluated across all datasets. 
+%We use 'S' and 'P' as short for 'Split' and 'Permuted' for the datasets. 
+The replay memory size is $M=10$ and $M=100$ for the 5-task and 10/20-task datasets respectively. We report the mean and standard deviation averaged over 5 seeds. RS-MCTS performs better or on par than the baselines on most datasets and selection methods, where MoF yields the best results %performance 
+in general.
+}
+%\vspace{-3mm}
+%\setlength{\tabcolsep}{5pt}
+\scalebox{0.87}{
+\begin{tabular}{l l c c c c c c}
+    \toprule
+     & & \multicolumn{3}{c}{{\bf 5-task Datasets}} & \multicolumn{3}{c}{{\bf 10- and 20-task Datasets}} \\
+    \cmidrule(lr){3-5} \cmidrule(lr){6-8}
+    {\bf Selection} & {\bf Method} & S-MNIST & S-FashionMNIST & S-notMNIST & P-MNIST & S-CIFAR-100 & S-miniImagenet \\
+    \midrule 
+    \multirow{4}{*}{Uniform} & Random & 95.91 {\scriptsize ($\pm$ 1.56)}  & 95.82 {\scriptsize ($\pm$ 1.45)} & 92.39 {\scriptsize ($\pm$ 1.29)} & 72.44 {\scriptsize ($\pm$ 1.15)} & 53.99 {\scriptsize ($\pm$ 0.51)} & 48.08 {\scriptsize ($\pm$ 1.36)} \\
+     & ETS  & 94.02 {\scriptsize ($\pm$ 4.25)} &  95.81 {\scriptsize ($\pm$ 3.53)} & 91.01 {\scriptsize ($\pm$ 1.39)} & 71.09 {\scriptsize ($\pm$ 2.31)} & 47.70 {\scriptsize ($\pm$ 2.16)} & 46.97 {\scriptsize ($\pm$ 1.24)} \\
+     & Heuristic &  96.02 {\scriptsize ($\pm$ 2.32)} &  97.09 {\scriptsize ($\pm$ 0.62)} & 91.26 {\scriptsize ($\pm$ 3.99)} & 76.68 {\scriptsize ($\pm$ 2.13)} & 57.31 {\scriptsize ($\pm$ 1.21)} & 49.66 {\scriptsize ($\pm$ 1.10)} \\
+     & Ours &  97.93 {\scriptsize ($\pm$ 0.56)} &  98.27 {\scriptsize ($\pm$ 0.17)} & 94.64 {\scriptsize ($\pm$ 0.39)} & 76.34 {\scriptsize ($\pm$ 0.98)} & 56.60 {\scriptsize ($\pm$ 1.13)} & 50.20 {\scriptsize ($\pm$ 0.72)} \\
+    \midrule 
+    \multirow{4}{*}{$k$-means} & Random & 94.24 {\scriptsize ($\pm$ 3.20)} & 96.30 {\scriptsize ($\pm$ 1.62)} & 91.64 {\scriptsize ($\pm$ 1.39)} & 74.30 {\scriptsize ($\pm$ 1.43)} & 53.18 {\scriptsize ($\pm$ 1.66)} & 49.47 {\scriptsize ($\pm$ 2.70)}  \\ 
+     & ETS  & 92.89 {\scriptsize ($\pm$ 3.53)} & 96.47 {\scriptsize ($\pm$ 0.85)} & 93.80 {\scriptsize ($\pm$ 0.82)} & 69.40 {\scriptsize ($\pm$ 1.32)} & 47.51 {\scriptsize ($\pm$ 1.14)} & 45.82 {\scriptsize ($\pm$ 0.92)} \\
+     & Heuristic &  96.28 {\scriptsize ($\pm$ 1.68)} &  95.78 {\scriptsize ($\pm$ 1.50)}  & 91.75 {\scriptsize ($\pm$ 0.94)} & 75.57 {\scriptsize ($\pm$ 1.18)} & 54.31 {\scriptsize ($\pm$  3.94)} & 49.25 {\scriptsize ($\pm$ 1.00)} \\
+    & Ours & 98.20 {\scriptsize ($\pm$ 0.16)} & 98.48 {\scriptsize ($\pm$ 0.26)} &  93.61 {\scriptsize ($\pm$ 0.71)} & 77.74 {\scriptsize ($\pm$ 0.80)} & 56.95 {\scriptsize ($\pm$ 0.92)} & 50.47 {\scriptsize ($\pm$ 0.85)} \\  
+    \midrule 
+    \multirow{4}{*}{$k$-center} & Random & 96.40 {\scriptsize ($\pm$ 0.68)} & 95.57 {\scriptsize ($\pm$ 3.16)}  & 92.61 {\scriptsize ($\pm$ 1.70)} & 71.41 {\scriptsize ($\pm$ 2.75)} & 48.46 {\scriptsize ($\pm$ 0.31)} & 44.76 {\scriptsize ($\pm$ 0.96)} \\ 
+     & ETS  & 94.84 {\scriptsize ($\pm$ 1.40)} & 97.28 {\scriptsize ($\pm$ 0.50)} & 91.08 {\scriptsize ($\pm$ 2.48)} & 69.11 {\scriptsize ($\pm$ 1.69)} & 44.13 {\scriptsize ($\pm$ 1.06)} & 41.35 {\scriptsize ($\pm$ 1.23)} \\
+     & Heuristic & 94.55 {\scriptsize ($\pm$ 2.79)} & 94.08 {\scriptsize ($\pm$ 3.72)} & 92.06 {\scriptsize ($\pm$ 1.20)} & 74.33 {\scriptsize ($\pm$ 2.00)} & 50.32 {\scriptsize ($\pm$ 1.97)} & 44.13 {\scriptsize ($\pm$ 0.95)} \\
+     & Ours & 98.24 {\scriptsize ($\pm$ 0.36)} & 98.06 {\scriptsize ($\pm$ 0.35)} & 94.26 {\scriptsize ($\pm$ 0.37)} & 76.55 {\scriptsize ($\pm$ 1.16)} & 51.37 {\scriptsize ($\pm$ 1.63)} & 46.76 {\scriptsize ($\pm$ 0.96)}  \\  
+    \midrule 
+    \multirow{4}{*}{MoF} & Random & 95.18 {\scriptsize ($\pm$ 3.18)} & 95.76 {\scriptsize ($\pm$ 1.41)}  & 91.33 {\scriptsize ($\pm$ 1.75)} & 77.96 {\scriptsize ($\pm$ 1.84)} & 61.93 {\scriptsize ($\pm$ 1.05)} & 54.50 {\scriptsize ($\pm$ 1.33)} \\ 
+     & ETS & 97.04 {\scriptsize ($\pm$ 1.23)} & 96.48 {\scriptsize ($\pm$ 1.33)} & 92.64 {\scriptsize ($\pm$ 0.87)} & 77.62 {\scriptsize ($\pm$ 1.12)} & 60.43 {\scriptsize ($\pm$ 1.17)} & 56.12 {\scriptsize ($\pm$ 1.12)} \\
+     & Heuristic & 96.46 {\scriptsize ($\pm$ 2.41)} &  95.84 {\scriptsize ($\pm$ 0.89)} & 93.24 {\scriptsize ($\pm$ 0.77)} & 77.27 {\scriptsize ($\pm$ 1.45)} & 55.60 {\scriptsize ($\pm$ 2.70)} & 52.30 {\scriptsize ($\pm$ 0.59)} \\
+     & Ours & 98.37 {\scriptsize ($\pm$ 0.24)} & 97.84 {\scriptsize ($\pm$ 0.32)} & 94.62 {\scriptsize ($\pm$ 0.42)} & 81.58 {\scriptsize ($\pm$ 0.75)} & 64.22 {\scriptsize ($\pm$ 0.65)} & 57.70 {\scriptsize ($\pm$ 0.51)} \\
+    \bottomrule
+\end{tabular}
+}
+\vspace{-3mm}
+\label{tab:results_memory_selection_methods}
+\end{table*}
+\end{comment}
+
+
+\begin{comment}
+\begin{table*}[t]
+\footnotesize
+\centering
+\caption{
+Accuracy comparison between RS-MCTS (Ours), Random choice scheduling (Random), Heuristic Scheduling (Heuristic), and Equal Task Schedule (ETS) with various memory selection methods evaluated across all datasets. We use 'S' and 'P' as short for 'Split' and 'Permuted' for the datasets. The replay memory size is $M=10$ and $M=100$ for the 5-task and 10/20-task datasets respectively. We report the mean and standard deviation averaged over 5 seeds. RS-MCTS performs better or on par than the baselines on most datasets and selection methods, where MoF yields the best performance in general.
+}
+%\vspace{-3mm}
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{l l c c c c c c}
+    \toprule
+     & & \multicolumn{3}{c}{{\bf 5-task Datasets}} & \multicolumn{3}{c}{{\bf 10- and 20-task Datasets}} \\
+    \cmidrule(lr){3-5} \cmidrule(lr){6-8}
+    {\bf Selection} & {\bf Method} & S-MNIST & S-FashionMNIST & S-notMNIST & P-MNIST & S-CIFAR-100 & S-miniImagenet \\
+    \midrule 
+    \multirow{4}{*}{Uniform} & Random & 95.91 $\pm$ 1.56  & 95.82 $\pm$ 1.45 & 92.39 $\pm$ 1.29 & 72.44 $\pm$ 1.15 & 53.99 $\pm$ 0.51 & 48.08 $\pm$ 1.36 \\
+     & ETS  & 94.02 $\pm$ 4.25 &  95.81 $\pm$ 3.53 & 91.01 $\pm$ 1.39 & 71.09 $\pm$ 2.31 & 47.70 $\pm$ 2.16 & 46.97 $\pm$ 1.24 \\
+     & Heuristic &  96.02 $\pm$ 2.32 &  97.09 $\pm$ 0.62 & 91.26 $\pm$ 3.99 & 76.68 $\pm$ 2.13 & 57.31 $\pm$ 1.21 & 49.66 $\pm$ 1.10 \\
+     & Ours &  97.93 $\pm$ 0.56 &  98.27 $\pm$ 0.17 & 94.64 $\pm$ 0.39 & 76.34 $\pm$ 0.98 & 56.60 $\pm$ 1.13 & 50.20 $\pm$ 0.72 \\
+    \midrule 
+    \multirow{4}{*}{$k$-means} & Random & 94.24 $\pm$ 3.20 & 96.30 $\pm$ 1.62 & 91.64 $\pm$ 1.39 & 74.30 $\pm$ 1.43 & 53.18 $\pm$ 1.66 & 49.47 $\pm$ 2.70  \\ 
+     & ETS  & 92.89 $\pm$ 3.53 & 96.47 $\pm$ 0.85 & 93.80 $\pm$ 0.82 & 69.40 $\pm$ 1.32 & 47.51 $\pm$ 1.14 & 45.82 $\pm$ 0.92 \\
+     & Heuristic &  96.28 $\pm$ 1.68 &  95.78 $\pm$ 1.50  & 91.75 $\pm$ 0.94 & 75.57 $\pm$ 1.18 & 54.31 $\pm$  3.94 & 49.25 $\pm$ 1.00 \\
+    & Ours & 98.20 $\pm$ 0.16 & 98.48 $\pm$ 0.26 &  93.61 $\pm$ 0.71 & 77.74 $\pm$ 0.80 & 56.95 $\pm$ 0.92 & 50.47 $\pm$ 0.85 \\  
+    \midrule 
+    \multirow{4}{*}{$k$-center} & Random & 96.40 $\pm$ 0.68 & 95.57 $\pm$ 3.16  & 92.61 $\pm$ 1.70 & 71.41 $\pm$ 2.75 & 48.46 $\pm$ 0.31 & 44.76 $\pm$ 0.96 \\ 
+     & ETS  & 94.84 $\pm$ 1.40 & 97.28 $\pm$ 0.50 & 91.08 $\pm$ 2.48 & 69.11 $\pm$ 1.69 & 44.13 $\pm$ 1.06 & 41.35 $\pm$ 1.23 \\
+     & Heuristic & 94.55 $\pm$ 2.79 & 94.08 $\pm$ 3.72 & 92.06 $\pm$ 1.20 & 74.33 $\pm$ 2.00 & 50.32 $\pm$ 1.97 & 44.13 $\pm$ 0.95 \\
+     & Ours & {98.24 $\pm$ 0.36} & 98.06 $\pm$ 0.35 & 94.26 $\pm$ 0.37 & 76.55 $\pm$ 1.16 & {51.37 $\pm$ 1.63} & { 46.76 $\pm$ 0.96}  \\  
+    \midrule 
+    \multirow{4}{*}{MoF} & Random & 95.18 $\pm$ 3.18 & 95.76 $\pm$ 1.41  & 91.33 $\pm$ 1.75 & 77.96 $\pm$ 1.84 & 61.93 $\pm$ 1.05 & 54.50 $\pm$ 1.33 \\ 
+     & ETS & 97.04 $\pm$ 1.23 & 96.48 $\pm$ 1.33 & 92.64 $\pm$ 0.87 & 77.62 $\pm$ 1.12 & 60.43 $\pm$ 1.17 & 56.12 $\pm$ 1.12 \\
+     & Heuristic & 96.46 $\pm$ 2.41 &  95.84 $\pm$ 0.89 & 93.24 $\pm$ 0.77 & 77.27 $\pm$ 1.45 & 55.60 $\pm$ 2.70 & 52.30 $\pm$ 0.59 \\
+     & Ours & { 98.37 $\pm$ 0.24} & { 97.84 $\pm$ 0.32} & {94.62 $\pm$ 0.42} & {81.58 $\pm$ 0.75} & {64.22 $\pm$ 0.65} & { 57.70 $\pm$ 0.51} \\
+    \bottomrule
+\end{tabular}
+\vspace{-3mm}
+\label{tab:results_memory_selection_methods}
+\end{table*}
+\end{comment}
+
+

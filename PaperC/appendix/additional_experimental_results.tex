@@ -1,0 +1,95 @@
+
+\section{Additional Experimental Results}
+\label{app:additional_experimental_results}
+
+In this section, we bring more insights to the benefits of replay scheduling in Section \ref{app:replay_schedule_visualization_for_split_mnist} as well as provide metrics for catastrophic forgetting in Section \ref{app:analysis_of_catastrophic_forgetting}.
+
+\subsection{Replay Schedule Visualization for Split MNIST}
+\label{app:replay_schedule_visualization_for_split_mnist}
+
+In Figure \ref{fig:split_mnist_task_accuracies_and_bubble_plot}, we show the progress in test classification performance for each task when using ETS and RS-MCTS with memory size $M=10$ on Split MNIST. For comparison, we also show the performance from a network that is fine-tuning on the current task without using replay. Both ETS and RS-MCTS overcome catastrophic forgetting to a large degree compared to the fine-tuning network. Our method RS-MCTS further improves the performance compared to ETS with the same memory, which indicates that learning the time to learn can be more efficient against catastrophic forgetting. Especially, Task 1 and 2 seems to be the most difficult task to remember since it has the lowest final performance using the fine-tuning network. Both ETS and RS-MCTS manage to retain their performance on Task 1 using replay, however, RS-MCTS remembers Task 2 better than ETS by around 5\%. 
+
+To bring more insights to this behavior, we have visualized the task proportions of the replay examples using a bubble plot showing the corresponding replay schedule from RS-MCTS in Figure \ref{fig:split_mnist_task_accuracies_and_bubble_plot}(right). At Task 3 and 4, we see that the schedule fills the memory with data from Task 2 and discards replaying Task 1. This helps the network to retain knowledge about Task 2 better than ETS at the cost of forgetting Task 3 slightly when learning Task 4. This shows that the learned policy has considered the difficulty level of different tasks. At the next task, the RS-MCTS schedule has decided to rehearse Task 3 and reduces replaying Task 2 when learning Task 5. This behavior is similar to spaced repetition, where increasing the time interval between rehearsals helps memory retention.
+We emphasize that even on datasets with few tasks, using learned replay schedules can overcome catastrophic forgetting better than standard ETS approaches.
+
+
+
+\begin{figure}[t]
+  \centering
+  \setlength{\figwidth}{0.25\textwidth}
+  \setlength{\figheight}{.14\textheight}
+  \input{appendix/figures/bubble_plots/mnist/seed3/mnist_accuracy_and_bubble_plot}
+  \vspace{-3mm}
+  \caption{ Comparison of test classification accuracies for Task 1-5 on Split MNIST from a network trained without replay (Fine-tuning), ETS, and RS-MCTS. The ACC metric for each method is shown on top of each figure. We also visualize the replay schedule found by RS-MCTS as a bubble plot to the right. The memory size is set to $M=10$ with uniform memory selection for ETS and RS-MCTS. Results are shown for 1 seed. 
+  }
+  \vspace{-3mm}
+  \label{fig:split_mnist_task_accuracies_and_bubble_plot}
+\end{figure}
+
+\subsection{Analysis of Catastrophic Forgetting}\label{app:analysis_of_catastrophic_forgetting}
+
+We have compared the degree of catastrophic forgetting for our method against the baselines by measuring the backward transfer (BWT) metric from \citet{lopez2017gradient}, which is given by
+\begin{align}
+    \textnormal{BWT} = \frac{1}{T-1} \sum_{i=1}^{T-1} A_{T, i} - A_{i, i},
+\end{align}
+where $A_{t, i}$ is the test accuracy for task $t$ after learning task $i$. Table \ref{tab:bwt_alternative_memory_selection} shows the ACC and BWT metrics for the experiments in Section \ref{sec:alternative_memory_selection_methods}. In general, the BWT metric is consistently better when the corresponding ACC is better. We find an exception in Table \ref{tab:bwt_alternative_memory_selection} on Split CIFAR-100 and Split miniImagenet between Ours and Heuristic with uniform selection method, where Heuristic has better BWT while its mean of ACC is slightly lower than ACC for Ours. Table \ref{tab:bwt_efficiency_of_replay_scheduling} shows the ACC and BWT metrics for the experiments in Section \ref{sec:efficiency_of_replay_scheduling}, where we see a similar pattern that better ACC yields better BWT. The BWT of RS-MCTS is on par with the other baselines except on Split CIFAR-100 where the ACC on our method was a bit lower than the best baselines.
+
+
+
+\subsection{Applying Scheduling to Recent Replay Methods}
+\label{app:apply_scheduling_to_recent_replay_methods}
+
+In Section \ref{sec:applying_scheduling_to_recent_replay_methods}, we showed that RS-MCTS can be applied to any replay method. We combined RS-MCTS together with four recent replay methods, namely Hindsight Anchor Learning (HAL)~\citep{chaudhry2021using}, Meta Experience Replay (MER)~\citep{riemer2018learning}, and Dark Experience Replay (DER)~\citep{buzzega2020dark}. Table \ref{tab:bwt_sota_models_applied_to_rsmcts} shows the ACC and BWT for all methods combined with the scheduling from Random, ETS, Heuristic, and RS-MCTS. We observe that RS-MCTS can further improve the performance for each of the replay methods across the different datasets.  
+
+\paragraph{Hyperparameters.} We present the hyperparameters used for each method below. We used the same architectures and hyperparameters as described in Appendix \ref{app:experimental_settings} for all datasets if not mentioned otherwise. We used the Adam optimizer with learning rate $\eta=0.001$ for MER, DER, and DER++. For HAL, we used the SGD optimizer since using Adam made the model diverge in our experiments.  
+
+\begin{itemize}
+    \item Hindsight Anchor Learning (HAL):
+    \begin{itemize}
+        \item Split MNIST: learning rate $\eta = 0.1$, regularization $\lambda=0.1$, mean embedding strength $\gamma = 0.5$, decay rate $\beta=0.7$, gradient steps on anchors $k=100$
+        \item Split FashionMNIST: learning rate $\eta = 0.1$, regularization $\lambda=0.1$, mean embedding strength $\gamma = 0.1$, decay rate $\beta=0.5$, gradient steps on anchors $k=100$
+        \item Split notMNIST: learning rate $\eta = 0.1$, regularization $\lambda=0.1$, mean embedding strength $\gamma = 0.1$, decay rate $\beta=0.5$, gradient steps on anchors $k=100$
+        \item Permuted MNIST: learning rate $\eta = 0.1$, regularization $\lambda=0.1$, mean embedding strength $\gamma = 0.1$, decay rate $\beta=0.5$, gradient steps on anchors $k=100$
+        \item Split CIFAR-100: learning rate $\eta = 0.03$, regularization $\lambda=1.0$, mean embedding strength $\gamma = 0.1$, decay rate $\beta=0.5$, gradient steps on anchors $k=100$
+        \item Split miniImagenet: learning rate $\eta = 0.03$, regularization $\lambda=0.3$, mean embedding strength $\gamma = 0.1$, decay rate $\beta=0.5$, gradient steps on anchors $k=100$
+    \end{itemize}
+    \item Meta Experience Replay (MER):
+    \begin{itemize}
+        \item Split MNIST: across batch meta-learning rate $\gamma = 1.0$, within batch meta-learning rate $\beta=1.0$ 
+        \item Split FashionMNIST: across batch meta-learning rate $\gamma = 1.0$, within batch meta-learning rate $\beta=0.01$ 
+        \item Split notMNIST: across batch meta-learning rate $\gamma = 1.0$, within batch meta-learning rate $\beta=1.0$ 
+        \item Permuted MNIST: across batch meta-learning rate $\gamma = 1.0$, within batch meta-learning rate $\beta=1.0$ 
+        \item Split CIFAR-100: across batch meta-learning rate $\gamma = 1.0$, within batch meta-learning rate $\beta=0.1$ 
+        \item Split miniImagenet: across batch meta-learning rate $\gamma = 1.0$, within batch meta-learning rate $\beta=0.1$ 
+    \end{itemize}
+    \item Dark Experience Replay (DER):
+    \begin{itemize}
+        \item Split MNIST: loss coefficient memory logits $\alpha=0.2$
+        \item Split FashionMNIST: loss coefficient memory logits $\alpha=0.2$
+        \item Split notMNIST: loss coefficient memory logits $\alpha=0.1$
+        \item Permuted MNIST: loss coefficient memory logits $\alpha=1.0$
+        \item Split CIFAR-100: loss coefficient memory logits $\alpha=1.0$
+        \item Split miniImagenet: loss coefficient memory logits $\alpha=0.1$
+    \end{itemize}
+    \item Dark Experience Replay++ (DER++):
+    \begin{itemize}
+        \item Split MNIST: loss coefficient memory logits $\alpha=0.2$, loss coefficient memory labels $\beta=1.0$
+        \item Split FashionMNIST: loss coefficient memory logits $\alpha=0.2$, loss coefficient memory labels $\beta=1.0$
+        \item Split notMNIST: loss coefficient memory logits $\alpha=0.1$, loss coefficient memory labels $\beta=1.0$
+        \item Permuted MNIST: loss coefficient memory logits $\alpha=1.0$, loss coefficient memory labels $\beta=1.0$
+        \item Split CIFAR-100: loss coefficient memory logits $\alpha=1.0$, loss coefficient memory labels $\beta=1.0$
+        \item Split miniImagenet: loss coefficient memory logits $\alpha=0.1$, loss coefficient memory labels $\beta=1.0$
+    \end{itemize}
+\end{itemize}
+
+
+
+%%% TABLE
+\input{appendix/tables/table_bwt_alternative_memory_selection}
+
+\input{appendix/tables/table_bwt_efficiency_replay_scheduling}
+
+\input{appendix/tables/table_apply_scheduling_to_recent_replay_methods}
+
+%\clearpage
+%\clearpage

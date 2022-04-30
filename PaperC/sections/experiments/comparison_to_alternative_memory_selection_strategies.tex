@@ -1,0 +1,31 @@
+
+\subsection{Comparisons to Alternative Selection Strategies}
+
+In this section, we compare RS-MCTS to two coreset-based CL algorithms with the selection strategies Mean-of-Features selection used in iCarl~\citep{rebuffi2017icarl} and K-center Coreset~\citep{nguyen2017variational}. Furthermore, we extend RS-MCTS with these selection strategies and compare these to Uniform sampling of the examples to store in the history. We show the results for Split MNIST and Split CIFAR-100 in Figure \ref{fig:comparison_alternative_memory_selection}. As we could observe from the results in Section 4.5, the standard coreset methods Uniform, iCarl, and K-center performs better than RS-MCTS because they replay all examples in the history. 
+
+\MK{Haven't included resutls with ETS and iCarl and K-center because I coudldn't get hold of any GPUs on the RPL cluster yet. This is why these results look different from the figure \ref{fig:MNIST_mcts_best_rewards_M24_selection_methods_appendix} below which was in ICCV submission.}
+
+\begin{figure}[h]
+  \centering
+  \setlength{\figwidth}{0.37\textwidth}
+  \setlength{\figheight}{.20\textheight}
+  %\input{figures/comparison_alternative_memory_selection/rewards_groupplot}
+  \caption{Comparing the best rewards from RS-MCTS with different coreset selection strategies including Uniform sampling, iCarl selection, and K-center selection. We also include the performance from these selection strategies with standard CL training where all examples in the memory are sued for replay. Note that Uniform, iCarl, and K-center can use all examples stored in the history for replay, while RS-MCTS and ETS has a lower capacity on the number of samples that can be replayed. The memory sizes are $M=24$ and $M=285$ for Split MNIST and Split CIFAR-100 respectively. 
+  %for Split MNIST, Split FashionMNIST, Split notMNIST, Permuted MNIST, Split CIFAR-100, and Split miniImagenet. 
+  %We show accuracies obtained by using an equal proportion of examples from previous tasks (ETS) as well as the result from the best replay schedules found with MCTS (RS-MCTS). 
+  All results have been averaged over 5 and 3 seeds for Split MNIST and Split CIFAR-100 respectively. 
+  }
+  \label{fig:comparison_alternative_memory_selection}
+\end{figure}
+
+
+\begin{figure}[h!]
+  \centering
+  \setlength{\figwidth}{0.32\textwidth}
+  \setlength{\figheight}{0.25\textwidth}
+  %\input{appendix/figures/mnist_alternative_selection_methods/best_rewards_rs_mcts_selection_methods_M24_groupplot}
+  \vspace{-6pt}
+  \caption{Best rewards measured in ACC for ETS and RS-MCTS using memory size $M=24$ on Split MNIST for different memory selection strategies Random Selection, Mean-of-Features, and K-center Coreset. Results are averaged over 5 seeds. 
+  }
+  \label{fig:MNIST_mcts_best_rewards_M24_selection_methods_appendix}
+\end{figure}

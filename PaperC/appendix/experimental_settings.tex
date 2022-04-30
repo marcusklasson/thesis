@@ -1,0 +1,37 @@
+
+\section{Experimental Settings}\label{app:experimental_settings}
+
+In this section, we describe the full details of the experimental settings used in this paper. 
+
+\vspace{-2mm}
+\paragraph{Datasets.}
+We conduct experiments on six datasets commonly used in the continual learning literature. Split MNIST~\citep{zenke2017continual} is a variant of the MNIST~\citep{lecun1998gradient} dataset where the classes have been divided into 5 tasks incoming in the order 0/1, 2/3, 4/5, 6/7, and 8/9. Split Fashion-MNIST~\citep{xiao2017fashion} is of similar size to MNIST and consists of grayscale images of different clothes, where the classes have been divided into the 5 tasks T-shirt/Trouser, Pullover/Dress, Coat/Sandals, Shirt/Sneaker, and Bag/Ankle boots. Similar to MNIST, Split notMNIST~\citep{bulatov2011notMNIST} consists of 10 classes of the letters A-J with various fonts, where the classes are divided into the 5 tasks A/B, C/D, E/F, G/H, and I/J. We use training/test split provided by \citet{ebrahimi2020adversarial} for Split notMNIST. Permuted MNIST~\cite{goodfellow2013empirical} dataset consists of applying a unique random permutation of the pixels of the images in original MNIST to create each task, except for the first task that is to learn the original MNIST dataset. We reduce the original MNIST dataset to 10k samples and create 9 unique random permutations to get a 10-task version of Permuted MNIST. In Split CIFAR-100~\citep{krizhevsky2009learning}, the 100 classes are divided into 20 tasks with 5 classes for each task~\citep{lopez2017gradient, rebuffi2017icarl}. Similarly, Split miniImagenet~\cite{vinyals2016matching} consists of 100 classes randomly chosen from the original Imagenet dataset where the 100 classes are divided into 20 tasks with 5 classes per task.
+
+\vspace{-2mm}
+\paragraph{Network Architectures.} We use a 2-layer MLP with 256 hidden units and ReLU activation for Split MNIST, Split FashionMNIST, Split notMNIST, and Permuted MNIST. We use a multi-head output layer for each dataset except Permuted MNIST where the network uses single-head output layer. For Split CIFAR-100, we use a multi-head CNN architecture built according to the CNN in \citep{adel2019continual, schwarz2018progress, vinyals2016matching}, which consists of four 3x3 convolutional blocks, i.e. convolutional layer followed by batch normalization~\citep{ioffe2015batch}, with 64 filters, ReLU activations, and 2x2 Max-pooling. For Split mniImagenet, we use the reduced ResNet-18 from \citet{lopez2017gradient} with multi-head output layer. 
+
+\vspace{-2mm}
+\paragraph{Hyperparameters.} We train all networks with the Adam optimizer~\citep{kingma2014adam} with learning rate $\eta = 0.001$ and hyperparameters $\beta_1 = 0.9$ and $\beta_2 = 0.999$. Note that the learning rate for Adam is not reset before training on a new task. Next, we give details on number of training epochs and batch sizes specific for each dataset:
+\begin{itemize}[topsep=1pt]
+    \item Split MNIST: 10 epochs/task, batch size 128.
+    \item Split FashionMNIST: 30 epochs/task, batch size 128.
+    \item Split notMNIST: 50 epochs/task, batch size 128.
+    \item Permuted MNIST: 20 epochs/task, batch size 128.
+    \item Split CIFAR-100: 25 epochs/task, batch size 256.
+    \item Split miniImagenet: 1 epoch/task (task 1 trained for 5 epochs as warm up), batch size 32.
+\end{itemize}
+
+\vspace{-2mm}
+\paragraph{Monte Carlo Tree Search.} We run RS-MCTS for 100 iterations in all experiments. The replay schedules used in the reported results on the held-out test sets are from the replay schedule that gave the highest reward on the validation sets. The exploration constant for UCT in Equation \ref{eq:uct} is set to $C=0.1$ in all experiments~\citep{chaudhry2018feature}.
+
+\vspace{-2mm}
+\paragraph{Computational Cost.} All experiments were performed on one NVIDIA GeForce RTW 2080Ti. The wall clock time for ETS on Split MNIST was around 1.5 minutes, and RS-MCTS and BFS takes 40 seconds on average to run one iteration, where BFS runs 1050 iterations in total for Split MNIST. 
+
+
+\vspace{-2mm}
+\paragraph{Implementations.} We adapted the implementation released by \citet{borsos2020coresets} for the memory selection strategies Uniform sampling, $k$-means clustering, $k$-center clustering~\citep{nguyen2017variational}, and Mean-of-Features~\citep{rebuffi2017icarl}. For HAL~\cite{chaudhry2021using}, MER~\cite{riemer2018learning}, DER~\cite{buzzega2020dark}, and DER++, we follow the implementations released by \cite{buzzega2020dark} for each method to apply them to our replay scheduling methods. Furthermore, we follow the implementations released by \citet{chaudhry2019tiny} and \citet{mirzadeh2021cl-gym} for A-GEM~\citep{chaudhry2018efficient} and ER-Ring~\citep{chaudhry2019tiny}. For MCTS, we adapted the implementation from {\footnotesize \url{https://github.com/int8/monte-carlo-tree-search}} to search for replay schedules.
+
+\vspace{-2mm}
+\paragraph{Experimental Settings for Single Task Replay Memory Experiment.} We motivated the need for replay scheduling in continual learning with Figure \ref{fig:single_task_replay_with_M10} in Section \ref{sec:introduction}. This simple experiment was performed on Split MNIST where the replay memory only contains samples from the first task, i.e., learning the classes 0/1. Furthermore, the memory can only be replayed at one point in time and we show the performance on each task when the memory is replayed at different time steps. We set the memory size to $M=10$ samples such that the memory holds 5 samples from both classes. We use the same network architecture and hyperparameters as described above for Split MNIST. The ACC metric above each subfigure corresponds to the ACC for training a network with the single task memory replay at different tasks. We observe that choosing different time points to replay the same memory leads to noticeably different results in the final performance, and in this example, the best final performance is achieved when the memory is used when learning task 5. Therefore, we argue that finding the proper schedule of what tasks to replay at what time in the fixed memory situation can be critical for continual learning. 
+
+

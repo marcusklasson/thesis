@@ -1,0 +1,34 @@
+
+
+
+\pgfplotsset{every axis title/.append style={at={(0.5,0.82)}}}
+\pgfplotsset{every tick label/.append style={font=\tiny}}
+\pgfplotsset{every major tick/.append style={major tick length=2pt}}
+\pgfplotsset{every minor tick/.append style={minor tick length=1pt}}
+\pgfplotsset{every axis x label/.append style={at={(0.5,-0.22)}}}
+\pgfplotsset{every axis y label/.append style={at={(-0.19,0.5)}}}
+\begin{tikzpicture}
+\tikzstyle{every node}=[font=\scriptsize]
+\definecolor{color0}{rgb}{0.12156862745098,0.466666666666667,0.705882352941177}
+\definecolor{color1}{rgb}{1,0.498039215686275,0.0549019607843137}
+\definecolor{color2}{rgb}{0.172549019607843,0.627450980392157,0.172549019607843}
+\definecolor{color3}{rgb}{0.83921568627451,0.152941176470588,0.156862745098039}
+\definecolor{color4}{rgb}{0.580392156862745,0.403921568627451,0.741176470588235}
+
+\begin{groupplot}[group style={group size= 6 by 1, horizontal sep=0.69cm, vertical sep=0.85cm}]
+
+\input{figures/mcts_rewards_comparison/MNIST_rewards}
+
+\input{figures/mcts_rewards_comparison/FashionMNIST_rewards}
+
+\input{figures/mcts_rewards_comparison/notMNIST_rewards}
+
+\input{figures/mcts_rewards_comparison/PermutedMNIST_rewards}
+
+\input{figures/mcts_rewards_comparison/CIFAR100_rewards}
+
+\input{figures/mcts_rewards_comparison/miniImagenet_rewards}
+
+\end{groupplot}
+
+\end{tikzpicture}

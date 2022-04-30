@@ -1,0 +1,21 @@
+
+
+\subsection{Replay Scheduling in Continual Learning}\label{sec:replay_scheduling_in_continual_learning}
+
+In this section, 
+we describe our replay scheduling method for selecting the replay memory at different time steps. We define a replay schedule as a sequence $S = (\va_1, \dots, \va_{T-1})$, where $\va_i = (a_1, \dots, a_{T-1})$ for $1 \leq i \leq T-1$ is the sequence of task proportions used for determining how many samples per task to fill the replay memory with at task $i$. To make the selection of task proportions tractable, we construct an action space with a discrete number of choices for %the 
+task proportions from old tasks. 
+We use the following method to construct this action space: At the time to learn task $t$, we have $t-1$ historical tasks that we can choose from. We create $t-1$ bins $\vb_t = [b_1, \dots, b_{t-1}]$ and choose a task index to sample for each bin $b_i \in \{1, \dots, t-1 \}$. We treat the bins as interchangeable and only keep the unique choices. 
+For example, at task 3, we have seen task 1 and 2, so the unique choices of vectors are $[1,1], [1,2], [2,2]$, where $[1,1]$ indicates that all memory samples are from task 1, $[1,2]$ indicates that half memory is from task 1 and the other half are from task etc. The task proportions are then computed by counting the number of occurrences of each task index in $\vb_t$ and dividing by $t-1$, such that $\va_t = \texttt{bincount}(\vb_t) / (t-1)$. 
+If the memory size $M$ is not divisible by the task proportion value for task $i$, we round the number of replay samples from task $i$, i.e., $a_i \cdot M$, up or down accordingly while keeping the memory size fixed.
+From this specification, we can build a tree of different replay schedules to evaluate with the network.
+
+
+Figure \ref{fig:replay_scheduling_mcts_tree_example} shows an example of a replay schedule tree with Split MNIST~\citep{zenke2017continual} 
+where the memory size is $M=8$. %where the memory size has been set to $M=8$. 
+The figure shows the current tasks with example images of the task classes on the left, and the right side shows examples of possible replay memories that can be evaluated. The memory starts as the empty set, i.e. $\gM_1 = \emptyset$, at task 1. Before learning task 2, $\gM_2$ is filled with $M$ task 1 examples since this is the only task seen so far. At task 3, the memory compositions we can choose from are $M$ examples from either task 1 or 2, as well as equally filling $\gM_3$ with four examples each from both tasks. 
+A replay schedule is represented as a path traversal of different replay memory compositions from task 1 to task 5. We have color-coded three examples of possible schedules in Figure \ref{fig:replay_scheduling_mcts_tree_example} to use for illustration: the \textcolor{blue}{blue} path represents a replay schedule where only task 1 examples are replayed. %at all future tasks. 
+The \textcolor{red}{red} path represents using an equally distributed amount of memory samples per task in the memory, and the \textcolor{purple}{purple} path represents a schedule where the memory is filled $M$ examples from the previously visited task. Note that all other possible paths in the tree are also valid replay schedules. 
+
+
+

@@ -1,0 +1,221 @@
+
+
+%\renewcommand\thesubfigure{(\alph{subfigure})}
+\pgfplotsset{every axis title/.append style={at={(0.5,0.90)}}}
+\begin{tikzpicture}
+
+\definecolor{color0}{rgb}{0.12156862745098,0.466666666666667,0.705882352941177}
+\definecolor{color1}{rgb}{1,0.498039215686275,0.0549019607843137}
+\definecolor{color2}{rgb}{0.172549019607843,0.627450980392157,0.172549019607843}
+\definecolor{color3}{rgb}{0.83921568627451,0.152941176470588,0.156862745098039}
+\definecolor{color4}{rgb}{0.580392156862745,0.403921568627451,0.741176470588235}
+
+\begin{groupplot}[group style={group size= 3 by 1, horizontal sep=2cm, vertical sep=2cm, group name=Task_group}, ]
+
+\nextgroupplot[title={Fine-tuning ($M=0$)},
+height=\figheight,
+    legend cell align={left},
+    legend style={
+      fill opacity=0.8,
+      draw opacity=1,
+      text opacity=1,
+      at={(0.03,0.03)},
+      anchor=south west,
+      draw=white!80!black
+    },
+minor xtick={},
+minor ytick={},
+tick align=outside,
+tick pos=left,
+width=\figwidth,
+x grid style={white!69.0196078431373!black},
+xlabel={Task Number},
+xmajorgrids,
+xmin=0.8, xmax=5.2,
+xtick style={color=black},
+xtick={1,2,3,4,5},
+y grid style={white!69.0196078431373!black},
+ylabel={Accuracy},
+ymajorgrids,
+ymin=0.48, ymax=1.01,
+ytick style={color=black},
+ytick={0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.05},
+yticklabels={0.5, 0.6, 0.7, 0.8, 0.9, 1.0,1.05}
+]
+\addplot [line width=1.5pt, color0, mark=*, mark size=1.5, mark options={solid}]
+table {%
+1 0.994000017642975
+2 0.902999997138977
+3 0.508499979972839
+4 0.500500023365021
+5 0.5
+};\label{plots:Task1}
+\addplot [line width=1.5pt, color1, mark=*, mark size=1.5, mark options={solid}]
+table {%
+2 0.973999977111816
+3 0.610000014305115
+4 0.501999974250793
+5 0.505999982357025
+};\label{plots:Task2}
+\addplot [line width=1.5pt, color2, mark=*, mark size=1.5, mark options={solid}]
+table {%
+3 1
+4 0.998000025749207
+5 0.967499971389771
+};\label{plots:Task3}
+\addplot [line width=1.5pt, color3, mark=*, mark size=1.5, mark options={solid}]
+table {%
+4 1
+5 0.976000010967255
+};\label{plots:Task4}
+\addplot [line width=1.5pt, color4, mark=*, mark size=1.5, mark options={solid}]
+table {%
+5 0.998000025749207
+};\label{plots:Task5}
+
+\nextgroupplot[title={ETS ($M = 24$)},
+height=\figheight,
+legend cell align={left},
+legend style={
+  fill opacity=0.8,
+  draw opacity=1,
+  text opacity=1,
+  at={(0.03,0.03)},
+  anchor=south west,
+  draw=white!80!black
+},
+minor xtick={},
+minor ytick={0.65, 0.75, 0.85, 0.95, 1.05},
+tick align=outside,
+tick pos=left,
+width=\figwidth,
+x grid style={white!69.0196078431373!black},
+xlabel={Task Number},
+xmajorgrids,
+xmin=0.8, xmax=5.2,
+xtick style={color=black},
+xtick={1,2,3,4,5},
+y grid style={white!69.0196078431373!black},
+ylabel={Accuracy},
+ymajorgrids,
+yminorgrids,
+ymin=0.7, ymax=1.01,
+ytick style={color=black},
+ytick={0.7, 0.8, 0.9, 1.0, 1.1},
+yticklabels={0.7, 0.8, 0.9, 1.0, 1.1}
+]
+\addplot [line width=1.5pt, color0, mark=*, mark size=1.5, mark options={solid}]
+table {%
+1 0.994000017642975
+2 0.935000002384186
+3 0.921500027179718
+4 0.92849999666214
+5 0.948000013828278
+};
+\addplot [line width=1.5pt, color1, mark=*, mark size=1.5, mark options={solid}]
+table {%
+2 0.975000023841858
+3 0.932500004768372
+4 0.930499970912933
+5 0.888999998569489
+};
+\addplot [line width=1.5pt, color2, mark=*, mark size=1.5, mark options={solid}]
+table {%
+3 0.999499976634979
+4 0.998000025749207
+5 0.986999988555908
+};
+\addplot [line width=1.5pt, color3, mark=*, mark size=1.5, mark options={solid}]
+table {%
+4 1
+5 0.996500015258789
+};
+\addplot [line width=1.5pt, color4, mark=*, mark size=1.5, mark options={solid}]
+table {%
+5 0.998000025749207
+};
+%\addlegendentry{RS-MCTS}
+
+\nextgroupplot[title={RS-MCTS ($M = 24$)},
+height=\figheight,
+legend cell align={left},
+legend style={
+  fill opacity=0.8,
+  draw opacity=1,
+  text opacity=1,
+  at={(0.03,0.03)},
+  anchor=south west,
+  draw=white!80!black
+},
+minor xtick={},
+minor ytick={0.65, 0.75, 0.85, 0.95, 1.05},
+tick align=outside,
+tick pos=left,
+width=\figwidth,
+x grid style={white!69.0196078431373!black},
+xlabel={Task Number},
+xmajorgrids,
+xmin=0.8, xmax=5.2,
+xtick style={color=black},
+xtick={1,2,3,4,5},
+y grid style={white!69.0196078431373!black},
+ylabel={Accuracy},
+ymajorgrids,
+yminorgrids,
+ymin=0.7, ymax=1.01,
+ytick style={color=black},
+ytick={0.7, 0.8, 0.9, 1.0, 1.1},
+yticklabels={0.7, 0.8, 0.9, 1.0, 1.1}
+]
+\addplot [line width=1.5pt, color0, mark=*, mark size=1.5, mark options={solid}]
+table {%
+1 0.994000017642975
+2 0.972500026226044
+3 0.970000028610229
+4 0.860499978065491
+5 0.973999977111816
+};
+\addplot [line width=1.5pt, color1, mark=*, mark size=1.5, mark options={solid}]
+table {%
+2 0.978500008583069
+3 0.976499974727631
+4 0.949000000953674
+5 0.970000028610229
+};
+\addplot [line width=1.5pt, color2, mark=*, mark size=1.5, mark options={solid}]
+table {%
+3 1
+4 0.999000012874603
+5 0.996999979019165
+};
+\addplot [line width=1.5pt, color3, mark=*, mark size=1.5, mark options={solid}]
+table {%
+4 1
+5 0.997500002384186
+};
+\addplot [line width=1.5pt, color4, mark=*, mark size=1.5, mark options={solid}]
+table {%
+5 0.998000025749207
+};
+%\addlegendentry{RS-MCTS}
+
+\end{groupplot}
+
+\path (Task_group c1r1.north west|-current bounding box.north)--
+      coordinate(legendpos)
+      (Task_group c3r1.north east|-current bounding box.north);
+\matrix[
+    matrix of nodes,
+    anchor=south,
+    draw,
+    inner sep=0.2em,
+    draw
+  ]at([yshift=1ex]legendpos)
+  {
+    \ref{plots:Task1}& Task 1&[5pt]
+    \ref{plots:Task2}& Task 2&[5pt]
+    \ref{plots:Task3}& Task 3&[5pt]
+    \ref{plots:Task4}& Task 4&[5pt]
+    \ref{plots:Task5}& Task 5&[5pt]\\};
+
+\end{tikzpicture} 

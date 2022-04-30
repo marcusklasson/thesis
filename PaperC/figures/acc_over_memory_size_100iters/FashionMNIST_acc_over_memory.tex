@@ -1,0 +1,155 @@
+
+\nextgroupplot[title=Split FashionMNIST,
+height=\figheight,
+legend cell align={left},
+legend style={
+  nodes={scale=0.7},
+  fill opacity=0.8,
+  draw opacity=1,
+  text opacity=1,
+  at={(0.48,0.03)},
+  anchor=south west,
+  draw=white!80!black
+},
+minor xtick={},
+minor ytick={0.89, 0.91, 0.93, 0.95, 0.97, 0.99},
+tick align=outside,
+tick pos=left,
+width=\figwidth,
+x grid style={white!69.0196078431373!black},
+xmajorgrids,
+%xlabel={Memory size \(\displaystyle M\)},
+xmin=0.7, xmax=7.3,
+xtick style={color=black},
+xtick={1,2,3,4,5,6,7},
+xticklabels={8,24,80,120,200,400,800},
+y grid style={white!69.0196078431373!black},
+ymajorgrids,
+yminorgrids,
+%ylabel={ACC},
+ymin=0.899,%0.891766529814355,
+ymax=0.996494715797058,
+ytick style={color=black},
+ytick={0.88,0.9,0.92,0.94,0.96,0.98,1},
+yticklabels={88, 90, 92, 94, 96, 98, 100}
+]
+\path [fill=color0, fill opacity=0.2, line width=1pt]
+(axis cs:1,0.96419358253479)
+--(axis cs:1,0.976246356964111)
+--(axis cs:2,0.984048008918762)
+--(axis cs:3,0.98274040222168)
+--(axis cs:4,0.982234418392181)
+--(axis cs:5,0.985867142677307)
+--(axis cs:6,0.985980749130249)
+--(axis cs:7,0.988571465015411)
+--(axis cs:7,0.980668723583221)
+--(axis cs:7,0.980668723583221)
+--(axis cs:6,0.972739219665527)
+--(axis cs:5,0.975212812423706)
+--(axis cs:4,0.954325616359711)
+--(axis cs:3,0.976219773292542)
+--(axis cs:2,0.962551951408386)
+--(axis cs:1,0.96419358253479)
+--cycle;
+
+\path [fill=color1, fill opacity=0.2, line width=1pt]
+(axis cs:1,0.965724160568608)
+--(axis cs:1,0.979275839431391)
+--(axis cs:2,0.983843648420532)
+--(axis cs:3,0.987767732323772)
+--(axis cs:4,0.988072744085454)
+--(axis cs:5,0.988506841180757)
+--(axis cs:6,0.989178836422143)
+--(axis cs:7,0.990307375485654)
+--(axis cs:7,0.989052624514346)
+--(axis cs:7,0.989052624514346)
+--(axis cs:6,0.987461163577857)
+--(axis cs:5,0.983413158819243)
+--(axis cs:4,0.982567255914546)
+--(axis cs:3,0.970792267676228)
+--(axis cs:2,0.972876351579468)
+--(axis cs:1,0.965724160568608)
+--cycle;
+
+\path [fill=color2, fill opacity=0.2, line width=1pt]
+(axis cs:1,0.955000050761585)
+--(axis cs:1,0.970759949238415)
+--(axis cs:2,0.98603178628668)
+--(axis cs:3,0.981832320290786)
+--(axis cs:4,0.983967730086771)
+--(axis cs:5,0.978253058795492)
+--(axis cs:6,0.991734343706935)
+--(axis cs:7,0.969833098095523)
+--(axis cs:7,0.896526901904478)
+--(axis cs:7,0.896526901904478)
+--(axis cs:6,0.916425656293065)
+--(axis cs:5,0.938266941204508)
+--(axis cs:4,0.921192269913229)
+--(axis cs:3,0.942567679709214)
+--(axis cs:2,0.92920821371332)
+--(axis cs:1,0.955000050761585)
+--cycle;
+
+\path [fill=color3, fill opacity=0.2, line width=1pt]
+(axis cs:1,0.982129275798798)
+--(axis cs:1,0.984390676021576)
+--(axis cs:2,0.987218379974365)
+--(axis cs:3,0.988464534282684)
+--(axis cs:4,0.989360094070435)
+--(axis cs:5,0.989464402198792)
+--(axis cs:6,0.989146828651428)
+--(axis cs:7,0.990860760211945)
+--(axis cs:7,0.988419115543365)
+--(axis cs:7,0.988419115543365)
+--(axis cs:6,0.98689329624176)
+--(axis cs:5,0.987175583839417)
+--(axis cs:4,0.985639929771423)
+--(axis cs:3,0.983615458011627)
+--(axis cs:2,0.982341647148132)
+--(axis cs:1,0.982129275798798)
+--cycle;
+\addplot [line width=1.0pt, color0, mark=*, mark size=1, mark options={solid}]
+table {%
+1 0.970219969749451
+2 0.973299980163574
+3 0.979480087757111
+4 0.968280017375946
+5 0.980539977550507
+6 0.979359984397888
+7 0.984620094299316
+};
+%\addlegendentry{Random}
+\addplot [line width=1.0pt, color1, mark=*, mark size=1, mark options={solid}]
+table {%
+1 0.9725
+2 0.97836
+3 0.97928
+4 0.98532
+5 0.98596
+6 0.98832
+7 0.98968
+};
+%\addlegendentry{ETS}
+\addplot [line width=1.0pt, color2, mark=*, mark size=1, mark options={solid}]
+table {%
+1 0.96288
+2 0.95762
+3 0.9622
+4 0.95258
+5 0.95826
+6 0.95408
+7 0.93318
+};
+%\addlegendentry{Heuristic}
+\addplot [line width=1.0pt, color3, mark=*, mark size=1, mark options={solid}]
+table {%
+1 0.983259975910187
+2 0.984780013561249
+3 0.986039996147156
+4 0.987500011920929
+5 0.988319993019104
+6 0.988020062446594
+7 0.989639937877655
+};
+%\addlegendentry{Ours}
+

@@ -1,0 +1,201 @@
+
+
+\section{Experimental Analysis}\label{app:experimental_analysis}
+
+In this section, we present experimental analysis on learning replay schedules with MCTS. First, we show that our method has greater advantage over the standard replay strategy without scheduling when the memory size is small in Section \ref{app:results_with_varying_memory_size}. In Section \ref{app:task_accuracies_and_replay_schedule_visualization}, we analyze the progress of task accuracies during learning by inspecting the replay schedules and deduce that the learned replay schedules are consistent with human learning processes, such as spaced repetition. Furthermore, we illustrate that RS-MCTS can be used with various sample selection strategies than random selection in Appendix \ref{app:alternative_memory_selection_strategies}, and also be applied to the class incremental learning setting in Appendix \ref{app:class_incremental_learning}.
+
+\subsection{Results with Varying Memory Size $M$}\label{app:results_with_varying_memory_size}
+
+In these experiments, we show that RS-MCTS improves on both ACC and BWT across different memory sizes $M$ for all four datasets with Figure \ref{fig:test_classification_accuracy_curves}.
+We observe that RS-MCTS replay schedules yield better final classification performance compared to ETS, especially for small $M$. Furthermore, the replay schedules from RS-MCTS yields slightly better BWT than ETS. 
+%For the MNIST datasets, the BWT metric is fairly stable as the memory size increases for RS-MCTS, while BWT increases more gradually for Split CIFAR-100 for larger $M$. 
+As the memory size increases, the results from using ETS approaches the ACC and BWT achieved by RS-MCTS. This indicates that replay scheduling is extremely needed when the memory budget is limited as in many real-world cases. 
+
+
+
+\subsection{Task Accuracies and Replay Schedule Visualizations}\label{app:task_accuracies_and_replay_schedule_visualization}
+
+We bring further insights about the performance boost from good replay schedules by inspecting how the task accuracies progress during the learning phase. 
+
+
+\vspace{-2mm}
+\paragraph{Split MNIST:} In Figure \ref{fig:splitMNIST_task_accuracies_M24_seed2}, we show the progress in classification performance for each task when using ETS and RS-MCTS with memory size $M=24$ on Split MNIST. 
+%In Figure \ref{fig:splitMNIST_task_accuracies_M24_seed2}, we show how the each classification performance varies when training on each task for ETS and RS-MCTS with memory size $M=24$. 
+For comparison, we also show the performance from a network that is fine-tuning on the current task without using replay. Both ETS and RS-MCTS overcome catastrophic forgetting to a large degree compared to the fine-tuning network. Our method RS-MCTS further improves the performance compared to ETS with the same memory, which indicates that learning the time to learn can be more efficient against catastrophic forgetting. 
+Especially, Task 2 in Split MNIST seems to be the most difficult task to remember since it has the lowest final performance using the fine-tuning network.
+%Especially, Task 2 in Split MNIST seems to be the most difficult task to remember since it has the lowest final performance in the baseline on the left. 
+Our RS-MCTS schedule manages to retain its performance on Task 2 better than ETS. To bring more insights to this behavior, we look into the proportions of the memory examples per task in the corresponding replay schedule from RS-MCTS in Figure \ref{fig:replay_schedules_proportion_for_mnist_fashionmnist_notmnist} (top). At Task 3, we see that the schedule fills the memory with data from Task 2 and discards replaying Task 1. This helps the network to retain knowledge about Task 2 better than ETS at the cost of forgetting Task 1 slightly. This shows that the learned policy has considered the difficulty level of different tasks. At the next task, the RS-MCTS schedule has decided to rehearse on Task 1 and discards rehearse on Task 2 until training on Task 5. This behavior is similar to spaced repetition, where increasing the time interval between rehearsal helps memory retention. %to retain memory longer. 
+We emphasize that even on datasets with few tasks, using learned replay schedules can overcome catastrophic forgetting better than standard ETS approaches.
+%\vspace{-10pt}
+
+\begin{figure}[t]
+\centering
+\setlength{\figwidth}{0.85\columnwidth}
+\setlength{\figheight}{.15\textheight}
+\input{appendix/figures/replay_schedules/mnist_M24_replay_schedule_barplot}
+\input{appendix/figures/replay_schedules/fashionmnist_M24_replay_schedule_barplot}
+\input{appendix/figures/replay_schedules/notmnist_M24_replay_schedule_barplot}
+\caption{The proportion of memory examples per task from replay schedule found by RS-MCTS on Split MNIST (top), Split FashionMNIST (middle), and Split notMNIST (bottom) with memory size $M=24$. The x-axis displays the current task and the y-axis shows the proportion of examples from the historical tasks. These replay schedules correspond to the learning progress in task accuracy performance for RS-MCTS in Figures \ref{fig:splitMNIST_task_accuracies_M24_seed2}, \ref{fig:splitFashionMNIST_task_accuracies_M24_seed1_appendix}, and \ref{fig:splitNotMNIST_task_accuracies_M24_seed2_appendix} for Split MNIST, Split FashionMNIST, and Split notMNIST respectively. }\vspace{-3mm}
+\label{fig:replay_schedules_proportion_for_mnist_fashionmnist_notmnist}
+\end{figure}
+
+\begin{figure*}[t]
+\centering
+\setlength{\figwidth}{0.65\textwidth}
+\setlength{\figheight}{0.6\columnwidth}
+\input{appendix/figures/splitCifar100_task_accuracy_seed5_barplot}
+\vspace{-10pt}
+\caption{Comparison of test classification accuracies after learning the final task on Split CIFAR-100 from a network trained with ETS and RS-MCTS with memory size $M=285$. RS-MCTS yields higher accuracies on all tasks except Task 6, 11, 13, 16, and 17. The corresponding replay schedule for RS-MCTS are found in Figure \ref{fig:cifar100_replay_schedules_appendix}. Results are shown for a single seed.}
+\label{fig:splitCifar100_task_accuracy_seed5_barplot_appendix}
+\end{figure*}
+
+\paragraph{Split Fashion-MNIST:} Figure \ref{fig:splitFashionMNIST_task_accuracies_M24_seed1_appendix} shows the progress in classification performance for a network using fine-tuning and replay schedules from ETS and RS-MCTS with memory size $M=24$ when training on each task in Split FashionMNIST. Both ETS and RS-MCTS overcome catastrophic forgetting significantly compared to the fine-tuning network. We observe that our RS-MCTS schedule manages to retain its performance on Task 1 on the final time step even if the Task 1 performance had dropped to almost 85\% at the previous time step. Figure \ref{fig:replay_schedules_proportion_for_mnist_fashionmnist_notmnist} (middle) shows however that this performance boost on Task 1 was the outcome of replaying Task 3 and 4 rather than Task 1 at the final time step. The performance increase of Task 1 is observed for the ETS schedule as well, which could mean that Task 1 benefits from learning Task 5. Still, RS-MCTS manages to receive better overall performance after learning Task 5 than ETS which shows the advantages of using a flexible replay schedule. 
+\vspace{-10pt}
+
+
+
+\paragraph{Split notMNIST:} Figure \ref{fig:splitNotMNIST_task_accuracies_M24_seed2_appendix} shows a similar visualization of the task classification performance for Split notMNIST. The fine-tuning network forgets Task 1 and 3, which both ETS and RS-MCTS manage to remember. However, RS-MCTS maintains its performance on Task 1 and 2 better than ETS which only yields good performance on the succeeding tasks. Figure \ref{fig:replay_schedules_proportion_for_mnist_fashionmnist_notmnist} (bottom) shows the proportion of memory examples for RS-MCTS. In particular, the schedule fills the memory with data from Task 2 at Task 3 but still retains its performance on the future time steps even if the schedule replays other tasks than Task 2.
+\vspace{-10pt}
+
+
+
+\paragraph{Split CIFAR-100:}
+Due to the large number of tasks, instead of showing the whole learning process, we show the results at the final step for Split CIFAR-100 in Figure \ref{fig:splitCifar100_task_accuracy_seed5_barplot_appendix}. We observe that our method performs better than ETS on 15 out of 20 tasks with the same memory size $M=285$. We visualize the corresponding replay schedule to gain insights into the behavior of the RS-MCTS policy.
+Figure \ref{fig:cifar100_replay_schedules_appendix} shows a bubble plot of the proportion of memory examples that are used for replay at each task. Each color of the circles corresponds to a historical task and its size represents the proportion of examples that are replayed at the current task. Thus, each column of the circles corresponds to the memory composition at the current task time. As the memory is limited, the sum of areas of circles in each column is fixed across different time steps. 
+The memory examples per task vary dynamically over time in a sophisticated nonlinear way which would be difficult to replace by any heuristics.
+This motivates the importance of learning the time to learn in continual learning with fixed size memory.
+Furthermore, we observe that the schedule replays the early tasks with a similar proportion in the beginning of learning but gradually increases the time interval between rehearsal.
+%Furthermore, we observe that the schedule replays Task 1-3 with a similar proportion at the initial tasks but gradually increases the time interval between rehearsal. 
+This shows that our learned schedule establishment stems well with the idea of spaced repetition that early tasks require less repetition in the future for retaining knowledge. 
+Moreover, our method is potentially more optimal than native spaced repetition as it considers the relationship among tasks. For example, Task 5-8 need less rehearsal which could potentially be that they are correlated with other tasks or they are simpler.  
+
+
+
+\clearpage
+
+%%%% Split MNIST Task Accuracies
+\begin{figure*}[t]
+\centering
+\setlength{\figwidth}{0.31\textwidth}
+\setlength{\figheight}{.17\textheight}
+\input{figures/splitMnist_task_accuracy_seed2_groupplot}
+\caption{Comparison of test classification accuracies for Task 1-5 on Split MNIST from a network trained without replay (Fine-tuning), ETS, and RS-MCTS. The memory size is set to $M=24$ for ETS and RS-MCTS. The replay schedule found by RS-MCTS is shown in Figure \ref{fig:replay_schedules_proportion_for_mnist_fashionmnist_notmnist} (top). Results are shown for a single seed. }
+\label{fig:splitMNIST_task_accuracies_M24_seed2}
+\end{figure*}
+
+%%%% Split Fashion-MNIST Task Accuracies
+\begin{figure*}[t]
+\centering
+\setlength{\figwidth}{0.31\textwidth}
+\setlength{\figheight}{.17\textheight}
+\input{appendix/figures/splitFashionMnist_task_accuracy_seed1_groupplot}
+\caption{Comparison of test classification accuracies for Task 1-5 on Split FashionMNIST from a network trained without replay (Fine-tuning), ETS, and RS-MCTS. The memory size is set to $M=24$ for ETS and RS-MCTS. The replay schedule found by RS-MCTS is shown in Figure \ref{fig:replay_schedules_proportion_for_mnist_fashionmnist_notmnist} (middle). Results are shown for a single seed. }
+\label{fig:splitFashionMNIST_task_accuracies_M24_seed1_appendix}
+\end{figure*}
+
+%%%% Split notMNIST Task Accuracies
+\begin{figure*}[t]
+\centering
+\setlength{\figwidth}{0.31\textwidth}
+\setlength{\figheight}{.17\textheight}
+\input{appendix/figures/splitNotMnist_task_accuracy_seed2_groupplot}
+\caption{Comparison of test classification accuracies for Task 1-5 on Split notMNIST from a network trained without replay (Fine-tuning), ETS, and RS-MCTS. The memory size is set to $M=24$ for ETS and RS-MCTS. The replay schedule found by RS-MCTS is shown in Figure \ref{fig:replay_schedules_proportion_for_mnist_fashionmnist_notmnist} (bottom). Results are shown for a single seed. }\vspace{-10pt}
+\label{fig:splitNotMNIST_task_accuracies_M24_seed2_appendix}
+\end{figure*}
+
+\clearpage
+
+%\begin{figure*}[t]
+%\centering
+%\begin{minipage}{0.95\columnwidth}
+%  \centering
+%  \setlength{\figwidth}{\textwidth}
+%  \setlength{\figheight}{0.7\columnwidth}
+%  \input{appendix/figures/replay_schedules/cifar100_ets_M285_seed5_scatter}
+%\end{minipage}
+%\begin{minipage}{0.95\columnwidth}
+%  \centering
+%  \setlength{\figwidth}{\textwidth}
+%  \setlength{\figheight}{0.7\columnwidth}
+%  \input{appendix/figures/replay_schedules/cifar100_rs_mcts_M285_seed5_scatter}
+%\end{minipage}
+%\caption{The proportion of memory examples that are used for replay at each task from replay schedules using ETS (left) and RS-MCTS (right) when training on Split CIFAR-100 with memory size $M=285$. The color of the circles corresponds to a historical task and its size represents the proportion of examples that are replayed at the current task. The sum of areas of circles in each column is fixed across different time. We show the ACC yielded by the replay schedules above each figure.}
+%\vspace{-10pt}
+%\label{fig:cifar100_replay_schedules_appendix}
+%\end{figure*}
+
+%\clearpage
+
+\begin{figure*}[h!]
+  \centering
+  \setlength{\figwidth}{0.32\textwidth}
+  \setlength{\figheight}{0.25\textwidth}
+  \input{appendix/figures/mnist_alternative_selection_methods/best_rewards_rs_mcts_selection_methods_M24_groupplot}
+  \vspace{-6pt}
+  \caption{Best rewards measured in ACC for ETS and RS-MCTS using memory size $M=24$ on Split MNIST for different memory selection strategies Random Selection, Mean-of-Features, and K-center Coreset. Results are averaged over 5 seeds. 
+  }
+  \label{fig:MNIST_mcts_best_rewards_M24_selection_methods_appendix}
+\end{figure*}
+
+\subsection{Alternative Memory Selection Strategies}\label{app:alternative_memory_selection_strategies}
+
+In this section, we evaluate RS-MCTS on two alternative selection strategies, namely Mean-of-Features (MoF)~\citep{rebuffi2017icarl} and K-center Coreset~\citep{nguyen2017variational}, and compare these to using random selection of examples to store as historical data. We begin by giving a brief description of both strategies: %\vspace{-12pt}
+
+\paragraph{Mean-of-Features:} We extract feature representations before the classification layer of all images for every class. Then the examples to store in memory are selected based on the similarity between the feature representations and their moving mean value. This selection strategy was used in iCaRL~\citep{rebuffi2017icarl} where they grabbed such examples to create an exemplar set for performing classification in feature space. Similar to \citet{chaudhry2019tiny}, we use this strategy for selecting memory examples that should be close to the mode of the class in feature space.%\vspace{-pt}
+
+\paragraph{K-center Coreset:} We employ the greedy K-center algorithm~\citep{gonzalez1985clustering} that was used for memory replay in Variational Continual Learning~\citep{nguyen2017variational}. In contrast to MoF, this strategy operates in input space and returns examples that are spread throughout the input space.%\vspace{12pt}
+
+We perform experiments on Split MNIST to compare MoF and K-center Coreset to random selection as selection strategies. Figure \ref{fig:MNIST_mcts_best_rewards_M24_selection_methods_appendix} shows the progress in ACC when searching for replay schedules with RS-MCTS using the three strategies and memory size $M=24$. We also show the performance from using ETS with each strategy as baselines. All three strategies find better replay schedules than ETS using less than 50 simulations. Both MoF and K-center Coreset strategies perform on par with random selection over the 500 simulations with RS-MCTS. 
+
+In Figure \ref{fig:MNIST_ACC_over_M_selection_methods_appendix}, we compare the performance using the selection strategies for various memory sizes. The schedules from RS-MCTS for the selection strategies perform on par as the memory size $M$ increases where K-center Coreset strategy gains slightly superior performance at $M=120$ and $M=200$. A potential reason for this slight performance increase could be that K-center Coreset selects memory examples to store that are spread out in the input space for each class rather than selecting examples that are near the mode for all examples as in MoF.   
+
+
+
+\begin{figure}[t]
+  \centering
+  \setlength{\figwidth}{0.6\textwidth}
+  \setlength{\figheight}{0.4\textwidth}
+  %\vspace{-8pt}
+  \input{appendix/figures/mnist_alternative_selection_methods/MNIST_accuracy_bwt_curveplot}
+  \caption{ACC over memory size $M$ for ETS and RS-MCTS on Split MNIST using different memory selection methods, namely Random Selection (Random), Mean-of-Features (MoF), and K-center Coreset. All results have been averaged over 5 seeds. 
+  }\vspace{-6mm}
+  \label{fig:MNIST_ACC_over_M_selection_methods_appendix}
+\end{figure}
+
+\subsection{Class Incremental Learning}\label{app:class_incremental_learning}
+
+In this section, we apply replay scheduling to the class incremental learning (Class-IL) setting where task information is unavailable at test time. This scenario requires the model to both infer the task and class of the test input. This continual learning scenario is considered to be more challenging than the task incremental learning (Task-IL) setting where task labels are available at test time that we address in the main paper. We assess RS-MCTS for Class-IL on the Split MNIST dataset. The experimental settings are the same as in the main paper, except that the network architecture uses a single-head classification layer in this scenario. 
+
+We need to adjust the way to construct the action space of memory combinations to apply RS-MCTS to the Class-IL setting. As earlier, we create $t-1$ bins $[b_1, b_2, ....b_{t-1}]$ and choose a historical task to sample for each bin $b_i \in {1,.., t-1}$ before learning task $t$. In the Class-IL setting, the model will catastrophically forget tasks that are excluded from the selected memory combination. Therefore, we ensure that the memory combinations includes some proportion of samples from all previous tasks by extending the memory with $t-1$ additional bins $[c_1, c_2, ..., c_{t-1}]$ where each $c_i$ includes samples from its corresponding task $i$. For example, at Task 3, we have Task 1 and 2 in history; so the unique choices of bins are $[1,1], [1,2], [2,2]$. We then extend each of these unique choices with $[1, 2]$, such that the unique choices become $[1,1,1,2], [1,2,1,2], [2,2,1,2]$, where $[1,1,1,2]$ indicates that 75\% and 25\% of the memory is from Task 1 and Task 2 respectively, and $[1,2,1,2]$ indicates that half memory is from Task 1 and the other half are from Task 2 etc.
+
+In the first experiment, we inspect the performance progress measured in ACC over MCTS simulations when $M=24$ for Split MNIST. Figure \ref{fig:MNIST_mcts_best_rewards_M24_class_il_appendix} shows that RS-MCTS quickly finds a significantly better ACC than ETS using less than 50 iterations. Furthermore, RS-MCTS can reach similar performance as from the breadth-first search (BFS) with significantly less computational budget. These results confirm that scheduling of which memory examples to replay is important in the Class-IL scenario. 
+
+In Figure \ref{fig:MNIST_ACC_BWT_over_M_class_il_appendix}, we show that the performance of RS-MCTS improves on both ACC and BWT across  different  memory sizes $M$. We observe that RS-MCTS replay schedules yield better final classification performance compared to ETS, especially for small $M$ in the Class-IL scenario. The performance for both RS-MCTS and ETS schedules increases rapidly as the memory size becomes larger which confirms the importance of the memory size in Class-IL. The results from using the ETS schedules approach the ACC and BWT metrics achieved by RS-MCTS as the memory size grows. This indicates that replay scheduling is necessary for situations with limited memory budgets in the Class-IL scenario. 
+
+\begin{figure}[h]
+  \centering
+  \setlength{\figwidth}{0.5\columnwidth}
+  \setlength{\figheight}{0.3\textwidth}
+  \input{appendix/figures/mnist_class_incremental_learning/best_rewards_rs_mcts_with_upper_bound_M24}
+  \vspace{-6pt}
+  \caption{MCTS simulation performance on Split MNIST in the Class-IL setting where the average test classification accuracies over tasks after training on the final task (ACC) is used as the reward. The ETS performance is shown in blue as a baseline and the green line show the ACC from the optimal schedules found from a breadth-first search (BFS) as an upper bound. We use $M= 24$ and all results have been averaged over 5 seeds.
+  }%\vspace{-12pt}
+  \label{fig:MNIST_mcts_best_rewards_M24_class_il_appendix}
+\end{figure}
+
+\begin{figure}[h]
+  \centering
+  \setlength{\figwidth}{0.5\columnwidth}
+  \setlength{\figheight}{0.3\textwidth}
+  \input{appendix/figures/mnist_class_incremental_learning/MNIST_accuracy_bwt_curveplot}
+  \vspace{-4mm}
+  \caption{Average test classification accuracies over tasks after training on the final task (ACC) and backward transfer (BWT) over different memory sizes $M$ for Split MNIST in the Class Incremental Learning setting. We show accuracies obtained by using an equal proportion of examples from previous tasks (ETS) as well as the result from the best replay schedules found with MCTS (RS-MCTS). All results have been averaged over 5 seeds.
+  }%\vspace{-12pt}
+  \label{fig:MNIST_ACC_BWT_over_M_class_il_appendix}
+\end{figure}
+
+
+
+
+
+
