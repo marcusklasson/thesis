@@ -42,7 +42,7 @@ More recent works have focused on evolving the memory samples through data augme
 
 \paragraph{Similarities and Differences between Continual Learning and other fields.} \MK{A short and cozy table fo this, similar to survey by Delange etal 2021}
 
-\section{Replay Scheduling in Continual Learning} 
+\section{Replay Scheduling in Continual Learning}\label{sec:replay_scheduling_in_cl}
 
 In this section, we introduce a slightly new CL setting considering the real-world needs where all historical data can be available since data storage is cheap. However, the amount of compute is limited when the model is updated on new data due to operational costs. Hence, it is impossible for the model to leverage from all the available historical data to mitigate catastrophic forgetting. The goal then becomes to learn how we can select subsets of historical data for replay to efficiently reduce forgetting of the old tasks. We will refer to these subsets of historical data as the \textit{replay memory} throughout this chapter. The size of the replay memory affects the processing time when learning new tasks as well as the allowed time for the training phase. When composing the replay memory, we focus on determining the number of samples to draw from the seen tasks in the historical data rather than selecting single stored instances. Next, we introduce the problem setting in more detail as well as the notation of the new CL setting. 
 
@@ -144,6 +144,7 @@ We employ DQNs for learning the policy for replay scheduling. The architecture t
 		\State $r_t^{i}, s_{t+1}^{i} = \texttt{CLStep}(t, a_t^{i}, E_i)$
 		\State $\gB = \gB \cup \{(s_{t}^{i}, a_{t}^{i}, r_{t}^{i}, s_{t+1}^{i})\}$ \Comment{Store transition in buffer}
 		\State $(s_j, a_j, r_j, s_{j+1}) \stackrel{B}{\sim} \gB$ \Comment{Get mini-batch of $B$ samples from buffer}					
+		%\State $\{(s_t^{(j)}, a_t^{(j)}, r_t^{(j)}, s_{t+1}^{(j)})\}_{j=1}^{B} \stackrel{B}{\sim} \gB$
 		\State $\vtheta \leftarrow \vtheta - \eta \nabla_{\vtheta} (r_t + \max_{a'} Q_{\vtheta^{-}}(s_{j+1}, a') - Q_{\vtheta}(s_j, a_j))$ \Comment{Update DQN}
 		\EndFor
 		\EndFor 
@@ -168,19 +169,42 @@ We outline the procedure for training the DQN on multiple CL environments in Alg
 \end{align}
 where $A_{t, i}^{\val}$ is the validation accuracy on task $i$ after $f_{\vphi}$ has learned task $t$. The next state is also obtained by utilizing the validation accuracies up to task $t$, such as $s_{t+1}^{i} = [A_{t, 1}^{\val}, ..., A_{t, t}^{\val}, 0, ..., 0] \in [0, 1]^{T-1}$. The DQN is then updated by sampling a mini-batch of $B$ samples from the shared buffer $\gB$ and taking a gradient step to minimize the loss
 \begin{align}
-	\gL_{\text{DQN}}(\vtheta) = r_t + \max_{a'} Q_{\vtheta^{-}}(s_{j+1}, a') - Q_{\vtheta}(s_j, a_j), 
+	\gL_{\text{DQN}}(\vtheta) = r_j + \max_{a'} Q_{\vtheta^{-}}(s_{j+1}, a') - Q_{\vtheta}(s_j, a_j), 
 \end{align}  
-where $\vtheta^{-}$ is target network which is copy of the parameters $\vtheta$ from some previous time step. By using the shared replay buffer, the DQN is trained on diverse set of environments that can generalize well to new environments with unseen dynamics from an unseen task order or a new dataset. 
-
-
+where $\vtheta^{-}$ is target network which is copy of the parameters $\vtheta$ from some previous time step. By using the shared replay buffer, the DQN is trained on diverse set of environments that can generalize well to new environments with unseen dynamics from an unseen task order or a new dataset. Next, we will describe the experiments we perform to evaluate the generalization capability of the policy to new CL scenarios. 
 
 
 
 \section{Experiments}
 
+In this section, we give an overview of the experimental results in Paper \ref{chap:paperC} and \ref{chap:paperD}. In Paper \ref{chap:paperC}, we perform experiments to show that the importance of replay scheduling in our proposed problem setting for CL described in Section \ref{sec:replay_scheduling_in_cl}. We demonstrate that learning when to replay different tasks by using use MCTS as an exemplar method for finding good replay schedules that are efficient in mitigating catastrophic forgetting in the classifier. In Paper \ref{chap:paperD}, we demonstrate on benchmark datasets for CL how our RL-based framework can be used for learning replay scheduling policies. We show that our proposed method can learn policies that generalize to CL scenarios with new task orders and datasets unseen during training.  
+
+\vspace{-3mm}
+\paragraph{Baselines.} We compare our methods with several scheduling baselines to verify the importance of learning replay schedules. The baselines we compare against are
+\begin{itemize}[itemsep=0em,topsep=1pt]
+	\item {\bf Random Schedule}: Randomly select which tasks to replay.
+	\item {\bf Equal Task Schedule (ETS)}: Replay all seen tasks equally.
+	\item {\bf Heuristic Schedule}: Replay tasks which validation performance is below a tuned threshold found through hyperparameter searches.
+\end{itemize} 
+
+\vspace{-3mm}
+\paragraph{Evaluation.} The evaluation metric we use is defined as
+\begin{align}
+	\ACC = \frac{1}{T} \sum_{j=1}^{T} A_{T, j}^{\test},
+\end{align}
+where $A_{T, j}^{\test}$ is the accuracy of task $j$ after learning the final task $T$.  
+
+
+\subsection{Replay Scheduling Using Monte Carlo Tree Search}
+
+
+
+\subsection{Policy Generalization to New Continual Learning Scenarios}
+
+
+
 
 \section{Discussion}
-
 
 
 \MK{Limitations:} Limitations here are of course that we potentially need lots of data for learning a policy that generalizes. Additionally, we need lots of training time and hyperparameter tuning as we are dealing with RL. Also, we need to store the data somewhere which is cheap, but it must be secure due to privacy concerns. An alternative there could be to store features instead of raw data, which is not completely flawless (I think that it's possible to revert features back to the real data to some extent) but at least it is a safer alternative. Another option for the data needed can be to gather experience from simulated environments and benchmark datasets. As the policy only takes in states with task performances, we can make use mixes of benchmark datasets and data from real contributing users. 
