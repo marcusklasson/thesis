@@ -112,6 +112,10 @@
 	\secdef\@part\@spart}
 %%%
 %\newcommand{\insubfile}[1]{\ifx\@onlypreamble\@notprerr\else#1\fi}
+
+%%% Command that fixed correct chapter and section referencing when setting chapter counter to zero in Part 2
+%%% Still had to reset counter in Part 2 with \setcounter{chapter}{0}, which they didn't do in https://tex.stackexchange.com/questions/54383/how-to-reset-chapter-and-section-counter-with-part
+\@addtoreset{chapter}{part}
 \makeatother
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -208,12 +212,17 @@
 
 \part{Included Papers}
 
+\setcounter{chapter}{0}
 \renewcommand{\thechapter}{\Alph{chapter}}  % use A, B, C for chapter numbers
+%\renewcommand{\theHchapter}{\thechapter}
 \renewcommand{\thesection}{\arabic{section}} % use numbers for sections
 %\renewcommand{\thefigure}{\arabic{figure}}
-\setcounter{chapter}{0}  % first paper should be paper A
+
 %\titleformat{\chapter}[block]{}{}{10pt}{\huge\centering\bfseries}{}  % format of chapter headline
 \renewcommand{\chaptername}{Paper} % A chapter is now called Paper
+%\renewcommand{\chapter}{Paper A} % A chapter is now called Paper
+%\renewcommand{\theHchapter}{otherchapter\thechapter}
+%\setcounter{chapter}{0}  % first paper should be paper A
 \renewcommand\bibsection{\section*{\refname}}
 \setcounter{secnumdepth}{3}
 \addtocontents{toc}{\setcounter{tocdepth}{0}} % removing sections in toc
