@@ -227,7 +227,7 @@
 \setcounter{secnumdepth}{3}
 \addtocontents{toc}{\setcounter{tocdepth}{0}} % removing sections in toc
 
-
+%%% Paper A %%%
 %\renewcommand*{\thepage}{A\arabic{page}}
 % for removing the chapter letter in front of figure, table, and equation references
 \renewcommand{\thefigure}{\arabic{figure}}
@@ -239,12 +239,22 @@
 \cleardoublepage
 
 
+%%% Paper B %%%
 %\renewcommand*{\thepage}{B\arabic{page}}
 %\setcounter{page}{1}
 \setcounter{section}{0}
 \input{PaperB/paperB}
 \cleardoublepage
-	
+
+%%% Paper C %%%
+\setcounter{section}{0}
+\input{PaperC/paperC}
+\cleardoublepage
+
+%%% Paper D %%%
+\setcounter{section}{0}
+\input{PaperD/paperD}
+\cleardoublepage	
 
 %--------------------------------------------------
 	
