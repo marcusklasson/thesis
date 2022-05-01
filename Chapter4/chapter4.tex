@@ -177,7 +177,7 @@ where $\vtheta^{-}$ is target network which is copy of the parameters $\vtheta$ 
 
 \section{Experiments}
 
-In this section, we give an overview of the experimental results in Paper \ref{chap:paperC} and \ref{chap:paperD}. In Paper \ref{chap:paperC}, we perform experiments to show that the importance of replay scheduling in our proposed problem setting for CL described in Section \ref{sec:replay_scheduling_in_cl}. We demonstrate that learning when to replay different tasks by using use MCTS as an exemplar method for finding good replay schedules that are efficient in mitigating catastrophic forgetting in the classifier. In Paper \ref{chap:paperD}, we demonstrate on benchmark datasets for CL how our RL-based framework can be used for learning replay scheduling policies. We show that our proposed method can learn policies that generalize to CL scenarios with new task orders and datasets unseen during training.  
+In this section, we give an overview of the experimental results in Paper \ref{chap:paperC} and \ref{chap:paperD}. In Paper \ref{chap:paperC}, we perform experiments to show that the importance of replay scheduling in our proposed problem setting for CL described in Section \ref{sec:replay_scheduling_in_cl}. We demonstrate that learning when to replay different tasks by using MCTS as an exemplar method for finding good replay schedules that are efficient in mitigating catastrophic forgetting in the classifier. In Paper \ref{chap:paperD}, we demonstrate on benchmark datasets for CL how our RL-based framework can be used for learning replay scheduling policies. We show that our proposed method can learn policies that generalize to CL scenarios with new task orders and datasets unseen during training.  
 
 \vspace{-3mm}
 \paragraph{Baselines.} We compare our methods with several scheduling baselines to verify the importance of learning replay schedules. The baselines we compare against are
@@ -197,12 +197,13 @@ where $A_{T, j}^{\test}$ is the accuracy of task $j$ after learning the final ta
 
 \subsection{Replay Scheduling Using Monte Carlo Tree Search}
 
-In this section, we provide an overview of the experimental results from Paper \ref{chap:paperC}. 
+In this section, we provide an overview of the experimental results from Paper \ref{chap:paperC}. We have named our approach as Replay Scheduling MCTS (RS-MCTS) below. Firstly, we evaluate the CL performance of RS-MCTS and the baselines on experiments with varying memory sizes. Secondly, we apply replay scheduling to three memory-based CL methods Hindsight Anchor Learning~\cite{chaudhry2021using} (HAL), Meta Experience Replay~\cite{riemer2018learning} (MER), and Dark Experience Replay~\cite{buzzega2020dark} (DER). Finally, we demonstrate the efficiency benefits of replay scheduling in settings when the memory size is smaller than the number of classes. See Paper \ref{chap:paperC} for the full experimental results and settings. 
 %We show that our method can improve the performance across different choices of memory size.
 %In this experiment, we set the replay memory size to ensure the ETS baseline replays an equal number of samples per class at the final task. 
 %The memory size is set to $M = n_{cpt} \cdot n_{spc} \cdot (T-1)$, where $n_{cpt}$ is the number of classes per task in the dataset and $n_{spc}$ are the number of samples per class we wish to replay at task $T$ for the ETS baseline. 
 %In Figure \ref{fig:acc_over_replay_memory_size}, we observe that RS-MCTS obtains better task accuracies than ETS, especially for small memory sizes. Both RS-MCTS and ETS perform better than Heuristic as $M$ increases showing that Heuristic requires careful tuning of the validation accuracy threshold. 
 
+\begin{comment}
 \begin{figure}[t]
 	\centering
 	\setlength{\figwidth}{0.36\textwidth}
@@ -216,14 +217,33 @@ In this section, we provide an overview of the experimental results from Paper \
 	\vspace{-3mm}
 	\label{fig:acc_over_replay_memory_size}
 \end{figure}
+\end{comment}
 
-\paragraph{Varying Memory Size.}
+\vspace{-3mm}
+\begin{wrapfigure}{r}{0.5\textwidth}
+	\centering
+	\setlength{\figwidth}{0.36\textwidth}
+	\setlength{\figheight}{.16\textheight}
+	\vspace{-3mm}
+	\hspace{-11mm}
+	\resizebox{0.58\textwidth}{!}{
+	\input{Chapter4/figures/acc_over_memory_size_100iters/acc_over_memory_size_groupplot}
+	}
+	\vspace{-7mm}
+	\captionsetup{width=.9\linewidth}
+	\caption{Performance comparisons with ACC over different replay memory sizes $M$ for RS-MCTS (Ours) and the baselines. All results have been averaged over 5 seeds. %The results show that replay scheduling can outperform replaying with random and ETS schedules, %equal task proportions,
+	%especially for small $M$, on both small and large datasets across different backbone choices. %Furthermore, our method requires less careful tuning than the Heuristic baseline as $M$ increases.
+}
+\vspace{-3mm}
+\label{fig:acc_over_replay_memory_size}
+\end{wrapfigure}
+\paragraph{Varying Memory Size.} We show that the replay schedules found by MCTS improves the CL performance across different memory sizes. In Figure \ref{fig:acc_over_replay_memory_size}, we observe that RS-MCTS obtains better task accuracies than ETS, especially for small memory sizes. Both RS-MCTS and ETS perform better than Heuristic as $M$ increases showing that Heuristic requires careful tuning of the validation accuracy threshold. Finally, these results show that replay scheduling can outperform simpler scheduling methods on both small and large datasets. 
+
+\vspace{-3mm}
+\paragraph{Applying Scheduling to Recent Replay Methods.} \MK{Show table for HAL, MER, and DER.}
 
 
-\paragraph{Applying Scheduling to Recent Replay Methods.} \MK{Show table for HAL, MER and DER.}
-
-
-
+\vspace{-3mm}
 \paragraph{Efficiency of Replay Scheduling.} \MK{Show 5-task datasets}
 
 
