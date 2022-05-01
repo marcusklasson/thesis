@@ -188,7 +188,7 @@ In this section, we give an overview of the experimental results in Paper \ref{c
 \end{itemize} 
 
 \vspace{-3mm}
-\paragraph{Evaluation.} The evaluation metric we use is defined as
+\paragraph{Evaluation.} The evaluation metric we use for measuring the CL performance is defined as
 \begin{align}
 	\ACC = \frac{1}{T} \sum_{j=1}^{T} A_{T, j}^{\test},
 \end{align}
@@ -196,6 +196,36 @@ where $A_{T, j}^{\test}$ is the accuracy of task $j$ after learning the final ta
 
 
 \subsection{Replay Scheduling Using Monte Carlo Tree Search}
+
+In this section, we provide an overview of the experimental results from Paper \ref{chap:paperC}. 
+%We show that our method can improve the performance across different choices of memory size.
+%In this experiment, we set the replay memory size to ensure the ETS baseline replays an equal number of samples per class at the final task. 
+%The memory size is set to $M = n_{cpt} \cdot n_{spc} \cdot (T-1)$, where $n_{cpt}$ is the number of classes per task in the dataset and $n_{spc}$ are the number of samples per class we wish to replay at task $T$ for the ETS baseline. 
+%In Figure \ref{fig:acc_over_replay_memory_size}, we observe that RS-MCTS obtains better task accuracies than ETS, especially for small memory sizes. Both RS-MCTS and ETS perform better than Heuristic as $M$ increases showing that Heuristic requires careful tuning of the validation accuracy threshold. 
+
+\begin{figure}[t]
+	\centering
+	\setlength{\figwidth}{0.36\textwidth}
+	\setlength{\figheight}{.16\textheight}
+	\input{Chapter4/figures/acc_over_memory_size_100iters/acc_over_memory_size_groupplot}
+	\vspace{-4mm}
+	\caption{Average test accuracies over tasks after learning the final task (ACC) over different replay memory sizes $M$ for the RS-MCTS (Ours) and the Random, ETS, and Heuristic baselines on all datasets.
+		All results have been averaged over 5 seeds. The results show that replay scheduling can outperform replaying with random and ETS schedules, %equal task proportions,
+		especially for small $M$, on both small and large datasets across different backbone choices. Furthermore, our method requires less careful tuning than the Heuristic baseline as $M$ increases.
+	}
+	\vspace{-3mm}
+	\label{fig:acc_over_replay_memory_size}
+\end{figure}
+
+\paragraph{Varying Memory Size.}
+
+
+\paragraph{Applying Scheduling to Recent Replay Methods.} \MK{Show table for HAL, MER and DER.}
+
+
+
+\paragraph{Efficiency of Replay Scheduling.} \MK{Show 5-task datasets}
+
 
 
 
