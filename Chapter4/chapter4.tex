@@ -111,7 +111,7 @@ In this section, we present an RL-based framework to learn policies for selectin
 \MK{Is this how it should be motivated?}
 Imagine the scenario that we can collect experiences from many users applying their phone to CL scenarios for learning different objects to recognize sequentially. Assume that we can store the collected data (limitation here is privacy!), the models will suffer from catastrophic forgetting as they are trained in CL scenario. But we can then use the collected data to train a replay scheduling policy. The learned policy can then be transferred to new users using their phone in CL settings and the policy is used for mitigating catastrophic forgetting in their environment without additional computational cost. 
 
-Limitations here are of course that we potentially need lots of data for learning a policy that generalizes. Additionally, we need lots of training time and hyperparameter tuning as we are dealing with RL. Also, we need to store the data somewhere which is cheap, but it must be secure due to privacy concerns. An alternative there could be to store features instead of raw data, which is not completely flawless (I think that it's possible to revert features back to the real data to some extent) but at least it is a safer alternative. Another option for the data needed can be to gather experience from simulated environments and benchmark datasets. As the policy only takes in states with task performances, we can make use mixes of benchmark datasets and data from real contributing users. 
+%Limitations here are of course that we potentially need lots of data for learning a policy that generalizes. Additionally, we need lots of training time and hyperparameter tuning as we are dealing with RL. Also, we need to store the data somewhere which is cheap, but it must be secure due to privacy concerns. An alternative there could be to store features instead of raw data, which is not completely flawless (I think that it's possible to revert features back to the real data to some extent) but at least it is a safer alternative. Another option for the data needed can be to gather experience from simulated environments and benchmark datasets. As the policy only takes in states with task performances, we can make use mixes of benchmark datasets and data from real contributing users. 
 
   
 \subsection{Problem Setting}
@@ -242,11 +242,29 @@ In this section, we provide an overview of the experimental results from Paper \
 \vspace{-3mm}
 \paragraph{Applying Scheduling to Recent Replay Methods.} \MK{Show table for HAL, MER, and DER.}
 
+\input{Chapter4/figures/table_applying_scheduling_to_recent_replay_methods}
+
 
 \vspace{-3mm}
 \paragraph{Efficiency of Replay Scheduling.} \MK{Show 5-task datasets}
 
 
+
+\begin{figure}[t]
+	\centering
+	\setlength{\figwidth}{0.3\textwidth}
+	\setlength{\figheight}{.2\textheight}
+	\vspace{-2mm}
+	\input{Chapter4/figures/memory_usage_barplot}
+	\vspace{-4mm}
+	\caption{
+		Number of replayed samples per task for the 5-task datasets in the tiny memory setting. Ours use $M=2$ samples for replay, while the baselines increment their memory per task. %Our method uses a fixed $M=2$ samples for replay, while the baselines increment their memory per task. 
+	}
+	\vspace{-4mm}
+	\label{fig:tiny_memory_experiment_memory_usage}
+\end{figure}
+
+\input{Chapter4/figures/table_efficiency_replay_scheduling}
 
 
 \subsection{Policy Generalization to New Continual Learning Scenarios}
