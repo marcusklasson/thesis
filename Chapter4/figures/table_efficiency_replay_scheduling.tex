@@ -1,17 +1,18 @@
 
 
-\begin{table}[t]
+%\begin{table}[t]
 \footnotesize %\scriptsize
-\centering
-\vspace{-4mm}
-\caption{
+%\centering
+%\caption{
 Performance comparison with ACC averaged over 5 seeds in the 1 ex/class %example per class 
 memory setting evaluated across all datasets. %We use 'S' and 'P' as short for 'Split' and 'Permuted' for the datasets. 
-RS-MCTS (Ours) has replay memory size $M=2$ and $M=50$ for the 5-task and 10/20-task datasets respectively. The baselines replay all available memory samples. 
+RS-MCTS (Ours) has replay memory size $M=2$, while the baselines replay all available memory samples. 
+%RS-MCTS (Ours) has replay memory size $M=2$ and $M=50$ for the 5-task and 10/20-task datasets respectively. The baselines replay all available memory samples. 
 %We report the mean and standard deviation averaged over 5 seeds. 
-RS-MCTS performs on par with the best baselines on all datasets except S-CIFAR-100.
-}
-\scalebox{0.89}{
+%RS-MCTS performs on par with the best baselines on all datasets except S-CIFAR-100.
+%}
+%\vspace{-3mm}
+\scalebox{0.85}{
 \begin{tabular}{l c c c}
     \toprule
      & \multicolumn{3}{c}{{\bf 5-task Datasets}} \\ 
@@ -24,49 +25,21 @@ RS-MCTS performs on par with the best baselines on all datasets except S-CIFAR-1
     Uniform &  95.77 ($\pm$ 1.12) & 97.12 ($\pm$ 1.57) & 92.14 ($\pm$ 1.45)   \\
     \midrule 
     Ours & 96.07 ($\pm$ 1.60) &  97.17 ($\pm$ 0.78) & 93.41 ($\pm$ 1.11)  \\
-    \midrule \midrule 
-    & \multicolumn{3}{c}{{\bf 10- and 20-task Datasets}} \\
-    \cmidrule(lr){2-4}
-    {\bf Method} & P-MNIST & S-CIFAR-100 & S-miniImagenet \\
-    \midrule 
-    Random & 70.02 ($\pm$ 1.76) & 48.62 ($\pm$ 1.02) & 48.85 ($\pm$ 1.38) \\
-    A-GEM & 64.71 ($\pm$ 1.78)  & 42.22 ($\pm$ 2.13) &  32.06 ($\pm$ 1.83) \\ 
-    ER-Ring & 69.73 ($\pm$ 1.13) & 53.93 ($\pm$ 1.13) & 49.82 ($\pm$ 1.69) \\
-    Uniform & 69.85 ($\pm$ 1.01) & 52.63 ($\pm$ 1.62)  & 50.56 ($\pm$ 1.07) \\
-    \midrule
-    Ours & 72.52 ($\pm$ 0.54) & 51.50 ($\pm$ 1.19) & 50.70 ($\pm$ 0.54) \\
+    %\midrule \midrule 
+    %& \multicolumn{3}{c}{{\bf 10- and 20-task Datasets}} \\
+    %\cmidrule(lr){2-4}
+    %{\bf Method} & P-MNIST & S-CIFAR-100 & S-miniImagenet \\
+    %\midrule 
+    %Random & 70.02 ($\pm$ 1.76) & 48.62 ($\pm$ 1.02) & 48.85 ($\pm$ 1.38) \\
+    %A-GEM & 64.71 ($\pm$ 1.78)  & 42.22 ($\pm$ 2.13) &  32.06 ($\pm$ 1.83) \\ 
+    %ER-Ring & 69.73 ($\pm$ 1.13) & 53.93 ($\pm$ 1.13) & 49.82 ($\pm$ 1.69) \\
+    %Uniform & 69.85 ($\pm$ 1.01) & 52.63 ($\pm$ 1.62)  & 50.56 ($\pm$ 1.07) \\
+    %\midrule
+    %Ours & 72.52 ($\pm$ 0.54) & 51.50 ($\pm$ 1.19) & 50.70 ($\pm$ 0.54) \\
     \bottomrule
 \end{tabular}
 }
-\vspace{-6mm}
+%\vspace{-6mm}
 \label{tab:efficiency_of_replay_scheduling_all_datasets}
-\end{table}
-
-
-\begin{comment}
-\begin{table*}[t]
-\scriptsize
-\centering
-\caption{
-Accuracy comparison in the 1 example per class memory setting evaluated across all datasets. We use 'S' and 'P' as short for 'Split' and 'Permuted' for the datasets. RS-MCTS has replay memory size $M=2$ and $M=50$ for the 5-task and 10/20-task datasets respectively. The baselines replay all available memory samples. We report the mean and standard deviation averaged over 5 seeds. RS-MCTS performs on par with the best baselines on all datasets except S-CIFAR-100. \MK{Try moving to one-column format}
-}
-%\vspace{-3mm}
-\begin{tabular}{l c c c c c c}
-    \toprule
-     & \multicolumn{3}{c}{{\bf 5-task Datasets}} & \multicolumn{3}{c}{{\bf 10- and 20-task Datasets}} \\
-    \cmidrule(lr){2-4} \cmidrule(lr){5-7}
-    {\bf Method} & S-MNIST & S-FashionMNIST & S-notMNIST & P-MNIST & S-CIFAR-100 & S-miniImagenet \\
-    \midrule 
-    Random & 92.56 $\pm$ 2.90 & 92.70 $\pm$ 3.78 & 89.53 $\pm$ 3.96 & 70.02 $\pm$ 1.76 & 48.62 $\pm$ 1.02 & 48.85 $\pm$ 1.38 \\
-    A-GEM  & 94.97 $\pm$ 1.50 & 94.81 $\pm$ 0.86 & 92.27 $\pm$ 1.16 & 64.71 $\pm$ 1.78  & 42.22 $\pm$ 2.13 &  32.06 $\pm$ 1.83  \\
-    ER-Ring & 94.94 $\pm$ 1.56 & 95.83 $\pm$ 2.15 & 91.10 $\pm$ 1.89 & 69.73 $\pm$ 1.13 & 53.93 $\pm$ 1.13 & 49.82 $\pm$ 1.69  \\
-    Uniform &  95.77 $\pm$ 1.12 & 97.12 $\pm$ 1.57 & 92.14 $\pm$ 1.45 & 69.85 $\pm$ 1.01 & 52.63 $\pm$ 1.62  & 50.56 $\pm$ 1.07  \\
-    \midrule 
-    RS-MCTS (Ours) & 96.07 $\pm$ 1.60 &  97.17 $\pm$ 0.78 & 93.41 $\pm$ 1.11 & 72.52 $\pm$ 0.54 & 51.50 $\pm$ 1.19 & 50.70 $\pm$ 0.54 \\
-    \bottomrule
-\end{tabular}
-\vspace{-3mm}
-\label{tab:efficiency_of_replay_scheduling_all_datasets}
-\end{table*}
-\end{comment}
+%\end{table}
 
