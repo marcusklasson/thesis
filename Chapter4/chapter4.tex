@@ -23,6 +23,9 @@ In this section, we give an overview of previous works related to Paper C and D.
 More recent works have focused on evolving the memory samples through data augmentation to avoid overfitting to the memory [Add REFs], and also by using contrastive learning to improve discriminating between tasks. Another direction has been to increasing the storage capacity to store more samples by compressing raw data into features that are more memory-cheap [Add REFs]. The above mentioned methods assume that the memory is small and allocates equal storage amount for all tasks. Our new problem setting for memory-based CL is different from this assumption as we argue that data storage is cheap in many real-world applications. Hence, we compose a replay memory with data from historical tasks before learning new tasks because the amount of compute is limited. However, replay scheduling can be combined with of the mentioned methods as it only differs with the standard memory-based CL setting in that the replay memory has to be selected at every new task. 
 
 \paragraph{Generalization in Reinforcement Learning.}
+Generalization in RL is an active research field where much focus has been put on developing proper benchmark datasets for evaluating generalization capabilities of RL agents~\cite{cobbe2019quantifying, cobbe2020leveraging, nichol2018gotta, yu2020meta}. 
+Regularization techniques from supervised learning have been used to investigate whether these can enhance generalization in RL~\cite{cobbe2019quantifying, farebrother2018generalization, igl2019generalization}, and also how variations in the environments help to obtain agents that generalize better~\cite{packer2018assessing, zhang2018dissection}. The survey by ~\cite{kirk2021survey} focuses on zero-shot policy transfer where a policy is evaluated on environments different from it was trained on. Furthermore, access to rewards or additional training is disallowed in the test environments with the aim to enable RL in real-world scenarios~\cite{yang2019single}. We evaluate our learned policies on the zero-shot policy transfer setting where the goal is to mitigate catastrophic forgetting in new CL scenarios. The rewards are accessible through accuracies calculated on validation datasets, however, fine-tuning the policy during CL training is prohibited.  \MK{Re-write this part!}
+
 %In contrast to our proposed problem setting Replay scheduling can be combined with any of the above mentioned methods as it .  
 %Replay scheduling can however be combined with any selection strategy and feature compression method.
 
@@ -318,10 +321,61 @@ We use three different heuristic rules for scheduling, namely
 The thresholds are found from grid searches and we provide the used values in Paper \ref{chap:paperD}. 
 
 \vspace{-3mm}
-\paragraph{Generalization to New Task Orders.}
+\begin{wraptable}{r}{0.35\textwidth}
+	\footnotesize
+	\vspace{-5mm}
+	\captionsetup{width=.84\linewidth}
+	%\hspace{-3mm}
+	\caption{Average rankings for generalizing to Split MNIST environments with new task orders. 
+		%Results are averaged over 10 environments and 3 DQN seeds.
+	}
+	\label{tab:avg_ranking_split_mnist_new_task_orders}
+	\vspace{-7mm}
+	\begin{tabular}{l c} \\
+		\toprule  
+		{\bf Method} & {\bf Avg. Rank} \\ 
+		\midrule
+		Random 		& 3.77 \\
+		ETS 		& 3.27 \\
+		Heur-GD 	& 4.47 \\
+		Heur-LD 	& 3.27 \\
+		Heur-AT 	& 3.37 \\
+		\midrule
+		DQN (Ours)		& {\bf 2.87} \\
+		\bottomrule
+	\end{tabular}
+\end{wraptable} 
+\paragraph{Generalization to New Task Orders.} In this experiment, we evaluate the performance of each scheduling method when generalizing to environments of Split MNIST with new task orders unseen during training. The DQN uses 30 environments for training and we average its results over 3 seeds for parameter initialization. Table \ref{tab:avg_ranking_split_mnist_new_task_orders} shows the average ranking over 10 test environments for all methods. We observe that the DQN achieves the best average ranking compared to the baselines. These results indicate that learning the replay scheduling policy is  more beneficial than creating heuristic scheduling rules and fixed policies such as ETS. 
+
+
 
 \vspace{-3mm}
-\paragraph{Generalization to New Datasets.}
+\begin{wraptable}{r}{0.35\textwidth}
+	\footnotesize
+	\vspace{-5mm}
+	\captionsetup{width=.84\linewidth}
+	%\hspace{-3mm}
+	\caption{Average rankings for generalizing to Split notMNIST environments from training on Split MNIST and FashionMNIST. 
+	}
+	\label{tab:avg_ranking_split_notmnist_new_dataset}
+	\vspace{-7mm}
+	\begin{tabular}{l c} \\
+		\toprule  
+		{\bf Method} 	& {\bf Avg. Rank} \\ 
+		\midrule
+		Random 			& 3.27 \\
+		ETS 			& 3.60 \\
+		Heur-GD 		& 4.53 \\
+		Heur-LD 		& 4.10 \\
+		Heur-AT 		& 2.80 \\
+		\midrule
+		DQN (Ours)		& {\bf 2.70} \\
+		\bottomrule
+	\end{tabular}
+\end{wraptable} 
+\paragraph{Generalization to New Datasets.} Here, we evaluate the performance of each scheduling method when generalizing to environments of Split notMNIST datasets while the methods have only been trained on environments of Split MNIST and Split FashionMNIST datasets. The DQN uses 30 environments in total for training (15 Split MNIST + 15 Split FashionMNIST) and we average its results over 3 seeds for parameter initialization. Table \ref{tab:avg_ranking_split_notmnist_new_dataset} shows the average ranking over 10 Split notMNIST environments for all methods. We observe again that the DQN achieves the best average ranking compared to the baselines, where Heur-AT performs almost on par with the DQN. These results further shows that the it is indeed possible to learn general scheduling policies that are capable of performing in new environments without additional computational time and training. 
+
+
 
 \vspace{-3mm}
 \paragraph{Visualization of Learned Policy.}
