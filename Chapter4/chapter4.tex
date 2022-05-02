@@ -251,26 +251,60 @@ In this section, we provide an overview of the experimental results from Paper \
 
 
 \vspace{-3mm}
-\paragraph{Efficiency of Replay Scheduling.} \MK{Show 5-task datasets}
-
-%Here, we 
-We illustrate the efficiency of replay scheduling with comparisons to several common replay-based CL baselines in an even more extreme memory setting.
-Our goal is to investigate if scheduling over which tasks to replay can be more efficient in situations where the memory size is even smaller than the number of classes. % than replaying all available samples at every task.
+\paragraph{Efficiency of Replay Scheduling.} We illustrate the efficiency of replay scheduling with comparisons to several common replay-based CL baselines in an even more extreme memory setting.
+Our goal is to investigate if scheduling over which tasks to replay can be more efficient in situations where the memory size is even smaller than the number of classes. 
 To this end, we set the replay memory size for our method
-to $M=2$ for the 5-task datasets, such that only 2 samples can be selected for replay at all times. For the 10- and 20-task datasets which have 100 classes, we set $M=50$. We then compare against the most memory efficient CL baselines, namely A-GEM~\cite{chaudhry2018efficient}, ER-Ring~\cite{chaudhry2019tiny} which show promising results with 1 sample per class for replay, % for replay after learning each task, 
-and with uniform memory selection as reference. 
+to $M=2$ for the 5-task datasets. We then compare against the most memory efficient CL baselines, namely A-GEM~\cite{chaudhry2018efficient}, ER-Ring~\cite{chaudhry2019tiny} which show promising results with 1 sample per class for replay, as well as with uniform memory selection as reference. 
 Additionally, we compare to using random replay schedules (Random) with the same memory setting as for RS-MCTS.
-We visualize the memory usage for our method and the baselines when training on a 5-task dataset in Figure \ref{fig:tiny_memory_experiment_memory_usage}. 
-%We visualize the memory usage when training on one of the 5-task datasets for our method and the baselines in Figure \ref{fig:tiny_memory_experiment_memory_usage}. 
-Figure \ref{fig:memory_usage_10_and_20task_datasets} in Appendix \ref{app:additional_figures} shows the memory usage for the other datasets.
-%We also visualize the memory usages for the other benchmarks in the Appendix \ref{app:additional_figures}.   
+We visualize the memory usage for our method and the baselines when training on a 5-task dataset in Figure \ref{fig:tiny_memory_experiment_memory_usage}. In Paper \ref{chap:paperC}, we provide results for the same experiments with the larger datasets Permuted MNIST, Split CIFAR-100, and Split miniImagenet. 
 
-Table \ref{tab:efficiency_of_replay_scheduling_all_datasets} shows the ACC for each method across all datasets. Despite using significantly fewer samples for replay, RS-MCTS performs better or on par with the best baselines on all datasets except Split CIFAR-100. These results show that replay scheduling can be even more efficient than the state-of-the-art memory efficient replay-based methods, which indicate that learning the time to learn is an important research direction in CL.
+Table \ref{tab:efficiency_of_replay_scheduling_5task_datasets} shows the ACC for each method across the 5-task datasets. Despite using significantly fewer samples for replay, RS-MCTS performs better or on par with the best baselines on all datasets except Split CIFAR-100. These results show that replay scheduling can be even more efficient than the common memory efficient replay-based methods, which indicate that learning the time to learn is an important research direction in CL.
 
+\begin{figure} % necessary to add figure environment for setting up right captions
+\begin{minipage}{\textwidth}
+	\begin{minipage}[b]{0.34\textwidth}
+		\centering
+		\setlength{\figwidth}{0.96\textwidth}
+		\setlength{\figheight}{.15\textheight}
+		\input{Chapter4/figures/memory_usage_barplot}
+		\vspace{-3mm}
+		\caption{Number of replayed samples per task for the 5-task datasets for RS-MCTS (Ours) and the baselines in the tiny memory setting.}
+		\label{fig:tiny_memory_experiment_memory_usage}
+	\end{minipage}
+	\hfill
+	\begin{minipage}[b]{0.64\textwidth}
+		\centering
+		\footnotesize
+		\vspace{-3mm}
+		\scalebox{0.87}{
+		\begin{tabular}{l c c c}
+			\toprule
+			& \multicolumn{3}{c}{{\bf 5-task Datasets}} \\ 
+			\cmidrule(lr){2-4} 
+			{\bf Method} & S-MNIST & S-FashionMNIST & S-notMNIST \\
+			\midrule 
+			Random & 92.56 ($\pm$ 2.90) & 92.70 ($\pm$ 3.78) & 89.53 ($\pm$ 3.96)  \\
+			A-GEM  & 94.97 ($\pm$ 1.50) & 94.81 ($\pm$ 0.86) & 92.27 ($\pm$ 1.16)   \\
+			ER-Ring & 94.94 ($\pm$ 1.56) & 95.83 ($\pm$ 2.15) & 91.10 ($\pm$ 1.89)   \\
+			Uniform &  95.77 ($\pm$ 1.12) & 97.12 ($\pm$ 1.57) & 92.14 ($\pm$ 1.45)   \\
+			\midrule 
+			Ours & 96.07 ($\pm$ 1.60) &  97.17 ($\pm$ 0.78) & 93.41 ($\pm$ 1.11)  \\
+			\bottomrule
+		\end{tabular} }
+		\vspace{-3mm}
+		\captionsetup{type=table, width=.94\linewidth}
+		\caption{Performance comparison with ACC averaged over 5 seeds in the 1 ex/class memory setting. RS-MCTS (Ours) has replay memory size $M=2$, while the baselines replay all available memory samples. }
+		\label{tab:efficiency_of_replay_scheduling_5task_datasets}
+	\end{minipage}
+\end{minipage}
+\vspace{-3mm}
+\end{figure}
+
+\begin{comment}
 
 \begin{figure}[t]
 	\centering
-	\setlength{\figwidth}{0.3\textwidth}
+	\setlength{\figwidth}{0.32\textwidth}
 	\setlength{\figheight}{.16\textheight}
 	\vspace{-2mm}
 	\input{Chapter4/figures/memory_usage_barplot}
@@ -283,6 +317,7 @@ Table \ref{tab:efficiency_of_replay_scheduling_all_datasets} shows the ACC for e
 \end{figure}
 
 \input{Chapter4/figures/table_efficiency_replay_scheduling}
+\end{comment}
 
 
 \subsection{Policy Generalization to New Continual Learning Scenarios}
