@@ -1,0 +1,69 @@
+
+
+\nextgroupplot[title={DQN (ACC: 95.50\%)} ,
+height=\figheight,
+legend cell align={left},
+legend columns=-1,
+legend style={
+  nodes={scale=0.9},
+  fill opacity=0.8,
+  draw opacity=1,
+  text opacity=1,
+  at={(1.20,1.40)},
+  anchor=south west,
+  draw=white!80!black
+},
+minor xtick={},
+minor ytick={0.55,0.65,0.75,0.85,0.95,1.05},
+tick align=outside,
+tick pos=left,
+width=\figwidth,
+x grid style={white!69.0196078431373!black},
+xmajorgrids,
+xlabel={Task},
+xmin=0.8, xmax=5.2,
+xtick style={color=black},
+xtick={1,2,3,4,5},
+xticklabel style={font=\tiny, inner sep=1pt},
+xticklabels={1,2,3,4,5},
+y grid style={white!69.0196078431373!black},
+ymajorgrids,
+yminorgrids,
+ylabel={Accuracy},
+ymin=0.491, ymax=1.01,
+ytick style={color=black},
+ytick={0.5,0.6,0.7,0.8,0.9,1.0},
+yticklabel style={font=\tiny, inner sep=0pt},
+yticklabels={50, 60, 70, 80, 90, 100}
+]
+\addplot [color0, mark=*, mark size=1.5, mark options={solid}]
+table {%
+1 0.994017958641052
+2 0.912761688232422
+3 0.868394792079926
+4 0.750747740268707
+5 0.837986052036285
+};\addlegendentry{Task 1}
+\addplot [ color1, mark=*, mark size=1.5, mark options={solid}]
+table {%
+2 0.99297297000885
+3 0.918378353118896
+4 0.967027008533478
+5 0.969729721546173
+};\addlegendentry{Task 2}
+\addplot [ color2, mark=*, mark size=1.5, mark options={solid}]
+table {%
+3 0.999067604541779
+4 0.987412571907043
+5 0.981818199157715
+};\addlegendentry{Task 3}
+\addplot [ color3, mark=*, mark size=1.5, mark options={solid}]
+table {%
+4 0.996513962745667
+5 0.994521915912628
+};\addlegendentry{Task 4}
+\addplot [color4, mark=*, mark size=1.5, mark options={solid}]
+table {%
+5 0.990959346294403
+};\addlegendentry{Task 5}
+

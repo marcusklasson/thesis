@@ -306,10 +306,9 @@ Table \ref{tab:efficiency_of_replay_scheduling_5task_datasets} shows the ACC for
 
 \subsection{Policy Generalization to New Continual Learning Scenarios}
 
-In Paper \ref{chap:paperD}, we perform two experiments to evaluate how well the learned replay scheduling policy can generalize to new CL scenarios. First, we investigate whether the policy can be applied to environments with new dataset task splits which are different from the splits that the policy was trained on. Secondly, we study if the policy can be applied to environments with new datasets than it was originally trained on. 
-We run experiments on CL datasets of $T=5$ tasks to have a discrete action space of reasonable size. The replay memory size is set to $M=10$ in all experiments. We use 15\% of the training set for validation for the DQN and the Heuristic baselines. The Random and ETS baselines use the validation set for training since these policies are fixed. 
-%See Appendix \ref{app:experimental_settings} for more details on the experimental settings.  
+In Paper \ref{chap:paperD}, we perform two experiments to evaluate how well the learned replay scheduling policy can generalize to new CL scenarios. First, we investigate whether the policy can be applied to environments with new dataset task splits which are different from the splits that the policy was trained on. Secondly, we study if the policy can be applied to environments with new datasets than it was originally trained on. Finally, we visualize the learned policy and compare it against one of the heuristic baselines to bring further insights into the advantages of learning the replay scheduling policy.
 
+We run experiments on CL datasets of $T=5$ tasks to have a discrete action space of reasonable size. The replay memory size is set to $M=10$ in all experiments. We use 15\% of the training set for validation for the DQN and the Heuristic baselines. The Random and ETS baselines use the validation set for training since these policies are fixed.  
 We use three different heuristic rules for scheduling, namely
 \begin{itemize}[itemsep=0em,topsep=1pt]
 	\item \textbf{Heuristic Global Drop (Heur-GD)}: Replay task when the validation accuracy has dropped below threshold of the highest achieved validation accuracy across all previous time steps.
@@ -376,9 +375,26 @@ The thresholds are found from grid searches and we provide the used values in Pa
 \paragraph{Generalization to New Datasets.} Here, we evaluate the performance of each scheduling method when generalizing to environments of Split notMNIST datasets while the methods have only been trained on environments of Split MNIST and Split FashionMNIST datasets. The DQN uses 30 environments in total for training (15 Split MNIST + 15 Split FashionMNIST) and we average its results over 3 seeds for parameter initialization. Table \ref{tab:avg_ranking_split_notmnist_new_dataset} shows the average ranking over 10 Split notMNIST environments for all methods. We observe again that the DQN achieves the best average ranking compared to the baselines, where Heur-AT performs almost on par with the DQN. These results further shows that the it is indeed possible to learn general scheduling policies that are capable of performing in new environments without additional computational time and training. 
 
 
-
+%TO-DO: Update this part when I have new results for NeurIPS paper!
 \vspace{-3mm}
 \paragraph{Visualization of Learned Policy.}
+We visualize the learned policies for the DQN to bring further insights into the advantages of learning the replay scheduling policy. We analyze the task accuracy progress and the replay schedule used for mitigating catastrophic forgetting by visualizing the schedule as a bubble plot. In the bubble plots shown in Figure \ref{fig:mnist_policy_illustration_dqn_vs_heuristic2}, the x- and y-axis shows the current and replay task respectively, and the bubbles represent the proportion of the replayed task in the replay memory at the current task. Each color of the circles corresponds to a seen task that is being replayed at the current task. The sum of all points in the circles at a current task column is fixed since the replay memory size is constant. 
+
+Figure \ref{fig:mnist_policy_illustration_dqn_vs_heuristic2} shows the task accuracy progression and replay schedules from the DQN and Heur-LD in one test environment with Split MNIST. Using the replay schedule from the DQN gives higher ACC since the DQN manages to mitigate forgetting tasks 1 and 2 better than Heur-LD. The DQN decides to replay task 1 and task 2 as soon as these tasks have been learned. At task 4, the DQN decides to replay both tasks 1 and 2 which helps the classifier to retain its knowledge of task 2. However, as the classifier forgets task 1, the DQN selects to only replay task 1 at task 5 which makes the classifier improve its performance on task 1. 
+The heuristic baseline Heur-LD enables replay on tasks 3 and 5 according to its rule since the performance of task 1 and 2 has decreased below its threshold at those time steps, but the classifier forgets these tasks more than when using the learned replay schedule from the DQN. This example shows creating a good heuristic for replay scheduling can be difficult which is why learning such a policy is preferable. 
+
+\begin{figure}[t]
+	\centering
+	\setlength{\figwidth}{0.26\textwidth}
+	\setlength{\figheight}{.15\textheight}
+	\input{Chapter4/figures/policy_illustrations/mnist/data_seed10/groupplot}
+	\vspace{-3mm}
+	\caption{ Comparison of test classification accuracies for tasks 1-5 on Split MNIST from using the replay schedules from the DQN and the Heuristic Local Drop (Heur-LD) scheduling baseline from 1 seed. We visualize the corresponding replay schedule used by both methods as a bubble plots. The learned policy (DQN) remembers tasks 1 and 2 better than when replaying based on this heuristic. 
+	}
+	\vspace{-3mm}
+	\label{fig:mnist_policy_illustration_dqn_vs_heuristic2}
+\end{figure}
+
 
 
 \section{Discussion}
