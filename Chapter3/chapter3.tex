@@ -2,7 +2,7 @@
 %*********************************** Third Chapter *****************************
 %*******************************************************************************
 
-\chapter{Fine-grained Recognition}
+\chapter{Fine-Grained Recognition}
 \label{chap:finegrained_classification}
 
 %% Write about Paper A and B in a coherent way
@@ -14,7 +14,7 @@ This chapter presents an approach for enhancing fine-grained classification perf
 
 In this section, we will briefly discuss the related work on fine-grained image recognition~\cite{wei2021fine}, particularly when learning from external information, and multi-view learning. 
 
-\subsection{Fine-grained Image Recognition}
+\subsection{Fine-Grained Image Recognition}
 %\paragraph{Fine-grained Image Recognition.} 
 The goal with fine-grained image recognition (FGIR) is to distinguish between images with multiple visually similar sub-categories that belong to a super-category. For example, various attempts have been made to discriminate between sub-categories of different animals~\cite{van2018inaturalist}, cars~\cite{krause2013stanford_cars}, fruits~\cite{hou2017vegfru}, retail products~\cite{wei2019rpc}, etc. The challenge is to recognize differences that are sufficient for discriminating between objects that are generally similar but differ in fine-grained visual details. In recent years, the successes with deep learning in computer vision have encouraged researchers to explore various approaches for FGIR that can broadly be divided into three directions for recognition by utilizing (i) localization-classification subnetworks, (ii) end-to-end feature encoding, and (iii) external information. In (i), the goal is to find object parts that are shared across the sub-categories for discovering details that make the part representations different. This can be achieved by utilizing feature maps from the activations of convolutional layers as local descriptors~\cite{zhang2016picking, wang2018learning, ding2019selective}, employing detection and segmentation techniques for localizing object parts[REFs], or leveraging attention mechanisms when common object parts are difficult to represent or even define [REFs]. With (ii), the goal has been to learn features that are better at capturing subtle and local differences by, for instance, performing high-order features interactions~\cite{lin2015bilinear} as well as designing novel loss functions [Add REFs]. In the third approach (iii), the goal is to leverage external information, for example, web data and multimodal data, in FGIR as additional supervision to the images. We will put more focus on the approach on FGIR with external information next, as we use this approach in Paper \ref{paperA} and \ref{paperB}. 
 
@@ -52,7 +52,7 @@ We have complemented the image dataset with external information from the web of
 	%\vspace{-7mm}
 \end{table}
 
-\section{Fine-grained Classification of Grocery Items}\label{chap3:sec:fgr_of_grocery_items}
+\section{Fine-Grained Classification of Grocery Items}\label{chap3:sec:fgr_of_grocery_items}
 
 This section describes the approaches we used for classification of grocery items from the available data types in the collected dataset. We begin by introducing the problem setting, followed by describing the methods for learning representations from the available data views. 
 
