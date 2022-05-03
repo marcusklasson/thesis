@@ -1,0 +1,30 @@
+
+\begin{comment}
+\begin{figure}[t]
+  \centering
+  \setlength{\figwidth}{0.46\textwidth}
+  \setlength{\figheight}{.22\textheight}
+  %\vspace{-3mm}
+  \input{figures/replay_schedule_visualizations/cifar100/rs_bubble_plot_seed3}
+  \vspace{-3mm}
+  \caption{ Replay schedule learned from Split CIFAR-100 visualized as a bubble plot. %Visualization using a bubble plot of a replay schedule learned from Split CIFAR-100. %The color of the circles corresponds to a historical task and its size represents the task proportion that is replayed. The memory size is $M=100$ and the results are from 1 seed. 
+  The task proportions vary dynamically over time which would be hard to replace by a heuristic method. 
+  } 
+  \vspace{-3mm}
+  \label{fig:replay_schedule_vis_cifar100}
+\end{figure}
+\end{comment}
+
+
+
+\subsection{Replay Schedule Visualizations}
+\label{sec:replay_schedule_visualization}
+
+We visualize a learned replay schedule from Split CIFAR-100 with memory size $M=100$ to gain insights into the behavior of the scheduling policy from RS-MCTS. Figure \ref{fig:replay_schedule_vis_cifar100} shows a bubble plot of the task proportions that are used for filling the replay memory at every task. 
+Each circle color corresponds to a historical task and the circle size represents its proportion of replay samples at the current task.
+%Each color of the circles corresponds to a historical task and its size represents the proportion of examples that are replayed at the current task. 
+The sum of all points from all circles at each column is fixed at the different time steps since the memory size $M$ is fixed. The task proportions vary dynamically over time in a sophisticated nonlinear way which would be hard to replace by a heuristic method. Moreover, we can observe space repetition style scheduling on many tasks, e.g., task 1-3 are replayed with similar proportion at the initial tasks but eventually starts varying the time interval between replay. Also, task 4 and 6 need less replay in their early stages, which could potentially be that they are simpler or correlated with other tasks. We provide a similar visualization for Split MNIST in Figure \ref{fig:split_mnist_task_accuracies_and_bubble_plot} in Appendix \ref{app:replay_schedule_visualization_for_split_mnist} to bring more insights to the benefits of replay scheduling. %which could potentially be that they are correlated with other tasks or simpler. 
+
+
+
+

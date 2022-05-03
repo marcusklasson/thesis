@@ -1,0 +1,63 @@
+
+\subsection{Monte Carlo Tree Search for Replay Schedules}
+\label{sec:mcts_for_replay_scheduling}
+
+
+Our proposed setup to learn %find 
+replay schedules is to discretize the number of possible task proportions per task. 
+With our discretization method, the action space of task proportions becomes shaped as a tree where each node represents a task proportion that corresponds to a specific composition of the replay memory $\gM$, as can be seen in Figure \ref{fig:replay_scheduling_mcts_tree_example}. 
+%The action space of task proportions then turn into a tree shape where each node represents a task proportion that corresponds to a specific composition of the replay memory $\gM$, as can be seen in Figure \ref{fig:replay_scheduling_mcts_tree_example}. 
+To find the most efficient replay schedule $S$ in mitigating catastrophic forgetting, we can perform an exhaustive search (e.g., breadth-first search) where all possible replay schedules are evaluated. 
+However, since the tree grows fast with the number of tasks, we need a scalable method that enables tree searches in large action spaces. To this end, we propose to use Monte Carlo tree search (MCTS)~\citep{coulom2006efficient} since MCTS has been successful in applications with similar conditions~\citep{browne2012survey, chaudhry2018feature, gelly2006modification, silver2016mastering}.
+In our setting, MCTS can help us to concentrate the search in directions towards promising replay schedules in terms of classification performance and thus learn the time to learn.
+
+%%% MCTS progress table
+%\input{sections/experiments/figures/mcts_rewards_over_iterations}
+
+Before outlining the steps for performing MCTS, we describe the notation for the tree search. The tree has $T$ levels where level $t$ corresponds to task $t$. Each tree level $t$ contains a set of nodes $V_t = \{v_t^{i}\}_{i=1}^{K_t}$ where $K_t$ is the number of nodes at level $t$. 
+Every node $v_t^{i}$ is related to a sequence of task proportions $\va_{t}^{i}$, which can be used to retrieve the replay memory from the historical data. 
+%Every node $v_t^{i}$ has a corresponding sequence of task proportions $\va_{t}^{i}$, which can be used to retrieve the replay memory from the historical data. 
+Referring back to Figure \ref{fig:replay_scheduling_mcts_tree_example}, the replay memory composition on the root node $v_1^1$ is the empty set $\gM = \emptyset$, since the historical data is empty. At task 2, the only task proportion is $\va_{2}^1 = (a_1, a_2, ..., a_{T-1}) = (1.0, 0.0, ..., 0.0)$, so the replay memory at node $v_2^1$ is only filled with samples from task 1. In the rest of the paper, we denote a node at task $t$ as $v_t$ by ignoring the superscript $i$ to avoid clutter in the notation. 
+
+At every visited node $v_t$, we store the corresponding task proportions $\va_t$ in the replay schedule $S$. The final replay schedule is then used for constructing the replay memory at each task during the CL training.  
+Next, we briefly outline the MCTS steps for performing the search of replay schedules: 
+%Next, we briefly outline the steps for performing MCTS in the search for replay schedules. 
+
+\setlength{\abovedisplayskip}{0pt}
+\setlength{\belowdisplayskip}{0pt}
+\setlength{\abovedisplayshortskip}{0pt}
+\setlength{\belowdisplayshortskip}{0pt}
+
+\vspace{-3mm}
+\paragraph{Selection.} An MCTS iteration begins by selecting the next node to visit from the root node. If the current node $v_t$ has visited all its children during the previous iterations, the next node is selected by evaluating the Upper Confidence Tree (UCT)~\citep{kocsis2006bandit} function for all children. 
+We use the following UCT function proposed by \citet{chaudhry2018feature} to evaluate the score for moving from node $v_t$ to its child $v_{t+1}$:
+\begin{align}\label{eq:uct}
+    UCT(v_t, v_{t+1}) = \text{max}(Q(v_{t+1})) + C \sqrt{\frac{2 \log(N(v_{t}))}{N(v_{t+1})}}.
+\end{align}
+The reward function $Q(\cdot)$ contains the rewards for previous searches that has passed through the child $v_{t+1}$. 
+The exploration constant $C \geq 0$ determines the degree of exploration to consider based on the number of visits $N(v_t)$ and $N(v_{t+1})$ to the corresponding nodes in the tree. %The exploration constant $C \geq 0$ determines the degree of exploration of less visited replay schedules based on the number of visits $N(v_t)$ and $N(v_{t+1})$ to the corresponding nodes in the tree. 
+The child node to visit next is the one with the highest UCT score.  
+
+\vspace{-3mm}
+\paragraph{Expansion.} Whenever the current node $v_t$ has unvisited child nodes, the search tree is expanded with one of the unvisited child nodes $v_{t+1}$ selected with uniform sampling. 
+
+
+\vspace{-3mm}
+\paragraph{Simulation and Reward.} After the expansion step, the search proceeds by selecting the succeeding nodes uniformly at random until reaching a terminal node $v_T$. %until a terminal node $v_T$ is reached. 
+The replay schedule $S$ is then collected by appending the task proportions from the visited nodes during the iteration. We train the network with the replay memories retrieved from $S$ and evaluate the average accuracy over all tasks after learning task $T$ as the reward $r$, i.e., $r = \frac{1}{T} \sum_{i=1}^T A_{T, i}^{(val)}$, where $A_{T, i}^{(val)}$ is the validation accuracy of task $i$ at task $T$. %after learning task $T$.  
+
+
+\vspace{-3mm}
+\paragraph{Backpropagation.} Reward $r$ is backpropagated from the expanded node $v_t$ %up 
+to the root $v_1$, %node $v_1$, 
+where the reward function $Q(\cdot)$ and number of visits $N(\cdot)$ are updated at each node.  %The reward $r$ is used for updating the reawrd function $Q(\cdot)$ for each node between the expanded node $v_t$ and the root $v_1$ as well as 
+%The reward $r$ is backpropagated from the expanded node $v_t$ up to the root node $v_1$, where the number of visits $N(\cdot)$ and reward function $Q(\cdot)$ is updated for each node.   
+
+\vspace{-1mm}
+We provide pseudocode in Algorithm \ref{alg:replay_scheduling_mcts} in Appendix \ref{app:rs_mcts_algorithm}. 
+Finally, we emphasize that we use MCTS as an example method for illustrating the benefits of learning replay schedules in our new proposed CL setting.  %we emphasize that we use MCTS as an example method for illustrating the benefits of replay scheduling.  
+%Finally, we emphasize that we use MCTS to illustrate in a simple setting the importance of learning the time to learn old tasks again.
+
+%We mainly want to prove the benefit of scheduling which task to replay rather than proving the benefit of MCTS. 
+
+

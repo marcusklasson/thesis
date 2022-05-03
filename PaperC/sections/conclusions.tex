@@ -1,0 +1,20 @@
+
+\section{Conclusions}\label{sec:conclusions}
+
+We propose learning the time to learn, i.e.,~in a real-world CL context, learning schedules of which tasks to replay at different times. %what previous tasks to replay at different times. 
+To the best of our knowledge, we are the first to consider the time to learn in machine learning inspired by human learning techniques. 
+We illustrate with MCTS how replay schedules can be learned and show that they can produce significantly improved results when comparing against methods without learned scheduling under the same memory budgets.
+%We demonstrate with an example method that learned replay schedules produce significantly improved results under the same memory budget when comparing with the method without scheduling.
+Furthermore, the dynamic behavior of the learned schedules showed similarities to human learning techniques, such as spaced repetition, by replaying previous tasks with varying time intervals.  
+Finally, we showed that replay scheduling can be combined with any replay-based method as well as utilize the memory efficiently even when the memory size is smaller than the number of classes. %allows for utilizing the memory more efficiently compared to standard benchmarks replaying all memory samples in the tiny memory setting.
+%Finally, we showed that replay scheduling allows for utilizing the memory more efficiently compared to standard benchmarks replaying all memory samples in the tiny memory setting.
+
+
+In future work, we would like to explore choosing memory samples on an instance level as the current work selects samples on task level. 
+This would need a policy learning method that scales to large action spaces which is a research challenge by itself. 
+Also, using MCTS for learning replay scheduling policies can be inefficient, %our demonstrated method with MCTS can be inefficient, 
+especially in CL settings, 
+in terms of training time and since it needs to learn for each dataset and application separately. 
+In future work, we will incorporate reinforcement learning methods that generalize and extend to learning general policies that can be directly applied to any new application and domain.
+%In future work, we will incorporate reinforcement learning methods that generalize. We will therefore extend replay scheduling to learn general policies that can be directly applied to any new application and domain.
+

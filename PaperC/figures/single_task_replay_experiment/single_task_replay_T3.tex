@@ -1,0 +1,82 @@
+% This file was created with tikzplotlib v0.9.12.
+\begin{tikzpicture}
+
+\definecolor{color0}{rgb}{0.12156862745098,0.466666666666667,0.705882352941177}
+\definecolor{color1}{rgb}{1,0.498039215686275,0.0549019607843137}
+\definecolor{color2}{rgb}{0.172549019607843,0.627450980392157,0.172549019607843}
+\definecolor{color3}{rgb}{0.83921568627451,0.152941176470588,0.156862745098039}
+\definecolor{color4}{rgb}{0.580392156862745,0.403921568627451,0.741176470588235}
+
+\begin{axis}[
+height=\figheight,
+legend cell align={left},
+legend style={
+  fill opacity=0.8,
+  draw opacity=1,
+  text opacity=1,
+  at={(0.03,0.03)},
+  anchor=south west,
+  draw=white!80!black
+},
+minor xtick={},
+minor ytick={},
+tick align=outside,
+tick pos=left,
+width=\figwidth,
+x grid style={white!69.0196078431373!black},
+xlabel={Task},
+xmajorgrids,
+xmin=0.8, xmax=5.2,
+xtick style={color=black},
+xtick={1,2,3,4,5},
+y grid style={white!69.0196078431373!black},
+ylabel={Accuracy},
+ymajorgrids,
+ymin=0.7, ymax=1.01,
+ytick style={color=black},
+ytick={0.6,0.7,0.8,0.9,1,1.1},
+yticklabels={0.6,0.7,0.8,0.9,1.0,1.1}
+]
+\addplot [line width=1.5pt, color0, mark=*, mark size=3, mark options={solid}]
+table {%
+1 0.999527156352997
+2 0.990638375282288
+3 0.998770713806152
+4 0.954420864582062
+5 0.953191578388214
+};
+\addlegendentry{Task 1}
+\addplot [line width=1.5pt, color1, mark=*, mark size=3, mark options={solid}]
+table {%
+2 0.995102763175964
+3 0.970029354095459
+4 0.915377020835876
+5 0.799706101417542
+};
+\addlegendentry{Task 2}
+\addplot [line width=1.5pt, color2, mark=*, mark size=3, mark options={solid}]
+table {%
+3 0.998505890369415
+4 0.964674472808838
+5 0.954108893871307
+};
+\addlegendentry{Task 3}
+\addplot [line width=1.5pt, color3, mark=*, mark size=3, mark options={solid}]
+table {%
+4 0.999395728111267
+5 0.990936577320099
+};
+\addlegendentry{Task 4}
+\addplot [line width=1.5pt, color4, mark=*, mark size=3, mark options={solid}]
+table {%
+5 0.994755387306213
+};
+\addlegendentry{Task 5}
+\addplot [line width=1.5pt, black, opacity=0.5, dashed, forget plot]
+table {%
+3 0
+3 1.05
+};
+\end{axis}
+
+\end{tikzpicture}

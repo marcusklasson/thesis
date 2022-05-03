@@ -1,0 +1,79 @@
+
+\begin{algorithm}[ht!]
+\caption{Replay Scheduling Monte Carlo tree search}
+\label{alg:replay_scheduling_mcts}
+\small
+\begin{algorithmic}[1]
+\Require Datasets $\gD_{1:T}$, Tree Nodes $v_{1:T}$
+\Require Memory Capacity $M$
+\State Initialize historical data $\gH$ using $\gD_{1:T}$
+\State Initialize model $\vtheta_0$
+\State $\textnormal{best\_acc} \leftarrow 0$
+\State $\vtheta_1 \leftarrow \textsc{TrainModel}(\gD_1, \vtheta_0)$
+\While{within computational budget}
+    \State $v_{t}, \vtheta_t \leftarrow \textsc{TreePolicy}(v_1, \vtheta_1, \gD_{1:T}, \gH, M)$
+    \State $v_T, \vtheta_T, \textnormal{acc} \leftarrow \textsc{DefaultPolicy}(v_{t}, \vtheta_t, \gD_{1:T}, \gH, M)$
+    \State $\textsc{Backpropagate}(v_{t}, \textnormal{acc})$
+    \If{$\textnormal{acc} > \textnormal{best\_acc}$}
+        \State $v_T^{best} \leftarrow v_T$
+        \State $\vtheta_T^{best} \leftarrow \vtheta_{T}$
+        \State $\textnormal{best\_acc} \leftarrow \textnormal{acc}$
+    \EndIf
+\EndWhile
+\State \Return $v_T^{best}, \vtheta_T^{best}, \textnormal{best\_acc}$
+
+\Statex 
+\vspace{-3pt}
+\Function{TreePolicy}{$v_t, \vtheta_t, \gD_{1:T}, \gH, M$}
+\While{$v_t$ is non-terminal}  
+\If{$v_t$ not fully expanded}
+    \State \Return $\textsc{Expansion}(v_t, \vtheta_t, \gD_{t+1}, \gH, M)$
+\Else
+    \State $v_{t}, \vtheta_{t} \leftarrow \textsc{BestChild}(v_t)$
+\EndIf
+\EndWhile
+\State \Return $v_t, \vtheta_t$
+\EndFunction
+
+\Statex
+
+\Function{Expansion}{$v_t, \vtheta_t, \gD_{t+1}, \gH, M$}
+\State Sample $v_{t+1}$ uniformly among unvisited children of $v_t$
+\State $\gM \stackrel{M}{\sim} \gH$ using memory combination in $v_{t+1}$
+\State $\vtheta_{t+1} \leftarrow \textsc{TrainModel}(\gD_{t+1} \cup \gM, \vtheta_{t})$
+\State Add new child $v_{t+1}$ with model $\vtheta_{t+1}$ to node $v_{t}$
+\State \Return $v_{t+1}, \vtheta_{t+1}$
+\EndFunction
+
+\Statex 
+
+\Function{BestChild}{$v_t$}
+    \State $v_{t+1} =  \hspace{-1em} \argmax\limits_{v_{t+1} \in \text{ children of } v} \hspace{-1em} \text{max}(Q(v_{t+1})) + C \sqrt{\frac{2 \log(N(v_{t}))}{N(v_{t+1})}}$
+    \State Get model $\vtheta_{t+1}$ from node $v_{t+1}$
+    \State \Return $v_{t+1}, \vtheta_{t+1}$
+\EndFunction
+
+\Statex 
+
+\Function{DefaultPolicy}{$v_t, \vtheta_t, \gD_{1:T}, \gH, M$}
+\While{$v_t$ is non-terminal}  
+    \State Sample $v_{t+1}$ uniformly among children of $v_t$
+    \State $\gM \stackrel{M}{\sim} \gH$ using memory combination in $v_{t+1}$
+    \State $\vtheta_{t+1} \leftarrow \textsc{TrainModel}(\gD_{t+1} \cup \gM, \vtheta_{t})$
+    \State Update $v_{t} \leftarrow v_{t+1}$, $\vtheta_{t} \leftarrow \vtheta_{t+1}$
+\EndWhile
+\State $\textnormal{acc} \leftarrow \textsc{TestModel}(\gD_{1:T}, \vtheta_{t})$
+\State \Return $v_t, \vtheta_t, \textnormal{acc}$
+\EndFunction
+
+\Statex
+
+\Function{Backpropagate}{$v_t, \textnormal{acc}$}
+\While{$v_t$ is not root}  
+    \State $N(v_t) \leftarrow N(v_t)+1$
+    \State $Q(v_t) \leftarrow \textnormal{acc}$
+    \State $v_t \leftarrow$ parent of $v_t$
+\EndWhile
+\EndFunction
+\end{algorithmic}
+\end{algorithm}

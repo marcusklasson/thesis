@@ -1,0 +1,137 @@
+
+\begin{table}[t]
+    \footnotesize
+    \centering
+    \caption{
+    Performance comparison with ACC and BWT metrics between scheduling methods RS-MCTS (Ours), Random, ETS, and Heuristic when combining them with replay-based methods Hindsight Anchor Learning (HAL), Meta Experience Replay (MER), Dark Experience Replay (DER), and DER++. 
+    Replay memory sizes are $M=10$ and $M=100$ for the 5-task and 10/20-task datasets respectively. We report the mean and standard deviation averaged over 5 seeds. Results on Heuristic where some seed did not converge is denoted by $^{*}$. Applying RS-MCTS to each method can enhance the performance compared to using the baseline schedules. 
+    }
+    %\vspace{-3mm}
+    \scalebox{0.91}{
+    \begin{tabular}{l l c c c c c c}
+        \toprule
+         & & \multicolumn{2}{c}{{\bf Split MNIST} } & \multicolumn{2}{c}{{\bf Split FashionMNIST} } & \multicolumn{2}{c}{{\bf Split notMNIST} } \\
+         \cmidrule{3-4} \cmidrule{5-6} \cmidrule{7-8} %\cline{3-8}
+         {\bf Method} & {\bf Schedule} & ACC(\%)$\uparrow$ & BWT(\%)$\uparrow$ & ACC(\%)$\uparrow$ & BWT(\%)$\uparrow$ & ACC(\%)$\uparrow$ & BWT(\%)$\uparrow$ \\
+        \midrule 
+
+        \multirow{4}{*}{HAL} & Random & 97.24 ($\pm$ 0.70) & -2.77 ($\pm$ 0.90) & 86.74 ($\pm$ 6.05) & -15.54 ($\pm$ 7.58) & 93.61 ($\pm$ 1.31) & -2.73 ($\pm$ 1.33) \\
+         & ETS & 97.21 ($\pm$ 1.25) & -2.80 ($\pm$ 1.59) & 96.75 ($\pm$ 0.50) & -2.84 ($\pm$ 0.75) & 92.16 ($\pm$ 1.82) &  -5.04 ($\pm$ 2.24) \\
+         & Heuristic & 97.69 ($\pm$ 0.19) & -2.22 ($\pm$ 0.24) & $^{*}$74.16 ($\pm$ 11.19) & -31.26 ($\pm$ 14.00) & 93.64 ($\pm$ 0.93) & -2.80 ($\pm$ 1.20) \\
+         & Ours & 97.96 ($\pm$ 0.15) & -1.85 ($\pm$ 0.18) & 97.56 ($\pm$ 0.51) & -2.02 ($\pm$ 0.63) & 94.47 ($\pm$ 0.82) &  -1.67 ($\pm$ 0.64) \\
+        \midrule 
+        \multirow{4}{*}{MER} & Random & 93.07 ($\pm$ 0.81)  & -8.36 ($\pm$ 0.99) & 85.53 ($\pm$ 3.30) & -0.56 ($\pm$ 3.36) & 91.13 ($\pm$ 0.86) & -5.32 ($\pm$ 0.95) \\
+         & ETS & 92.97 ($\pm$ 1.73) &  -8.52 ($\pm$ 2.15) & 84.88 ($\pm$ 3.85) & -3.34 ($\pm$ 5.59) & 90.56 ($\pm$ 0.83) & -6.11 ($\pm$ 1.06) \\
+         & Heuristic & 94.30 ($\pm$ 2.79) & -6.46 ($\pm$ 3.50) & 96.91 ($\pm$ 0.62) & -1.34 ($\pm$ 0.76) & 90.90 ($\pm$ 1.30) & -6.24 ($\pm$ 1.96) \\
+         & Ours & 96.44 ($\pm$ 0.72)  & -4.14 ($\pm$ 0.94)  & 86.67 ($\pm$ 4.09) & 0.85 ($\pm$ 3.85)  & 92.44 ($\pm$ 0.77) & -3.63 ($\pm$ 1.06) \\
+        \midrule 
+        \multirow{4}{*}{DER} & Random & 98.23 ($\pm$ 0.53) & -1.89 ($\pm$ 0.65) & 96.56 ($\pm$ 1.79) & -3.48 ($\pm$ 2.22) & 92.89 ($\pm$ 0.86) & -3.75 ($\pm$ 1.16) \\
+         & ETS & 98.17 ($\pm$ 0.35) & -2.00 ($\pm$ 0.42) & 97.69 ($\pm$ 0.58) & -2.05 ($\pm$ 0.71) & 94.74 ($\pm$ 1.05) & -1.94 ($\pm$ 1.17) \\
+         & Heuristic & 94.57 ($\pm$ 1.71) & -6.08 ($\pm$ 2.09) & $^{*}$72.49 ($\pm$ 19.32) & -20.88 ($\pm$ 11.46) & $^{*}$77.88 ($\pm$ 12.58) & -12.66 ($\pm$ 4.17) \\
+         & Ours & 99.02 ($\pm$ 0.10) & -0.91 ($\pm$ 0.13) & 98.33 ($\pm$ 0.51) & -1.26 ($\pm$ 0.63) & 95.02 ($\pm$ 0.33) & -0.97 ($\pm$ 0.81) \\
+        \midrule
+        \multirow{4}{*}{DER++} & Random & 97.90 ($\pm$ 0.52) & -2.32 ($\pm$ 0.67) & 97.10 ($\pm$ 1.03) & -2.77 ($\pm$ 1.29) & 93.29 ($\pm$ 1.43) & -3.11 ($\pm$ 1.60 ) \\
+         & ETS & 97.98 ($\pm$ 0.52) & -2.24 ($\pm$ 0.66) & 98.12 ($\pm$ 0.40) & -1.59 ($\pm$ 0.52) & 94.53 ($\pm$ 1.02) & -1.82 ($\pm$ 1.02) \\
+         & Heuristic & 92.35 ($\pm$ 2.42) & -8.83 ($\pm$ 2.99) & $^{*}$67.31 ($\pm$ 21.20) & -24.86 ($\pm$ 16.34) & 93.88 ($\pm$ 1.33) & -2.86 ($\pm$ 1.49) \\
+         & Ours & 98.84 ($\pm$ 0.21)  & -1.14 ($\pm$ 0.26)  & 98.38 ($\pm$ 0.43) & -1.17 ($\pm$ 0.51) & 94.73 ($\pm$ 0.20) & -1.21 ($\pm$ 1.12) \\
+        \bottomrule
+        \toprule
+         & & \multicolumn{2}{c}{{\bf Permuted MNIST} } & \multicolumn{2}{c}{{\bf Split CIFAR-100} } & \multicolumn{2}{c}{{\bf Split miniImagenet} } \\
+         \cmidrule{3-4} \cmidrule{5-6} \cmidrule{7-8} %\cline{3-8}
+         {\bf Method} & {\bf Schedule} & ACC(\%)$\uparrow$ & BWT(\%)$\uparrow$ & ACC(\%)$\uparrow$ & BWT(\%)$\uparrow$ & ACC(\%)$\uparrow$ & BWT(\%)$\uparrow$ \\
+        \midrule 
+        \multirow{4}{*}{HAL} & Random & 88.49 ($\pm$ 0.99) & -7.03 ($\pm$ 1.05) & 36.09 ($\pm$ 1.77) & -17.49 ($\pm$ 1.78 ) & 38.51 ($\pm$ 2.22) & -6.65 ($\pm$ 1.43) \\
+         & ETS & 88.46 ($\pm$ 0.86) & -7.26 ($\pm$ 0.90) & 34.90 ($\pm$ 2.02) & -18.92 ($\pm$ 0.91) & 38.13 ($\pm$ 1.18) & -8.19 ($\pm$ 1.73) \\
+         & Heuristic & $^{*}$66.63 ($\pm$ 28.50) & -29.68 ($\pm$ 27.90) & 35.07 ($\pm$ 1.29) & -24.76 ($\pm$ 2.41) & 39.51 ($\pm$ 1.49) & -5.65 ($\pm$ 0.77) \\
+         & Ours & 89.14 ($\pm$ 0.74) & -6.29 ($\pm$ 0.74) & 40.22 ($\pm$ 1.57) & -12.77 ($\pm$ 1.30) & 41.39 ($\pm$ 1.15) & -3.69 ($\pm$ 1.86) \\
+        \midrule 
+        \multirow{4}{*}{MER} & Random & 75.90 ($\pm$ 1.34) & -21.69 ($\pm$ 1.47) & 42.96 ($\pm$ 1.70) & -34.01 ($\pm$ 2.07) & 31.48 ($\pm$ 1.65) & -6.99 ($\pm$ 1.27) \\
+         & ETS & 73.01 ($\pm$ 0.96) & -25.19 ($\pm$ 1.10) & 43.38 ($\pm$ 1.81) & -34.84 ($\pm$ 1.98) & 33.58 ($\pm$ 1.53) & -6.80 ($\pm$ 1.46) \\
+         & Heuristic & 83.86 ($\pm$ 3.19) & -12.48 ($\pm$ 3.60) & 40.90 ($\pm$ 1.70) & -44.10 ($\pm$ 2.03) & 34.22 ($\pm$ 1.93) & -7.57 ($\pm$ 1.63) \\
+         & Ours & 79.72 ($\pm$ 0.71) & -17.42 ($\pm$ 0.78) & 44.29 ($\pm$ 0.69) & -32.73 ($\pm$ 0.88) & 32.74 ($\pm$ 1.29) & -5.77 ($\pm$ 1.04) \\
+        \midrule 
+        \multirow{4}{*}{DER} & Random & 87.51 ($\pm$ 1.10) & -8.81 ($\pm$ 1.28) & 56.83 ($\pm$ 0.76) & -27.34 ($\pm$ 0.63) & 42.19  ($\pm$ 0.67) & -10.60  ($\pm$ 1.28) \\
+         & ETS & 85.71 ($\pm$ 0.75) & -11.15 ($\pm$ 0.87) & 52.58 ($\pm$ 1.49) & -32.93 ($\pm$ 2.04) & 35.50  ($\pm$ 2.84) & -10.94  ($\pm$ 2.21) \\
+         & Heuristic & 81.56 ($\pm$ 2.28) & -15.06 ($\pm$ 2.51) & 55.75 ($\pm$ 1.08) & -31.27 ($\pm$ 1.02) & 43.62 ($\pm$ 0.88) & -8.18 ($\pm$ 1.16) \\
+         & Ours & 90.11 ($\pm$ 0.18) & -5.89 ($\pm$ 0.23) & 58.99 ($\pm$ 0.98) & -24.95 ($\pm$ 0.64) & 43.46  ($\pm$ 0.95) & -9.32  ($\pm$ 1.37) \\
+        \midrule
+        \multirow{4}{*}{DER++} & Random & 87.89 ($\pm$ 1.10& -8.35 ($\pm$ 1.33) & 58.49  ($\pm$ 1.44) & -25.48  ($\pm$ 1.55) & 48.40  ($\pm$ 0.69) & -4.20  ($\pm$ 0.86) \\
+         & ETS & 85.25 ($\pm$ 0.88) & -11.60 ($\pm$ 1.03) & 52.54  ($\pm$ 1.06) & -33.22  ($\pm$ 1.51) & 41.36  ($\pm$ 2.90) & -4.07  ($\pm$ 2.28) \\
+         & Heuristic & 79.17 ($\pm$ 2.44) & -17.68 ($\pm$ 2.68) & 56.70 ($\pm$ 1.27) & -30.33 ($\pm$ 1.41) & 45.73 ($\pm$ 0.84) & -6.09 ($\pm$ 1.24) \\
+         & Ours & 89.84 ($\pm$ 0.22) & -6.13 ($\pm$ 0.29) & 59.23  ($\pm$ 0.83) & -24.61  ($\pm$ 0.91) & 49.45  ($\pm$ 0.68) & -3.12  ($\pm$ 0.89) \\
+        \bottomrule
+    \end{tabular}
+    }
+    \vspace{-3mm}
+    \label{tab:bwt_sota_models_applied_to_rsmcts}
+\end{table}
+
+
+\begin{comment}
+\begin{table}[h]
+    \footnotesize
+    \centering
+    \caption{
+    Performance comparison between scheduling methods RS-MCTS (Ours), Random, ETS, and Heuristic when combining them with replay-based methods Hindsight Anchor Learning (HAL), Meta Experience Replay (MER), Dark Experience Replay (DER), and DER++. 
+    Replay memory sizes are $M=10$ and $M=100$ for the 5-task and 10/20-task datasets respectively. We report the mean and standard deviation averaged over 5 seeds. Results on Heuristic where some seed did not converge is denoted by $^{*}$. Applying RS-MCTS to each method can enhance the performance compared to using the baseline schedules. 
+    }
+    %\vspace{-3mm}
+    \scalebox{0.9}{
+    \begin{tabular}{l l c c c c c c}
+        \toprule
+         & & \multicolumn{2}{c}{{\bf Split MNIST} } & \multicolumn{2}{c}{{\bf Split FashionMNIST} } & \multicolumn{2}{c}{{\bf Split notMNIST} } \\
+         \cmidrule{3-4} \cmidrule{5-6} \cmidrule{7-8} %\cline{3-8}
+         {\bf Method} & {\bf Schedule} & ACC(\%)$\uparrow$ & BWT(\%)$\uparrow$ & ACC(\%)$\uparrow$ & BWT(\%)$\uparrow$ & ACC(\%)$\uparrow$ & BWT(\%)$\uparrow$ \\
+        \midrule 
+
+        \multirow{4}{*}{HAL} & Random & 97.24 $\pm$ 0.70 & -2.77 $\pm$ 0.90 & 86.74 $\pm$ 6.05 & -15.54 $\pm$ 7.58 & 93.61 $\pm$ 1.31 & -2.73 $\pm$ 1.33 \\
+         & ETS & 97.21 $\pm$ 1.25 & -2.80 $\pm$ 1.59 & 96.75 $\pm$ 0.50 & -2.84 $\pm$ 0.75 & 92.16 $\pm$ 1.82 &  -5.04 $\pm$ 2.24 \\
+         & Heuristic & 97.69 $\pm$ 0.19 & -2.22 $\pm$ 0.24 & $^{*}$74.16 $\pm$ 11.19 & -31.26 $\pm$ 14.00 & 93.64 $\pm$ 0.93 & -2.80 $\pm$ 1.20 \\
+         & Ours & 97.96 $\pm$ 0.15 & -1.85 $\pm$ 0.18 & 97.56 $\pm$ 0.51 & -2.02 $\pm$ 0.63 & 94.47 $\pm$ 0.82 &  -1.67 $\pm$ 0.64 \\
+        \midrule 
+        \multirow{4}{*}{MER} & Random & 93.07 $\pm$ 0.81  & -8.36 $\pm$ 0.99 & 85.53 $\pm$ 3.30 & -0.56 $\pm$ 3.36 & 91.13 $\pm$ 0.86 & -5.32 $\pm$ 0.95 \\
+         & ETS & 92.97 $\pm$ 1.73 &  -8.52 $\pm$ 2.15 & 84.88 $\pm$ 3.85 & -3.34 $\pm$ 5.59 & 90.56 $\pm$ 0.83 & -6.11 $\pm$ 1.06 \\
+         & Heuristic & 94.30 $\pm$ 2.79 & -6.46 $\pm$ 3.50 & 96.91 $\pm$ 0.62 & -1.34 $\pm$ 0.76 & 90.90 $\pm$ 1.30 & -6.24 $\pm$ 1.96 \\
+         & Ours & {96.44 $\pm$ 0.72}  & {-4.14 $\pm$ 0.94}  & 86.67 $\pm$ 4.09 & 0.85 $\pm$ 3.85  & 92.44 $\pm$ 0.77 & -3.63 $\pm$ 1.06 \\
+        \midrule 
+        \multirow{4}{*}{DER} & Random & 98.23 $\pm$ 0.53 & -1.89 $\pm$ 0.65 & 96.56 $\pm$ 1.79 & -3.48 $\pm$ 2.22 & 92.89 $\pm$ 0.86 & -3.75 $\pm$ 1.16 \\
+         & ETS & 98.17 $\pm$ 0.35 & -2.00 $\pm$ 0.42 & 97.69 $\pm$ 0.58 & -2.05 $\pm$ 0.71 & 94.74 $\pm$ 1.05 & -1.94 $\pm$ 1.17 \\
+         & Heuristic & 94.57 $\pm$ 1.71 & -6.08 $\pm$ 2.09 & $^{*}$72.49 $\pm$ 19.32 & -20.88 $\pm$ 11.46 & $^{*}$77.88 $\pm$ 12.58 & -12.66 $\pm$ 4.17 \\
+         & Ours & {99.02 $\pm$ 0.10} & { -0.91 $\pm$ 0.13} & 98.33 $\pm$ 0.51 & -1.26 $\pm$ 0.63 & 95.02 $\pm$ 0.33 & -0.97 $\pm$ 0.81 \\
+        \midrule
+        \multirow{4}{*}{DER++} & Random & 97.90 $\pm$ 0.52 & -2.32 $\pm$ 0.67 & 97.10 $\pm$ 1.03 & -2.77 $\pm$ 1.29 & 93.29 $\pm$ 1.43 & -3.11 $\pm$ 1.60  \\
+         & ETS & 97.98 $\pm$ 0.52 & -2.24 $\pm$ 0.66 & 98.12 $\pm$ 0.40 & -1.59 $\pm$ 0.52 & 94.53 $\pm$ 1.02 & -1.82 $\pm$ 1.02 \\
+         & Heuristic & 92.35 $\pm$ 2.42 & -8.83 $\pm$ 2.99 & $^{*}$67.31 $\pm$ 21.20 & -24.86 $\pm$ 16.34 & 93.88 $\pm$ 1.33 & -2.86 $\pm$ 1.49 \\
+         & Ours & {98.84 $\pm$ 0.21}  & {-1.14 $\pm$ 0.26}  & 98.38 $\pm$ 0.43 & -1.17 $\pm$ 0.51 & 94.73 $\pm$ 0.20 & -1.21 $\pm$ 1.12 \\
+        \bottomrule
+        \toprule
+         & & \multicolumn{2}{c}{{\bf Permuted MNIST} } & \multicolumn{2}{c}{{\bf Split CIFAR-100} } & \multicolumn{2}{c}{{\bf Split miniImagenet} } \\
+         \cmidrule{3-4} \cmidrule{5-6} \cmidrule{7-8} %\cline{3-8}
+         {\bf Method} & {\bf Schedule} & ACC(\%)$\uparrow$ & BWT(\%)$\uparrow$ & ACC(\%)$\uparrow$ & BWT(\%)$\uparrow$ & ACC(\%)$\uparrow$ & BWT(\%)$\uparrow$ \\
+        \midrule 
+        \multirow{4}{*}{HAL} & Random & 88.49 $\pm$ 0.99 & -7.03 $\pm$ 1.05 & 36.09 $\pm$ 1.77 & -17.49 $\pm$ 1.78  & 38.51 $\pm$ 2.22 & -6.65 $\pm$ 1.43 \\
+         & ETS & 88.46 $\pm$ 0.86 & -7.26 $\pm$ 0.90 & 34.90 $\pm$ 2.02 & -18.92 $\pm$ 0.91  & 38.13 $\pm$ 1.18 & -8.19 $\pm$ 1.73 \\
+         & Heuristic & $^{*}$66.63 $\pm$ 28.50 & -29.68 $\pm$ 27.90 & 35.07 $\pm$ 1.29 & -24.76 $\pm$ 2.41 & 39.51 $\pm$ 1.49 & -5.65 $\pm$ 0.77 \\
+         & Ours & 89.14 $\pm$ 0.74 & -6.29 $\pm$ 0.74 & 40.22 $\pm$ 1.57 & -12.77 $\pm$ 1.30  & 41.39 $\pm$ 1.15 & -3.69 $\pm$ 1.86\\
+        \midrule 
+        \multirow{4}{*}{MER} & Random & 75.90 $\pm$ 1.34  & -21.69 $\pm$ 1.47 & 42.96 $\pm$ 1.70 & -34.01 $\pm$ 2.07  & 31.48 $\pm$ 1.65 & -6.99 $\pm$ 1.27 \\
+         & ETS & 73.01 $\pm$ 0.96 & -25.19 $\pm$ 1.10 & 43.38 $\pm$ 1.81 & -34.84 $\pm$ 1.98  & 33.58 $\pm$ 1.53 & -6.80 $\pm$ 1.46 \\
+         & Heuristic & 83.86 $\pm$ 3.19 & -12.48 $\pm$ 3.60 & 40.90 $\pm$ 1.70 & -44.10 $\pm$ 2.03 & 34.22 $\pm$ 1.93 & -7.57 $\pm$ 1.63 \\
+         & Ours & 79.72 $\pm$ 0.71 & -17.42 $\pm$ 0.78 & 44.29 $\pm$ 0.69 & -32.73 $\pm$ 0.88  & 32.74 $\pm$ 1.29 & -5.77 $\pm$ 1.04 \\
+        \midrule 
+        \multirow{4}{*}{DER} & Random & 87.51 $\pm$ 1.10 & -8.81 $\pm$ 1.28 & 56.83 $\pm$ 0.76 & -27.34 $\pm$ 0.63 & 42.19  $\pm$ 0.67 & -10.60  $\pm$ 1.28 \\
+         & ETS & 85.71 $\pm$ 0.75 & -11.15 $\pm$ 0.87 & 52.58 $\pm$ 1.49 & -32.93 $\pm$ 2.04 & 35.50  $\pm$ 2.84 & -10.94  $\pm$ 2.21 \\
+         & Heuristic & 81.56 $\pm$ 2.28 & -15.06 $\pm$ 2.51 & 55.75 $\pm$ 1.08 & -31.27 $\pm$ 1.02 & 43.62 $\pm$ 0.88 & -8.18 $\pm$ 1.16 \\
+         & Ours & 90.11 $\pm$ 0.18 & -5.89 $\pm$ 0.23 & 58.99 $\pm$ 0.98 & -24.95 $\pm$ 0.64 & 43.46  $\pm$ 0.95 & -9.32  $\pm$ 1.37 \\
+        \midrule
+        \multirow{4}{*}{DER++} & Random & 87.89 $\pm$ 1.10& -8.35 $\pm$ 1.33  & 58.49  $\pm$ 1.44 & -25.48  $\pm$ 1.55  & 48.40  $\pm$ 0.69 & -4.20  $\pm$ 0.86 \\
+         & ETS & 85.25 $\pm$ 0.88  & -11.60 $\pm$ 1.03  & 52.54  $\pm$ 1.06 & -33.22  $\pm$ 1.51 & 41.36  $\pm$ 2.90 & -4.07  $\pm$ 2.28 \\
+         & Heuristic & 79.17 $\pm$ 2.44 & -17.68 $\pm$ 2.68 & 56.70 $\pm$ 1.27 & -30.33 $\pm$ 1.41 & 45.73 $\pm$ 0.84 & -6.09 $\pm$ 1.24 \\
+         & Ours & 89.84 $\pm$ 0.22 & -6.13 $\pm$ 0.29 & 59.23  $\pm$ 0.83 & -24.61  $\pm$ 0.91  & 49.45  $\pm$ 0.68 & -3.12  $\pm$ 0.89 \\
+        \bottomrule
+    \end{tabular}
+    }
+    \vspace{-3mm}
+    \label{tab:bwt_sota_models_applied_to_rsmcts}
+\end{table}
+\end{comment}

@@ -1,0 +1,13 @@
+
+
+
+\subsection{Results with Varying Replay Memory Size}
+\label{sec:results_with_varying_replay_memory_size}
+We show that our method can improve the performance across different choices of memory size.
+In this experiment, we set the replay memory size to ensure the ETS baseline replays an equal number of samples per class at the final task. 
+The memory size is set to $M = n_{cpt} \cdot n_{spc} \cdot (T-1)$, where $n_{cpt}$ is the number of classes per task in the dataset and $n_{spc}$ are the number of samples per class we wish to replay at task $T$ for the ETS baseline. 
+In Figure \ref{fig:acc_over_replay_memory_size}, we observe that RS-MCTS obtains better task accuracies than ETS, especially for small memory sizes. Both RS-MCTS and ETS perform better than Heuristic as $M$ increases showing that Heuristic requires careful tuning of the validation accuracy threshold. 
+
+
+
+

@@ -1,0 +1,131 @@
+
+\nextgroupplot[title=Split CIFAR-100,
+height=\figheight,
+legend cell align={left},
+legend style={
+  nodes={scale=0.7},
+  fill opacity=0.8,
+  draw opacity=1,
+  text opacity=1,
+  at={(0.48,0.03)},
+  anchor=south west,
+  draw=white!80!black
+},
+minor xtick={},
+minor ytick={},
+tick align=outside,
+tick pos=left,
+width=\figwidth,
+x grid style={white!69.0196078431373!black},
+xmajorgrids,
+xlabel={Memory size \(\displaystyle M\)},
+xmin=0.8, xmax=5.2,
+xtick style={color=black},
+xtick={1,2,3,4,5},
+xticklabels={95,285,475,950,1900},
+y grid style={white!69.0196078431373!black},
+ymajorgrids,
+ylabel={ACC (\%)},
+ymin=0.495, ymax=0.810957793848251,
+ytick style={color=black},
+ytick={0.5, 0.55, 0.6,0.65,0.7,0.75,0.8,0.85},
+yticklabels={50, 55, 60, 65, 70, 75, 80, 85}
+]
+\path [fill=color0, fill opacity=0.2, line width=1pt]
+(axis cs:1,0.567187964916229)
+--(axis cs:1,0.595052063465118)
+--(axis cs:2,0.683687448501587)
+--(axis cs:3,0.721232891082764)
+--(axis cs:4,0.759949862957001)
+--(axis cs:5,0.789501786231995)
+--(axis cs:5,0.782858371734619)
+--(axis cs:5,0.782858371734619)
+--(axis cs:4,0.748370110988617)
+--(axis cs:3,0.711007118225098)
+--(axis cs:2,0.667912483215332)
+--(axis cs:1,0.567187964916229)
+--cycle;
+
+\path [fill=color1, fill opacity=0.2, line width=1pt]
+(axis cs:1,0.54420843806795)
+--(axis cs:1,0.55951156193205)
+--(axis cs:2,0.660018780412226)
+--(axis cs:3,0.701282341220295)
+--(axis cs:4,0.74849294674193)
+--(axis cs:5,0.780335209714517)
+--(axis cs:5,0.772824790285483)
+--(axis cs:5,0.772824790285483)
+--(axis cs:4,0.73630705325807)
+--(axis cs:3,0.686757658779705)
+--(axis cs:2,0.640341219587774)
+--(axis cs:1,0.54420843806795)
+--cycle;
+
+\path [fill=color2, fill opacity=0.2, line width=1pt]
+(axis cs:1,0.499704018706963)
+--(axis cs:1,0.577535981293037)
+--(axis cs:2,0.631322030526373)
+--(axis cs:3,0.68081333911034)
+--(axis cs:4,0.714779020310597)
+--(axis cs:5,0.698210881385584)
+--(axis cs:5,0.575789118614416)
+--(axis cs:5,0.575789118614416)
+--(axis cs:4,0.604540979689403)
+--(axis cs:3,0.61926666088966)
+--(axis cs:2,0.573797969473627)
+--(axis cs:1,0.499704018706963)
+--cycle;
+
+\path [fill=color3, fill opacity=0.2, line width=1pt]
+(axis cs:1,0.594093382358551)
+--(axis cs:1,0.615146577358246)
+--(axis cs:2,0.694118440151215)
+--(axis cs:3,0.734759986400604)
+--(axis cs:4,0.772708475589752)
+--(axis cs:5,0.798255443572998)
+--(axis cs:5,0.786504507064819)
+--(axis cs:5,0.786504507064819)
+--(axis cs:4,0.760211646556854)
+--(axis cs:3,0.723879992961884)
+--(axis cs:2,0.682881414890289)
+--(axis cs:1,0.594093382358551)
+--cycle;
+
+\addplot [line width=1.0pt, color0, mark=*, mark size=1, mark options={solid}]
+table {%
+1 0.581120014190674
+2 0.675799965858459
+3 0.716120004653931
+4 0.754159986972809
+5 0.786180078983307
+};
+%\addlegendentry{Random}
+
+\addplot [line width=1.0pt, color1, mark=*, mark size=1, mark options={solid}]
+table {%
+1 0.55186
+2 0.65018
+3 0.69402
+4 0.7424
+5 0.77658
+};
+
+\addplot [line width=1.0pt, color2, mark=*, mark size=1, mark options={solid}]
+table {%
+1 0.53862
+2 0.60256
+3 0.65004
+4 0.65966
+5 0.637
+};
+
+\addplot [line width=1.0pt, color3, mark=*, mark size=1, mark options={solid}]
+table {%
+1 0.604619979858398
+2 0.688499927520752
+3 0.729319989681244
+4 0.766460061073303
+5 0.792379975318909
+};
+
+
