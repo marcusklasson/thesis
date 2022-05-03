@@ -1,0 +1,64 @@
+
+\nextgroupplot[title=Finetune,
+height=\figheight,
+legend cell align={left},
+legend style={
+  nodes={scale=0.8},
+  fill opacity=0.8,
+  draw opacity=1,
+  text opacity=1,
+  at={(5.62,0.06)},
+  anchor=south west,
+  draw=white!80!black
+},
+minor xtick={},
+minor ytick={0.55,0.65,0.75,0.85,0.95,1.05},
+tick align=outside,
+tick pos=left,
+width=\figwidth,
+x grid style={white!69.0196078431373!black},
+xmajorgrids,
+xlabel={Task},
+xmin=0.8, xmax=5.2,
+xtick style={color=black},
+xtick={1,2,3,4,5},
+xticklabels={1,2,3,4,5},
+y grid style={white!69.0196078431373!black},
+ymajorgrids,
+yminorgrids,
+ylabel={Accuracy},
+ymin=0.691, ymax=1.01,
+ytick style={color=black},
+ytick={0.5,0.6,0.7,0.8,0.9,1.0},
+yticklabels={50, 60, 70, 80, 90, 100}
+]
+\addplot [line width=1.5pt, color0, mark=*, mark size=1, mark options={solid}]
+table {%
+1 0.999527215957642
+2 0.992434978485107
+3 0.756501197814941
+4 0.701654851436615
+5 0.78865247964859
+};\addlegendentry{Task 1}
+\addplot [line width=1.5pt, color1, mark=*, mark size=1, mark options={solid}]
+table {%
+2 0.996572017669678
+3 0.960822701454163
+4 0.913320302963257
+5 0.803134202957153
+};\addlegendentry{Task 2}
+\addplot [line width=1.5pt, color2, mark=*, mark size=1, mark options={solid}]
+table {%
+3 0.998932778835297
+4 0.97438633441925
+5 0.942369282245636
+};\addlegendentry{Task 3}
+\addplot [line width=1.5pt, color3, mark=*, mark size=1, mark options={solid}]
+table {%
+4 0.99899297952652
+5 0.996475338935852
+};\addlegendentry{Task 4}
+\addplot [line width=1.5pt, color4, mark=*, mark size=1, mark options={solid}]
+table {%
+5 0.995461404323578
+};\addlegendentry{Task 5}

@@ -1,0 +1,65 @@
+
+\input{sections/experiments/figures/mcts_rewards_over_iterations}
+
+
+\section{Experiments}\label{sec:experiments}
+
+We evaluated our replay scheduling method empirically on six common benchmark datasets for CL. 
+%We show that scheduling of the replay memory improves significantly over replaying equal proportions across the tasks. 
+%Furthermore, we demonstrate that replay scheduling can be as efficient as replaying all available memory samples in settings where only 1 example per class can be stored for replay. 
+We denote our method as Replay Scheduling MCTS (RS-MCTS) and select the result on the held-out test sets from the replay schedule that yielded the best reward on the validation set during the search.
+%We perform experiments using 5 different seeds on all datasets. 
+%Our code is available as part of the supplementary material.
+%Next, we briefly describe the experimental settings. 
+Full details on experimental settings are in Appendix \ref{app:experimental_settings} and additional results are in Appendix \ref{app:additional_experimental_results}. %Additional information on experimental settings and results can be found in Appendix \ref{app:experimental_settings} and \ref{app:additional_experimental_results} respectively. 
+Our code is available in the supplementary material. %as part of the supplementary material.
+
+\vspace{-3mm}
+\paragraph{Datasets.} We conduct experiments on six datasets commonly used as benchmarks in the CL literature: Split MNIST~\citep{lecun1998gradient, zenke2017continual}, Fashion-MNIST~\citep{xiao2017fashion}, Split notMNIST~\citep{bulatov2011notMNIST}, Permuted MNIST~\citep{goodfellow2013empirical}, Split CIFAR-100~\citep{krizhevsky2009learning}, and Split miniImagenet~\citep{vinyals2016matching}. We randomly sample 15\% of the training data from each task to use for validation when computing the reward for the MCTS simulations. 
+
+\vspace{-3mm}
+\paragraph{Baselines.} We compare RS-MCTS to using 1) random replay schedules (Random), 2) equal task schedules (ETS), and 3) a heuristic scheduling method (Heuristic). The ETS baseline uses equal task proportions, such that $M/(t-1)$ samples per task are replayed during learning of task $t$,and use both training and validations sets for training such that ETS use the same amount of data as RS-MCTS. %such that $M/(t-1)$ samples per task are replayed during learning of task $t$, and use both training and validations sets for training such that they use the same amount of data as RS-MCTS. 
+The Heuristic baseline replays the tasks which accuracy on the validation set is below a certain threshold proportional to the best achieved validation accuracy on the task. Here, the replay memory is filled with $M/k$ samples per task where $k$ is the number of selected tasks. If $k=0$, then we skip applying replay at the current task.  
+See Appendix \ref{app:heuristic_scheduling_baseline} for more details on the Heuristic baseline. 
+
+%%% Table 1, put it here for placement
+\input{sections/experiments/tables/table_memory_selection_methods}
+
+\vspace{-3mm}
+\paragraph{Architectures.} We use a multi-head output layer for all datasets except for Permuted MNIST where the network uses single-head output. We use a 2-layer MLP with 256 hidden units for Split MNIST, Split FashionMNIST, Split notMNIST, and Permuted MNIST. For Split CIFAR-100, we use the CNN architecture used in \citet{vinyals2016matching} and \citet{schwarz2018progress}. For Split miniImagenet, we apply the reduced ResNet-18 from \citet{lopez2017gradient}. 
+
+\vspace{-3mm}
+\paragraph{Evaluation Metric.} We use the average test accuracy over all tasks after learning the final task, i.e., $\text{ACC} = \frac{1}{T} \sum_{i=1}^{T} A_{T, i}$ where $A_{T, i}$ is the test accuracy of task $i$ after learning task $T$. We report means and standard deviations of ACC using 5 different seeds on all datasets. 
+
+
+
+%%% MCTS Results
+\input{sections/experiments/results_with_mcts}
+
+%%% Table 2, put it here for placement
+\input{sections/experiments/tables/table_applying_scheduling_to_recent_replay_methods}
+
+%%% Visualizations
+\input{sections/experiments/replay_schedule_visualizations}
+
+
+%%% Results on memory selection methods
+\input{sections/experiments/alternative_memory_selection_methods}
+
+%\input{sections/experiments/figures/replay_schedule_visualization}
+
+%%% Results on applying replay scheduling to recent replay methods
+\input{sections/experiments/applying_scheduling_to_recent_replay_methods}
+
+\input{sections/experiments/figures/replay_schedule_visualization}
+
+%%% Figure Acc over memory size
+\input{sections/experiments/figures/accs_over_memory_size}
+
+%%%% Results of ACC over memory size
+\input{sections/experiments/results_with_varying_memory_size}
+
+
+%%% Efficiency of Replay Scheduling
+%\newpage
+\input{sections/experiments/efficiency_of_replay_scheduling}

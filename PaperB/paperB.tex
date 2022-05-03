@@ -1,29 +1,31 @@
 
 
-\renewcommand*{\bibname}{References}
-\renewcommand*{\thechapter}{B}  % use A, B, C for chapter numbers
-\renewcommand{\chaptername}{Paper} % A chapter is now called Paper
-\renewcommand*{\thepage}{B\arabic{page}}
-\setcounter{page}{1}
+%\renewcommand*{\bibname}{References}
+%\renewcommand*{\thechapter}{B}  % use A, B, C for chapter numbers
+%\renewcommand{\chaptername}{Paper} % A chapter is now called Paper
+%\renewcommand\thesection{\arabic{section}}
+%\renewcommand*{\thepage}{B\arabic{page}}
+%\setcounter{page}{1}
 
 %%% Paper content
 
 \chapter{
-	\centering{
-		Name for Paper B
-}}
+	\centering{Using Variational Multi-View Learning for Classification of Grocery Items}
+}\label{paperB}
+\chaptermark{Multi-View Learning for Grocery Classification}
+\vspace{-5mm}
 \begin{center}
-	\large{Marcus Klasson, Cheng Zhang, Hedvig Kjellström}
+	\large{\textbf{Marcus Klasson$^{*}$, Cheng Zhang$^{\dagger}$, Hedvig Kjellström$^{*}$}} \\[2mm]
+	\small{$^{*}$KTH Royal Institute of Technology, Stockholm, Sweden} \\
+	\small{$^{\dagger}$Microsoft Research, Cambridge, United Kingdom} \\
 \end{center}
-\vspace{5pt}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}
 	%\printinunitsof{in}\prntlen{\linewidth}
-	Abstract aby stract
-	
+	\noindent An essential task for computer vision-based assistive technologies is to help visually impaired people to recognize objects in constrained environments, for instance, recognizing food items in grocery stores. In this paper, we introduce a novel dataset with natural images of groceries -- fruits, vegetables, and packaged products -- where all images have been taken inside grocery stores to resemble a shopping scenario. Additionally, we download iconic images and text descriptions for each item that can be utilized for better representation learning of groceries. We select a multi-view generative model, which can combine the different item information into lower-dimensional representations. The experiments show that utilizing the additional information yields higher accuracies on classifying grocery items over only using the natural images. We observe that iconic images help to construct representations separated by visual differences of the items, while text descriptions enable the model to distinguish between visually similar items by different ingredients.
 \end{abstract}
 
 

@@ -1,0 +1,296 @@
+% This file was created by tikzplotlib v0.9.8.
+\pgfplotsset{every axis title/.append style={at={(0.5,0.83)}}}
+\pgfplotsset{every axis x label/.append style={at={(0.5,-0.25)}}}
+\pgfplotsset{every major tick/.append style={major tick length=2pt}}
+\pgfplotsset{every minor tick/.append style={minor tick length=1pt}}
+\pgfplotsset{every tick label/.append style={font=\scriptsize}}
+\begin{tikzpicture}
+\tikzstyle{every node}=[font=\footnotesize]
+\definecolor{color0}{rgb}{0.12156862745098,0.466666666666667,0.705882352941177}
+\definecolor{color1}{rgb}{1,0.498039215686275,0.0549019607843137}
+\definecolor{color2}{rgb}{0.172549019607843,0.627450980392157,0.172549019607843}
+\definecolor{color3}{rgb}{0.83921568627451,0.152941176470588,0.156862745098039}
+\definecolor{color4}{rgb}{0.580392156862745,0.403921568627451,0.741176470588235}
+
+\begin{groupplot}[group style={group size=4 by 1, horizontal sep=1.0cm,}]
+\nextgroupplot[title={ACC: 89.66\%},
+legend cell align={left},
+%legend columns=-1,
+%legend style={
+%  nodes={scale=0.9},
+%  fill opacity=0.8,
+%  draw opacity=1,
+%  text opacity=1,
+%  at={(0.03,1.27)},
+%  anchor=south west,
+%  draw=white!80!black
+%},
+height=\figheight,
+minor xtick={},
+minor ytick={0.65,0.75,0.85,0.95,1,1.1},
+tick align=outside,
+tick pos=left,
+width=\figwidth,
+x grid style={white!69.0196078431373!black},
+xlabel={Task},
+xmajorgrids,
+xmin=0.8, xmax=5.2,
+xtick style={color=black},
+xtick={1,2,3,4,5},
+xticklabels={1,2,3,4,5},
+y grid style={white!69.0196078431373!black},
+ylabel={Accuracy(\%)},
+ymajorgrids,
+yminorgrids,
+ymin=0.7, ymax=1.01,
+ytick style={color=black},
+ytick={0.6,0.7,0.8,0.9,1,1.1},
+yticklabels={60,70,80,90,100,110}
+]
+\addplot [line width=1.5pt, color0, mark=*, mark size=1, mark options={solid}]
+table {%
+1 0.999527156352997
+2 0.997730553150177
+3 0.882458686828613
+4 0.794799029827118
+5 0.841323971748352
+};
+%\addlegendentry{Task 1}
+\addplot [line width=1.5pt, color1, mark=*, mark size=1, mark options={solid}]
+table {%
+2 0.995984375476837
+3 0.963858962059021
+4 0.868658185005188
+5 0.76601368188858
+};
+%\addlegendentry{Task 2}
+\addplot [line width=1.5pt, color2, mark=*, mark size=1, mark options={solid}]
+table {%
+3 0.998612582683563
+4 0.950907111167908
+5 0.886979699134827
+};
+%\addlegendentry{Task 3}
+\addplot [line width=1.5pt, color3, mark=*, mark size=1, mark options={solid}]
+table {%
+4 0.999194324016571
+5 0.993353486061096
+};
+%\addlegendentry{Task 4}
+\addplot [line width=1.5pt, color4, mark=*, mark size=1, mark options={solid}]
+table {%
+5 0.995259761810303
+};
+%\addlegendentry{Task 5}
+\addplot [line width=1.5pt, black, dashed]
+table {%
+2 0
+2 1.05
+};
+%\addlegendentry{Replay}
+
+\nextgroupplot[title={ACC: 93.85\%},
+height=\figheight,
+minor xtick={},
+minor ytick={0.65,0.75,0.85,0.95,1,1.1},
+tick align=outside,
+tick pos=left,
+width=\figwidth,
+x grid style={white!69.0196078431373!black},
+xlabel={Task},
+xmajorgrids,
+xmin=0.8, xmax=5.2,
+xtick style={color=black},
+xtick={1,2,3,4,5},
+xticklabels={1,2,3,4,5},
+y grid style={white!69.0196078431373!black},
+%ylabel={Accuracy},
+ymajorgrids,
+yminorgrids,
+ymin=0.7, ymax=1.01,
+ytick style={color=black},
+ytick={0.6,0.7,0.8,0.9,1,1.1},
+yticklabels={60,70,80,90,100,110}
+]
+\addplot [line width=1.5pt, color0, mark=*, mark size=1, mark options={solid}]
+table {%
+1 0.999527156352997
+2 0.990638375282288
+3 0.998770713806152
+4 0.954420864582062
+5 0.953191578388214
+};
+%\addlegendentry{Task 1}
+\addplot [line width=1.5pt, color1, mark=*, mark size=1, mark options={solid}]
+table {%
+2 0.995102763175964
+3 0.970029354095459
+4 0.915377020835876
+5 0.799706101417542
+};
+%\addlegendentry{Task 2}
+\addplot [line width=1.5pt, color2, mark=*, mark size=1, mark options={solid}]
+table {%
+3 0.998505890369415
+4 0.964674472808838
+5 0.954108893871307
+};
+%\addlegendentry{Task 3}
+\addplot [line width=1.5pt, color3, mark=*, mark size=1, mark options={solid}]
+table {%
+4 0.999395728111267
+5 0.990936577320099
+};
+%\addlegendentry{Task 4}
+\addplot [line width=1.5pt, color4, mark=*, mark size=1, mark options={solid}]
+table {%
+5 0.994755387306213
+};
+%\addlegendentry{Task 5}
+\addplot [line width=1.5pt, black, dashed]
+table {%
+3 0
+3 1.05
+};
+
+\nextgroupplot[title={ACC: 93.17\%},
+height=\figheight,
+minor xtick={},
+minor ytick={0.65,0.75,0.85,0.95,1,1.1},
+tick align=outside,
+tick pos=left,
+width=\figwidth,
+x grid style={white!69.0196078431373!black},
+xlabel={Task},
+xmajorgrids,
+xmin=0.8, xmax=5.2,
+xtick style={color=black},
+xtick={1,2,3,4,5},
+xticklabels={1,2,3,4,5},
+y grid style={white!69.0196078431373!black},
+%ylabel={Accuracy},
+ymajorgrids,
+yminorgrids,
+ymin=0.7, ymax=1.01,
+ytick style={color=black},
+ytick={0.6,0.7,0.8,0.9,1,1.1},
+yticklabels={60,70,80,90,100,110}
+]
+\addplot [line width=1.5pt, color0, mark=*, mark size=1, mark options={solid}]
+table {%
+1 0.999527156352997
+2 0.990638375282288
+3 0.784302592277527
+4 0.994799017906189
+5 0.979763627052307
+};
+%\addlegendentry{Task 1}
+\addplot [line width=1.5pt, color1, mark=*, mark size=1, mark options={solid}]
+table {%
+2 0.995102763175964
+3 0.967384934425354
+4 0.902546525001526
+5 0.736434817314148
+};
+%\addlegendentry{Task 2}
+\addplot [line width=1.5pt, color2, mark=*, mark size=1, mark options={solid}]
+table {%
+3 0.998185753822327
+4 0.962860226631165
+5 0.960298895835876
+};
+%\addlegendentry{Task 3}
+\addplot [line width=1.5pt, color3, mark=*, mark size=1, mark options={solid}]
+table {%
+4 0.998892307281494
+5 0.988116860389709
+};
+%\addlegendentry{Task 4}
+\addplot [line width=1.5pt, color4, mark=*, mark size=1, mark options={solid}]
+table {%
+5 0.994049429893494
+};
+%\addlegendentry{Task 5}
+\addplot [line width=1.5pt, black, dashed]
+table {%
+4 0
+4 1.05
+};
+
+\nextgroupplot[title={ACC: 94.49\%},
+height=\figheight,
+legend columns=2,
+legend style={
+  nodes={scale=0.9},
+  fill opacity=0.8,
+  draw opacity=1,
+  text opacity=1,
+  at={(1.13,0.10)},
+  anchor=south west,
+  draw=white!80!black
+},
+minor xtick={},
+minor ytick={0.65,0.75,0.85,0.95,1,1.1},
+tick align=outside,
+tick pos=left,
+width=\figwidth,
+x grid style={white!69.0196078431373!black},
+xlabel={Task},
+xmajorgrids,
+xmin=0.8, xmax=5.2,
+xtick style={color=black},
+xtick={1,2,3,4,5},
+xticklabels={1,2,3,4,5},
+y grid style={white!69.0196078431373!black},
+%ylabel={Accuracy},
+ymajorgrids,
+yminorgrids,
+ymin=0.7, ymax=1.01,
+ytick style={color=black},
+ytick={0.6,0.7,0.8,0.9,1,1.1},
+yticklabels={60,70,80,90,100,110}
+]
+\addplot [line width=1.5pt, color0, mark=*, mark size=1, mark options={solid}]
+table {%
+1 0.999527156352997
+2 0.990638375282288
+3 0.784302592277527
+4 0.645106375217438
+5 0.995650112628937
+};
+\addlegendentry{Task 1}
+\addplot [line width=1.5pt, color1, mark=*, mark size=1, mark options={solid}]
+table {%
+2 0.995102763175964
+3 0.967384934425354
+4 0.905876517295837
+5 0.780019640922546
+};
+\addlegendentry{Task 2}
+\addplot [line width=1.5pt, color2, mark=*, mark size=1, mark options={solid}]
+table {%
+3 0.998185753822327
+4 0.969583809375763
+5 0.966808974742889
+};
+\addlegendentry{Task 3}
+\addplot [line width=1.5pt, color3, mark=*, mark size=1, mark options={solid}]
+table {%
+4 0.999295055866241
+5 0.987814724445343
+};
+\addlegendentry{Task 4}
+\addplot [line width=1.5pt, color4, mark=*, mark size=1, mark options={solid}]
+table {%
+5 0.994452834129333
+};
+\addlegendentry{Task 5}
+\addplot [line width=1.5pt, black, dashed]
+table {%
+5 0
+5 1.05
+};
+\addlegendentry{Replay}
+\end{groupplot}
+
+\end{tikzpicture}

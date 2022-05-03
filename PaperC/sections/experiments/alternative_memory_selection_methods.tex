@@ -1,0 +1,13 @@
+
+\subsection{Alternative Memory Selection Methods}
+\label{sec:alternative_memory_selection_methods}
+
+%In this section, we 
+We show that our method can be combined with any memory selection method for storing replay samples. In addition to uniform sampling, we apply various memory selection methods commonly used in the CL literature, namely $k$-means clustering, $k$-center clustering~\citep{nguyen2017variational}, and Mean-of-Features (MoF)~\citep{rebuffi2017icarl}. We compare our method and ETS combined with these different selection methods. 
+The replay memory sizes are $M=10$ for the 5-task datasets and $M=100$ for the 10- and 20-task datasets. 
+%As in Section \ref{sec:results_with_mcts}, we set the replay memory size $M=10$ for the 5-task datasets and $M=100$ for the 10- and 20-task datasets. 
+Table \ref{tab:results_memory_selection_methods} shows the results across all datasets. 
+We note that using the replay schedule from RS-MCTS outperforms the baselines when using the alternative selection methods, where MoF performs the best on most datasets. 
+
+
+

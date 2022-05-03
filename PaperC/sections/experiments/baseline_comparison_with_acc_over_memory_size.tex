@@ -1,0 +1,27 @@
+
+\subsection{Baseline Comparisons }
+
+In this experiment, we use a Uniform Coreset, A-GEM, and ER-Ring as baselines for comparing against RS-MCTS. Uniform Coreset uses uniform sampling when storing samples in the history, while A-GEM and ER-Ring uses a first-in first-out (FIFO) queue such that the most recently seen examples are stored in the history. The baselines typically replay all memory examples that are available in the memory (history) when learning new tasks. To compare them fairly to RS-MCTS, we let the baselines replay all examples that are available history, while RS-MCTS have to select proportions over how many samples to use for replay from each old task. The number of replayed examples are thus many more for the baselines compared to how many are used in RS-MCTS and ETS. 
+
+Figure \ref{fig:baseline_comparison_acc_over_memory_size} shows the ACC over the number of memory examples per class stored in the history. The values for RS-MCTS and ETS are the same as in Figure \ref{fig:acc_over_memory_size}, but the x-axis represents the examples per class here. We observe that RS-MCTS performs better than all baselines with 4 examples per class on Split MNIST, FashionMNIST, and notMNIST. Uniform and ER-Ring approaches RS-MCTS as the memory size increases. However, Uniform and Er-Ring are significantly better than RS-MCTS on Permuted MNIST, Split CIFAR-100 and miniImagenet, most probably due to that they replay many more samples at every learned task than RS-MCTS.  
+
+\mk{MK: Discussed with Hedvig today about that this comparison is not fair towards our method since the baselines replay many more examples than we do. Hedvig then suggested that we could increase the replay memory size for our method, such that we replay as many examples as the baselines on average over all tasks, and argue that scheduling is more efficient in terms of processing time since our method replays X examples every time step while the baselines replay have to replay >X examples at a certain point. 
+
+Hedvig then came up with a new way of setting the replay memory size for our method that would be fair to these baselines. Let's say that we run experiments on 5-task split MNIST, where $c=2$ is the number of classes/task. We let $m=1$ be the number of examples/class that we store in the history. The baselines replay the whole history, so they will replay $x + 2x + 3x + 4x=10x$ examples in total over learning $T$ tasks where $x$ is the number of examples that is drawn from every dataset for the baseline. The average of these will be $10x/4 = 2.5x$. Our method should then replay $2.5x$ examples every task to replay as many examples as the baselines.
+
+Hedvig then formed a general equation for computing how many examples $M$ to sample from the history for our method, where $M = x(T/2)$ where $x$ is the number of examples drawn by the baseline from each task and $T$ is the total number of tasks. I will start running experiments on with this setting of $M$ instead. I can also decrease the $x$ since the $M$ gets quite large when $x=19$ with this equation in Split CIFAR100 and miniImagenet.}
+
+%\MK{I guess that I could lower the number of memory examples for the datasets with 10 or more tasks to see if there's a sweet spot where the baselines improve over RS-MCTS. }
+
+\begin{figure}[h]
+  \centering
+  \setlength{\figwidth}{0.32\textwidth}
+  \setlength{\figheight}{.15\textheight}
+  \input{figures/baseline_comparison_acc_over_memory_size/acc_over_memory_size}
+  \caption{Performace comparison with RS-MCTS and other baselines showing average test classification accuracies (ACC) over different number of memory exampels per class stored in the history. Note that Uniform, A-GEM, and ER-Ring can use all examples stored in the history for replay, while RS-MCTS and ETS has a lower capacity on the number  of samples that can be replayed. 
+  %for Split MNIST, Split FashionMNIST, Split notMNIST, Permuted MNIST, Split CIFAR-100, and Split miniImagenet. 
+  %We show accuracies obtained by using an equal proportion of examples from previous tasks (ETS) as well as the result from the best replay schedules found with MCTS (RS-MCTS). 
+  All results have been averaged over 5 seeds. 
+  }
+  \label{fig:baseline_comparison_acc_over_memory_size}
+\end{figure}

@@ -1,0 +1,153 @@
+\nextgroupplot[title=Split MNIST,
+height=\figheight,
+legend cell align={left},
+legend columns=4,
+legend style={
+  nodes={scale=0.90},
+  fill opacity=0.8,
+  draw opacity=1,
+  text opacity=1,
+  at={(0.00,1.30)}, %{(3.70,-0.30)},   %{(3.72,0.13)},
+  anchor=south west,
+  draw=white!80!black
+},
+minor xtick={},
+minor ytick={},
+tick align=outside,
+tick pos=left,
+width=\figwidth,
+x grid style={white!69.0196078431373!black},
+xmajorgrids,
+%xlabel={Memory size \(\displaystyle M\)},
+xmin=0.7, xmax=7.3,
+xtick style={color=black},
+xtick={1,2,3,4,5,6,7},
+xticklabels={8,24,80,120,200,400,800},
+y grid style={white!69.0196078431373!black},
+ymajorgrids,
+ylabel={ACC (\%)},
+ymin=0.939, ymax=0.997729043511215,
+ytick style={color=black},
+ytick={0.92,0.93,0.94,0.95,0.96,0.97,0.98,0.99,1},
+yticklabels={92,93,94,95,96,97,98,99,100}
+]
+\path [fill=color0, fill opacity=0.2, line width=1pt]
+(axis cs:1,0.92504620552063)
+--(axis cs:1,0.981783270835876)
+--(axis cs:2,0.981537520885468)
+--(axis cs:3,0.988991677761078)
+--(axis cs:4,0.986135482788086)
+--(axis cs:5,0.991755723953247)
+--(axis cs:6,0.989374697208405)
+--(axis cs:7,0.994002878665924)
+--(axis cs:7,0.976767957210541)
+--(axis cs:7,0.976767957210541)
+--(axis cs:6,0.979170620441437)
+--(axis cs:5,0.964531421661377)
+--(axis cs:4,0.978874921798706)
+--(axis cs:3,0.979120314121246)
+--(axis cs:2,0.937642157077789)
+--(axis cs:1,0.92504620552063)
+--cycle;
+
+\path [fill=color1, fill opacity=0.2, line width=1pt]
+(axis cs:1,0.946015386753438)
+--(axis cs:1,0.970621573246562)
+--(axis cs:2,0.984533286206628)
+--(axis cs:3,0.988692537329328)
+--(axis cs:4,0.990023216819651)
+--(axis cs:5,0.990669279851693)
+--(axis cs:6,0.992800317892538)
+--(axis cs:7,0.994021984494329)
+--(axis cs:7,0.992872175505671)
+--(axis cs:7,0.992872175505671)
+--(axis cs:6,0.990845362107462)
+--(axis cs:5,0.986030240148307)
+--(axis cs:4,0.986402863180349)
+--(axis cs:3,0.980789062670673)
+--(axis cs:2,0.972900553793372)
+--(axis cs:1,0.946015386753438)
+--cycle;
+
+\path [fill=color2, fill opacity=0.2, line width=1pt]
+(axis cs:1,0.953295697386423)
+--(axis cs:1,0.969893182613577)
+--(axis cs:2,0.989900327489411)
+--(axis cs:3,0.987615676138068)
+--(axis cs:4,0.987468694435405)
+--(axis cs:5,0.987904186526891)
+--(axis cs:6,0.990390603540462)
+--(axis cs:7,0.991611458769248)
+--(axis cs:7,0.983504221230752)
+--(axis cs:7,0.983504221230752)
+--(axis cs:6,0.978347876459538)
+--(axis cs:5,0.975166293473109)
+--(axis cs:4,0.979932985564595)
+--(axis cs:3,0.979642883861932)
+--(axis cs:2,0.966454952510589)
+--(axis cs:1,0.953295697386423)
+--cycle;
+
+\path [fill=color3, fill opacity=0.2, line width=1pt]
+(axis cs:1,0.976848125457764)
+--(axis cs:1,0.986456036567688)
+--(axis cs:2,0.988981068134308)
+--(axis cs:3,0.992213249206543)
+--(axis cs:4,0.991635799407959)
+--(axis cs:5,0.991742670536041)
+--(axis cs:6,0.992980241775513)
+--(axis cs:7,0.994612276554108)
+--(axis cs:7,0.993073880672455)
+--(axis cs:7,0.993073880672455)
+--(axis cs:6,0.992027640342712)
+--(axis cs:5,0.990043103694916)
+--(axis cs:4,0.989341855049133)
+--(axis cs:3,0.989036798477173)
+--(axis cs:2,0.982677280902863)
+--(axis cs:1,0.976848125457764)
+--cycle;
+
+\addplot [line width=1.0pt, color0, mark=*, mark size=1, mark options={solid}]
+table {%
+1 0.953414738178253
+2 0.959589838981628
+3 0.984055995941162
+4 0.982505202293396
+5 0.978143572807312
+6 0.984272658824921
+7 0.985385417938232
+};
+\addlegendentry{Random}
+\addplot [line width=1.0pt, color1, mark=*, mark size=1, mark options={solid}]
+table {%
+1 0.95831848
+2 0.97871692
+3 0.9847408
+4 0.98821304
+5 0.98834976
+6 0.99182284
+7 0.99344708
+};\addlegendentry{ETS}
+\addplot [line width=1.0pt, color2, mark=*, mark size=1, mark options={solid}]
+table {%
+1 0.96159444
+2 0.97817764
+3 0.98362928
+4 0.98370084
+5 0.98153524
+6 0.98436924
+7 0.98755784
+};
+\addlegendentry{Heuristic}
+\addplot [line width=1.0pt, color3, mark=*, mark size=1, mark options={solid}]
+table {%
+1 0.981652081012726
+2 0.985829174518585
+3 0.990625023841858
+4 0.990488827228546
+5 0.990892887115479
+6 0.992503941059113
+7 0.993843078613281
+};\addlegendentry{Ours}
+
+

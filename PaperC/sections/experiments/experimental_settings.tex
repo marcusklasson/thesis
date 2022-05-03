@@ -1,0 +1,37 @@
+
+\subsection{Experimental Settings}
+
+\paragraph{Datasets and Network Architectures:} We conduct experiments on six datasets commonly used as benchmarks in the continual learning literature: Split MNIST~\citep{lecun1998gradient, zenke2017continual}, Fashion-MNIST~\citep{xiao2017fashion}, Split notMNIST~\citep{bulatov2011notMNIST}, Permuted MNIST~\citep{goodfellow2013empirical}, Split CIFAR-100~\citep{krizhevsky2009learning}, and Split miniImagenet~\citep{vinyals2016matching}. We randomly sample 15\% of the training data from each task to use for validation when computing the reward for the MCTS simulations. The network architectures use a multi-head output layer for all datasets except for Permuted MNIST where the network uses single-head output layer. We use a 2-layer MLP with 256 hidden units for Split MNIST, Split FashionMNIST, Split notMNIST, and Permuted MNIST. For Split CIFAR-100, we use the CNN architecture used in \citet{vinyals2016matching} and \citet{schwarz2018progress}. For Split mniImagenet, we apply the reduced ResNet18 from \citet{lopez2017gradient}. 
+
+%We conduct experiments on several datasets commonly used benchmarks in the continual learning literature: Split MNIST~\citep{lecun1998gradient, zenke2017continual}, Fashion-MNIST~\citep{xiao2017fashion}, Split notMNIST~\citep{bulatov2011notMNIST}, Permuted MNIST~\citep{goodfellow2013empirical}, Split CIFAR-100~\citep{krizhevsky2009learning}, and Split miniImagenet~\citep{vinyals2016matching}. The first three datasets consist of ten classes in total, and we have divided the classes into five binary classification tasks in each dataset. Permuted MNIST consists of learning the MNIST dataset where a unique random permutation has been applied to all images at each task. For Split CIFAR-100, we divide the 100 classes into 20 tasks with five classes each~\citep{lopez2017gradient, rebuffi2017icarl}. Split miniImagenet also consists of 100 classes equally divided into 20 tasks, but is considered more challenging due to the higher dimensional images (84x84x3 pixels) compared to Split CIFAR-100.  
+
+%\mk{The network architectures use a multi-head output layer where each output head corresponds to a learned task for all datasets except Permuted MNIST where we use a single-head output layer. 
+%In all experiments, we assume that task information is available at test time. 
+%We use a fully-connected network with two hidden layers consisting of 256 hidden units with ReLU activations for the Split MNIST, Split FashionMNIST, Split notMNIST, and Permuted MNIST. } For Split CIFAR-100, we use a multi-head convolutional neural network built according to the architecture used in \citep{adel2019continual, schwarz2018progress, vinyals2016matching}. %, which consists of four 3x3 convolutional blocks with 64 filters, ReLU activations, and 2x2 Max-pooling.
+%We train a smaller version of ResNet18 from \citet{lopez2017gradient} when learning Split miniImagenet. We train all networks with the Adam optimizer~\citep{kingma2014adam} with starting learning rate $\eta = 0.001$ and default hyperparameters. 
+
+%In all experiments, we assume that task information is available at test time. We, therefore, use a fully-connected multi-head network with two hidden layers consisting of 256 hidden units with ReLU activations for the first three datasets. For Split CIFAR-100, we use a multi-head convolutional neural network built according to the architecture used in \citep{adel2019continual, schwarz2018progress, vinyals2016matching}, which consists of four 3x3 convolutional blocks with 64 filters, ReLU activations, and 2x2 Max-pooling. We train a smaller version of ResNet18 from \citet{lopez2017gradient} when learning Split miniImagenet. We train all networks with the Adam optimizer~\citep{kingma2014adam} with starting learning rate $\eta = 0.001$ and default hyperparameters.
+
+%The replay schedule protocol and the tree are built as described in Section \ref{sec:replay_scheduling_for_continual_learning}. \mk{We randomly sample 15\% of training data from each task to use for validation when computing the reward for the MCTS simulations.} The exploration constant for UCT in Equation \ref{eq:uct} is set to $C=0.1$ in all experiments~\citep{chaudhry2018feature}. %The number of MCTS simulations varies across the datasets based on training time per task and the number of tasks.
+\vspace{-2mm}
+\paragraph{Metrics:} We use two commonly used metrics in the continual learning literature to report the results for all methods: 
+\begin{enumerate}[topsep=0pt,noitemsep]
+    \item $\text{ACC} = \frac{1}{T} \sum_{i=1}^{T} A_{T, i}$ is the average accuracy over all tasks after learning the final task, where $A_{T, i}$ is the test accuracy of task $i$ after learning task $T$. %The average accuracy over all tasks after learning the final task, i.e., $\text{ACC} = \frac{1}{T} \sum_{i=1}^{T} A_{T, i}$ where $A_{T, i}$ is the test accuracy of task $i$ after learning task $T$.
+    \item $\text{BWT} = \frac{1}{T-1}\sum_{i=1}^{T-1} A_{T, i} - A_{i, i}$ is the backward transfer measuring how much learning new tasks has influenced the performance on older tasks~\citep{lopez2017gradient}.  %The backward transfer (BWT) from \citet{lopez2017gradient} measuring how much learning new tasks has influenced the performance on older tasks. That is, $\text{BWT} = \frac{1}{T-1}\sum_{i=1}^{T-1} A_{T, i} - A_{i, i}$.
+\end{enumerate}
+
+%We report results on commonly used metrics for evaluating the classification performance and amount of catastrophic forgetting in the network. We use the average test classification accuracy of all tasks after training on the final task (ACC). To assess catastrophic forgetting, we use backward transfer (BWT)~\citep{lopez2017gradient} which measures how much learning new tasks have influenced the performance on older tasks. Formally, both metrics are given by:
+%\begin{align*}
+%    \text{ACC} &= \frac{1}{T} \sum_{i=1}^T A_{T, i}, %\label{eq:acc_final}, 
+%    \quad \text{BWT} = \frac{1}{T-1}\sum_{i=1}^{T-1} A_{T, i} - A_{i, i} %\label{eq:bwt}
+%\end{align*}
+%where $A_{t, i}$ is the test accuracy on task $i$ after sequentially learning the $t$-th task. See the full descriptions of the experimental settings in Appendix B.
+
+%\mk{
+%\paragraph{Baselines:}
+%We compare RS-MCTS against replay-based methods using with various sample selection strategies, e.g., Uniform sampling. The baselines uses increments the memory with $m$ samples after learning task $t$, such that the final memory size is $mT$. Baselines replay the whole memory to mitigate catastrophic forgetting. 
+
+
+
+%We compare RS-MCTS against two replay-based CL methods using first-in first-out (FIFO) selection, such that the most recently seen examples are stored in the history, namely A-GEM~\citep{chaudhry2018efficient} and ER-Ring~\citep{chaudhry2019tiny}. We also use coreset-based CL algorithms that use Uniform sampling, K-center Coreset~\citep{nguyen2017variational}, and iCarl's mean-of-features~\citep{rebuffi2017icarl} to select the samples to store in memory. Note that all these baselines are allowed to replay all examples that have been stored in the historical data, because that is how they are used other works. Our goal is to illustrate with RS-MCTS that replay scheduling over which tasks to replay at different time steps can be just as efficient replaying all stored historical examples.
+%}

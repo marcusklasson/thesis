@@ -1,0 +1,80 @@
+
+
+\pgfplotsset{compat=1.11,
+    /pgfplots/ybar legend/.style={
+    /pgfplots/legend image code/.code={%
+       \draw[##1,/tikz/.cd,yshift=-0.25em]
+        (0cm,0cm) rectangle (3pt,0.8em);},
+   },
+}
+
+\begin{tikzpicture}
+\tikzstyle{every node}=[font=\footnotesize]
+\definecolor{color0}{rgb}{0.12156862745098,0.466666666666667,0.705882352941177}
+\definecolor{color1}{rgb}{1,0.498039215686275,0.0549019607843137}
+\definecolor{color2}{rgb}{0.172549019607843,0.627450980392157,0.172549019607843}
+\definecolor{color3}{rgb}{0.83921568627451,0.152941176470588,0.156862745098039}
+\definecolor{color4}{rgb}{0.580392156862745,0.403921568627451,0.741176470588235}
+
+\begin{axis}[title={},
+ybar,
+bar width = 4pt,
+height=\figheight,
+legend cell align={left},
+legend columns=2,
+legend style={
+  nodes={scale=0.90},
+  fill opacity=0.8,
+  draw opacity=1,
+  text opacity=1,
+  at={(0.00,1.03)},
+  anchor=south west,
+  draw=white!80!black
+},
+%legend columns=2,
+%legend style={
+%  fill opacity=0.8,
+%  draw opacity=1,
+%  text opacity=1,
+%  at={(0.03,1.05)},
+%  anchor=south west,
+%  draw=white!80!black
+%},
+minor xtick={},
+minor ytick={},
+tick align=outside,
+tick pos=left,
+width=\figwidth,
+x grid style={white!69.0196078431373!black},
+xlabel={Task},
+x label style={at={(axis description cs:0.5,-0.36)},anchor=north},
+xmin=1.5, xmax=5.5,
+xtick style={color=black},
+xtick={2,3,4,5},
+xticklabels={2,3,4,5},
+y grid style={white!69.0196078431373!black},
+ymajorgrids,
+ylabel={\#Samples},
+ymin=0.0, ymax=8.7,
+ytick style={color=black},
+ytick={0,2, 4, 6, 8, 10},
+yticklabels={0, 2, 4, 6, 8, 10}
+]
+
+\addplot [draw=black, fill=color0] coordinates {
+(2,2)
+(3,2)
+(4,2)
+(5,2)
+};\addlegendentry{Ours}
+
+\addplot [draw=black, fill=color1] coordinates {
+(2,2)
+(3,4)
+(4,6)
+(5,8)
+};\addlegendentry{Baselines}
+
+\end{axis}
+
+\end{tikzpicture}

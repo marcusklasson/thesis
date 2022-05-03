@@ -34,4 +34,12 @@ If you get this error "Package pdftex.def Error: File `KTHLogo-eps-converted-to.
 sudo apt install texlive-font-utils
 ```
 
+## Using separate References using multibib package 
+I had many issues with fixing using separate references in each chapter.
+
+Now I have to remove all .aux files in order to get the references to work. 
+Maybe all this is works out fine in Overleaf? It seemed to do so for Taras.
+
+I think also that I should contribute to RPL with an overleaf template of this solution 
+if I can make it work with Ioanna's files and the multibib package.
 
