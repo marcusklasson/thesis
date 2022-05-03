@@ -1,8 +1,9 @@
-\section{Classification Methods}\label{paperA:sec:classification-methods}
+\section{Classification Methods}\label{paperA:sec:classification_methods}
 
 We here describe the classification methods and approaches that we have used to provide benchmark results to the dataset. We apply both deterministic deep neural networks as well as a deep generative model used for representation learning to the natural images that we have collected. Furthermore, we utilize the additional information -- iconic images -- from our dataset with a multi-view deep generative model. This model can utilize different data sources and obtain superior representation quality as well as high interpretability. For a fair evaluation, we use a linear classifier with the learned representation from the different methods.
 
-\paragraph*{Deep Neural Networks.} 
+\vspace{-3mm}
+\paragraph{Deep Neural Networks.} 
 CNNs have been the state-of-the-art models in image classification ever since AlexNet \citeA{paperA:krizhevsky2012imagenet} achieved the best classification accuracy in ILSVRC in 2012.
 However, in general, computer vision models require lots of labeled data to achieve satisfactory performance, which has resulted in interest for adapting CNNs that have already been trained on a large amount of training data to other image datasets. When adapting pretrained CNNs to new datasets, we can either use it directly as a feature extractor, a.k.a use the off-the-shelf features,~\citeA{paperA:donahue2014decaf, paperA:razavian2014cnnfeatures}, or fine-tune it~\citeA{paperA:Girshick2014rich-feature-hierarchies, paperA:oquab2014learning-and-transferring, paperA:pan2010transferlearning, paperA:yosinski2014transferable, paperA:Zhang2014PartbasedRCNN}. Using off-the-shelf features, we need to specify which feature representation we should extract from the network and use these for training a new classifier. Fine-tuning a CNN involves adjusting the pretrained model parameters, such that the network can e.g. classify images from a dataset different from what the CNN was trained on before. We can either choose to fine-tune the whole network or select some layer parameters to adjust while keeping the others fixed. One important factor on deciding which approach to choose is the size of the new dataset and how similar the new dataset is to the dataset which the CNN was previously trained on. A rule of thumb here is that the closer the features are to the classification layer, the features become more specific to the training data and task \citeA{paperA:yosinski2014transferable}. 
 
@@ -30,6 +31,36 @@ VAE is a probabilistic framework. Many extensions such as utilizing structured p
 %Another advantage is that VAEs can be extended to multimodal data and learn joint latent representations between data pairs, such as image--text or image--image. 
 In the following method, we describe how to make use of the iconic images while retaining the unsupervised learning setting in VAEs.
 
+\begin{figure}[t]
+	\centering
+	\begin{subfigure}[b]{0.35\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{PaperA/figures/cnn.pdf}
+		%\vspace{-7mm}
+		\caption{}
+		\label{subfig:cnn}
+	\end{subfigure} ~
+	\begin{subfigure}[b]{0.6\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{PaperA/figures/cnn+vae.pdf}
+		%\vspace{-7mm}
+		\caption{}
+		\label{subfig:cnn+vae}
+	\end{subfigure} \\
+	\begin{subfigure}[b]{0.7\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{PaperA/figures/vae-cca.pdf}
+		%\vspace{-7mm}
+		\caption{}
+		\label{subfig:vae-cca}
+	\end{subfigure}
+	%\subfigure[CNN]{\label{subfig:cnn}\includegraphics[width=0.35\textwidth]{PaperA/figures/cnn.pdf}} 
+	%\subfigure[VAE]{\label{subfig:cnn+vae}\includegraphics[width=0.6\textwidth]{PaperA/figures/cnn+vae.pdf}}
+	%\subfigure[VAE-CCA]{\label{subfig:vae-cca}\includegraphics[width=0.7\textwidth]{PaperA/figures/vae-cca.pdf}}
+	\caption{The architectures for the classification methods described in Section \ref{paperA:sec:classification_methods}. In this paper, we use either a pretrained AlexNet, VGG16 or DenseNet-169 as the CNN feature extractor, but it may be replaced with any CNN architecture. Note that the pretrained CNN can be fine-tuned. The encoder and decoder of the VAE in \ref{subfig:cnn+vae} consist of two fully-connected layers. VAE-CCA in \ref{subfig:vae-cca} uses the DCGAN architecture as an iconic image decoder and the same encoder and feature vector decoder as the VAE.   }
+	\label{fig:classification-methods}
+\end{figure}
+
 \vspace{-3mm}
 \paragraph{Utilizing iconic images with multi-view VAEs.}
 Utilizing extra information has shown to be useful in many applications with various model designs~\citeA{paperA:butepage2018Inform, paperA:vedantam2018generative, paperA:vinyals2015show, paperA:wang2016vcca, paperA:zhang2016inter}. For computer vision tasks, natural language is the most commonly used modality to aid the visual representation learning. However, the consistency of the language and visual embeddings has no guarantee. As an example with our dataset, the product description of a Royal Gala apple explains the appearance of a red apple. But if the description is represented with word embeddings, e.g. word2vec \citeA{paperA:mikolov2013distributedrepresentations}, the word 'royal' will probably be more similar to the words 'king' and 'queen' than 'apple'. Therefore, if available, additional visual information about objects might be more beneficial for learning meaningful representations instead of text. In this work, with our collected dataset, we propose to utilize the iconic images for the representation learning of natural images using a multi-view VAE. Since the natural images can include background noise and grocery items different from the targeted one, the role of the iconic image will be to guide the model to which features that are of interest in the natural image.
@@ -44,38 +75,6 @@ The VAE can be extended to modeling multiple views of data, where a latent varia
 \end{align}  
 This model is referred to as variational autoencoder canonical correlation analysis (VAE-CCA) and was introduced in \citeA{paperA:wang2016vcca}. The main motivation for using VAE-CCA is that the latent representations need to contain information about reconstructing both natural and iconic images.
 The main motivation for using VAE-CCA is that 
-the latent representation needs to preserve information about how both the natural and iconic images are reconstructed. This also allows us to produce iconic images from new natural images to enhance the interpretability of the latent representation of VAE-CCA (see Section \ref{paperA:sec:experimental-results}) \citeA{paperA:vedantam2018generative}.
+the latent representation needs to preserve information about how both the natural and iconic images are reconstructed. This also allows us to produce iconic images from new natural images to enhance the interpretability of the latent representation of VAE-CCA (see Section \ref{paperA:sec:experimental_results}) \citeA{paperA:vedantam2018generative}.
 
-%\begin{comment}
-	
-\begin{figure}[t]
-    \centering
-    \begin{subfigure}[b]{0.35\textwidth}
-    	\centering
-    	\includegraphics[width=\textwidth]{PaperA/figures/cnn.pdf}
-    	%\vspace{-7mm}
-    	\caption{}
-    	\label{subfig:cnn}
-    \end{subfigure} ~
-    \begin{subfigure}[b]{0.6\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{PaperA/figures/cnn+vae.pdf}
-		%\vspace{-7mm}
-		\caption{}
-		\label{subfig:cnn+vae}
-	\end{subfigure} \\
-    \begin{subfigure}[b]{0.7\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{PaperA/figures/vae-cca.pdf}
-		%\vspace{-7mm}
-		\caption{}
-		\label{subfig:vae-cca}
-	\end{subfigure}
-    %\subfigure[CNN]{\label{subfig:cnn}\includegraphics[width=0.35\textwidth]{PaperA/figures/cnn.pdf}} 
-    %\subfigure[VAE]{\label{subfig:cnn+vae}\includegraphics[width=0.6\textwidth]{PaperA/figures/cnn+vae.pdf}}
-    %\subfigure[VAE-CCA]{\label{subfig:vae-cca}\includegraphics[width=0.7\textwidth]{PaperA/figures/vae-cca.pdf}}
-    \caption{The architectures for the classification methods described in Section \ref{paperA:sec:classification-methods}. In this paper, we use either a pretrained AlexNet, VGG16 or DenseNet-169 as the CNN feature extractor, but it may be replaced with any CNN architecture. Note that the pretrained CNN can be fine-tuned. The encoder and decoder of the VAE in \ref{subfig:cnn+vae} consist of two fully-connected layers. VAE-CCA in \ref{subfig:vae-cca} uses the DCGAN architecture as an iconic image decoder and the same encoder and feature vector decoder as the VAE.   }
-    \label{fig:classification-methods}
-\end{figure}
 
-%\end{comment}
