@@ -32,13 +32,19 @@ To the best of our knowledge, there is a lack of efficient methods for applying 
 
 \section{Future Directions}\label{chap5:sec:future_directions}
 
-In this section, we discuss two future directions that we believe are important to advance assistive vision technologies. First, we discuss the importance of having a disability-first mindset when conducting research towards useful technology for assisting the visually impaired~\cite{theodorou2021disability}. Secondly, we suggest future researchers in machine learning and computer vision to work with federated learning~\cite{li2020federated} applied to assistive vision devices to enhance the robustness in their image recognition performance. 
+In this section, we discuss two future directions that we believe are important to advance assistive vision technologies. First, we suggest future researchers in machine learning and computer vision to work with federated learning~\cite{li2020federated} applied to assistive vision devices to enhance the robustness in their image recognition performance. Secondly, we highlight the importance of involving visually impaired (VI) people throughout research processes to enhance the usefulness of the next generation of assistive vision technologies.  
 
 %\begin{itemize}
 %	\item Video data for object recognition instead of images for making systems easier to use. And use a disability-first approach when collecting the data
 %	\item Federated Learning for decentralizing model updates 
 	%\item Uncertainty Quantification - How to make the classifiers trustworthy?
 %\end{itemize}
+
+\subsection{Federated Learning}
+
+In recent years, there has been a growing interest for federated learning~\cite{li2020federated} in the machine learning community. Federated learning involves leveraging the storage and computational capabilities of remote devices, such as mobile phones, for training local models while keeping the data on the device to preserve privacy. We give an example scenario in the context of assistive vision where Alice and Bob are grocery shopping in a supermarket using an assistive vision app installed on their personal smartphones. Alice needs to buy milk and wants to recognize a milk package held in her hand. She capture several frames of the milk package by recording a video with the camera that is processed in the app. However, the app responds that this milk package is an unknown item since this type of milk brand is new in the supermarket. Alice asks Charles the clerk what item she is holding, gets help with updating her app with the new milk class from Charles, and purchases the milk. The next day, Bob does his grocery shopping in the same supermarket as Alice. Bob is curious about a new milk package he has never seen before, which is of the same class as the milk Alice bought the day before. Charles app can successfully recognize the correct class of the milk package although this is the first time Bob and his app encounters this type of milk. How is this possible?
+
+
 
 
 \subsection{Disability-First Approach in Development of Assistive Vision Technologies}
@@ -82,7 +88,7 @@ What is it that the target users want exactly? Collaborate with VI people, exper
 
 
 
-\subsection{Federated Learning}
+
 
 
 
