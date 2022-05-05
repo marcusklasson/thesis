@@ -1,9 +1,9 @@
 
-\begin{figure*}[t]
+\begin{figure}[t]
   \centering
   \setlength{\figwidth}{0.28\textwidth}
   \setlength{\figheight}{.13\textheight}%{.12\textheight}
-  \input{figures/acc_over_memory_size_100iters/acc_over_memory_size_groupplot}
+  \input{PaperC/figures/acc_over_memory_size_100iters/acc_over_memory_size_groupplot}
   \vspace{-4mm}
   \caption{Average test accuracies over tasks after learning the final task (ACC) over different replay memory sizes $M$ for the RS-MCTS (Ours) and the Random, ETS, and Heuristic baselines on all datasets.
   All results have been averaged over 5 seeds. The results show that replay scheduling can outperform replaying with random and ETS schedules, %equal task proportions,
@@ -11,5 +11,5 @@
   }
   \vspace{-3mm}
   \label{fig:acc_over_replay_memory_size}
-\end{figure*}
+\end{figure}
 

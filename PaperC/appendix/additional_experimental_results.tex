@@ -18,7 +18,7 @@ We emphasize that even on datasets with few tasks, using learned replay schedule
   \centering
   \setlength{\figwidth}{0.25\textwidth}
   \setlength{\figheight}{.14\textheight}
-  \input{appendix/figures/bubble_plots/mnist/seed3/mnist_accuracy_and_bubble_plot}
+  \input{PaperC/appendix/figures/bubble_plots/mnist/seed3/mnist_accuracy_and_bubble_plot}
   \vspace{-3mm}
   \caption{ Comparison of test classification accuracies for Task 1-5 on Split MNIST from a network trained without replay (Fine-tuning), ETS, and RS-MCTS. The ACC metric for each method is shown on top of each figure. We also visualize the replay schedule found by RS-MCTS as a bubble plot to the right. The memory size is set to $M=10$ with uniform memory selection for ETS and RS-MCTS. Results are shown for 1 seed. 
   }
@@ -39,7 +39,7 @@ where $A_{t, i}$ is the test accuracy for task $t$ after learning task $i$. Tabl
 \subsection{Applying Scheduling to Recent Replay Methods}
 \label{app:apply_scheduling_to_recent_replay_methods}
 
-In Section \ref{sec:applying_scheduling_to_recent_replay_methods}, we showed that RS-MCTS can be applied to any replay method. We combined RS-MCTS together with four recent replay methods, namely Hindsight Anchor Learning (HAL)~\citep{chaudhry2021using}, Meta Experience Replay (MER)~\citep{riemer2018learning}, and Dark Experience Replay (DER)~\citep{buzzega2020dark}. Table \ref{tab:bwt_sota_models_applied_to_rsmcts} shows the ACC and BWT for all methods combined with the scheduling from Random, ETS, Heuristic, and RS-MCTS. We observe that RS-MCTS can further improve the performance for each of the replay methods across the different datasets.  
+In Section \ref{sec:applying_scheduling_to_recent_replay_methods}, we showed that RS-MCTS can be applied to any replay method. We combined RS-MCTS together with four recent replay methods, namely Hindsight Anchor Learning (HAL)~\citeC{C:chaudhry2021using}, Meta Experience Replay (MER)~\citeC{C:riemer2018learning}, and Dark Experience Replay (DER)~\citeC{C:buzzega2020dark}. Table \ref{tab:bwt_sota_models_applied_to_rsmcts} shows the ACC and BWT for all methods combined with the scheduling from Random, ETS, Heuristic, and RS-MCTS. We observe that RS-MCTS can further improve the performance for each of the replay methods across the different datasets.  
 
 \paragraph{Hyperparameters.} We present the hyperparameters used for each method below. We used the same architectures and hyperparameters as described in Appendix \ref{app:experimental_settings} for all datasets if not mentioned otherwise. We used the Adam optimizer with learning rate $\eta=0.001$ for MER, DER, and DER++. For HAL, we used the SGD optimizer since using Adam made the model diverge in our experiments.  
 
@@ -85,11 +85,11 @@ In Section \ref{sec:applying_scheduling_to_recent_replay_methods}, we showed tha
 
 
 %%% TABLE
-\input{appendix/tables/table_bwt_alternative_memory_selection}
+\input{PaperC/appendix/tables/table_bwt_alternative_memory_selection}
 
-\input{appendix/tables/table_bwt_efficiency_replay_scheduling}
+\input{PaperC/appendix/tables/table_bwt_efficiency_replay_scheduling}
 
-\input{appendix/tables/table_apply_scheduling_to_recent_replay_methods}
+\input{PaperC/appendix/tables/table_apply_scheduling_to_recent_replay_methods}
 
 %\clearpage
 %\clearpage
