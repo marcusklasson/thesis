@@ -54,14 +54,25 @@ There are many interesting challenges that remains to tackle in federated learni
 
 This section is for encouraging future researchers in computer vision and machine learning to have their target user in mind for projects motivated by real-world applications such as assistive technologies. In general, there seems to be consensus between computer vision researchers and the visually impaired (VI) that combining computer vision with assistive technologies have several benefits to ease everyday life for VI people. The past years, there has been an increasing interest of deploying computer vision and machine learning models on mobile devices. Additionally, it is well-known that VI people use mobile phones, including the camera to record events, and want help with object recognition and navigation. Even if the combination is evidently a good fit, researchers should keep VI people involved throughout the process to ensure that the developed technology is requested and, in fact, useful for blind/low-vision people. An example of close collaboration between the two communities is the collection of the recent ORBIT dataset~\cite{massiceti2021orbit, theodorou2021disability} where the data collection was performed by blind/low-vision participants. They take on a \textit{disability-first approach} in the process to produce good quality dataset that should primarily serve the VI community by continuously engaging with and supporting the participants to balance the usefulness versus the effort of data to be collected~\cite{theodorou2021disability}. Involving VI users in the research process should provide benefits on for both the VI users as well as the vision community by bringing insights on how to build more robust image recognizers. 
 
+Aspects on usefulness, fairness, and privacy needs to be considered when developing assistive vision technologies. Regarding usefulness, it will be important to engage with VI people and people from technical disciplines, such as human-computer interaction and user experience designers, to understand what VI people want their app to assist them with and how to build functionality to achieve those goals. For computer vision researchers, we have seen that the models suffer from biases that can disadvantage users based on their gender and geographical location. Such challenges on fairness and various types of distribution shifts will be crucial to tackle for establishing trust in image recognition systems for practitioners. Furthermore, we should strive for developing privacy-preserving systems to avoid unintended leakages of user-sensitive information. However, we also need to take into account the point-of-view of bystanders and whether they are comfortable with being photographed by mobile and wearable devices. This aspect has been studied recently, however, it is still non-trivial how to approach users and ask them to stop using their device. This matter of privacy of assistive vision users and surrounding people should be further discussed with experts on AI ethics in addition to computer vision researchers and VI people. 
 
-has raised the question whether computer vision works equally for everyone.   
 
-Are models biased, fair, do they work equally well everywhere?
 
-Privacy concerns for the VI users, privacy for bystanders?
 
-What is it that the target users want exactly? Collaborate with VI people, experts on HCI and other disciplines 
+%preserve user-sensitive information 
+%Potentially, we may be able to mitigate such fairness issues by taking greater care in dataset collections by involving VI people
+
+%there are several challenges on biased datasets and fairness in models that need to be tackled to achieve object recognition that works equally well for everyone. 
+ 
+
+
+%has raised the question whether computer vision works equally for everyone.   
+
+%Are models biased, fair, do they work equally well everywhere?
+
+%Privacy concerns for the VI users, privacy for bystanders?
+
+%What is it that the target users want exactly? Collaborate with VI people, experts on HCI and other disciplines 
 
 
 %but secondly be possible to generalize to applications for serve all people~\cite{theodorou2021disability}. 
