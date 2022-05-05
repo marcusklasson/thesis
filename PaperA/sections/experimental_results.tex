@@ -1,10 +1,10 @@
-\section{Experimental Results}\label{sec:experimental-results}
+\section{Experimental Results}\label{paperA:sec:experimental_results}
 
-We apply the three different types of models described in Section \ref{sec:classification-methods} to our dataset and evaluate their performance. The natural images are propagated through a CNN pretrained on ImageNet to extract feature vectors. We experiment with both the off-the-shelf features as well as fine-tuning the CNN. When using off-the-shelf features, we simply extract feature vectors and train an SVM on those. For the fine-tuned CNN, we report both results from the softmax classifier used in the actual fine-tuning procedure and training an SVM with extracted fine-tuned feature vectors.  
+We apply the three different types of models described in Section \ref{paperA:sec:classification_methods} to our dataset and evaluate their performance. The natural images are propagated through a CNN pretrained on ImageNet to extract feature vectors. We experiment with both the off-the-shelf features as well as fine-tuning the CNN. When using off-the-shelf features, we simply extract feature vectors and train an SVM on those. For the fine-tuned CNN, we report both results from the softmax classifier used in the actual fine-tuning procedure and training an SVM with extracted fine-tuned feature vectors.  
 
-These extracted feature vectors are also used for VAE and VAE-CCA which makes further compression. We perform classification for those VAE based models by training a classifier, e.g. an SVM, on the data encoded into the latent representation. We use this classification approach for both VAE and VAE-CCA. In all classification experiments, except when we fine-tune the CNN, we use a linear SVM trained with the one-vs-one approach as in \cite{razavian2014cnnfeatures}.
+These extracted feature vectors are also used for VAE and VAE-CCA which makes further compression. We perform classification for those VAE based models by training a classifier, e.g. an SVM, on the data encoded into the latent representation. We use this classification approach for both VAE and VAE-CCA. In all classification experiments, except when we fine-tune the CNN, we use a linear SVM trained with the one-vs-one approach as in \citeA{paperA:razavian2014cnnfeatures}.
 
-We experiment with three different pretrained CNN architectures, namely AlexNet \cite{krizhevsky2012imagenet}, VGG16 \cite{simonyan2014verydeep} and DenseNet-169 \cite{huang2017densely}. For AlexNet and VGG16, we extract feature vectors of size 4096 from the two last fully connected (FC) layers before the classification layer. The features from the $n^{\text{th}}$ hidden layer are denoted as $\text{AlexNet}_{n}$ and $\text{VGG16}_{n}$. As an example, the last hidden FC layer in AlexNet is denoted as $\text{AlexNet}_{7}$, the input of which is output from $\text{AlexNet}_{6}$. For DenseNet-169, we extract the features of size 1664 from the average pooling layer before its classification layer.
+We experiment with three different pretrained CNN architectures, namely AlexNet \citeA{paperA:krizhevsky2012imagenet}, VGG16 \citeA{paperA:simonyan2014verydeep} and DenseNet-169 \citeA{paperA:huang2017densely}. For AlexNet and VGG16, we extract feature vectors of size 4096 from the two last fully connected (FC) layers before the classification layer. The features from the $n^{\text{th}}$ hidden layer are denoted as $\text{AlexNet}_{n}$ and $\text{VGG16}_{n}$. As an example, the last hidden FC layer in AlexNet is denoted as $\text{AlexNet}_{7}$, the input of which is output from $\text{AlexNet}_{6}$. For DenseNet-169, we extract the features of size 1664 from the average pooling layer before its classification layer.
 
 %\renewcommand{\arraystretch}{1.2}
 \begin{table}[t]
@@ -33,6 +33,8 @@ We experiment with three different pretrained CNN architectures, namely AlexNet 
     \end{tabular} }
     \label{tab:results-fine-grained}
 \end{table}
+
+\begin{comment}
 
 %\renewcommand{\arraystretch}{1.2}
 \begin{table}[t]
@@ -78,27 +80,81 @@ We experiment with three different pretrained CNN architectures, namely AlexNet 
 \label{tab:results-finetuned-cnn}
 \end{table}
 
+	content...
+\end{comment}
+
+
+
 
 \subsection{Experimental Setups}\label{subsec:experimental-setups}
 
 The following setups were used in the experiments: 
 
+\vspace{-2mm}
+\paragraph{Setup 1.} Train an SVM on extracted off-the-shelf features from a pretrained CNN, which is denoted as SVM in the results. We also fine-tune the CNN by replacing the final layer with a new softmax layer and denote these results as Fine-tune. We denote training an SVM on extracted finetuned feature vectors as SVM-ft.
 
-\paragraph*{Setup 1.} Train an SVM on extracted off-the-shelf features from a pretrained CNN, which is denoted as SVM in the results. We also fine-tune the CNN by replacing the final layer with a new softmax layer and denote these results as Fine-tune. We denote training an SVM on extracted finetuned feature vectors as SVM-ft.
+\vspace{-2mm}
+\paragraph{Setup 2.} Extract feature vectors with a pretrained CNN of the natural images and learn a latent representation $\mathbf{z}$ with a VAE. Then the data is encoded into the latent space and we train an SVM with these latent representations, which used for classification. We denote the results as VAE+SVM when using off-the-shelf feature vectors, whereas using the fine-tuned feature vectors are denoted as VAE+SVM-ft. In all experiments with the VAE, we used the architecture from \citeA{paperA:sohn2015conditionalvae}, i.e. the latent layer having 200 hidden units and both encoder and decoder consisting of two FC layers with 1,000 hidden units each.
 
-
-\paragraph*{Setup 2.} Extract feature vectors with a pretrained CNN of the natural images and learn a latent representation $\mathbf{z}$ with a VAE. Then the data is encoded into the latent space and we train an SVM with these latent representations, which used for classification. We denote the results as VAE+SVM when using off-the-shelf feature vectors, whereas using the fine-tuned feature vectors are denoted as VAE+SVM-ft. In all experiments with the VAE, we used the architecture from \cite{sohn2015conditionalvae}, i.e. the latent layer having 200 hidden units and both encoder and decoder consisting of two FC layers with 1,000 hidden units each.
-
-\paragraph*{Setup 3.} Each natural image is paired with its corresponding iconic image. We train VAE-CCA similarly as the VAE, but instead, we learn a joint latent representation that is used to reconstruct the extracted feature vectors $\mathbf{x}$ and the iconic images $\mathbf{y}$. The classification is performed with the same steps as in Setup 2 and denotes the results similarly with VAE-CCA+SVM and VAE-CCA+SVM-ft. Our VAE-CCA model takes the feature vectors $\mathbf{x}$ as input and encodes them into a latent layer with 200 hidden units. The encoder and the feature vector decoder uses the same architecture, i.e. two FC layers with 512 hidden units, whereas the iconic image decoder uses the DCGAN \cite{radford2015unsupervised} architecture.
+\vspace{-2mm}
+\paragraph{Setup 3.} Each natural image is paired with its corresponding iconic image. We train VAE-CCA similarly as the VAE, but instead, we learn a joint latent representation that is used to reconstruct the extracted feature vectors $\mathbf{x}$ and the iconic images $\mathbf{y}$. The classification is performed with the same steps as in Setup 2 and denotes the results similarly with VAE-CCA+SVM and VAE-CCA+SVM-ft. Our VAE-CCA model takes the feature vectors $\mathbf{x}$ as input and encodes them into a latent layer with 200 hidden units. The encoder and the feature vector decoder uses the same architecture, i.e. two FC layers with 512 hidden units, whereas the iconic image decoder uses the DCGAN \citeA{paperA:radford2015unsupervised} architecture.
 
 Figure \ref{fig:classification-methods} displays the three experimental setups described above. We report both fine-grained and coarse-grained classification results with an SVM in Table \ref{tab:results-fine-grained} and \ref{tab:results-coarse-grained} respectively. In Table \ref{tab:results-finetuned-cnn}, we report the fine-grained classification results from fine-tuned CNNs.
 
 When fine-tuning the CNNs,
-we replace the final layer with a softmax layer applicable to our dataset with randomly initialized weights drawn from a Gaussian with zero mean and standard deviation $0.01$~\cite{Zhang2014PartbasedRCNN}. 
+we replace the final layer with a softmax layer applicable to our dataset with randomly initialized weights drawn from a Gaussian with zero mean and standard deviation $0.01$~\citeA{paperA:Zhang2014PartbasedRCNN}. 
 For AlexNet and VGG16, we fine-tune the networks for 30 epochs with two different learning rates, 0.01 for the new classification layer and 0.001 for the pretrained layers. Both learning rates are reduced by half after every fifth epoch. The DenseNet-169 is fine-tuned for 30 epochs with momentum of $0.9$ and an initial learning rate of 0.001, which decays with $10^{-6}$ after each epoch. We report the classification results from the softmax activation after the fine-tuned classification layer. 
 We also report classification results from an SVM trained with feature representations from a fine-tuned CNN, which are extracted from FC6 and FC7 of the AlexNet and VGG16 and from the last average pooling layer in DenseNet-169.
 
-The VAE and VAE-CCA models are trained for 50 epochs with Adam \cite{kingma2015adam} for optimizing the ELBOs in Equation \ref{eq:vae-loss} and \ref{eq:vcca-loss} respectively. We use a constant learning rate of 0.0001 and set the minibatch size to 64. The extracted feature vectors are rescaled with standardization before training the VAE and VAE-CCA models to stabilize the learning.
+The VAE and VAE-CCA models are trained for 50 epochs with Adam \citeA{paperA:kingma2015adam} for optimizing the ELBOs in Equation \ref{eq:vae-loss} and \ref{eq:vcca-loss} respectively. We use a constant learning rate of 0.0001 and set the minibatch size to 64. The extracted feature vectors are rescaled with standardization before training the VAE and VAE-CCA models to stabilize the learning.
+
+
+\begin{table}
+	\parbox{.65\textwidth}{
+		\centering
+		%\captionsetup
+		\caption{Coarse-grained classification (46 classes) accuracies with an SVM for the methods described in Section \ref{subsec:experimental-setups} that uses off-the-shelf feature representations. Each row displays from network architecture and layer that we extracted the feature vectors of the natural images and the columns show the result for the classification methods. }
+		\label{tab:results-coarse-grained}
+		\vspace{-3mm}
+		\resizebox{0.6\textwidth}{!}{%
+			\begin{tabular}{c ccc}
+				\hline %\Xhline{3\arrayrulewidth}
+				& SVM & VAE+SVM & VAE-CCA+SVM  \\
+				\hline %\Xhline{3\arrayrulewidth}
+				\rowcolor{gray!25}
+				$\text{AlexNet}_{6}$ & 78.0 & 74.2 & 76.4  \\ 
+				$\text{AlexNet}_{7}$ & 75.4 & 73.2 & 74.4  \\ 
+				\rowcolor{gray!25}
+				$\text{VGG16}_{6}$ &  76.6 & 74.2 & 74.9  \\ 
+				$\text{VGG16}_{7}$ & 72.8 & 71.7 & 72.3  \\
+				\rowcolor{gray!25}
+				$\text{DenseNet-169}$ & 85.2 & 79.5 & 82.0 \\
+				\hline %\Xhline{3\arrayrulewidth}
+		\end{tabular} }
+		%\caption{Foo}
+	}
+	\hfill
+	\parbox{.30\textwidth}{
+		\centering
+		\caption{Fine-grained classification accuracies from fine-tuned CNNs pretrained on ImageNet, where the column shows which architecture that has been fine-tuned. A standard softmax layer is used as the last %classification 
+			layer.}
+		\label{tab:results-finetuned-cnn}
+		\vspace{-3mm}
+		\resizebox{0.30\textwidth}{!}{%
+			\begin{tabular}{c c}
+				\hline
+				%\Xhline{3\arrayrulewidth}
+				& Fine-tune \\% AlexNet & VGG16 & DenseNet-169 \\
+				\hline 
+				\rowcolor{gray!25}
+				AlexNet &  69.3 \\
+				VGG16 & 73.8 \\
+				\rowcolor{gray!25}
+				DenseNet-169 & 84.0  \\
+				\hline %\Xhline{3\arrayrulewidth}
+		\end{tabular} }
+	}
+\end{table}
 
 \subsection{Results}
 
