@@ -10,17 +10,17 @@ We use Monte Carlo tree search (MCTS)~\citeC{C:coulom2006efficient} to learn a s
 \input{PaperC/sections/method/problem_setting}
 
  %%% RS-MCTS EXAMPLE FIGURE 
-\begin{figure*}[t]
+\begin{figure}[t]
 \centering 
 \setlength{\figwidth}{.77\textwidth}
 \setlength{\figheight}{.3\textheight}
 \input{PaperC/figures/rs_mcts_tree_example2}
 \vspace{-2mm}
-\caption{An exemplar tree of replay memory compositions from the proposed discretization method described in Section \ref{sec:replay_scheduling_in_continual_learning} for Split MNIST. The replay memories from one replay schedule are found by traversing from task 1-5 through the tree on the right hand side. The replay memory compositions have been structured according to the task where they can be used for replay. Note that the replay memory at task 1 is the empty set, i.e., $\gM = \emptyset$. Example images for each task are shown on the left.
+\caption{An exemplar tree of replay memory compositions from the proposed discretization method described in Section \ref{paperC:sec:replay_scheduling_in_continual_learning} for Split MNIST. The replay memories from one replay schedule are found by traversing from task 1-5 through the tree on the right hand side. The replay memory compositions have been structured according to the task where they can be used for replay. Note that the replay memory at task 1 is the empty set, i.e., $\gM = \emptyset$. Example images for each task are shown on the left.
 }
 \vspace{-3mm}
 \label{fig:replay_scheduling_mcts_tree_example}
-\end{figure*}
+\end{figure}
 
 \input{PaperC/sections/method/replay_scheduling_in_continual_learning}
 
