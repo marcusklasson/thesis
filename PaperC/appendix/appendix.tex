@@ -4,13 +4,13 @@
 \section*{Appendix}
 This supplementary material is structured as follows: 
 \begin{itemize}
-    \item Appendix \ref{app:experimental_settings}: Full details of the experimental settings.
-    \item Appendix \ref{app:rs_mcts_algorithm}: Pseudocode of RS-MCTS in Algorithm \ref{alg:replay_scheduling_mcts} to provide more details about our method. 
-    \item Appendix \ref{app:heuristic_scheduling_baseline} describes the Heuristic scheduling baseline.
-    \item Appendix \ref{app:additional_experimental_results} shows additional experimental results. 
-    \item Appendix \ref{app:additional_figures} includes additional figures. 
-    \item Our code is provided in the zip-file {\footnotesize \texttt{code\_replay\_scheduling\_mcts\_icml22.zip}} 
-    as part of the supplementary material and will be made publicly available upon acceptance. 
+    \item Appendix \ref{paperC:app:experimental_settings}: Full details of the experimental settings.
+    \item Appendix \ref{paperC:app:rs_mcts_algorithm}: Pseudocode of RS-MCTS in Algorithm \ref{alg:replay_scheduling_mcts} to provide more details about our method. 
+    \item Appendix \ref{paperC:app:heuristic_scheduling_baseline} describes the Heuristic scheduling baseline.
+    \item Appendix \ref{paperC:app:additional_experimental_results} shows additional experimental results. 
+    \item Appendix \ref{paperC:app:additional_figures} includes additional figures. 
+    \item Our code %is provided in the zip-file {\footnotesize \texttt{code\_replay\_scheduling\_mcts\_icml22.zip}} as part of the supplementary material and 
+    will be made publicly available upon acceptance. 
 \end{itemize}
 
 
@@ -27,28 +27,28 @@ This supplementary material is structured as follows:
 %------------------------------------------------------------------------
 %\input{appendix/additional_experiments}
 
-\clearpage 
+%\clearpage 
 
 \input{PaperC/appendix/heuristic_scheduling_baseline}
 
-\clearpage 
+%\clearpage 
 
 
 \input{PaperC/appendix/additional_experimental_results}
 
-\clearpage
+%\clearpage
 
-\section{Additional Figures}\label{app:additional_figures}
+\section{Additional Figures}\label{paperC:app:additional_figures}
 
-\paragraph{Memory usage.} We visualize the memory usage for Permuted MNIST and the 20-task datasets Split CIFAR-100 and Split miniImagenet in Figure \ref{fig:memory_usage_10_and_20task_datasets} for our method and the baselines used in the experiment in Section \ref{sec:efficiency_of_replay_scheduling}. Our method uses a fixed memory size of $M=50$ samples for replay on all three datasets. The memory size capacity for our method is reached after learning task 6 and task 11 on the Permuted MNIST and the 20-task datasets respectively, while the baselines continue incrementing their replay memory size.
+\paragraph{Memory usage.} We visualize the memory usage for Permuted MNIST and the 20-task datasets Split CIFAR-100 and Split miniImagenet in Figure \ref{fig:memory_usage_10_and_20task_datasets} for our method and the baselines used in the experiment in Section \ref{paperC:sec:efficiency_of_replay_scheduling}. Our method uses a fixed memory size of $M=50$ samples for replay on all three datasets. The memory size capacity for our method is reached after learning task 6 and task 11 on the Permuted MNIST and the 20-task datasets respectively, while the baselines continue incrementing their replay memory size.
 
 \begin{figure}[h]
   \centering
-  \setlength{\figwidth}{0.78\textwidth}
+  \setlength{\figwidth}{0.79\textwidth}
   \setlength{\figheight}{.22\textheight}
   \input{PaperC/appendix/figures/memory_usage/groupplot}
   %\vspace{-3mm}
-  \caption{Number of replayed samples per task for 10-task Permuted MNIST (top) and the 20-task datasets in the experiment in Section \ref{sec:efficiency_of_replay_scheduling}. The fixed memory size $M=50$ for our method is reached after learning task 6 and task 11 on the Permuted MNIST and the 20-task datasets respectively, while the baselines continue incrementing their number of replay samples per task.}
+  \caption{Number of replayed samples per task for 10-task Permuted MNIST (top) and the 20-task datasets in the experiment in Section \ref{paperC:sec:efficiency_of_replay_scheduling}. The fixed memory size $M=50$ for our method is reached after learning task 6 and task 11 on the Permuted MNIST and the 20-task datasets respectively, while the baselines continue incrementing their number of replay samples per task.}
   \label{fig:memory_usage_10_and_20task_datasets}
 \end{figure}
 
