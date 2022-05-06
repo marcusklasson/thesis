@@ -1,0 +1,32 @@
+
+\section{Related Work}\label{paperD:sec:related_work}
+
+%In this section, we describe works in continual learning, especially memory-based, generalization in reinforcement learning, and human learning concepts related to our method.
+
+\paragraph{Continual Learning.} One of the main goals of CL methods is to mitigate catastrophically forgetting previous tasks when learning new tasks. Approaches for retaining knowledge of previously learned tasks can be broadly divided into regularization-based methods~\citeD{D:kirkpatrick2017overcoming, D:li2017learning, D:nguyen2017variational, D:schwarz2018progress}, dynamic architectures~\citeD{D:ebrahimi2020adversarial, D:rusu2016progressive, D:yoon2017lifelong}, and memory-based methods~\citeD{D:chaudhry2019tiny, D:hayes2020remind, D:lopez2017gradient}, where the latter is the approach we focus on in this paper. Regularization-based methods put constraints on parameters important for previous tasks to mitigate forgetting and use less salient parameters for learning new tasks. Dynamic architecture approaches increase the capacity of the network by adding more parameters as new tasks are encountered. Memory-based methods mitigate forgetting by replaying samples from old tasks that are stored in a small memory buffer. This work is based on memory-based approaches, but in contrast to the traditional CL setting, we assume that we have a large amount of storage for historical data and can therefore fill the replay memory with historical data from the storage before learning new tasks~\citeD{D:klasson2021learn}. Due to processing time constraints, we need a method for selecting which historical tasks to replay at every time step.   
+
+\paragraph{Large and Changing Action Spaces in RL.} 
+Several works focus on bringing RL closer to real-world scenarios where the action spaces are large as well as can change size over time or given certain states. \citeD{D:dulac2015deep} proposes to learn action embeddings where $k$-nearest neighbors are used for selecting valid actions which the policy can select from to enable RL in large action spaces. \citeD{D:chandak2019learning} proposes to let the agent reason about which actions to take in a lower-dimensional representation space and transforms decisions in this space into actual actions which improve generalization in large action spaces when the agent infers outcomes of actions that are similar to actions already taken. \citeD{D:jain2020generalization} takes this a step further and learns action representations that should generalize to completely new actions in a zero-shot setting. \citeD{D:boutilier2018planning, chandak2020reinforcement} present how RL can be applied to stochastic action sets, while \citeD{D:chandak2020lifelong} proposes algorithms that adapt to action spaces where the set of available actions changes over time.  
+Several attempts have been made to scale up Q-learning to high-dimensional or continuous action spaces. \citeD{D:he2015deep} applies Q-learning to action spaces for natural language where the Q-function is approximated by the dot-product between state and action embeddings for measuring the relevance of performing the action. \citeD{D:van2020q} comes around the maximization over all actions by instead taking the maximization over a subset of actions sampled from a learned proposal distribution, and \citeD{D:metz2017discrete} discretizes each action dimension into bins where the maximization is performed and predicts Q-value for each dimension sequentially. 
+We assume that the structure of the action space is known as the number of tasks to replay grows linearly with every seen task. Since we also assume the task-horizon is known, we know the number of available actions at the end of the episodes which allows us to use a static architecture and use masking for selecting valid actions. 
+
+\paragraph{Generalization in RL.} 
+Generalization in RL is an active research field where much focus has been put on developing proper benchmark datasets for evaluating generalization capabilities of RL agents~\citeD{cobbe2019quantifying, cobbe2020leveraging, nichol2018gotta, yu2020meta}. 
+Regularization techniques from supervised learning have been used to investigate whether these can enhance generalization in RL~\citeD{D:cobbe2019quantifying, farebrother2018generalization, igl2019generalization}, and also how variations in the environments help to obtain agents that generalize better~\citeD{D:packer2018assessing, zhang2018dissection}. The survey by ~\citeD{D:kirk2021survey} focuses on zero-shot policy transfer where a policy is evaluated on environments different from it was trained on. Furthermore, access to rewards or additional training is disallowed in the test environments with the aim to enable RL in real-world scenarios~\citeD{D:yang2019single}. We evaluate our learned policies on the zero-shot policy transfer setting where the goal is to mitigate catastrophic forgetting in new CL scenarios. The rewards are accessible through accuracies calculated on validation datasets, however, fine-tuning the policy during CL training is prohibited.  
+
+
+%There are also works that try to learn in large action spaces and also generalize fast to new actions [add references].  
+
+%\MK{Mention zero-shot policy transfer and what it is.}
+
+
+
+%\paragraph{Human Learning.} We draw inspiration from human learning techniques, especially spaced repetition~\citep{dempster1989spacing}, in our approach for learning replay scheduling policies. 
+
+%\MK{
+%Some links on human learning and ML with spaced repetition 
+%\begin{itemize}
+%    \item Enhancing human learning via spaced repetition optimization, Tabibian et al. \url{https://www.pnas.org/content/pnas/116/10/3988.full.pdf}, \url{http://learning.mpi-sws.org/memorize/}
+%    \item Accelerating Human Learning with Deep Reinforcement Learning, Reddy et al.
+%    \item Unbounded Human Learning: Optimal Scheduling for Spaced Repetition Reddy et al. \url{https://dl.acm.org/doi/abs/10.1145/2939672.2939850}
+%\end{itemize}}

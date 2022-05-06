@@ -1,0 +1,54 @@
+
+\begin{table}[t]
+%\small
+\centering
+\caption{Average ranking (Avg. Rank) and median of rankings for training with mixed datasets and test on split FashionMNIST experiment. We train the DQN on 10 training environments (5 MNIST + 5 notMNIST) and evaluate on 10 test environments of FashionMNIST. We average the results over 5 DQNs and the 10 test environments.
+}
+\label{tab:average_ranking_fashionmnist_mixed_datasets}
+\begin{tabular}{l c c c}
+\toprule
+ & \multicolumn{3}{c}{ {\bf Split FashionMNIST}} \\
+ \cmidrule(lr){2-4}
+ {\bf Method} & Avg. Rank ($\downarrow$) & Median ($\downarrow$) & IQR \\ 
+ \midrule
+ Random         & 3.80 $\pm$ 1.71 & 4.00 & 3.00 \\
+ ETS            & 4.60 $\pm$ 1.55 & 5.00 & 2.00 \\
+ Heur-GD        & 2.56 $\pm$ 1.00 & 3.00 & 1.00 \\
+ Heur-LD        & 4.12 $\pm$ 1.61 & 5.00 & 3.75 \\
+ Heur-AT        & 2.96 $\pm$ 1.44 & 3.00 & 2.00 \\
+ \midrule
+ DQN (Ours)     & 2.96 $\pm$ 1.83 & 3.00 & 3.00 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+\begin{comment}
+\begin{table}[t]
+%\small
+\centering
+\caption{Average ranking (Avg. Rank) and median of rankings for training with mixed datasets and test on split FashionMNIST experiment. We train the DQN on 20 training envs (10 MNIST + 10 notMNIST) and evaluate on 10 test envs of FashionMNIST. We average the results over 5 DQNs and the 10 test envs.
+}
+\label{tab:train_mixed_dataset_test_fashionmnist}
+%\vspace{-1em}
+%\vskip 0.15in
+%\begin{sc}
+\begin{tabular}{l c c c}
+\toprule
+ & \multicolumn{3}{c}{ {\bf Split FashionMNIST}} \\
+ \cmidrule(lr){2-4}
+ {\bf Method} & Avg. Rank ($\downarrow$) & Median ($\downarrow$) & IQR \\ 
+ \midrule
+ Random         & 3.30 $\pm$ 1.28 & 4.00 & 2.00 \\
+ ETS            & 3.88 $\pm$ 1.21 & 4.00 & 2.00 \\
+ Heuristic1     & 2.08 $\pm$ 0.80 & 2.00 & 1.00 \\
+ Heuristic2     & 2.96 $\pm$ 1.50 & 3.00 & 2.00 \\
+ \midrule
+ DQN (Ours)     & 2.78 $\pm$ 1.50 & 3.00 & 3.00 \\
+\bottomrule
+\end{tabular}
+%\end{sc}
+\vskip -0.1in
+\end{table}
+\vspace{-3mm}
+\end{comment}

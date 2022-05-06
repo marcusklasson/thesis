@@ -1,0 +1,265 @@
+
+\section{Experiments}\label{paperD:sec:experiments}
+%\CZ{Add illustration of learned policy and explain the insights.}
+%\CZ{If time allows, we should add more experiments and baselines such as the ones that we used in the ICLR paper. But focus on finishing the minimum submit-able version first.   }
+%To-Do:
+%Finalize experiments in the paper 
+%Add 2 heurist baseline;
+%Keep protentialy one setting dense/sparse; delta/nodetla; and put the other as setting study either in paper or in appendix 
+%Finalize MNIST with different slits
+%Finalize The mixed dataset
+%Rank Table + policy illustration
+%Add A colour dataset
+%always write paper
+
+
+We perform two experiments to evaluate how well the learned replay scheduling policy can generalize to new CL scenarios. First, we investigate whether the policy can be applied to environments with new dataset task splits which are different from the splits that the policy was trained on. Secondly, we study if the policy can be applied to environments with new datasets than it was originally trained on. 
+We run experiments on CL datasets of $T=5$ tasks to have a discrete action space of reasonable size. The replay memory size is set to $M=10$ in all experiments. We use 15\% of the training set for validation for the methods where it applies. See Appendix \ref{paperD:app:experimental_settings} for more details on the experimental settings.  
+
+For measuring the generalization performance, we use a ranking method where we calculate of average ranking of each method based on the CL performance the scheduling method achieved in each environment. We use this ranking method is used because the accuracies for measuring the CL performance differs between the environments, which can make it difficult to draw conclusions from averaging the accuracies instead of the ranks.  
+To measure the CL performance of the classifiers, we use the average test accuracy over all tasks after learning the final task, i.e.,
+\begin{align}
+    \text{ACC} = \frac{1}{T} \sum_{i=1}^{T} A_{T, i}^{(test)}.
+\end{align}
+For comparing each method across the environments, we compare the ACC achieved by each method in each environment and rank the methods in descending order of the ACC score. 
+The average ranking is then computed by taking the average over all ranking positions in every test environment for each method separately.  Moreover, we perform qualitative assessments of our method by visualizing the learned policies.
+
+%We perform experiments to answer the following questions about our method for selecting which tasks to replay: (1) How well can our method generalize to different label splits within the training data, and (2) How well can our method generalize to new datasets that are unseen during training? 
+%For (1), we train the DQN with environments including the same dataset and test on where the labels have been randomly shuffled to establish different task sequences in each environment. For (2), we train the DQN on environments with datasets that can be of two different kinds, e.g., either Split MNIST or FashionMNIST, and then evaluate how well the DQN generalizes to Split notMNIST. 
+%We set the replay memory size to $M=10$ in all experiments. We use 15\% of the training set for validation for the methods where it applies.   
+
+%%% TABLE AVERAGE RANKING
+\input{PaperD/tables/average_ranking_single_datasets}
+
+\subsection{Baselines}
+
+We compare our proposed method to five baselines for scheduling. Three of the baselines use heuristic rules for scheduling the replay tasks which are based on the intuition that forgotten tasks should be replayed. Hence, we use a validation set for selecting which task to replay for the heuristic baselines. Note that heuristic baselines skip replaying any tasks if no tasks satisfies the conditions on the validation accuracy.
+
+\vspace{-3mm}
+\paragraph{Random.} Random policy that randomly selects task proportions from the action space on how to structure the replay memory at every task. 
+
+\vspace{-3mm}
+\paragraph{Equal Task Schedule (ETS).} Policy that selects equal task proportion such that the replay memory aims to fill the memory with an equal number of samples from every seen task. 
+
+\vspace{-3mm}
+\paragraph{Heuristic Global Drop (Heur-GD).} This heuristic uses ratio constant $\tau \in [0, 1]$ representing the degree of how much the validation accuracy of a task is allowed to drop compared to a reference accuracy. The reference is the best measured validation accuracy $A_{t, i}^{(best)} = \max\{(A_{1, i}^{(val)}, \dots, A_{t, i}^{(val)})\}$ for task $i$, such that we check the task performance for task $i$ globally over time. Therefore, task $i$ is replayed if $A_{t, i} < \tau A_{t, i}^{(best)}$ after learning task $t$. 
+
+\vspace{-3mm}
+\paragraph{Heuristic Local Drop (Heur-LD).} Similar to Heur-GD, this heuristic also uses a ratio constant $\tau \in [0, 1]$ representing the degree of allowed drop in validation performance. The reference accuracy that the current accuracy is compared locally against is from the previous time step, such that we replay task $i$ when $A_{t, i} < \tau A_{t-1, i}$ after learning task $t$.
+
+\vspace{-3mm}
+\paragraph{Heuristic Accuracy Threshold (Heur-AT).} The third heuristic has a fixed threshold $\tau \in [0, 1]$ on the accuracy such that task $i$ is replayed after learning task $t$ if $A_{t, i} < \tau$.
+
+%\vspace{-3mm}
+%\paragraph{Heuristic Scheduling.} \MK{Split these into the 3 baselines that are mentioned here.} The heuristic scheduling baselines selects tasks to replay based on the intuition that forgotten tasks should be replayed. Hence, a task is replayed when its accuracy on the validation set is below a certain threshold. We use three ways for creating the threshold, where the first two are based on a ratio in performance drop and the third checks the current performance. In the ratio heuristics, the threshold is controlled by the ratio constant $\tau \in [0, 1]$ determining the degree of how much the validation accuracy of a task is allowed to drop compared to a reference accuracy. The first heuristic uses the best measured validation accuracy $A_{t, i}^{(best)} = \max\{(A_{1, i}^{(val)}, \dots, A_{t, i}^{(val)})\}$ for task $i$ as its reference, such that we check the task performance globally over time. The second heuristic uses the validation accuracy at the previous task as its reference, such that we compare the performance locally between the current and previous time step for task $t$. We name these heuristic rules Heuristic Global Drop (Heur-GD) and Heuristic Local Drop (Heur-LD) respectively. The third heuristic decides to replay a task is the current validation accuracy is below a threshold $\tau \in [0, 1]$, which we refer to Heuristic Simple (Heur-Simple). We use a grid search to find the best values for the threshold $\tau$ for all three heuristics (see details in Appendix \ref{app:experimental_settings}).
+
+
+
+\subsection{Generalization to New Continual Learning Environments}
+In this experiment, we evaluate the generalization capability of the DQN to new CL environments unseen during training. First, we compare the performance of the DQN and the scheduling baselines when they are tested on environments with task splits different from the training environments, where we evaluate each method Split MNIST~\citeD{D:lecun1998gradient} and Split CIFAR-10~\citeD{D:krizhevsky2009learning}. Secondly, we evaluate the capability of the DQN to select replay schedules to new CL datasets by training on environments with Split MNIST and Split notMNIST~\citeD{D:bulatov2011notMNIST} datasets and testing on environments with Split FashionMNIST~\citeD{D:xiao2017fashion}. We use 10 test environments for evaluating the generalization performance in all experiments where the task split is different in each environment.
+
+\input{PaperD/tables/average_ranking_mixed_datasets}
+
+Table \ref{tab:average_ranking_single_datasets} shows the average ranking across 10 testing environments for our method and the baselines when experimenting with Split MNIST and Split CIFAR-10. We also show the median and interquartile range (IQR) of the ranks for each method. Our scheduling method performs better than the Random, ETS, and Heur-GD policies and is almost on par with Heur-LD and Heur-AT on both datasets. In the CIFAR-10 experiment, we observe that the DQN has a slightly better average ranking than the Heur-LD and Heur-AT baselines. This could mean that learning the replay scheduling policy can be more beneficial than creating heuristic scheduling rules for challenging datasets where the classifiers are more sensitive to the selection of replay tasks. 
+
+Table \ref{tab:average_ranking_fashionmnist_mixed_datasets} shows the average ranking across 10 testing environments with Split FashionMNIST datasets for our method when 10 (5+5) environments of both Split MNIST and notMNIST have been used for training. We observe that the DQN is the second-best method and performs on par with Heur-AT while Heur-GD achieves the best result. Furthermore, the DQN performs significantly better than the ETS policy which shows that scheduling can outperform replay strategies that are common in memory-based CL. These results indicate that learning the replay scheduling policy is a promising approach when applying memory-based CL methods in new scenarios. 
+
+
+
+
+
+\subsection{Visualization of Learned Policies}
+\label{paperD:sec:visualization_of_learned_policies}
+
+We visualize the learned policies for the DQN to bring further insights into the advantages of learning the replay scheduling policy. We analyze the task accuracy progress and the replay schedule used for mitigating catastrophic forgetting by visualizing the schedule as a bubble plot. In the bubble plots shown in Figure \ref{fig:mnist_policy_illustration_dqn_vs_heuristic2}, the x- and y-axis shows the current and replay task respectively, and the bubbles represent the proportion of the replayed task in the replay memory at the current task. Each color of the circles corresponds to a seen task that is being replayed at the current task. The sum of all points in the circles at a current task column is fixed since the replay memory size is constant. 
+
+
+
+Figure \ref{fig:mnist_policy_illustration_dqn_vs_heuristic2} shows the task accuracy progression and replay schedules from the DQN and Heur-LD in one test environment with Split MNIST. Using the replay schedule from the DQN gives higher overall CL performance since the DQN manages to mitigate forgetting tasks 1 and 2 better than Heur-LD. The DQN decides to replay task 1 and task 2 as soon as these tasks have been learned. At task 4, the DQN decides to replay both tasks 1 and 2 which helps the classifier to retain its knowledge of task 2. However, as the classifier forgets task 1, the DQN selects to only replay task 1 at task 5 which makes the classifier improve its performance on task 1. 
+The heuristic baseline Heur-LD enables replay on tasks 3 and 5 according to its rule since the performance of task 1 and 2 has decreased below its threshold at those time steps, but the classifier forgets these tasks more than when using the learned replay schedule from the DQN. This example shows creating a good heuristic for replay scheduling can be difficult which is why learning such a policy is preferable. 
+
+In Figure \ref{fig:fashionmnist_policy_illustration_dqn_vs_heur_gd}, we further illustrate the flexibility of the learned policy when the DQN is applied to Split FashionMNIST which was unseen during training. Here, we observe that the DQN schedule exhibits a replay pattern for task 1 that is similar to spaced repetition used in human learning, which helps to achieve better performance on task 2 as the DQN only replays this task when learning task 3. This shows the benefits of learning policies for replay scheduling as this enables scheduling behaviors that would be difficult to create with heuristics.   
+
+\begin{comment}
+\input{sections/figures/policy_illustration_mnist}
+\input{sections/figures/policy_illustration_fashionmnist}
+\end{comment}
+
+%also show a pair of policy visualizations for Split CIFAR-10 and Split FashionMNIST that further illustrate the flexibility in the learned policy. In Figure \ref{fig:fashionmnist_policy_illustration_dqn_vs_heur_gd}, we observe that the DQN schedule exhibits a replay pattern for task 1 that is similar to spaced repetition used in human learning. This helps to achieve better performance on task 2 as the DQN only replays this task when learning task 3. Finally, this shows the benefits of learning the replay scheduling policy as it would be difficult to create a heuristic that enables this scheduling behavior. 
+
+%We also show a pair of policy visualizations for Split CIFAR-10 and Split FashionMNIST that further illustrate the flexibility in the learned policy. Figure \ref{fig:cifar10_policy_illustration_dqn_vs_heur_at} shows the task accuracy progression and the used replay schedules for the DQN and Heur-AT on Split CIFAR-10. In this example, the DQN schedule yields better overall performance than the heuristic since the DQN allows to replay any seen task at any time as at task 4 when task 1-3 is replayed. At task 5, the DQN decides to only replay task 1 and 2 after the accuracies for task 1 and 2 dropped more than task 3. 
+
+%due to the flexibility in the learned policy in selecting which task to replay. We see that the DQN decides to only replay task 1 and 2 at the final task after the accuracies for task 1 and 2 dropped more than task 3 after task 1-3 was replayed on task 4. Replaying task 2 when learning task 4 and 5 gives slightly better performance on task 2 at the end of learning compared to only replaying task 2 at task 5 as the heuristic had scheduled. 
+
+%In Figure \ref{fig:fashionmnist_policy_illustration_dqn_vs_heur_gd}, we observe that the DQN schedule exhibits a replay pattern for task 1 that is similar to spaced repetition used in human learning. This helps to achieve better performance on task 2 as the DQN only replays this task when learning task 3. Finally, this shows the benefits of learning the replay scheduling policy as it would be difficult to create a heuristic that enables this scheduling behavior.    
+
+
+%We also show a pair of policy visualizations for Split CIFAR-10 and Split FashionMNIST against the heuristic baselines that performed best overall for these datasets. Figure \ref{fig:cifar10_policy_illustration_dqn_vs_heur_at} shows the task accuracy progression and used replay schedules for the DQN and Heur-AT on Split CIFAR-10. In this example, the DQN schedule yields better overall performance than the heuristic due to the flexibility in the learned policy in selecting which task to replay. We see that the DQN decides to only replay task 1 and 2 at the final task after the accuracies for task 1 and 2 dropped more than task 3 after task 1-3 was replayed on task 4. Replaying task 2 when learning task 4 and 5 gives slightly better performance on task 2 at the end of learning compared to only replaying task 2 at task 5 as the heuristic had scheduled. 
+
+
+
+
+
+%%%%%%%%%%%%%%% OLD TEXT
+\begin{comment}
+
+\subsection{Generalization to Environments with New Label Splits}
+In this experiment, we evaluate the generalization capability of the DQN to unseen label sequences of Split MNIST. We use 10 Split MNIST environments for training and 5 environments for testing with different label splits than seen in the training environments. Table \ref{tab:mnist_with_new_label_splits} shows the average ranking and median of each method. We observe that the DQN performs on par with Heuristic2 scheduling which achieves the highest average ranking. 
+%We observe that the DQN achieves the best average ranking and median across all methods which shows the advantages of learning policies for replay scheduling. The baseline Heuristic2 achieves the second best ranking which indicates that scheduling the replay tasks based on their performance drop between two time steps is a strong baseline in changing label splits.    
+
+We visualize the learned policies for the DQN and Heuristic2 in Figure \ref{fig:mnist_policy_illustration_dqn_vs_heuristic2} to bring further insights to the advantages of learning the replay scheduling policy. 
+Figure \ref{fig:mnist_policy_illustration_dqn_vs_heuristic2}(top row) shows the progression of the test accuracies when using the learned policy from the DQN and the schedule from Heuristic2. 
+We also visualize the used replay schedules as bubble plots in Figure \ref{fig:mnist_policy_illustration_dqn_vs_heuristic2}(bottom row) for both methods. The x- and y-axis shows the current and replay task respectively, and the bubbles represent the proportion of the replayed task in the replay memory at the current task. Each color of the circles corresponds to a seen task that is replayed. The sum of all points of the circles at a current task column is fixed since the replay memory size is constant. 
+In this example, we observe that the DQN focuses on replaying Task 1 at all tasks except Task 4 when it replays Task 2 only. The DQN thus takes into account the performance drop for Task 1 since this task is replayed the most. Another behavior we see is that only Task 2 is replayed at Task 4 which is similar to how spaced repetition for human learning works. Potentially, the DQN has learned that memory retention becomes better when tasks are rehearsed with increasing time interval. For Heuristic2, we see that the replay is only enabled due before learning Task 3 and 5 since the performance of Task 1 and 2 decrease below the threshold at those time steps. However, even if the performances for the replayed tasks increase after replaying them, this schedule does not manage to retain the knowledge of these tasks as well as the DQN. This example shows that learning a policy for replay scheduling should be preferred over relying on heuristic rules due to the difficulty of developing a good heuristic. 
+
+%is similar to how spaced repetition works  
+
+%[[8, 2], [5, 6], [3, 1], [0, 7], [4, 9]] 
+
+\paragraph{Split CIFAR-10.} Table \ref{tab:cifar10_with_new_label_splits} shows the average ranking, median, and interquartile range (IQR) of each method. We observe that the DQN obtains the highest mean average ranking followed by Heuristic2. In Figure \ref{fig:cifar10_policy_illustration_dqn_vs_heuristic2}, we show an example of two replay schedules from DQN and Heuristic2 and their corresponding task performance progress. We observe that the DQN first focuses on replaying Task 1 and successively reduces its proportion over time as the performance of Task 2 decreases. At Task 5, we see that Task 3 is replayed more than Task 1 and 2 possibly since its performance decreased the most at the previous task. We see that Heuristic2 manages to obtain better final accuracy of Task 2, but its Task 1 performance does not reach the same as the DQN.    
+
+\end{comment}
+
+
+\begin{comment}
+\begin{table}[t]
+%\small
+\centering
+\caption{Average ranking (Avg. Rank) and median of rankings for CIFAR-10 different label split experiment. We train the DQN on 10 training envs and evaluate on 10 test envs. We average the results over 5 DQNs and the 10 test envs. \CZ{Maybe add the detailed accuracy in the appendix}. \MK{Maybe merge with Table 1. }
+}
+\label{tab:cifar10_with_new_label_splits}
+%\vspace{-1em}
+%\vskip 0.15in
+%\begin{sc}
+\begin{tabular}{l c c c}
+\toprule
+ & \multicolumn{3}{c}{{\bf Split CIFAR-10}} \\
+ \cmidrule(lr){2-4}
+ {\bf Method} & Avg. Rank ($\downarrow$) & Median ($\downarrow$) & IQR \\ 
+ \midrule
+ Random         & 3.40 $\pm$ 1.55 & 4.00 & 3.00 \\
+ ETS            & 3.26 $\pm$ 1.61 & 3.50 & 3.00 \\
+ Heuristic1     & 3.16 $\pm$ 1.14 & 3.00 & 1.75 \\
+ Heuristic2     & 2.64 $\pm$ 1.09 & 3.00 & 2.00 \\
+ \midrule
+ DQN (Ours)     & 2.54 $\pm$ 1.39 & 2.00 & 3.00 \\
+\bottomrule
+\end{tabular}
+%\end{sc}
+\vskip -0.1in
+\end{table}
+\vspace{-3mm}
+\end{comment}
+
+
+\begin{comment}
+
+\subsection{Generalization to Split FashionMNIST Environments}
+\label{sec:generalization_to_split_fashionmnist_environments}
+
+In this experiment, we evaluate the generalization capability of the DQN on new environments with the Split FashionMNIST dataset. The DQN is trained on 10 environments with MNIST and 10 other with notMNIST, and we want to investigate if the DQN policy can be used for replay scheduling when learning a new dataset like FashionMNIST. Table \ref{tab:train_mixed_dataset_test_fashionmnist} shows the resulting average ranking and median from the DQN and the baselines. We see that Heuristic1 gets the highest average ranking followed by DQN. We show each ACC from every test environment and DQN seed in Table \ref{tab:accuracy_per_environment_fashionmnist} in Appendix \ref{app:additional_experimental_results} to get a better understanding of how different the accuracies are between Heuristic1 and DQN. In test environment 1 and 4 where Heuristic 1 performs well, we observe that the DQN can perform similar as Heuristic1 with around 1-2\% difference. \MK{Need to think about what I can say here when comparing accuracies.} 
+
+We show an example of two replay schedules for DQN and Heuristic1 and the task performance progression in Figure \ref{fig:fashionmnist_policy_illustration_dqn_vs_heuristic1}. We see that the DQN managed to consider the lower accuracy on Task 2 compared to Task 1 after learning Task 2, so that only Task 2 is replayed when learning the next task. At Task 4, the DQN decides to replay both Task 1 and 2 potentially due to the minor drop in accuracy for Task 1. For Heuristic1, Task 2 is forgotten by a significant amount after learning Task 3 and does not manage to recover its performance as well as DQN. This shows the importance of learning the policy instead of relying on heuristic rules for replaying, since a learned policy can base its decisions on previous experiences on what a potentially good replay schedule will be. \MK{Consider moving the replay schedule visualizations to a separate section.}  
+
+%The DQN performs is ranked the best and has the lowest median of all methods. The ETS baseline performs the second best which shows that replaying all tasks equally is a good policy to use as a standard. The heuristic baselines fails to generalize to Split notMNIST which is due to that their threshold ratio $\tau$ was tuned for training environments with MNIST and FashionMNIST and the accuracies between MNIST/FashionMNIST and notMNIST differ more.
+
+\end{comment}
+
+
+\begin{comment}
+\subsection{Generalization to Split notMNIST Environments}\label{sec:generalization_to_split_notmnist_environments}
+In this experiment, we evaluate the generalization capability of the DQN on environments with Split notMNIST dataset that is unseen during training. Table \ref{tab:train_mixed_dataset_test_notmnist} shows the resulting average ranking and median from the DQN and the baselines. The DQN performs is ranked the best and has the lowest median of all methods. The ETS baseline performs the second best which shows that replaying all tasks equally is a good policy to use as a standard. The heuristic baselines fails to generalize to Split notMNIST which is due to that their threshold ratio $\tau$ was tuned for training environments with MNIST and FashionMNIST and the accuracies between MNIST/FashionMNIST and notMNIST differ more.
+\end{comment}
+
+
+
+
+
+
+\begin{comment}
+\begin{figure}[t]
+  \centering
+  \setlength{\figwidth}{0.25\textwidth}
+  \setlength{\figheight}{.14\textheight}
+  \input{figures/policy_illustrations/cifar10/data_seed17/groupplot}
+  \vspace{-3mm}
+  \caption{ Comparison of test classification accuracies for Task 1-5 on Split CIFAR-10 from using the replay schedules from the DQN and the Heuristic2 scheduling baseline from 1 seed (top row). The learned policy (DQN) remembers Task 1 better than when replaying based on Heuristic2.  %The ACC metric for each method is shown on top of each figure. We also visualize the replay schedule found by both methods as a bubble plot (bottom row). The learned policy (DQN) remembers Task 1 and 2 better than when replaying based on this heuristic. 
+  }
+  \vspace{-3mm}
+  \label{fig:cifar10_policy_illustration_dqn_vs_heuristic2}
+\end{figure}
+
+\begin{figure}[t]
+  \centering
+  \setlength{\figwidth}{0.25\textwidth}
+  \setlength{\figheight}{.14\textheight}
+  \input{figures/policy_illustrations/fashionmnist/data_seed1/groupplot}
+  \vspace{-3mm}
+  \caption{ Comparison of test classification accuracies for Task 1-5 on Split FashionMNIST (trained on MNIST and notMNIST) from using the replay schedules from the DQN and the Heuristic1 scheduling baseline from 1 seed (top row). The learned policy (DQN) remembers Task 2 better than when replaying based on Heuristic1.  %The ACC metric for each method is shown on top of each figure. We also visualize the replay schedule found by both methods as a bubble plot (bottom row). The learned policy (DQN) remembers Task 1 and 2 better than when replaying based on this heuristic. 
+  }
+  \vspace{-3mm}
+  \label{fig:fashionmnist_policy_illustration_dqn_vs_heuristic1}
+\end{figure}
+\end{comment}
+
+
+
+
+
+%%%% OLD TABLES WITH DIFFERENT METRICS. REMOVED THESE BECAUSE THEY DIDN'T GIVE BETTER RESULTS
+\begin{comment}
+\begin{table*}[t]
+%\small
+\centering
+\caption{Average ranking, median of rankings and interquartile range (IQR) for the Split MNIST with different label splits experiment. The rankings are computed based on the metrics ACC last, ACC full, and BWT. The DQN was trained on 10 environments. We average the results over 5 DQNs and the 10 test envs.
+}
+\label{tab:mnist_results_testing}
+%\vspace{-1em}
+%\vskip 0.15in
+%\begin{sc}
+\begin{tabular}{l c c c c c c c c c}
+\toprule
+ & \multicolumn{3}{c}{ACC last} & \multicolumn{3}{c}{ACC full} & \multicolumn{3}{c}{BWT} \\
+ \cmidrule(lr){2-4} \cmidrule(lr){5-7} \cmidrule(lr){8-10}
+ Method & Avg. Rank ($\downarrow$) & Median ($\downarrow$) & IQR & Avg. Rank ($\downarrow$) & Median ($\downarrow$) & IQR & Avg. Rank ($\downarrow$) & Median ($\downarrow$) & IQR \\ 
+ \midrule
+ Random         & 3.24 $\pm$ 1.48 & 3.50 & 2.75 & 3.12 $\pm$ 1.52 & 3.50 & 2.00 & 3.22 $\pm$ 1.01 & 3.00 & 2.00 \\
+ ETS            & 3.80 $\pm$ 1.33 & 4.00 & 2.00 & 3.58 $\pm$ 1.31 & 4.00 & 2.00 & 3.92 $\pm$ 1.18 & 4.00 & 2.00 \\
+ Heuristic1     & 3.22 $\pm$ 1.01 & 3.00 & 2.00 & 2.66 $\pm$ 1.11 & 3.00 & 1.75 & 3.22 $\pm$ 1.01 & 3.00 & 2.00 \\
+ Heuristic2     & 2.36 $\pm$ 1.21 & 2.00 & 1.00 & 3.02 $\pm$ 1.38 & 3.00 & 2.75 & 2.28 $\pm$ 1.23 & 2.00 & 2.00 \\
+ \midrule
+ DQN (Ours)     & 2.38 $\pm$ 1.43 & 2.00 & 2.00 & 2.62 $\pm$ 1.50 & 3.00 & 3.00 & 2.36 $\pm$ 1.41 & 2.00 & 2.00 \\
+\bottomrule
+\end{tabular}
+%\end{sc}
+\vskip -0.1in
+\end{table*}
+
+\begin{table*}[t]
+%\small
+\centering
+\caption{Average ranking, median of rankings and interquartile range (IQR) for the Split CIFAR-10 with different label splits experiment. The rankings are computed based on the metrics ACC last, ACC full, and BWT. The DQN was trained on 10 environments. We average the results over 5 DQNs and the 10 test envs.
+}
+\label{tab:cifar10_results_testing}
+%\vspace{-1em}
+%\vskip 0.15in
+%\begin{sc}
+\begin{tabular}{l c c c c c c c c c}
+\toprule
+ & \multicolumn{3}{c}{ACC last} & \multicolumn{3}{c}{ACC full} & \multicolumn{3}{c}{BWT} \\
+ \cmidrule(lr){2-4} \cmidrule(lr){5-7} \cmidrule(lr){8-10}
+ Method & Avg. Rank ($\downarrow$) & Median ($\downarrow$) & IQR & Avg. Rank ($\downarrow$) & Median ($\downarrow$) & IQR & Avg. Rank ($\downarrow$) & Median ($\downarrow$) & IQR \\ 
+ \midrule
+ Random         & 3.40 $\pm$ 1.55 & 4.00 & 3.00 & 2.82 $\pm$ 1.28 & 3.00 & 2.00 & 3.34 $\pm$ 1.37 & 4.00 & 2.00 \\
+ ETS            & 3.26 $\pm$ 1.55 & 4.00 & 3.00 & 3.14 $\pm$ 1.80 & 3.50 & 4.00 & 3.18 $\pm$ 1.67 & 3.50 & 4.00 \\
+ Heuristic1     & 3.16 $\pm$ 1.14 & 3.00 & 1.75 & 3.10 $\pm$ 1.15 & 3.00 & 2.00 & 3.20 $\pm$ 1.37 & 3.00 & 2.00 \\
+ Heuristic2     & 2.64 $\pm$ 1.09 & 3.00 & 2.00 & 2.92 $\pm$ 1.21 & 3.00 & 2.00 & 2.74 $\pm$ 1.05 & 3.00 & 2.00 \\
+ \midrule
+ DQN (Ours)     & 2.54 $\pm$ 1.39 & 2.00 & 3.00 & 3.02 $\pm$ 1.50 & 3.00 & 2.75 & 2.54 $\pm$ 1.37 & 2.00 & 2.00 \\
+\bottomrule
+\end{tabular}
+%\end{sc}
+\vskip -0.1in
+\end{table*}
+\end{comment}
+

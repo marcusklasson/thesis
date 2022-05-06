@@ -1,0 +1,19 @@
+
+\section{Discussion}\label{paperD:sec:discussion}
+
+In this section, we provide a discussion of the experimental results in Section \ref{paperD:sec:experiments}. Our goal was to answer whether it was possible to learn a policy for replay scheduling that can be applied in new CL scenarios without additional training cost. We evaluate the policy on two CL scenarios where (i) the training and test environments share the same dataset but the task splits are different, and (ii) the datasets in the training and test environments are completely different. We observed that the DQN receives a similar average ranking of the performance in the test environments as the best heuristic scheduling baselines in both CL scenarios. Furthermore, we analyzed the learned policies by visualizing them together with the test accuracy progression for each task to illustrate the benefits of the DQN. We then showed an example in Figure \ref{fig:fashionmnist_policy_illustration_dqn_vs_heur_gd} where learning the replay scheduling policy indeed opens up for scheduling behaviors similar to human learning insights, such as spaced repetition, that would be difficult to create a heuristic scheduling rule for. We conclude that our results indicate that using RL for learning policies for replay scheduling is a promising direction for making replay scheduling in CL practical for real-world applications where training at test time is prohibited.   
+
+Several challenges need to be tackled to make the best out of our approach to learn replays scheduling policies. As the policy is learned with RL, the training requires careful hyperparameter tuning to succeed to learn a policy that generalizes well to the studied CL scenarios. We will therefore perform more hyperparameter searches for the DQN as well as increase the number of training environments since adding more experience for training should intuitively improve the generalization capabilities. Moreover, each step in the environment requires training the classifier on the current CL task which makes each environment step computationally expensive. Hence, we will apply RL algorithms that can be easier to tune, e.g., PPO~\citeD{D:schulman2017proximal} and A2C~\citeD{D:mnih2016asynchronous}, and investigate whether these can be more sample-efficient than DQN for our application. 
+
+Another challenge is how to learn policies for replay scheduling in CL scenarios with long task-horizons. Continuous action spaces are a scalable option that would be appropriate for representing the task proportions since the action space would simply add one dimension per seen task. 
+However, as learning policies for continuous actions are considered to be more difficult than learning how to take discrete actions, we could also look into various ways for discretizing continuous action spaces into finite sets of actions.    
+
+\MK{Add a paragraph for limitations.}
+
+%\begin{itemize}
+%    \item Continuous action space for enabling longer task-horizon 
+%    \item large action spaces seems to need lots of exploration, transitions are expensive in a CL environment so need more sample-efficient methods here
+%    \item potential conflicting environments that disturbs the policy learning
+%    \item more hyperparameter tuning and/or other RL algorithm
+%\end{itemize}
+

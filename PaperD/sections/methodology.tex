@@ -1,0 +1,96 @@
+
+\section{Methodology}\label{paperD:sec:methodology}
+
+In this section, we describe our problem setting for learning replay scheduling policies and also how we employ DQNs to learn such policies.
+%In this section, we describe our approach for learning policies for selecting which tasks to replay at different time steps in a continual learning setting. We apply reinforcement learning methods for learning schedules over which tasks to replay based on the current task performance. The aim is to obtain a scheduler that can be transferred to new domains where classifiers are trained in continual learning settings. We begin by describing the problem setting followed by a description of how reinforcement learning is applied to learn a transferable scheduling policy.  
+
+
+
+\subsection{Problem Setting}\label{paperD:sec:problem_setting}
+
+Our goal is to learn a replay scheduling policy for selecting which tasks to replay at different times that can generalize to new CL scenarios without additional training in the new environment. We apply RL for learning the policy where a Deep Q-Network (DQN) acts as a scheduler of the replay tasks for a CL model. We train the policy by collecting experience from multiple learning episodes in different CL environments to improve policy transfer. At test time, we let the policy be used to select replay schedules for new CL scenarios.  
+
+Each environment is modeled by its own MDP $E = (\gS, \gA, P, r, \gS_1, \gamma) \in \gE$ with an accompanied classifier $\vphi^{E}$ and CL datasets $\gD_{1:T}^{E}$ of $T$ tasks. We assume the task-horizon $T$ is finite and known. The agent passes action $a_t^{E}$ at task $t$ to environment $E$ for building the replay memory $\gM_t$ before the classifier $\vphi^{E}$ learns task $t+1$. After learning the task, the agent receives the reward $r_{t}^{E}$ from applying action $a_{t}^{E}$ and the state of the environment $s_{t+1}^{E}$. We calculate the rewards using the average validation accuracy over all seen tasks, i.e.
+\begin{align}\label{eq:dense_reward}
+    r_t^{E} = \frac{1}{t}\sum_{i=1}^{t} A_{t, i}^{(val)}, 
+\end{align} 
+where the accuracy $A_{t, i}^{(val)}$ is calculated using the validation dataset $\gV_{i}^{E}$. The goal for the agent is to maximize the sum of rewards after the classifier has learnt the final task $T$. We have summarized the CL procedure in Algorithm \ref{alg:continual_learning_step}.
+Next, we describe how the states and action spaces are defined.
+
+%Our goal is to learn a policy for selecting which tasks to replay at different times that can generalize to new continual learning scenarios. We apply reinforcement learning for learning the policy where a Deep Q-Network (DQN) acts as a scheduler of the replay tasks for a continual learning model. At test time, we let the policy from the DQN be used to select replay schedules for new continual learning scenarios.    
+
+We are dealing with state and action spaces that are growing per seen task. We wish for the DQN to select which tasks to replay based on the current performance of the CL model $\vphi$. Therefore, we represent the states with a vector of the currently seen accuracies, such that $s_t \in [0, 1]^{t} = \gS_t$ where the state space domain $\gS_t$ grows linearly with $t$. We keep a validation set for each task to calculate the task accuracies to use for the states. The action space is also growing per task, such that $\gA = (\gA_1, \dots, \gA_{T-1})$ where $|\gA_t| < |\gA_{t+1}|$ for $t=1, \dots, T-1$. Each action $a_t \in \gA_t$ is represented as a vector of task proportions to use for filling the replay memory. More specifically, the action $a_t = [p_1, \dots, p_{t}]$ where $p_i$ is the task proportion for task $i$ which satisfies $\sum_{i=1}^{t} p_i = 1$ for $t \in \{1, \dots, T-1\}$.  We construct the action space and the number of actions to use in the same way as in Klasson \etal~\citeD{D:klasson2021learn} which we describe in more detail in Appendix \ref{paperD:app:construction_of_the_action_space}.   
+
+%The action space is also growing per task similarly as the state space. Since there are an additional task that can be replayed per time step, we have the action space $\gA = (\gA_1, \dots, \gA_{T-1})$ where $|\gA_t| < |\gA_{t+1}|$ for $t=1, \dots, T-1$. We use the same discrete action space as was used in~\cite{klasson2021learn}. An action $\va_t \in \sR^{T-1}$ consists of the task proportions for the $T-1$ tasks that can be replayed during each episode.  
+
+%The learning steps consists of 1) updating the agent $Q_{\vtheta}$ on experiences from continual learning environment, and 2) collect experience by training the continual learning model $\vphi$ on the current task dataset and the replay memory $\gM$ composed from the given action. 
+
+%In this setting, each time step $t \in (1, T)$ consists of the following steps: 1) The DQN interacts with a continual learning environment where a continual learning model $\vphi$ learns task $t$ at time step $t$ 
+
+%Our goal is to learn a policy for selecting which tasks to replay at different times that can generalize to new continual learning scenarios unseen during training. We apply reinforcement learning for learning the policy where the agent acts a scheduler of the replay tasks. To evaluate its generalization capability, we deploy the learned policy to new continual learning environments to be used in a zero-shot setting. Next, we describe the procedure of how we learn the replay scheduling policy. 
+
+%We let the agent interact with environments including a continual learning scenario for learning the replay scheduling policy $\pi$. Each environment includes a classifier $\vphi$ and $T$ datasets of tasks that the classifier should learn. The state $s$ of the environment describes the the performance on every seen task for the classifier. Before training the classifier on task $t$, we must construct a replay memory $\gM_t$ with samples from previous tasks for mitigating catastrophic forgetting. The agent is responsible for selecting actions $\va$ with which tasks to replay and the proportion samples of the selected tasks to compose the replay memory with. After the classifier has learned task $t$ with dataset $\gD_t$ and replay memory $\gM_t$, the agent receives a reward $r_t$ for the performed action as well as the state $s_{t+1}$ for selecting the next action. The goal for the agent is to maximize the sum of rewards after the classifier has learnt the final task $T$. 
+
+%In this setting, the state space is growing as a new task is to be learned. The state space $\gS$ consists of the performance of seen tasks from the classifier, such that $\gS = (\gS_1, \dots, \gS_T)$ where $\gS_t \in \sR^{t}$. We keep a validation set $\gD_t^{(val)}$ for all tasks to evaluate the performance of the classifier during training, and compute the validation accuracy $A_{t, i}^{(val)}$ for all seen tasks $i \leq t$, where $A_{t, i}^{(val)}$ is the validation accuracy for task $i$ after learning task $t$. We use the validation accuracies for representing the state $s_{t}$, such that $s_t = (A_{t, 1}^{(val)}, \dots, A_{t, t}^{(val)}) \in \gS_t$. 
+
+%The action space is also growing per task similarly as the state space. Since there are an additional task that can be replayed per time step, we have the action space $\gA = (\gA_1, \dots, \gA_{T-1})$ where $|\gA_t| < |\gA_{t+1}|$ for $t=1, \dots, T-1$. We use the same discrete action space as was used in~\cite{klasson2021learn}. An action $\va_t \in \sR^{T-1}$ consists of the task proportions for the $T-1$ tasks that can be replayed during each episode.    
+
+%We calculate the rewards using the average validation accuracy over all seen tasks, such that
+%\begin{align}
+%    r_t = \frac{1}{t}\sum_{i=1}^{t} A_{t, i}^{(val)}.
+%\end{align}
+
+%We evaluate the learned policy on new continual learning environments unseen during training. 
+
+
+%We consider a problem setting where the goal is to learn a policy that selects which tasks to replay at different time steps in the continual learning setting described in Section \ref{sec:background}. We need a method for selecting which tasks to replay at different times to mitigate catastrophic forgetting since all historical data is stored and the replay memory is tiny. Furthermore, we want a method that can generalize to new and unseen continual learning scenarios.   
+
+%Describe our setting where we learn a policy for selecting the tasks to replay and we want thjis policy to generalize to new and unseen CL environments. 
+
+%Let a classifier $\vphi$ learn $T$ tasks from the datasets $\gD_{1:T}$ arriving in a sequence. We assume that there is enough external memory to store the full datasets, such that they can be used for replay to mitigate catastrophically forgetting already seen tasks. However, we are only allowed to fill a limited replay memory $\gM$ of size $M$ with historical samples to use for replay due to processing constraints.        
+
+%\MK{Add info on the RL setting, like describe that action space is increasing, and make connections to our CL setting. Perhaps describe the environment here, that it is the whole CL part.}
+
+%In this paper, we propose to use an RL agent to select which seen tasks a continual learning classifier should replay when training on new tasks. We discretize the action space into selections from a replay memory of how many stored samples from each task that should be used for replay. Our RL agent is a DQN aiming to maximize the classification score of the continual learner by learning action-values estimating the expected discounted return, which is the classification performance. The action-values are learned from observing the current task performance of the continual learner, such that the DQN learns a general policy of selecting replay tasks simply based on how well the classifier is performing on each task. Our goal for this method is that the general policy should be transferable and generalize to new domains where classifiers are trained in a continual learning setting.
+
+%In this paper, the goal is to learn how to select proportions of memory tasks to replay when new tasks arrives. Our intuition behind when replaying tasks is necessary is when the classifier performs worse than earlier on specific tasks. Furthermore, we should be able to balance the proportion of samples per task, such that the classifier can focus on retaining knowledge of tasks that are harder to remember. Constructing rules for selecting the proportion is potentially requires lots of tuning when adapting the same strategies in different environments. Therefore, we suggest to learn the behaviour of controlling the amount of samples from old tasks that the classifier uses for replay. Next, we describe how to construct the problem setting to learn such selection strategies. 
+
+%\subsection{Problem Setting}\label{sec:problem_setting}
+
+\input{PaperD/algorithms/continual_learning_step}
+
+\input{PaperD/algorithms/learning_replay_scheduling_policy_with_dqn}
+
+
+\subsection{Deep Q-Networks for Learning Replay Scheduling Policy}\label{paperD:sec:dqn_for_learning_replay_scheduling_policy}
+
+We employ Deep Q-Networks~\citeD{D:mnih2013playing} (DQNs) as the RL agent for learning the replay scheduling policy. We assume that the number of tasks $T$ is known which makes it easier to set up the DQN architecture. The output layer size to be the same as the number of actions in the last action space, i.e., $|\gA_{T-1}|$. As earlier action spaces has fewer actions, i.e. $|\gA_{t-1}| < |\gA_{t}|$, we use masking for preventing the DQN to select invalid actions. The input layer is of fixed size $T-1$, such that we can input the task performances of the seen tasks as states. We apply zero-padding on the input state vectors for future tasks that have not been evaluated yet.       
+
+We let the DQN agent collects experience from multiple CL environments for training the policy to enhance the generalization capability. We hypothesize that the policy will get better at learning the tasks to replay based on the task performance through learning experiences from multiple environments with different variations on the datasets in each environment, e.g., different task splits or datasets (Split MNIST, Split FashionMNIST, etc.). 
+We store the experiences from all environments in a single replay buffer used for updating the DQN, where we denote the experience from environment $E$ as $(s_{t}^{E}, a_{t}^{E}, r_{t}^{E}, s_{t+1}^{E})$. The replay buffer is shared among the environments to obtain a diverse set of outcomes for learning a general policy that can be used for replay scheduling by only selecting actions with the current task performances of a classifier. See Algorithm \ref{alg:learning_replay_scheduling_policy_with_dqn} for the steps on how to train the DQN. 
+%Therefore, if two environments contain the same continual learning dataset, then the labels are split differently with random shuffling to ensure the environments are dissimilar. We can also use datasets with different input distributions in the environments, e.g., MNIST and FashionMNIST, to ease the transferability of the policy to unseen data domains.    
+
+At test time, we evaluate the policy on CL environments with different datasets than seen during training. For example, a different dataset can mean that we have changed the task split of a dataset we used for training, or that we evaluate on a new dataset. We assume that the task-horizons are the same on the datasets used for both training and testing such that we can keep the DQN architecture the same. The DQN acts greedily during testing selecting the next action using
+\begin{align}
+    a_{t}^{E'} = \argmax_{a} Q_{\theta}(s_{t}^{E'}, a) 
+\end{align}
+in test environment $E'$ at task $t$. The hope is that we should have obtained a general policy for replay scheduling that generalizes to new CL scenarios.  
+
+%We evaluate the performance of the DQN by using it as the replay scheduler in environments unseen during training. As collecting experience in our setting is expensive, our goal is to learn a general policy that can be used in any continual learning setting without increasing the computational time at test time.    
+
+%We consider the scenario where both the state and action spaces are expanding per time step. 
+
+%\MK{Formal definition of the RL settign we are working with. Add high-level algorithm box explaining the procedure. }
+
+%In this section, we describe in detail how we define the state and action space, reward functions, and environments for our problem setting.
+
+%\paragraph{State Representation.} We represent the states with the performance of each seen task. More specifically, the performance for task $i$ is the validation accuracy evaluated at task $t$ denoted by $A_{t,i}^{(val)}$ where $i \leq t$. We assume that the task horizon is known and use zero-padding for the unseen tasks $t' > t$ at the current task $t$ to be able to use state vectors with fixed size.  
+
+%\paragraph{Action Space.} We use the same action space described in [ICML ws paper]. %Each action represents a proportion of how many samples that should be used for replaying each historical task. The action dimension is therefore increasing linearly with every seen task. We use a binary mask to prevent the agent to select invalid actions. \MK{Describe discretization here too.}
+
+%\paragraph{Reward Function.} We use both sparse and dense rewards based on the task performances. More specifically, at task $t$, we evaluate the average accuracy over all seen tasks up to task $t$ as the reward, such that 
+%\begin{align}
+%    r_t = \frac{1}{t}\sum_{i=1}^{t} A_{t, i}^{(val)},
+%\end{align}
+%where $A_{t, i}^{(val)}$ is the validation accuracy for task $i$ after learning task $t$. 
+

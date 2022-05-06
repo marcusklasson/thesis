@@ -1,0 +1,86 @@
+
+\section{Task Split Tables}\label{paperD:app:task_split_tables}
+
+Here, we provide tables of the task splits for Split FashionMNIST and split CIFAR-10. 
+We provide the random seeds that we used for shuffling the label splits as well as the class names for the datasets concerned. 
+
+
+\begin{table}[h]
+    \centering
+    \caption{Split FashionMNIST task splits with their corresponding seed. }
+    \resizebox{1.0\textwidth}{!}{
+    \begin{tabular}{l c c c c c}
+        \toprule \toprule
+         {\bf Seed} & {\bf Task 1} & {\bf Task 2} & {\bf Task 3} & {\bf Task 4} & {\bf Task 5} \\
+        \midrule
+        0 & T-shirt/top, Trouser & Pullover, Dress & Coat, Sandal & Shirt, Sneaker & Bag, Ankle boot \\ \midrule 
+        1 & Pullover, Ankle boot & Shirt, Coat & T-shirt/top, Dress & Trouser, Sneaker & Bag, Sandal \\ \midrule 
+        2 & Coat, Trouser & Sandal, T-shirt/top & Sneaker, Pullover & Dress, Shirt & Ankle boot, Bag \\ \midrule 
+        3 & Sandal, Coat & Trouser, Pullover & Ankle boot, Shirt & Sneaker, T-shirt/top & Dress, Bag \\ \midrule
+        4 & Dress, Bag & Coat, Ankle boot & Pullover, Shirt & T-shirt/top, Trouser & Sandal, Sneaker\\ \midrule 
+        5 & Ankle boot, Sandal & Pullover, Coat & Sneaker, Trouser & T-shirt/top, Bag & Shirt, Dress \\ \midrule
+        6 & Bag, Trouser & Sneaker, T-shirt/top & Shirt, Sandal & Pullover, Coat & Dress, Ankle boot \\ \midrule
+        7 & Bag, Sandal & T-shirt/top, Pullover & Trouser, Ankle boot & Sneaker, Dress & Shirt, Coat \\ \midrule 
+        8 & Bag, Shirt & Ankle boot, T-shirt/top & Pullover, Sandal & Sneaker, Trouser & Coat, Dress \\ \midrule
+        9 & Bag, Coat & Sneaker, Pullover & Trouser, Ankle boot & Dress, T-shirt/top & Shirt, Sandal \\
+        \bottomrule \bottomrule
+    \end{tabular}
+    }
+    \label{tab:label_splits_fashionmnist}
+\end{table}
+
+
+
+\begin{table}[h]
+    \centering
+    \caption{Split CIFAR-10 task splits with their corresponding seed. }
+    \resizebox{1.0\textwidth}{!}{
+    \begin{tabular}{l c c c c c}
+        \toprule \toprule
+         {\bf Seed} & {\bf Task 1} & {\bf Task 2} & {\bf Task 3} & {\bf Task 4} & {\bf Task 5} \\
+        \midrule
+        0 & Airplane, Automobile & Bird, Cat & Deer, Dog & Frog, Horse & Ship, Truck \\
+        \midrule
+        1 & Bird, Truck & Frog, Deer & Airplane, Cat & Automobile, Horse & Ship, Dog \\
+        \midrule
+        2 & Deer, Automobile & Dog, Airplane & Horse, Bird & Cat, Frog & Truck, Ship \\
+        \midrule
+        3 & Dog, Deer & Automobile, Bird & Truck, Frog & Horse, Airplane & Cat, Ship \\ 
+        \midrule
+        4 & Cat, Ship & Deer, Truck & Bird, Frog & Airplane, Automobile & Dog, Horse \\ 
+        \midrule
+        5 & Truck, Dog & Bird, Deer & Horse, Automobile & Airplane, Ship & Frog, Cat \\ 
+        \midrule
+        6 & Ship, Automobile & Horse, Airplane & Frog, Dog & Bird, Deer & Cat, Truck \\ 
+        \midrule
+        7 & Ship, Dog & Airplane, Bird & Automobile, Truck & Horse, Cat & Frog, Deer \\ 
+        \midrule
+        8 & Ship, Frog & Truck, Airplane & Bird, Dog & Horse, Automobile & Deer, Cat \\ 
+        \midrule
+        9 & Ship, Deer & Horse, Bird & Automobile, Truck & Cat, Airplane & Frog, Dog \\ 
+        \midrule
+        10 & Ship, Bird & Dog, Frog & Cat, Automobile & Airplane, Horse & Deer, Truck \\ 
+        \midrule
+        11 & Horse, Ship & Bird, Frog & Deer, Dog & Automobile, Cat & Airplane, Truck \\ 
+        \midrule
+        12 & Dog, Ship & Horse, Airplane & Deer, Truck & Cat, Bird & Automobile, Frog \\ 
+        \midrule
+        13 & Cat, Dog & Frog, Automobile & Deer, Horse & Ship, Truck & Airplane, Bird \\ 
+        \midrule
+        14 & Cat, Truck & Airplane,  Dog & Deer, Bird & Automobile, Horse & Frog, Ship \\ 
+        \midrule
+        15 & Bird, Frog & Automobile, Cat & Horse, Airplane & Truck, Deer & Dog, Ship \\ 
+        \midrule
+        16 & Frog, Bird & Airplane, Horse & Ship, Deer & Cat, Automobile & Dog, Truck \\ 
+        \midrule
+        17 & Horse, Bird & Dog, Cat & Deer, Airplane & Truck, Ship & Frog, Automobile \\ 
+        \midrule
+        18 & Horse, Truck & Airplane, Deer & Bird, Automobile & Frog, Dog & Ship, Cat  \\ 
+        \midrule
+        19 & Automobile, Horse & Truck, Frog & Ship, Deer & Cat, Airplane & Bird, Dog  \\
+        \bottomrule \bottomrule
+    \end{tabular}
+    }
+    \label{tab:label_splits_cifar10}
+\end{table}
+
