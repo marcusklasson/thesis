@@ -2,7 +2,7 @@
 
 
 %%% FIGURE ON MEMORY USAGE 5-TASK DATASETS
-\input{PaperC/sections/experiments/figures/memory_usage_comparison}
+%\input{PaperC/sections/experiments/figures/memory_usage_comparison}
 
 \subsection{Efficiency of Replay Scheduling}
 \label{paperC:sec:efficiency_of_replay_scheduling}
@@ -10,6 +10,20 @@
 
 
 %Here, we 
+\begin{wrapfigure}[12]{r}{0.36\textwidth}
+    \centering
+	\setlength{\figwidth}{0.33\textwidth}
+	\setlength{\figheight}{.14\textheight}
+	\vspace{-3mm}
+	\input{PaperC/sections/experiments/figures/tiny_memory/memory_usage_barplot}
+	\vspace{-3mm}
+	\captionsetup{width=.85\linewidth}
+	\caption{
+		Number of replayed samples per task for the 5-task datasets in the tiny memory setting. Ours use $M=2$ samples for replay, while the baselines increment their memory per task. %Our method uses a fixed $M=2$ samples for replay, while the baselines increment their memory per task. 
+	}
+	%\vspace{-4mm}
+	\label{fig:tiny_memory_experiment_memory_usage}
+\end{wrapfigure}
 We illustrate the efficiency of replay scheduling with comparisons to several common replay-based CL baselines in an even more extreme memory setting.
 Our goal is to investigate if scheduling over which tasks to replay can be more efficient in situations where the memory size is even smaller than the number of classes. % than replaying all available samples at every task.
 To this end, we set the replay memory size for our method

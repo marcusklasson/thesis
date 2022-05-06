@@ -8,8 +8,11 @@
    },
 }
 
+\pgfplotsset{every tick label/.append style={font=\tiny}}
+\pgfplotsset{every major tick/.append style={major tick length=2pt}}
+
 \begin{tikzpicture}
-\tikzstyle{every node}=[font=\footnotesize]
+\tikzstyle{every node}=[font=\scriptsize]
 \definecolor{color0}{rgb}{0.12156862745098,0.466666666666667,0.705882352941177}
 \definecolor{color1}{rgb}{1,0.498039215686275,0.0549019607843137}
 \definecolor{color2}{rgb}{0.172549019607843,0.627450980392157,0.172549019607843}
@@ -21,12 +24,13 @@ ybar,
 bar width = 4pt,
 height=\figheight,
 legend cell align={left},
-legend columns=1,
+legend columns=-1,
 legend style={
+  nodes={scale=0.85},
   fill opacity=0.8,
   draw opacity=1,
   text opacity=1,
-  at={(1.03,0.20)},
+  at={(0.0,1.05)},
   anchor=south west,
   draw=white!80!black
 },
