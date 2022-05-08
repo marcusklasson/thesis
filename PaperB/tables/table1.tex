@@ -1,0 +1,53 @@
+
+\renewcommand{\arraystretch}{1.05}
+\begin{table}[th!]
+\centering
+\caption{Classification accuracies on the test set for all models in percentage (\%) along for each model. The subscript letters in the model names indicate the data views used in the model. The column Accuracy corresponds to the fine-grained classification accuracy. The column Coarse Accuracy corresponds to the classifying a class within the correct parent class. Results are averaged using 10 different random seeds and we report both means and standard deviations. Abbreviations: AE, Autoencoder; VAE, Variational Autoencoder; SplitAE, Split Autoencoder; VCCA, Variational Canonical Correlation Analysis.
+}
+\begin{tabular}{l c c} 
+    \hline 
+    Model & Accuracy (\%) & Coarse Accuracy (\%) \\ 
+    \hline
+    DenseNet-scratch & $67.33 \pm \, 1.35$ & $75.67 \pm \, 1.15$ \\ 
+    \rowcolor{gray!30}
+    Softmax & $71.67 \pm 0.28$ & $83.34 \pm 0.32$ \\ 
+    \hline
+    AE$_{x}$+Softmax & $70.69 \pm 0.82$ & $82.42 \pm 0.58$ \\ 
+    \rowcolor{gray!30}
+    VAE$_{x}$+Softmax & $69.20 \pm 0.46$ & $81.24 \pm 0.63$ \\ 
+    \hline
+    SplitAE$_{x y}$ & $70.34 \pm 0.56$ & $82.11 \pm 0.38$ \\ 
+    \rowcolor{gray!30}   
+    VCCA$_{x y}$ & $70.72 \pm 0.56$ & $82.12 \pm 0.61$ \\ 
+    \hline
+    SplitAE$_{x i}$+Softmax & $77.68 \pm 0.69$ & $87.09 \pm 0.53$ \\ 
+    \rowcolor{gray!30}  
+    VCCA$_{x i}$+Softmax & $77.02 \pm 0.51$ & $86.46 \pm 0.42$ \\ 
+    VCCA-private$_{x i}$+Softmax & $73.04 \pm 0.56$ & $84.16 \pm 0.51$ \\ \hline 
+    \rowcolor{gray!30}
+    SplitAE$_{x i y}$ & $77.43 \pm 0.80$ & $87.14 \pm 0.57$ \\ 
+    VCCA$_{x i y}$ &  $77.22 \pm 0.55$ & $86.54 \pm 0.51$ \\ 
+    \rowcolor{gray!30}  
+    VCCA-private$_{x i y}$ & $74.04 \pm 0.83$ & $84.59 \pm 0.83$ \\
+    \hline
+    SplitAE$_{x w}$+Softmax & $76.27 \pm 0.66$ & $86.45 \pm 0.56$ \\
+    \rowcolor{gray!30}  
+    VCCA$_{x w}$+Softmax & $75.37 \pm 0.46$ & $86.00 \pm 0.32$\\
+    VCCA-private$_{x w}$+Softmax & $75.11 \pm 0.81$ & $85.91 \pm 0.55$ \\ \hline
+    \rowcolor{gray!30} 
+    SplitAE$_{x w y}$ & $75.78 \pm 0.84$ & $86.13 \pm 0.63$ \\ 
+    VCCA$_{x w y}$ & $74.72 \pm 0.85$ & $85.59 \pm 0.78$ \\ 
+    \rowcolor{gray!30}  
+    VCCA-private$_{x w y}$ & $74.92 \pm 0.74$ & $85.59 \pm 0.67$ \\
+    \hline
+    SplitAE$_{x i w}$+Softmax & $77.79 \pm 0.48$ & $87.12 \pm 0.62$ \\
+    \rowcolor{gray!30}  
+    VCCA$_{x i w}$+Softmax & $77.51 \pm \, 0.51$ & $86.69 \pm 0.41$ \\   
+    \hline
+    SplitAE$_{x i w y}$  & $78.18 \pm 0.53$ & $87.26 \pm 0.46$ \\ 
+    \rowcolor{gray!30}
+    VCCA$_{x i w y}$ &  $77.78 \pm 0.45$ & $86.88 \pm 0.47$ \\
+    \hline 
+\end{tabular}
+\label{tab:classification_results_on_test_set}
+\end{table}

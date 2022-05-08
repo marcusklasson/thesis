@@ -1,0 +1,143 @@
+\section{Experimental Procedures}
+\label{sec:experimental_procedures}
+
+\subsection{Resource Availability}
+
+\subsubsection{Lead Contact}
+Marcus Klasson is the lead contact for this study and can be contacted by email at \url{mklas@kth.se}.
+
+\subsubsection{Materials Availability}
+There are no physical materials associated with this study.
+
+\subsubsection{Data and Code Availability}
+\begin{enumerate}
+\item The Grocery Store dataset along with documentation is available at the following Github repository: \url{https://github.com/marcusklasson/GroceryStoreDataset}
+\item The source code for the multi-view models along with documentation is available at the following Github repository: \url{https://github.com/marcusklasson/vcca_grocerystore}
+\end{enumerate}
+
+%In this section, we outline the details of all models that we use for grocery classification. We also provide a description of the experimental setups used to generate the results in Section \ref{sec:results}.
+
+\subsection{Methods}\label{sec:methods}
+
+In this section, we outline the details of the models we use for grocery classification.
+We begin by introducing autoencoders and SplitAEs~\cite{wang2015deep}. Then we describe VAEs~\cite{kingma2013auto} and how it is applied to single-view data, followed by the introduction of VCCA~\cite{wang2016deep} and how we adapt it to our dataset. We also discuss a variant of VCCA called VCCA-private~\cite{wang2016deep}, which is used for extracting private information about each view in addition to shared information across all views by factorizing the latent space. The graphical model representations of the VAE, VCCA, and VCCA-private models that have been used in this paper are shown in Figure S5. The model names use subscripts to denote the views utilized for learning the shared latent representations. For example, VCCA$_{x i}$ utilizes natural image features $x$ and iconic images $i$, while VCCA$_{x i w y}$ uses natural image features $x$ and iconic images $i$, text descriptions $w$, and class labels $y$.
+
+\subsubsection{Autoencoders and Split Autoencoders}
+\label{sec:autoencoders_and_split_autoencoders}
+
+The autoencoding framework can be used for feature extraction and learning latent representations of data in unsupervised manners~\cite{bengio2013representation}. It begins with defining a parameterized function called the encoder for extracting features. We denote the encoder as $f_{\phi}$ where $\phi$ includes its parameters, which commonly are the weights and bias vectors of a neural network. The encoder is used for computing a feature vector $h = f_{\phi}(x)$ from the input data $x$. Another parameterized function $g_{\theta}$ called the decoder is also defined, that maps the feature $h$ back into input space, i.e., $\hat{x} = g_{\theta}(h)$. The encoder and decoder are learned simultaneously to minimize the reconstruction loss between the input and its reconstruction of all training samples. By setting the dimension of the feature vector smaller than the input dimension, i.e., $d_{h} < d_{x}$, the autoencoder can be used for dimensionality reduction which makes the feature vectors suitable for training linear classifiers in a cheap way.
+
+As in the case for the Grocery Store dataset, we have multiple views available during training, while only the natural image view is present at test time. In this setting, we can use a Split Autoencoder (SplitAE) to extract shared representations by reconstructing all views during training from the one view that is available during the test phase~\cite{ngiam2011multimodal, wang2015deep}. As an example, we have the two-view case with $x$ present at both training and test while $y$ is only available during training. We therefore define an encoder $f_{\phi}$ and two decoders $g_{\theta_{x}}$ and $g_{\theta_{y}}$ where both decoders inputs the same representation $h = f_{\phi}(x)$. The objective of the SplitAE is to minimize the sum of the reconstruction losses, which will encourage representations $h$ that best reconstructs both views. The total loss is then 
+\begin{align}\label{eq:splitae_objective}
+    \mathcal{L}_{SplitAE}(\theta, \phi; x, y) = \lambda_{x} \mathcal{L}_{x}(x, g_{\theta_{x}}(h)) + \lambda_{y} \mathcal{L}_{y}(y, g_{\theta_{y}}(h)) ,
+\end{align}
+where $\theta_{x}, \theta_{y} \in \theta$ and $\lambda_{x}, \lambda_{y}$ are scaling weights for the reconstruction losses.
+For images, the reconstruction loss can be the mean squared error, while the cross-entropy loss is commonly used for class labels and text. This architecture can be extended to more than two views by simply using view-specific decoders that input the shared representation extracted from natural images. Note that in the case when the class labels are available, we can use the class label decoder $g_{\theta_{y}}$ as a classifier during test time. Alternatively, we can train a separate classifier with the learned shared representations after the SplitAE has been trained.
+
+
+\subsubsection{Variational Autoencoders with only Natural Images}
+\label{sec:vae_with_only_natural_images}
+The Variational Autoencoder (VAE) is a generative model that can be used for generating data from single views. Here, we describe how the VAE learns latent representations of the data and how the model can be used for classification.
+VAEs define a joint probability distribution $p_{\theta}(x,z) = p(z) p_{\theta}(x|z)$, where $p(z)$ is a prior distribution over the latent variables $z$ and $p_{\theta}(x|z)$ is the likelihood over the natural images $x$ given $z$. The prior distribution is often assumed to be an isotropic Gaussian distribution, $p(z) = \mathcal{N}(z\,|\, \boldsymbol{0}, \mathbf{I})$, with the zero vector $\boldsymbol{0}$ as mean and the identity matrix $\mathbf{I}$ as the covariance.  
+The likelihood $p_{\theta}(x|z)$ takes the latent variable $z$ as input and outputs a distribution parameterized by a neural network with parameters $\theta$
+which is referred to as the decoder network.
+A common distribution for natural images is a multivariate Gaussian, $p_{\theta}(x|z) = \mathcal{N}(x\,|\, \mu_{x}(z), \bm{\sigma}_{x}^2(z) \odot \mathbf{I})$, where $\mu_{x}(z)$ and $\bm{\sigma}_{x}^2(z)$ are the means and standard deviations of the pixels respectively outputted from the decoder and $\odot$ denotes element-wise multiplication. 
+We wish to find latent variables $z$ that are likely to have generated $x$, which is done by approximating the intractable posterior distribution $p_{\theta}(z|x)$ with a simpler distribution $q_{\phi}(z|x)$~\cite{zhang2018advances}. This approximate posterior $q_{\phi}(z|x)$ is referred to as the encoder network since it is parameterized by a neural network $\phi$ which inputs $x$ and outputs a latent variable $z$. Commonly, we let the approximate posterior to be Gaussian
+$q_{\phi}(z|x) = \mathcal{N}(z \,|\,\mu_{z}(x), \sigma_{z}^2(x) \odot \mathbf{I})$, where the mean $\mu_{z}(x)$ and variance $\sigma_{z}^2(x)$ are the outputs of the encoder. The latent variable $z$ is then sampled using the mean and variance from the encoder with the reparameterization trick~\cite{kingma2013auto,rezende2014stochastic}. The goal is to maximize a tractable lower bound on the marginal log-likelihood of $x$ using $q_{\phi}(z|x)$:
+\begin{align}
+\begin{split}\label{eq:vae-loss}
+\log p_{\theta}(x) \geq \, \mathcal{L}(\theta, \phi; x) = \, \E_{q_{\phi}(z|x)}\left[\, \log p_{\theta}(x | z) \,\right]  -\KL(q_{\phi}(z|x)\,||\,p(z)) .
+\end{split}
+\end{align}
+The last term is the Kullback-Leibler (KL) divergence~\cite{kullback1951information} of the approximate posterior from the prior distribution, which can be computed analytically when $q_{\phi}(z|x)$ and $p(z)$ are Gaussians. The expectation can be viewed as a reconstruction loss term, which can be approximated using Monte Carlo sampling from $q_{\phi}(z|x)$. The lower bound $\mathcal{L}$ is called the evidence lower bound (ELBO) and can be optimized with stochastic gradient descent via backpropagation. The mean outputs $\mu_{z}(x)$ from the encoder $q_{\phi}(z|x)$ are commonly used as the latent representation of the natural images $x$. We can use the representations
+$\mu_{z}(x)$ for training any classifier $p(y | \mu_{z}(x))$, e.g., a Softmax classifier, where $y$ is the class label of $x$. We can therefore see training the VAE as a pre-processing step, where we extract a lower-dimensional representation of the data $x$ which hopefully makes the classification problem easier to solve. 
+We can also extend the VAE with a generative classifier by incorporating the class label $y$ in the model~\cite{li2019generative, ma2018eddi}. 
+Hence, the VAE defines a joint distribution $p_{\theta}(x, y, z) = p(z) p_{\theta_{x}}(x|z) p_{\theta_{y}}(y|z)$ where the class label decoder $p_{\theta_{y}}(y|z)$ is used as the final classifier. 
+We therefore aim to maximize the ELBO on the marginal log-likelihood over $x$ and $y$: 
+\begin{align}\label{eq:loss_vcca_xy}
+    \begin{split}
+        \log p_{\theta}(x, y) \geq & \, \mathcal{L}(\theta, \phi; x, y) \\ 
+        = & \,  \lambda_{x} \E_{q_{\phi}(z|x)}\left[\, \log p_{\theta_{x}}(x | z) \right] + \lambda_{y} \E_{q_{\phi}(z|x)}\left[\, \log p_{\theta_{y}}(y | z) \,\right] - \KL(q_{\phi}(z|x)\,||\,p(z)) .
+    \end{split}
+\end{align}  
+The parameters $\lambda_{x}$ and $\lambda_{y}$ are used for scaling the magnitudes of the expected values. When predicting the class label for an unseen natural image $x^{*}$, we can consider multiple output predictions of the class label by sampling $K$ different latent variables for $x^{*}$ from the encoder to determine the final predicted class. For example, we could either average the predicted class scores over $K$ or use the maximum class score from $K$ samples as the final predictions. In this paper, we compute the average of the predicted class scores using
+\begin{align}\label{eq:prediction_vcca_xy}
+    \hat{y} = \argmax_{y} \frac{1}{K} \sum_{k=1}^{K} p_{\bm{\theta_{y}}}(y | z^{(k)}), \,\, z^{(k)} \sim q_{\phi}(z | x^{*}) ,
+\end{align}
+where $\hat{y}$ is the predicted class for the natural image $x^{*}$. We denote this model as VCCA$_{x y}$ due to its closer resemblance to VCCA than VAE in this paper.
+
+
+\subsubsection{Variational Canonical Correlation Analysis for Utilizing Multi-View Data}
+\label{sec:utilizing_additional_information}
+
+In this section, we describe the details of Variational Canonical Correlation Analysis (VCCA)~\cite{wang2016deep} for our application. In the Grocery Store dataset, the views can be the natural images, iconic images, text descriptions, or class labels and we can use any combination of those three in VCCA. To illustrate how we can employ this model to the Grocery Store dataset, we let the natural images $x$ and the iconic images $i$ be the two views.  
+We assume that both views $x$ and $i$ have been generated from a single latent variable $z$. Similarly as with VAEs, VCCA defines a joint probability distribution $p_{\theta}(x, i, z) = p(z)p_{\theta_{x}}(x\,|\,z)p_{\theta_{i}}(i\,|\,z)$. There are now two likelihoods for each view modeled by the decoders $p_{\theta_{x}}(x\,|\,z)$ and $p_{\theta_{i}}(i\,|\,z)$ are represented as neural networks with parameters $\theta_{x}$ and $\theta_{i}$. 
+Since we want to classify natural images, the other available views in the dataset will be missing when we have received a new natural image. Therefore, the encoder $\vq_{\phi}(z | x)$ only uses $x$ as input to infer the latent variable $z$ shared across all views, such that we do not have to use inference techniques that handle missing views. With this choice of approximate posterior, we receive the following ELBO on the marginal log-likelihood over $x$ and $i$ that we aim to maximize:
+\begin{align}\label{eq:loss_vcca}
+    \begin{split}
+        \log p_{\theta}(x, i) \geq & \, \mathcal{L}(\theta, \phi; x, i) \\ 
+        = & \,  \lambda_{x} \E_{q_{\phi}(z|x)}\left[\, \log p_{\theta_{x}}(x | z) \right] + \lambda_{i} \E_{q_{\phi}(z|x)}\left[\, \log p_{\theta_{i}}(i | z) \,\right] - \KL(q_{\phi}(z|x)\,||\,p(z)) .
+    \end{split}
+\end{align}  
+The parameters $\lambda_{x}$ and $\lambda_{i}$ are used for scaling the magnitude of the expected values for each view. 
+We provide a derivation of the ELBO for three or more views in the Supplemental Experimental Procedures.
+%supplementary material.
+The representations $\mu_{z}(x)$ from the encoder $q_{\phi}(z|x)$ can be used for training a separate classifier. We can also add a class label decoder $p_{\theta_{y}}(y | z)$ to the model and use Equation \ref{eq:prediction_vcca_xy} to predict the class of unseen natural images.
+
+
+\subsubsection{Extracting Private Information of Views with VCCA-private}
+\label{sec:extracting_private_information}
+
+In the following section, %discussion,
+we show how the VCCA model can be altered to extract shared information between the views as well as view-specific private information to enable more efficient posterior inference.
+Assuming that a shared latent variable $z$ is sufficient for generating all different views may have its disadvantages. Since the information in the views is rarely fully independent nor fully correlated, information only relevant to one of the views will be mixed with the shared information. This may complicate the inference of the latent variables, which potentially can harm the classification performance. To tackle this problem, previous works have proposed learning separate latent spaces for modeling shared and private information of the different views~\cite{salzmann2010factorized,wang2016deep,zhang2016inter}. The shared information should represent the correlations between the views, while the private information represents the independent variations within each view. 
+As an example, 
+the shared information between natural and iconic images are the visual features of the grocery item, while their private information is considered as the various backgrounds that can appear in the natural images and the different locations of non-white pixels in the iconic images. For the text descriptions, the shared information would be words that describe visual features in the natural images, whereas the private information would be different writing styles for describing grocery items with text.   
+We adapt the approach from~\cite{wang2016deep} called VCCA-private and introduce private latent variables for each view along with the shared latent variable.
+To illustrate how we employ this model to the Grocery Store dataset, we let the natural images $x$ and the text descriptions $w$ be the two views. The joint distribution of this model is written as 
+\begin{align}
+    p_{\theta}(x, w, z, u_{x}, u_{w}) = p_{\theta_{x}}(x | z, u_{x}) p_{\theta_{w}}(w | z, u_{w}) p(z) p(u_{x}) p(u_{w}) ,
+\end{align}
+where $u_{x}$ and $u_{w}$ are the private latent variables for the $x$ and $w$ respectively. To enable tractable inference of this model, we employ a factorized approximate posterior distribution of the form
+\begin{align}\label{eq:vcca_private_approximate_posterior}
+    q_{\phi}(z, u_{x}, u_{w} | x, w) = q_{\phi_{z}}(z | x) q_{\phi_{x}}(u_{x} | x) q_{\phi_{w}}(u_{w} | w),
+\end{align}
+where each factor is represented as an encoder network inferring its associated latent variable. With this approximate posterior, the ELBO for VCCA-private is given by
+\begin{align}
+    \begin{split} \label{eq:loss_vcca_private_xw}
+        \log p_{\theta}(x, w) \geq & \, \mathcal{L}_{\text{private}}(\theta, \phi; x, w) \\ 
+        = & \, \lambda_{x} \E_{q_{\phi_{z}}(z|x), q_{\phi_{x}}(u_{x}|x)}\left[\, \log p_{\theta_{x}}(x | z, u_{x}) \right] + \lambda_{w}  \E_{q_{\phi_{z}}(z|x), q_{\phi_{w}}(u_{w}|w)}\left[\, \log p_{\theta_{w}}(w | z, u_{w}) \right] \\ 
+        & - \KL(q_{\phi_{z}}(z|x)\,||\,p(z)) - \KL(q_{\phi_{x}}(u_{x}|x)\,||\,p(u_{\ux})) - \KL(q_{\phi_{w}}(u_{w} |w)\,||\,p(u_{\uw})) .
+    \end{split}
+\end{align}
+The expectations in $\mathcal{L}_{\text{private}}(\theta, \phi; x, w)$ in Equation \ref{eq:loss_vcca_private_xw} can be approximated using Monte Carlo sampling from $q_{\phi}(z | x)$. The sampled latent variables are concatenated and then used as input to their corresponding decoder. We let the approximated posteriors over both shared and private latent variables to be multivariate Gaussian distributions and their priors distributions to be standard isotropic Gaussians $\mathcal{N}(\bm{0}, \mathbf{I})$. The KL divergences in Equation \ref{eq:vcca_private_approximate_posterior} can then be computed analytically. 
+Since only natural images are present during test time and because the shared latent variable $z$ since it should contain information about similarities between the views, e.g., the object class, we use the encoder $q_{\phi}(z|x)$ to extract latent representations $\mu_{z}(x)$ for training a separate classifier. As for the VAE and standard VCCA, we can also add a class label decoder $p_{\theta_{y}}(y | z)$ only conditioned on $z$ to the model and use Equation \ref{eq:prediction_vcca_xy} to predict the class of unseen natural images. We evaluated the classification performance of VCCA-private and compare it to the standard VCCA model only using a single shared latent variable (see subsection Classification Results in Result). %In Section \ref{sec:classification_results}, we evaluate the classification performance of VCCA-private and compare it to the standard VCCA model only using a single shared latent variable. 
+
+
+\subsection{Experimental Setup}
+\label{sec:experimental_setup}
+
+This section briefly describes the network architecture designs and the selection of hyperparameters for the models. See the Supplemental Experimental Procedures
+%supplementary material 
+for full details on the network architectures and hyperparameters that we use.
+
+\paragraph{Processing of Natural Images} We use a DenseNet169~\cite{huang2017densely} as the backbone for processing the natural images since this architecture showed good classification performance in~\cite{klasson2019hierarchical}. As our first baseline, we customize the output layer of DenseNet169 to our the Grocery Store dataset and train it from scratch to classify the natural images. For the second baseline, we train a Softmax classifier on off-the-shelf features from DenseNet169 pre-trained on the ImageNet dataset~\cite{deng2009imagenet}, where we extract 1664-dimensional from the average pooling layer before the classification layer in the architecture. Using pre-trained networks as feature extractors for smaller datasets has previously been proven to be a successful approach for classification tasks~\cite{razavian2014cnnfeatures}, which makes it a suitable baseline for the Grocery Store dataset. We denoted the DenseNet169 trained from scratch and the Softmax classifier trained on off-the-shelf features as DenseNet-scratch and Softmax respectively in the Results section.%We denote the DenseNet169 trained from scratch and the Softmax classifier trained on off-the-shelf features as DenseNet-scratch and Softmax respectively in the further sections.
+
+\paragraph{Network Architectures} We use the same architectures for SplitAE and VCCA for a fair comparison. We train the models using off-the-shelf features extracted from a pre-trained DenseNet169 for the natural images. No fine-tuning of the DenseNet backbone was used in the experiments, which we leave for future research. The image feature encoder and decoder consist of a single hidden layer, where the encoder outputs the latent representation and the decoder reconstructs the image feature. We use a DCGAN~\cite{radford2015unsupervised} generator architecture for the iconic image decoder reconstructing the iconic images. The text description is predicted sequentially using an LSTM network~\cite{hochreiter1997long}. The label decoder uses a single hidden layer with 512 hidden units and Leaky ReLU activation. 
+The latent space dimension to $d_{z} = 200$ for all SplitAE and VCCA models in the experiments. In the VCCA-private models, the encoder and decoders have the same architectures as in the VCCA models. We use a reversed DCGAN generator as the iconic image encoder. The text description encoder is an LSTM. We obtain an embedding for the description by averaging all of the hidden states $h_t$ generated from the LSTM, i.e., $\frac{1}{T} \sum_{t=1}^{T} h_t$, and input it to a linear layer that outputs the latent representation. The dimensions of the private latent spaces are the same as the shared latent space dimension $d_{z} = 200$. 
+
+\paragraph{Training Details} In all experiments, we train all models for 200 epochs using the Adam optimizer~\cite{kingma2015adam} with initial learning rate $10^{-4}$ and hyperparameters $\beta_1 = 0.9$ and $\beta_2 = 0.999$. We apply the sum-of-squares loss for the natural and iconic images and the categorical cross-entropy loss for text descriptions and class labels. The latent representations for the AE and SplitAE are the output from the encoder, while for the VAE, VCCA, and VCCA-private we instead use the mean outputs $\mu_{z}(x)$ from the encoder. In VCCA-private, we use the the mean outputs $\mu_{u_{x}}(x)$ and $\mu_{u_{w}}(w)$ for visualizing the private latent representations (see Figure \ref{fig:2d_visualizations_pca_vcca_private_xw}). The Softmax classifiers are trained for 100 epochs using with initial learning rate $10^{-4}$ and hyperparameters $\beta_1 = 0.5$ and $\beta_2 = 0.999$. We run a hyperparameter search for the scaling weights $\lambda$ for the reconstruction losses of each view (see the Supplemental Experimental Procedures
+%supplementary material 
+for more details). 
+
+\paragraph{Choice of Text Description Length $T$} We wanted to investigate how the classification performance is affected by the text description length $T$ for the SplitAE and VCCA models using the text description $w$. Since the LSTM predicts the text description sequentially, the computational time increases as the text description length increases. We began by setting $T = 16$ because of how the sentence length was set for the image captioning model in \cite{lu2018neural}. Then we created an interval by taking steps with 8 words up to $T=40$ and included the minimum, mean, and maximum text description lengths which are $T=6, 36$, and $91$ respectively. We added two additional points at $T=50$ and $75$ since for most models there was a slight increase in classification performance when $T$ was increased from $40$ to $91$. 
+
+\paragraph{Computational Time} The computational time for the SplitAE and VCCA models differs depending on which views that are being used. We measured the number of seconds per epoch (s/epoch) on an Nvidia GeForce RTX 2080 Ti, where an epoch consists of the 2640 training samples. Running experiments with the text description view 
+%, i.e., VCCA$_{x w}$ and VCCA$_{x w y}$,
+took around 0.4--2.7 s/epoch with text description length $T \in [6, 91]$. Adding the iconic image view and training the models 
+% VCCA$_{x i w}$ and VCCA$_{x i w y}$ 
+took around 4.5--6.2 s/epoch depending on the text description length.
+
+
+\paragraph{Visualization Method} We use PCA to visualize the latent space by plotting the latent representations from the trained encoders. PCA is used for projecting the representations from dimension $d_{z}$ to a 2D space. We obtain the principal components for the representations with the natural images from the training set. In all figures, we plot the representations of test set images given the principal components obtained from the training images (see subsection Investigation of the Learned Representations in Results). To distinguish more easily between the class labels of the images, we occasionally use the iconic images from the dataset and plot the corresponding iconic image of the representation on its location in the 2D space.
+
