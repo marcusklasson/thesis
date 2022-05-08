@@ -1,0 +1,23 @@
+
+\begin{algorithm}[tb]
+   \caption{Learning Replay Scheduling Policy with DQN}
+   \label{alg:learning_replay_scheduling_policy_with_dqn}
+\begin{algorithmic}[1]
+   \Require $\vtheta$: DQN parameters,
+   \Require $\gE$: Set of training environments,
+   \State Initialize replay buffer $\gB$
+   %\STATE Initialize Q-network $Q_{\vtheta}$ with random weights $\vtheta$ 
+   \For{episode$=1, \dots, n_{episodes}$}
+        \State Initialize $s_1^{E}$ for every $E \in \gE$
+        \For{$t=1, T-1$}
+            \For{$E \in \gE$}
+            \State Take action $a_t^{E} = \argmax_{a \in \gA_t} Q_{\vtheta}(s_t^{E}, a)$ or random action with probability $\epsilon$
+            \State Execute $a_t^{E}$ in $E$ with Alg. \ref{alg:continual_learning_step} and observe reward $r_t^{E}$ and next state $s_{t+1}^{E}$ 
+            \State Store transition $(s_t^{E}, a_t^{E}, r_t^{E}, s_{t+1}^{E})$ in $\gB$
+            \State Sample mini-batch $(s_j, a_j, r_j, s_{j+1}) \sim \gB$ 
+            \State Perform gradient descent step on $(y_j - Q_{\vtheta}(s_j, a_j))^2$ with target values $y_j$ 
+            \EndFor
+        \EndFor 
+   \EndFor
+\end{algorithmic}
+\end{algorithm}

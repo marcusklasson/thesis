@@ -1,6 +1,6 @@
 
 \subsection{Monte Carlo Tree Search for Replay Schedules}
-\label{sec:mcts_for_replay_scheduling}
+\label{paperC:sec:mcts_for_replay_scheduling}
 
 
 Our proposed setup to learn %find 
@@ -8,7 +8,7 @@ replay schedules is to discretize the number of possible task proportions per ta
 With our discretization method, the action space of task proportions becomes shaped as a tree where each node represents a task proportion that corresponds to a specific composition of the replay memory $\gM$, as can be seen in Figure \ref{fig:replay_scheduling_mcts_tree_example}. 
 %The action space of task proportions then turn into a tree shape where each node represents a task proportion that corresponds to a specific composition of the replay memory $\gM$, as can be seen in Figure \ref{fig:replay_scheduling_mcts_tree_example}. 
 To find the most efficient replay schedule $S$ in mitigating catastrophic forgetting, we can perform an exhaustive search (e.g., breadth-first search) where all possible replay schedules are evaluated. 
-However, since the tree grows fast with the number of tasks, we need a scalable method that enables tree searches in large action spaces. To this end, we propose to use Monte Carlo tree search (MCTS)~\citep{coulom2006efficient} since MCTS has been successful in applications with similar conditions~\citep{browne2012survey, chaudhry2018feature, gelly2006modification, silver2016mastering}.
+However, since the tree grows fast with the number of tasks, we need a scalable method that enables tree searches in large action spaces. To this end, we propose to use Monte Carlo tree search (MCTS)~\citeC{C:coulom2006efficient} since MCTS has been successful in applications with similar conditions~\citeC{C:browne2012survey, C:chaudhry2018feature, C:gelly2006modification, C:silver2016mastering}.
 In our setting, MCTS can help us to concentrate the search in directions towards promising replay schedules in terms of classification performance and thus learn the time to learn.
 
 %%% MCTS progress table
@@ -29,8 +29,8 @@ Next, we briefly outline the MCTS steps for performing the search of replay sche
 \setlength{\belowdisplayshortskip}{0pt}
 
 \vspace{-3mm}
-\paragraph{Selection.} An MCTS iteration begins by selecting the next node to visit from the root node. If the current node $v_t$ has visited all its children during the previous iterations, the next node is selected by evaluating the Upper Confidence Tree (UCT)~\citep{kocsis2006bandit} function for all children. 
-We use the following UCT function proposed by \citet{chaudhry2018feature} to evaluate the score for moving from node $v_t$ to its child $v_{t+1}$:
+\paragraph{Selection.} An MCTS iteration begins by selecting the next node to visit from the root node. If the current node $v_t$ has visited all its children during the previous iterations, the next node is selected by evaluating the Upper Confidence Tree (UCT)~\citeC{C:kocsis2006bandit} function for all children. 
+We use the following UCT function proposed by \citeC{C:chaudhry2018feature} to evaluate the score for moving from node $v_t$ to its child $v_{t+1}$:
 \begin{align}\label{eq:uct}
     UCT(v_t, v_{t+1}) = \text{max}(Q(v_{t+1})) + C \sqrt{\frac{2 \log(N(v_{t}))}{N(v_{t+1})}}.
 \end{align}

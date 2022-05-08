@@ -1,7 +1,7 @@
 
-\subsection{Applying Scheduling to Recent Replay Methods}\label{sec:applying_scheduling_to_recent_replay_methods}
+\subsection{Applying Scheduling to Recent Replay Methods}\label{paperC:sec:applying_scheduling_to_recent_replay_methods}
 
-In this experiment, we show that replay scheduling can be combined with any replay method to enhance the CL performance. We combine RS-MCTS with Hindsight Anchor Learning (HAL)~\cite{chaudhry2021using}, Meta-Experience Replay (MER)~\cite{riemer2018learning}, Dark Experience Replay (DER)~\cite{buzzega2020dark}, and DER++. We provide the hyperparameter settings in Appendix \ref{app:apply_scheduling_to_recent_replay_methods}. Table \ref{tab:results_applying_scheduling_to_recent_replay_methods} shows the performance comparison between our proposed replay scheduling against using Random, ETS, and Heuristic schedules for each method. The results confirm that replay scheduling %learning the time to learn 
+In this experiment, we show that replay scheduling can be combined with any replay method to enhance the CL performance. We combine RS-MCTS with Hindsight Anchor Learning (HAL)~\citeC{C:chaudhry2021using}, Meta-Experience Replay (MER)~\citeC{C:riemer2018learning}, Dark Experience Replay (DER)~\citeC{C:buzzega2020dark}, and DER++. We provide the hyperparameter settings in Appendix \ref{paperC:app:apply_scheduling_to_recent_replay_methods}. Table \ref{tab:results_applying_scheduling_to_recent_replay_methods} shows the performance comparison between our proposed replay scheduling against using Random, ETS, and Heuristic schedules for each method. The results confirm that replay scheduling %learning the time to learn 
 is important for the final performance given the same memory constraints and it can benefit any existing CL framework. 
 
 

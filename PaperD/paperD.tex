@@ -26,9 +26,22 @@
 \end{abstract}
 
 
-\section{Introduction}\label{paperD:sec:introduction}
-hej hej här är en artikel
+%%% Contents
+\input{PaperD/sections/introduction}
+\input{PaperD/sections/background}
+\input{PaperD/sections/related_work}
+\input{PaperD/sections/methodology}
+\input{PaperD/sections/experiments}
+\input{PaperD/sections/discussion}
+\input{PaperD/sections/conclusions}
 
-\newpage
+\begin{appendices}
+\input{PaperD/appendix/appendix}
+\end{appendices}
+%\clearpage
 
-what do you think this is?
+%\renewcommand*{\bibname}{References}
+\bibliographystyleD{unsrt}
+{\small
+	\bibliographyD{PaperD/refD}
+}
