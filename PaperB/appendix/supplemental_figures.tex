@@ -147,15 +147,18 @@
     \label{fig:graphical_models}
 \end{figure}
 
+
 \clearpage
+\end{comment}
 
-    
-
-\begin{table*}[!ht]
-    \begin{adjustwidth}{-1cm}{}
+\begin{table}[!ht]
+    %\begin{adjustwidth}{-1cm}{}
     \centering
+    \caption{Examples of text descriptions and their corresponding class label and iconic image from the Grocery Store dataset. }
+    \vspace{-2mm}
+    \resizebox{\textwidth}{!}{
     \begin{tabular}{c c c}
-        %\toprule
+         \toprule
          {\bf\footnotesize Class Label} & {\bf\footnotesize Iconic Image} & {\bf\footnotesize Text Description} \\
          \toprule
          \multicolumn{1}{p{1.5cm}}{\vspace{-17mm} {\footnotesize Golden Delicious Apple} } &
@@ -205,18 +208,20 @@
          
         \toprule
     \end{tabular}
-    \caption{Examples of text descriptions and their corresponding class label and iconic image from the Grocery Store dataset. }
+	}
+
     \label{tab:grocerystore_dataset_descriptions}
-    \end{adjustwidth}
-\end{table*}
+    %\end{adjustwidth}
+\end{table}
 
 \clearpage
 
-\renewcommand{\arraystretch}{1.6}
-\begin{table*}[h]
+\begin{table}[h]
 \centering
-\vspace{2mm}
-%\scalebox{0.95}{
+\caption{ Classification accuracies on the test set for all models in percentage (\%) along with the best hyperparameter setting, i.e., the scaling weights $\lambda$ and text description length $T$, for each model. The column Accuracy corresponds to the fine-grained classification accuracy. The column Coarse Accuracy corresponds to the classifying a class within the correct parent class. Results are averaged using 10 different random seeds and we report both means and standard deviations. Abbreviations: AE, Autoencoder; VAE, Variational Autoencoder; SplitAE, Split Autoencoder; VCCA, Variational Canonical Correlation Analysis.
+}
+\vspace{-2mm}
+\resizebox{\textwidth}{!}{%\scalebox{0.95}{
 \begin{tabular}{l | c c c c | c | c c}
     \hline
     \Xhline{3\arrayrulewidth}
@@ -258,11 +263,10 @@
     {\small VCCA$_{x i w y}$} & 1 & 1000 & 1000 & 1000 &  91 & $77.78 \pm 0.45$ & $86.88 \pm 0.47$ \\ 
     \Xhline{3\arrayrulewidth}
 \end{tabular}
-\caption{ Classification accuracies on the test set for all models in percentage (\%) along with the best hyperparameter setting, i.e., the scaling weights $\lambda$ and text description length $T$, for each model. The column Accuracy corresponds to the fine-grained classification accuracy. The column Coarse Accuracy corresponds to the classifying a class within the correct parent class. Results are averaged using 10 different random seeds and we report both means and standard deviations. Abbreviations: AE, Autoencoder; VAE, Variational Autoencoder; SplitAE, Split Autoencoder; VCCA, Variational Canonical Correlation Analysis.
 }
+\vspace{-2mm}
 \label{tab:classification_results_on_test_set_with_hyperparameters}
-\end{table*}
+\end{table}
 
-\clearpage
+%\clearpage
 
-\end{comment}
