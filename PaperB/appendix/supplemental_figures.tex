@@ -115,41 +115,105 @@
     \label{fig:2d_visualizations_pca_vcca_private_xi}
 \end{figure}
 
-\begin{comment}
-
 \clearpage
 
+%\resizebox{\textwidth}{!}{
 \begin{figure}[t!]
     \centering
+    %\resizebox{\textwidth}{!}{
     \begin{minipage}[t]{\textwidth}
-        \centering
-         \subfigure[VAE$_{x}$]{\label{fig:tikz_vae_x}\input{PaperB/appendix/figures/tikz_figures/vae_x}} ~~~~ \subfigure[VCCA$_{x y}$]{\label{fig:tikz_vcca_xy}\input{PaperB/appendix/figures/tikz_figures/vae_xy}}
-         ~~~~  
-         \subfigure[VCCA$_{x i}$]{\label{fig:tikz_vcca_xi}\input{PaperB/appendix/figures/tikz_figures/vcca_xi}}
-         ~~~~  
-         \subfigure[VCCA$_{x i y}$]{\label{fig:tikz_vcca_xiy}\input{PaperB/appendix/figures/tikz_figures/vcca_xiy}} ~~~~
-         \\
-         \subfigure[VCCA$_{x w}$]{\label{fig:tikz_vcca_xw}\input{PaperB/appendix/figures/tikz_figures/vcca_xw}} 
-         \subfigure[VCCA$_{x w y}$]{\label{fig:tikz_vcca_xwy}\input{PaperB/appendix/figures/tikz_figures/vcca_xwy}} ~~~~
-         \subfigure[VCCA$_{x i w}$]{\label{fig:tikz_vcca_xiw}\input{PaperB/appendix/figures/tikz_figures/vcca_xiw}}
-         ~~~~
-         \subfigure[VCCA$_{x i w y}$]{\label{fig:tikz_vcca_xiwy}\input{PaperB/appendix/figures/tikz_figures/vcca_xiwy}} ~~~~
-         \\
-         \subfigure[VCCA-private$_{x i}$]{\label{fig:tikz_vcca_private_xi}\input{PaperB/appendix/figures/tikz_figures/vcca_private_xi}}
-         ~~~~ 
-         \subfigure[VCCA-private$_{x i y}$]{\label{fig:tikz_vcca_private_xiy}\input{PaperB/appendix/figures/tikz_figures/vcca_private_xiy}}
-         ~~~~ 
-         \subfigure[VCCA-private$_{x w}$]{\label{fig:tikz_vcca_private_xw}\input{PaperB/appendix/figures/tikz_figures/vcca_private_xw}}
-         ~~~~ 
-         \subfigure[VCCA-private$_{x w y}$]{\label{fig:tikz_vcca_private_xwy}\input{PaperB/appendix/figures/tikz_figures/vcca_private_xwy}} ~~~~
+        %\centering
+        \begin{subfigure}[t]{0.21\textwidth}
+        	\centering
+        	\input{PaperB/appendix/figures/tikz_figures/vae_x}
+        	%\includegraphics[width=\textwidth]{PaperB/appendix/figures/tikz_figures/vae_x}
+        	\caption{VAE$_{x}$}
+        	\label{fig:tikz_vae_x}
+        \end{subfigure} \hspace{2mm}
+    	\begin{subfigure}[t]{0.21\textwidth}
+    		\centering
+    		\input{PaperB/appendix/figures/tikz_figures/vae_xy}
+    	%\includegraphics[width=\textwidth]{PaperB/appendix/figures/tikz_figures/vae_x}
+    	\caption{VCCA$_{x y}$}
+    	\label{fig:tikz_vcca_xy}
+    	\end{subfigure} \hspace{2mm}
+        \begin{subfigure}[t]{0.21\textwidth}
+	    	\centering
+	    	\input{PaperB/appendix/figures/tikz_figures/vcca_xi}
+		    %\includegraphics[width=\textwidth]{PaperB/appendix/figures/tikz_figures/vae_x}
+		    \caption{VCCA$_{x i}$}
+		    \label{fig:tikz_vcca_xi}
+		\end{subfigure} \hspace{2mm}
+		\begin{subfigure}[t]{0.21\textwidth}
+			\centering
+			\input{PaperB/appendix/figures/tikz_figures/vcca_xiy}
+			%\includegraphics[width=\textwidth]{PaperB/appendix/figures/tikz_figures/vae_x}
+			\caption{VCCA$_{x i y}$}
+			\label{fig:tikz_vcca_xiy}
+		\end{subfigure} 
+		\\[3mm]
+        \begin{subfigure}[t]{0.20\textwidth}
+         	\centering
+         	\input{PaperB/appendix/figures/tikz_figures/vcca_xw}
+         	\caption{VCCA$_{x w}$}
+         	\label{fig:tikz_vcca_xw}
+         \end{subfigure} \hspace{2mm}
+         \begin{subfigure}[t]{0.20\textwidth}
+         	\centering
+         	\input{PaperB/appendix/figures/tikz_figures/vcca_xwy}
+         	%\includegraphics[width=\textwidth]{PaperB/appendix/figures/tikz_figures/vae_x}
+         	\caption{VCCA$_{x w y}$}
+         	\label{fig:tikz_vcca_xwy}
+         \end{subfigure} \hspace{2mm}
+         \begin{subfigure}[t]{0.20\textwidth}
+         	\centering
+         	\input{PaperB/appendix/figures/tikz_figures/vcca_xiw}
+         	%\includegraphics[width=\textwidth]{PaperB/appendix/figures/tikz_figures/vae_x}
+         	\caption{VCCA$_{x i w}$}
+         	\label{fig:tikz_vcca_xiw}
+         \end{subfigure} \hspace{2mm}
+         \begin{subfigure}[t]{0.20\textwidth}
+         	\centering
+         	\input{PaperB/appendix/figures/tikz_figures/vcca_xiwy}
+         	%\includegraphics[width=\textwidth]{PaperB/appendix/figures/tikz_figures/vae_x}
+         	\caption{VCCA$_{x i w y}$}
+         	\label{fig:tikz_vcca_xiwy}
+         \end{subfigure}
+     	\\[3mm]
+     	\begin{subfigure}[t]{0.21\textwidth}
+     		\centering
+     		\input{PaperB/appendix/figures/tikz_figures/vcca_private_xi}
+     		\caption{VCCA-private$_{x i}$}
+     		\label{fig:tikz_vcca_private_xi}
+     	\end{subfigure} \hspace{2mm}
+     	\begin{subfigure}[t]{0.21\textwidth}
+     		\centering
+     		\input{PaperB/appendix/figures/tikz_figures/vcca_private_xiy}
+     		%\includegraphics[width=\textwidth]{PaperB/appendix/figures/tikz_figures/vae_x}
+     		\caption{VCCA-private$_{x i y}$}
+     		\label{fig:tikz_vcca_private_xiy}
+     	\end{subfigure} \hspace{2mm}
+     	\begin{subfigure}[t]{0.21\textwidth}
+     		\centering
+     		\input{PaperB/appendix/figures/tikz_figures/vcca_private_xw}
+     		%\includegraphics[width=\textwidth]{PaperB/appendix/figures/tikz_figures/vae_x}
+     		\caption{VCCA-private$_{x w}$}
+     		\label{fig:tikz_vcca_private_xw}
+     	\end{subfigure} \hspace{2mm}
+     	\begin{subfigure}[t]{0.21\textwidth}
+     		\centering
+     		\input{PaperB/appendix/figures/tikz_figures/vcca_private_xwy}
+     		%\includegraphics[width=\textwidth]{PaperB/appendix/figures/tikz_figures/vae_x}
+     		\caption{VCCA-private$_{x w y}$}
+     		\label{fig:tikz_vcca_private_xwy}
+     	\end{subfigure}
     \end{minipage}
+	%}
     \caption{ The graphical models of the VAE, VCCA, and VCCA-private, where nodes represent random variables and edges indicate possible dependence. Grey nodes are observed random variables, while white nodes are latent random variables. The joint distribution is given by the product of the conditional distributions of nodes given their parents. Abbreviations: VAE, Variational Autoencoder; VCCA, Variational Canonical Correlation Analysis.}
     \label{fig:graphical_models}
 \end{figure}
 
-
 \clearpage
-\end{comment}
 
 \begin{table}[!ht]
     %\begin{adjustwidth}{-1cm}{}
