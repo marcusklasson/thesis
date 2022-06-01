@@ -273,10 +273,22 @@ All authors took part in discussing the results and contributed to writing the m
 \subsection{\underline{Paper C}: Learn the Time to Learn: Replay Scheduling for Continual Learning}
 \label{sec:paperC}
 
-\begin{figure}[h]
+\begin{figure}[t]
 	\centering 
-	\includegraphics[width=0.33\textwidth]{example-image-c}
-	\caption{ \MK{Paper C could illustrate the new CL setup with a figure that shows a network and a scheduler that needs to fetch a small replay memory from a huge pool of historical data.}}
+    \begin{subfigure}[b]{0.8\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{Chapter1/figures/testing2}
+		\caption{The traditional replay approach.}
+		\label{fig:paperC_standard_replay}
+	\end{subfigure} \\[5pt]
+    \begin{subfigure}[b]{0.8\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{Chapter1/figures/testing}
+		\caption{Our replay scheduling approach.}
+		\label{fig:paperC_our_approach}
+	\end{subfigure}
+	%\includegraphics[width=0.33\textwidth]{example-image-c}
+	\caption{(a) shows the traditional replay approach where a small amount of data from past tasks is stored in the replay memory buffer. An equal amount of samples per task are selected for constructing the replay memory $\gM$ at each time step and is then concatenated with the dataset $\gD$ to train the classifier $f_{\vtheta}$. (b) \MK{fill in here, figure is quite self-contained} }
 	\label{fig:paperC}
 \end{figure}
 
@@ -297,12 +309,13 @@ All authors took part in discussing the results and contributed to writing the m
 \subsection{\underline{Paper D}: Meta Policy Learning for Replay Scheduling in Continual Learning}
 \label{sec:paperD}
 
-\begin{figure}[h]
+\begin{figure}[t]
 	\centering 
-	\includegraphics[width=0.33\textwidth]{example-image-golden}
-	\caption{ \MK{Paper D could show illustration of the RL agent scheduler that gets performance measures as input and outputs an action proportion of how to select the replay memory. RL agent could also have a replay buffer where data is collected from several environments. Maybe it can also show the test case, so that it would be two separated "at training/test phase". }}
-	\label{fig:paperD}
+	\includegraphics[width=0.95\textwidth]{Chapter1/figures/paper_d_testing_mnist}
+	\caption{\MK{Paper D could show illustration of the RL agent scheduler that gets performance measures as input and outputs an action proportion of how to select the replay memory. RL agent could also have a replay buffer where data is collected from several environments. Maybe it can also show the test case, so that it would be two separated "at training/test phase". } }
+	\label{fig:paperD_our_approach}
 \end{figure}
+
 
 \begin{enumerate}
 	\item[] \textbf{Marcus Klasson}, Hedvig Kjellström, Cheng Zhang. \textit{Under preparation}.%Under preparation for submission to \textit{Conference on Neural Information Processing Systems (NeurIPS) 2022}.
