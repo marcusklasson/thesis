@@ -306,14 +306,15 @@ MK performed all the experiments, created the visualizations, and wrote the text
 All authors took part in discussing the results and contributed to writing the manuscript. 
 
 
-\subsection{\underline{Paper D}: Meta Policy Learning for Replay Scheduling in Continual Learning}
+\subsection{\underline{Paper D}: %Meta 
+	Policy Learning for Replay Scheduling in Continual Learning}
 \label{sec:paperD}
 
 
 \begin{figure}[t]
 	\centering 
 	\includegraphics[width=0.95\textwidth]{Chapter1/figures/testing_size2.pdf}
-	\caption{\MK{Paper D could show illustration of the RL agent scheduler that gets performance measures as input and outputs an action proportion of how to select the replay memory. RL agent could also have a replay buffer where data is collected from several environments. Maybe it can also show the test case, so that it would be two separated "at training/test phase". } grey valued box means that its in evaluation time.}
+	\caption{Illustration over policy learning framework for replay scheduling. The policy $\pi_{\vtheta}$ receives state $s_t$ of the classifier $f_{\vphi}$ to select action $a_t$ determining how the replay memory $\gM_t$ should be constructed. Dark gray-shaded box means that classifier is in evaluation mode.}
 	\label{fig:paperD_our_approach}
 \end{figure}
 
