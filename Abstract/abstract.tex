@@ -1,4 +1,47 @@
 \begin{abstract}
+	
+\noindent In recent years, computer vision-based assistive systems have enabled visually impaired people to use automatic visual recognition on their mobile phones. 
+These systems should be capable of recognizing objects on fine-grained levels to provide the user with accurate predictions. Additionally, the user should have the option to update the system continuously to recognize new objects of interest.  %Moreover, a valuable feature would be if they could be updated to recognize new object classes. 
+However, there are several challenges that need to be tackled to enable such features with assistive vision systems in real and highly-varying environments. 
+For instance, fine-grained image recognition usually requires large amounts of labeled data to be robust, and image classifiers struggle with retaining performance of previously learned abilities when adapting to new tasks. 
+This thesis is divided into two parts where we address these challenges. 
+First, we focus on the application of using assistive vision devices for grocery shopping where items are naturally structured based on fine-grained details.  %grocery shopping with an assistive vision device where items are naturally structured based on fine-grained details. 
+We demonstrate how image classifiers can be trained with a combination of natural images and web-scraped information about the groceries to obtain more accurate classification performance compared to only using natural images for training. %To reduce the need for exhaustive data collection in grocery stores, we show how image classifiers can be trained with a combination of real images and web-scraped information about the groceries to obtain more accurate classification performance.
+Secondly, we bring forward a new approach for continual learning called replay scheduling where we select which tasks to replay at different times to improve memory retention. 
+Furthermore, we propose a novel framework for learning replay scheduling policies that can generalize to new continual learning scenarios for mitigating the catastrophic forgetting effect in image classifiers. 
+This %To summarize, this 
+thesis provides insights on practical challenges that need to be addressed to enhance the usefulness of computer vision for assisting the visually impaired in real-world scenarios. 
+
+
+%To address these challenges, 
+
+%Problems with fine-grained image recognition is that it requires large amounts of training data for being robust in real environments with high-variations. 
+
+%The problem with updating the object recognizer continuously is that the recognizer typically suffers from catastrophic forgetting, such that it is hard to guarantee that the recognizer will accurately recognize previously learned objects after learning new ones. 
+
+%This thesis has been divided into two parts targeting these challenges. For fine-grained recognition, we focus on the application of grocery shopping with an assistive vision device. To reduce the need for exhaustive data collection in grocery stores, we show how image classifiers can be trained with a combination of real images and web-scraped information about the groceries to obtain more accurate classification performance. 
+
+%In continual learning, we bring forward a new approach called replay scheduling where we select which tasks to replay at different times. Moreover, we propose a framework for learning replay scheduling policies that can generalize to new continual learning scenarios for mitigating catastrophic forgetting. 
+
+
+%This thesis provides approaches motivated from real-world applications as well as insights towards automatic visual recognition to assist the visually impaired. 
+
+%To tackle the challenges with fine-grained image recognition, we propose combining learning from web information to reduce the need for collecting real-world images. We have collected a dataset of grocery items in addition to web-scraped information of the items and suggest a method based on multi-view representation learning that enhances the classification performance when combing learning fro real images and web information over learning from only real images. 
+
+%To tackle the catastrohic forgetting, we propose a novel approach called repla yscheduling for mititgating catastrophic forgetting where we select which old tasks to rehearse on at differetn times. We show that repla yscheduling is important in continual learning settings as well as propose a method to enable more efficient scheduling policies that can generalzie to new scenarios without added training cost. 
+
+%Why is this work imporatnt for assistive vision?
+
+
+%These systems should be capable of recognizing objects that are important for the user on a fine-grained level. To this end, we have focused on the particular application of classifying food items which can be challenging for blind/low-vision people since visual information is often required for distinguishing between similar items. In Paper A, we present a challenging image dataset of groceries taken in grocery stores where each item is hierarchically labeled to capture the fine-grained structure of the various items. Furthermore, we demonstrate in Paper B how more easily accessible information about the items, such as web-scraped images and text descriptions, can be utilized for enhancing the classification performance of groceries compared to only using the real-world images for training. 
+
+%A valuable feature of assistive vision systems is the capability of adapting to new object classes. The main challenge here is to avoid catastrophically forgetting previously learned knowledge when the classifier is updated with new classes. In Paper C, we propose a new continual learning setting for replay-based methods that aligns well with real-world needs where constraints are placed on processing time rather than the storage capacity of old samples. 
+%Replay methods mitigate this problem efficiently by mixing previous data samples from a limited memory buffer with the training samples of the new classes during learning. In Paper C, we propose a new continual learning setting that is close to real-world needs where constraints are placed on processing time rather than the storage capacity of old samples. 
+%We then study the timing of replaying certain tasks and show that learning replay schedules over which tasks to replay can be critical for the final classification performance in our proposed setting. Finally, in Paper D, we present a method based on reinforcement learning for learning a policy for selecting which tasks to replay at different times. The benefit of our learned replay scheduling policy is that it can be applied to any new continual learning scenario for mitigating catastrophic forgetting in a classifier without additional computational cost. 
+
+%To conclude, I will discuss some potential future directions for the development of the next generation of computer vision-based assistive technologies. 
+	
+\begin{comment}
 \noindent In recent years, computer vision-based assistive systems have enabled visually impaired people to use automatic object recognition on their mobile phones. 
 These systems should be capable of recognizing objects that are important for the user on a fine-grained level. 
 To this end, we have focused on the particular application of classifying food items which can be challenging for blind/low-vision people since visual information is often required for distinguishing between similar items. 
@@ -13,6 +56,8 @@ We then study the timing of replaying certain tasks and show that learning repla
 Finally, in Paper D, we present a method based on reinforcement learning for learning a policy for selecting which tasks to replay at different times. The benefit of our learned replay scheduling policy is that it can be applied to any new continual learning scenario for mitigating catastrophic forgetting in a classifier without additional computational cost. 
 
 To conclude, I will discuss some potential future directions for the development of the next generation of computer vision-based assistive technologies. 
+\end{comment}
+
 
 
 %which have been mostly ignored in the literature, can have a high influence on the final classification performance. We then propose a new continual learning setting where scheduling over which tasks to replay becomes important 
