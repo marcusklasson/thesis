@@ -7,7 +7,7 @@
 
 The goal with this chapter is to provide the reader with preliminaries that are useful for comprehending the included papers. We assume that the reader has some knowledge in calculus, linear algebra, and probability theory, but we intend to keep it on a basic level. First, we give the notation that will be used throughout the thesis. Then, we will introduce a selection of related works to place the thesis into context. 
 
-\MK{What is chapter about? Add references to sections!}
+\MK{What is chapter about? Add references to sections! We focus on deep learning architectures rather than how they are trained.}
 
 
 
@@ -91,11 +91,8 @@ Deep networks are most commonly optimized using the Stochastic Gradient Descent 
 \end{align} 
 where $\eta$ is the learning rate which determines how much the weights should be updated with the computed gradient. Common loss functions $\gL$ are the cross-entropy loss for classification and the mean-squared error for regression tasks. The gradients are computed using the backpropagation algorithm~\cite{rumelhart1986learning} which computes the gradients iteratively backwards one layer at a time. 
 
-
-\MK{Mention batch normalization and dropout for improving training and prevent overfitting, architectural design choices for for stable training. }
-
-
-Next, we will describe three popular types of neural networks, namely, multilayer perceptrons (MLPs), convolutional neural networks (CNNs), and recurrent neural networks (RNNs).
+Many innovations have been designed in recent years to stabilize the training of deep neural network architectures. For instance, dropout~\cite{srivastava2014dropout} is used for mitigating overfitting to the training data by randomly keeping layer outputs active to encourage the parameters to take more (or less) responsibility for the inputs. Batch normalization~\cite{ioffe2015batch, santurkar2018does} normalizes the layer inputs to enable faster and more stable learning. Residual connections~\cite{he2016deep} eases training networks with hundreds of layers by mitigating the degradation problem, where adding more layers resulted in higher training error. Furthermore, various adaptive learning rate optimizers~\cite{kingma2014adam,liu2019variance,tieleman2012lecture} for the SGD updates, learning rate schedulers~\cite{smith2017cyclical}, and network initializations~\cite{glorot2010understanding, he2015delving} have been proposed to enable more efficient training. We refer the reader to the provided references for the details on these techniques.
+Next, we will describe three popular types of neural networks that have been applied in the experiments of this thesis, namely, multilayer perceptrons (MLPs), convolutional neural networks (CNNs), and recurrent neural networks (RNNs).
 
 \vspace{-3mm}
 \begin{wrapfigure}{r}{0.39\textwidth}
@@ -128,6 +125,23 @@ Next, we will describe three popular types of neural networks, namely, multilaye
 \paragraph{Convolutional Neural Networks.} Convolutional layers constitutes of a set of filters with adaptable parameters to capture relationships between neighboring features in the data~\cite{lecun1998gradient}. The parameters in every filter are shared across every spatial location in the data when extracting the succeeding feature representation. This design choice enables each filter to extract important features at any location in the data. Furthermore, parameter sharing also reduces the amount of parameters in the network and lowers the number of operations for computing the outputs. Figure \ref{fig:cnn_simple} shows an illustration of a CNN architecture. Each filter slides across the width and height of the input to compute dot products between the filter weights and the local input region to produce a 2-dimensional feature map. The feature maps from all filters are then stacked depth-wise to obtain the output volume, which are often subsampled along their spatial dimensions with a pooling operation after a non-linear activation function. The feature maps in the last subsampling layer are flattened and fed into an arbitrary number of fully-connected layers (an MLP) to produce the final output. 
 
 
+\vspace{-3mm}
+\begin{wrapfigure}{r}{0.39\textwidth}
+	\centering
+	\vspace{-3mm}
+	\resizebox{0.39\textwidth}{!}{
+		\input{Chapter2/tikz/rnn}
+	}
+	\captionsetup{width=.9\linewidth}
+	\caption{Graphical representation of RNN.}
+	\vspace{-3mm}
+	\label{fig:rnn}
+\end{wrapfigure}
+\paragraph{Recurrent Neural Networks.} RNNs are a family of neural network models specialized for processing sequences of data. These networks predicts the next output given the past sequence and uses an extension of backpropagation to compute gradients across different time steps. 
+Similar to CNNs, RNNs apply parameter sharing across time steps to enable extracting relevant information that can appear at different positions in the sequence. RNNs makes an assumption that all relevant information about the past sequence $\vx_{1:t-1}$ can be summarized in a hidden state $\vh_t$. The state evolves over time through the updated equation $\vh_t = f_{\vtheta}(\vh_{t-1}, \vx_{t-1})$ where $f_{\vtheta}$ is a neural network for capturing the long-term dependencies. Common choices for this network are the Long Short-Term Memory (LSTM)~\cite{hochreiter1997long} and Gated Recurrent Unit (GRU)~\cite{chung2014empirical} which use gating functions for determining what information is relevant for the future time steps. Figure \ref{fig:rnn} shows a graphical representation of an RNN. The initial hidden state $\vh_0$ is usually set to zero or learned. 
+
+
+%\paragraph{Recurrent Neural Networks.} RNNs are a family of neural network models specialized for processing sequences of data. Similar to CNNs, these models use parameter sharing by applying the same weights across several time steps. The parameter sharing is important in RNNs as it enables the model to handle different sequence lengths as well as being capable of recognizing relevant information that can appear at different locations in the sequence. Many RNNs follow the same procedure through the equation $\vh^{(t)} = f_{\vtheta}(\vh^{(t-1)}, \vx^{(t)})$, where the RNN produces the current state $\vh^{(t)}$ by incorporating the input data $\vx^{(t)}$ at time $t$ into the previous hidden state $\vh^{(t-1)}$. Hence, the hidden state $\vh^{(t)}$ will now contain information about the whole past sequence up to time $t$. In most applications, there will be an extra output layer that reads the information from state $\vh^{(t)}$ to make predictions. An example application for RNNs is predicting the next word in a sentence given previous words, where the RNN should store the necessary information about previous words to predict the rest of the sentence. A common choice of RNN model is the Long Short-Term Memory~\cite{hochreiter1997long} (LSTM) which mitigates problems with vanishing gradients during the training phase. \vspace{1mm}
 
 %The simplest form of feedforward neural networks is the MLP. Let the vector $\vx = (x_1, \dots, x_d)^{T}$ be some form of data where $x_i$ is the $i$-th feature for $i = 1, \dots, d$. Every layer in the MLP constitutes of weights $\mW$ that are used for transforming the input such that the output reveals some hidden structure useful for solving the task of interest. The transformation is performed with a matrix multiplication, i.e., $\vh = \mW \vx$, to receive the intermediate representation $\vh$. An essential part for enabling neural networks to learn non-linear functions is to add an activation function right after the matrix multiplication of each layer. Otherwise, the neural network would only be capable of learning linear functions since the matrix multiplication is a linear mapping. A common activation function is the $a(\vx) = \max(0, \vx)$, or the so called Rectified Linear Unit (ReLU) activation, which outputs $\vx$ when $\vx > 0$ or otherwise zero. By stacking two layers together in a neural network with a ReLU activation, we then obtain the representation $\vh = \mW_2\max(0,  \mW_1\vx)$. Note here that this representation could be predicted class scores, such that $\vh = \hat{\vy}$, if we would use two-layer MLP for a classication task. 
 
@@ -189,8 +203,6 @@ For data where the spatial order of each feature can be salient for prediction t
 
 %, we The MLP operates on each input feature individually. Hence, the order of the features is ignored. However, in images, we know that pixels can have strong relationships between each other where, for instance, two neighboring pixels often have similar color and may belong to the same object that we wish to recognize. 
 
-
-\paragraph{Recurrent Neural Networks.} RNNs are a family of neural network models specialized for processing sequences of data. Similar to CNNs, these models use parameter sharing by applying the same weights across several time steps. The parameter sharing is important in RNNs as it enables the model to handle different sequence lengths as well as being capable of recognizing relevant information that can appear at different locations in the sequence. Many RNNs follow the same procedure through the equation $\vh^{(t)} = f_{\vtheta}(\vh^{(t-1)}, \vx^{(t)})$, where the RNN produces the current state $\vh^{(t)}$ by incorporating the input data $\vx^{(t)}$ at time $t$ into the previous hidden state $\vh^{(t-1)}$. Hence, the hidden state $\vh^{(t)}$ will now contain information about the whole past sequence up to time $t$. In most applications, there will be an extra output layer that reads the information from state $\vh^{(t)}$ to make predictions. An example application for RNNs is predicting the next word in a sentence given previous words, where the RNN should store the necessary information about previous words to predict the rest of the sentence. A common choice of RNN model is the Long Short-Term Memory~\cite{hochreiter1997long} (LSTM) which mitigates problems with vanishing gradients during the training phase. \vspace{1mm}
 
 \begin{comment}
 
