@@ -24,7 +24,7 @@ where $x_i$ for $1 \leq i \leq D$ is the $i$-th scalar, real-valued feature of t
 We assume that the data follows some underlying distribution, $p_{data}(\vx)$, usually referred to as the data generating distribution. In machine learning, we are often interested in approximating $p_{data}$ with a distribution $p_{\vtheta}(\vx)$ parameterized by $\vtheta$ given a finite dataset $\gD = \{\vx^{(i)}\}_{i=1}^{N}$ of $N$ samples where $x^{(i)} \sim p_{data}(\vx)$. Estimating the parameters $\vtheta$ from the dataset $\gD$ is called the \textit{training phase}. A central goal for most applications in machine learning is to make predictions on new data which is called \textit{generalization}. We measure the generalization capability by evaluating the task of interest on a held-out dataset during the \textit{test phase}.
 
 \vspace{-3mm}
-\paragraph{Supervised Learning.} In this setting, we are given a dataset $\{(\vx^{(i)}, y^{(i)})\}_{i=1}^{N}$ where each data point $\vx^{(i)}$ is accompanied with a target $y^{(i)}$. In classification problems, the target $y \in \{1, \dots, K\}$ belongs to one of $K$ discrete categories, while in regression problems, the targets $y \in \R$ are continuous and real-valued. The goal is to estimate $p_{\vtheta}(y | \vx)$ which is the probability of assigning the target $y$ given data $\vx$. We represent $p_{\vtheta}(y | \vx) = f_{\vtheta}(x)$ with the parameterized function $f_{\vtheta}(x)$ which maps data $\vx$ to target variables $y$.  
+\paragraph{Supervised Learning.} In this setting, we are given a dataset $\{(\vx^{(i)}, y^{(i)})\}_{i=1}^{N}$ where each data point $\vx^{(i)}$ is accompanied with a target $y^{(i)}$. In classification problems, the target $y \in \{1, \dots, C\}$ belongs to one of $C$ discrete categories, while in regression problems, the targets $y \in \R$ are continuous and real-valued. The goal is to estimate $p_{\vtheta}(y | \vx)$ which is the probability of assigning the target $y$ given data $\vx$. We represent $p_{\vtheta}(y | \vx) = f_{\vtheta}(x)$ with the parameterized function $f_{\vtheta}(x)$ which maps data $\vx$ to target variables $y$.  
 
 %a function $f_{\vtheta}(\vx)$ that assigns the correct target to each example in the training set as accurately as possible. In classification problems, each target belongs to one of $K$ discrete categories, such that $\vy = \{1, \dots, K\}$, and we want to predict which of the categories that new data belongs to. Classification tasks will be involved in all included papers of this thesis wherein Paper \ref{chap:paperA} and B we focus on assigning the correct product category to images of grocery items. Another problem type in supervised learning is regression where the targets are continuous and real-valued. An example of a regression task is to predict the outdoors temperature tomorrow given the observed temperature today. 
 
@@ -83,7 +83,19 @@ There exist many different methods for solving problems within these three field
 \section{Deep Learning}\label{sec:deep_learning}
 
 In this section, we give an introduction to deep learning~\cite{goodfellow2016deep} which is a family of machine learning methods that we have used in this thesis. 
-Deep learning methods are capable of learning tasks from large and high-dimensional datasets due to more efficient machine learning algorithms and advances in computer hardware in the last decades. A deep learning architecture is constructed by stacking layers of parameters that extract intermediate representations of the input data, where the last layer usually outputs a predicted target answer from the queried input. This approach has been successfully applied in various number of fields such as computer vision~\cite{he2016deep, krizhevsky2012imagenet}, natural language processing~\cite{devlin2018bert}, and reinforcement learning~\cite{mnih2015human, silver2016mastering}. Next, we will describe three popular types of neural networks, namely, multilayer perceptrons (MLPs), convolutional neural networks (CNNs), and recurrent neural networks (RNNs).
+Deep learning methods are capable of learning tasks from large and high-dimensional datasets due to more efficient machine learning algorithms and advances in computer hardware in the last decades. A deep learning architecture is constructed by stacking layers of parameters that extract intermediate representations of the input data, where the last layer usually outputs a predicted target answer from the queried input. This approach has been successfully applied in various number of fields such as computer vision~\cite{he2016deep, krizhevsky2012imagenet}, natural language processing~\cite{devlin2018bert}, and reinforcement learning~\cite{mnih2015human, silver2016mastering}. 
+
+Deep networks are most commonly optimized using the Stochastic Gradient Descent (SGD) algorithm. This procedure uses gradients of a loss function $\gL(f_{\vtheta}(\vx), \vy)$ with respect to every parameter to perform the update step
+\begin{align}\label{eq:weight_update_sgd}
+	\vtheta = \vtheta - \eta \nabla_{\vtheta} \gL(f_{\vtheta}(\vx), \vy),
+\end{align} 
+where $\eta$ is the learning rate which determines how much the weights should be updated with the computed gradient. Common loss functions $\gL$ are the cross-entropy loss for classification and the mean-squared error for regression tasks. The gradients are computed using the backpropagation algorithm~\cite{rumelhart1986learning} which computes the gradients iteratively backwards one layer at a time. 
+
+
+\MK{Mention batch normalization and dropout for improving training and prevent overfitting, architectural design choices for for stable training. }
+
+
+Next, we will describe three popular types of neural networks, namely, multilayer perceptrons (MLPs), convolutional neural networks (CNNs), and recurrent neural networks (RNNs).
 
 \vspace{-3mm}
 \begin{wrapfigure}{r}{0.39\textwidth}
@@ -97,7 +109,23 @@ Deep learning methods are capable of learning tasks from large and high-dimensio
 	\vspace{-3mm}
 	\label{fig:mlp}
 \end{wrapfigure}
-\paragraph{Multilayer Perceptrons.} The simplest form of feedforward neural networks is the MLP based on the Perceptron~\cite{rosenblatt1958perceptron}. Basically, MLPs constitutes of multiple hidden layers performing matrix multiplication to extract intermediate representations of the input. Each matrix multiplication is followed by an activation function, such as the Rectified Linear Unit (ReLU) activation, which is an essential step for enabling neural networks to learn non-linear functions. Figure \ref{fig:mlp} shows an illustration of an MLP with two hidden layers. The edges between two columns of units represent the matrix multiplication where each edge corresponds to a parameter in the network. The parameters are updated to approximate the function of interest as accurately as possible given some learning criterion which we will introduce later.  
+\paragraph{Multilayer Perceptrons.} The simplest form of feedforward neural networks is the MLP based on the Perceptron~\cite{rosenblatt1958perceptron}. Basically, MLPs constitutes of multiple hidden layers performing matrix multiplication to extract intermediate representations of the input. Each matrix multiplication is followed by an activation function, such as the Rectified Linear Unit (ReLU) activation, which is an essential step for enabling neural networks to learn non-linear functions. Figure \ref{fig:mlp} shows an illustration of an MLP with two hidden layers. The edges between two columns of units represent the matrix multiplication where each edge corresponds to a parameter in the network. The hidden layers are often called fully-connected layers in MLPs. 
+
+%The parameters are updated to approximate the function of interest as accurately as possible given some learning criterion which we will introduce later.  
+
+
+
+\begin{figure}[t]
+	\centering
+	\resizebox{0.95\textwidth}{!}{
+		\input{Chapter2/tikz/cnn_simple}
+	}
+	\caption{Simple CNN architecture with two convolutional layers (Conv) for extracting feature maps, two subsampling layers performing a pooling operation (Pooling), and one fully-connected layer (FC) to produce the network output.}
+	\label{fig:cnn_simple}
+\end{figure}
+
+\vspace{-3mm}
+\paragraph{Convolutional Neural Networks.} Convolutional layers constitutes of a set of filters with adaptable parameters to capture relationships between neighboring features in the data~\cite{lecun1998gradient}. The parameters in every filter are shared across every spatial location in the data when extracting the succeeding feature representation. This design choice enables each filter to extract important features at any location in the data. Furthermore, parameter sharing also reduces the amount of parameters in the network and lowers the number of operations for computing the outputs. Figure \ref{fig:cnn_simple} shows an illustration of a CNN architecture. Each filter slides across the width and height of the input to compute dot products between the filter weights and the local input region to produce a 2-dimensional feature map. The feature maps from all filters are then stacked depth-wise to obtain the output volume, which are often subsampled along their spatial dimensions with a pooling operation after a non-linear activation function. The feature maps in the last subsampling layer are flattened and fed into an arbitrary number of fully-connected layers (an MLP) to produce the final output. 
 
 
 
@@ -143,9 +171,13 @@ Next, we will describe three popular types of neural networks, namely, multilaye
 \end{wrapfigure}
 \paragraph{Multilayer Perceptrons.} The simplest form of feedforward neural networks is the MLP. Let the vector $\vx = (x_1, \dots, x_d)^{T}$ be some form of data where $x_i$ is the $i$-th feature for $i = 1, \dots, d$. Every layer in the MLP constitutes of weights $\mW$ that are used for transforming the input such that the output reveals some hidden structure useful for solving the task of interest. The transformation is performed with a matrix multiplication, i.e., $\vh = \mW \vx$, to receive the intermediate representation $\vh$. An essential part for enabling neural networks to learn non-linear functions is to add an activation function right after the matrix multiplication of each layer. Otherwise, the neural network would only be capable of learning linear functions since the matrix multiplication is a linear mapping. A common activation function is the $a(\vx) = \max(0, \vx)$, or the so called Rectified Linear Unit (ReLU) activation, which outputs $\vx$ when $\vx > 0$ or otherwise zero. By stacking two layers together in a neural network with a ReLU activation, we then obtain the representation $\vh = \mW_2\max(0,  \mW_1\vx)$. Note here that this representation could be predicted class scores, such that $\vh = \hat{\vy}$, if we would use two-layer MLP for a classication task. 
 
+\paragraph{Convolutional Neural Networks.}
+For data where the spatial order of each feature can be salient for prediction tasks such as image classification, we need a network that can capture relationships between features. CNNs are special kinds of neural networks that can process data with grid-like structures. Convolutional layers constitutes of a set of filters with adaptable weight parameters. To produce the output, we slide each filter across the input across the width and height of the input and compute dot products between the filter weights and the input at any position. Each filter will then produce a 2-dimensional feature map that gives the responses of that filter at every spatial position. The 2-dimensional feature maps from all filters are then stacked depth-wise to obtain the output volume. The obtained feature maps are often downsampled along their spatial dimensions using a pooling operation after the activation function. The parameter sharing in convolutional layers where each weight in a filter is applied to every position of the input comes from the idea that if some visual features are important in one part of the image, it should intuitively be useful at some other location as well. Furthermore, this design choice also makes the model require fewer parameters and a lower number of operations to compute the outputs.
+
 \end{comment}
 
-\paragraph{Convolutional Neural Networks.} For data where the spatial order of each feature can be salient for prediction tasks such as image classification, we need a network that can capture relationships between features. CNNs are special kinds of neural networks that can process data with grid-like structures. Convolutional layers constitutes of a set of filters with adaptable weight parameters. To produce the output, we slide each filter across the input across the width and height of the input and compute dot products between the filter weights and the input at any position. Each filter will then produce a 2-dimensional feature map that gives the responses of that filter at every spatial position. The 2-dimensional feature maps from all filters are then stacked depth-wise to obtain the output volume. The obtained feature maps are often downsampled along their spatial dimensions using a pooling operation after the activation function. The parameter sharing in convolutional layers where each weight in a filter is applied to every position of the input comes from the idea that if some visual features are important in one part of the image, it should intuitively be useful at some other location as well. Furthermore, this design choice also makes the model require fewer parameters and a lower number of operations to compute the outputs.
+
+
 
 %Intuitively, the network will learn filters that activate when they see some type of visual feature such as edges in early layers, and eventually object parts in later layers that are discriminative . 
 
@@ -160,6 +192,8 @@ Next, we will describe three popular types of neural networks, namely, multilaye
 
 \paragraph{Recurrent Neural Networks.} RNNs are a family of neural network models specialized for processing sequences of data. Similar to CNNs, these models use parameter sharing by applying the same weights across several time steps. The parameter sharing is important in RNNs as it enables the model to handle different sequence lengths as well as being capable of recognizing relevant information that can appear at different locations in the sequence. Many RNNs follow the same procedure through the equation $\vh^{(t)} = f_{\vtheta}(\vh^{(t-1)}, \vx^{(t)})$, where the RNN produces the current state $\vh^{(t)}$ by incorporating the input data $\vx^{(t)}$ at time $t$ into the previous hidden state $\vh^{(t-1)}$. Hence, the hidden state $\vh^{(t)}$ will now contain information about the whole past sequence up to time $t$. In most applications, there will be an extra output layer that reads the information from state $\vh^{(t)}$ to make predictions. An example application for RNNs is predicting the next word in a sentence given previous words, where the RNN should store the necessary information about previous words to predict the rest of the sentence. A common choice of RNN model is the Long Short-Term Memory~\cite{hochreiter1997long} (LSTM) which mitigates problems with vanishing gradients during the training phase. \vspace{1mm}
 
+\begin{comment}
+
 For training deep networks, \textit{loss} functions are used for measuring how well the network performs to solve the task of interest. In classification tasks, the cross-entropy loss is commonly used where the predicted class scores $\hat{\vy}$ are compared against the true target class $\vy$,
 \begin{align}
 	\gL_{CE}(\hat{\vy}, \vy) = -\sum_{k=1}^{K} \vy[k] \log \hat{\vy}[k],
@@ -170,11 +204,15 @@ Probably the most common optimization algorithm for deep learning is stochastic 
 \begin{align}\label{eq:weight_update_sgd}
 	\vtheta = \vtheta - \eta \nabla_{\vtheta} \gL(f_{\vtheta}(\vx), \vy),
 \end{align} 
-where $\eta$ is the learning rate which is an important parameter for SGD determining how much the weights should be updated with the computed gradient. 
+where $\eta$ is the learning rate which is an important parameter for SGD determining how much the weights should be updated with the computed gradient. 	
+\end{comment}
+
 
 
 
 \subsection{Deep Autoencoders}\label{sec:deep_autoencoders}
+
+\MK{Can describe multimodal autoencoders for representation learning here too}
 
 A common architecture type for deep learning in unsupervised learning are autoencoders for learning hidden representations of unlabeled data. Autoencoders are commonly used for dimensionality reduction of high-dimensional data, where the lower-dimensional representation can be used for classification tasks, or to visualize hidden structures in the data that are hard to reveal from the original input data. The objective of the model is to reconstruct the original input data. The network architecture is built using two networks called \textit{encoder} and \textit{decoder} with a bottleneck layer between the networks for extracting the hidden representation $\vh$. The encoder and decoder architectures can be of any neural network type, such as MLPs, CNNs, or RNNs, that fits the given dataset. The encoder is used for obtaining the hidden representation of the input data, while the decoder tries to reconstruct the original input from the obtained representation. Therefore, the idea is that the learned representation should contain the relevant information for reconstructing the data. 
 
