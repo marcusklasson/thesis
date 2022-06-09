@@ -140,85 +140,8 @@ Next, we will describe three popular types of neural networks that have been app
 \paragraph{Recurrent Neural Networks.} RNNs are a family of neural network models specialized for processing sequences of data. These networks predicts the next output given the past sequence and uses an extension of backpropagation to compute gradients across different time steps. 
 Similar to CNNs, RNNs apply parameter sharing across time steps to enable extracting relevant information that can appear at different positions in the sequence. RNNs makes an assumption that all relevant information about the past sequence $\vx_{1:t-1}$ can be summarized in a hidden state $\vh_t$. The state evolves over time through the updated equation $\vh_t = f_{\vtheta}(\vh_{t-1}, \vx_{t-1})$ where $f_{\vtheta}$ is a neural network for capturing the long-term dependencies. Common choices for this network are the Long Short-Term Memory (LSTM)~\cite{hochreiter1997long} and Gated Recurrent Unit (GRU)~\cite{chung2014empirical} which use gating functions for determining what information is relevant for the future time steps. Figure \ref{fig:rnn} shows a graphical representation of an RNN. The initial hidden state $\vh_0$ is usually set to zero or learned. 
 
-
-%\paragraph{Recurrent Neural Networks.} RNNs are a family of neural network models specialized for processing sequences of data. Similar to CNNs, these models use parameter sharing by applying the same weights across several time steps. The parameter sharing is important in RNNs as it enables the model to handle different sequence lengths as well as being capable of recognizing relevant information that can appear at different locations in the sequence. Many RNNs follow the same procedure through the equation $\vh^{(t)} = f_{\vtheta}(\vh^{(t-1)}, \vx^{(t)})$, where the RNN produces the current state $\vh^{(t)}$ by incorporating the input data $\vx^{(t)}$ at time $t$ into the previous hidden state $\vh^{(t-1)}$. Hence, the hidden state $\vh^{(t)}$ will now contain information about the whole past sequence up to time $t$. In most applications, there will be an extra output layer that reads the information from state $\vh^{(t)}$ to make predictions. An example application for RNNs is predicting the next word in a sentence given previous words, where the RNN should store the necessary information about previous words to predict the rest of the sentence. A common choice of RNN model is the Long Short-Term Memory~\cite{hochreiter1997long} (LSTM) which mitigates problems with vanishing gradients during the training phase. \vspace{1mm}
-
-%The simplest form of feedforward neural networks is the MLP. Let the vector $\vx = (x_1, \dots, x_d)^{T}$ be some form of data where $x_i$ is the $i$-th feature for $i = 1, \dots, d$. Every layer in the MLP constitutes of weights $\mW$ that are used for transforming the input such that the output reveals some hidden structure useful for solving the task of interest. The transformation is performed with a matrix multiplication, i.e., $\vh = \mW \vx$, to receive the intermediate representation $\vh$. An essential part for enabling neural networks to learn non-linear functions is to add an activation function right after the matrix multiplication of each layer. Otherwise, the neural network would only be capable of learning linear functions since the matrix multiplication is a linear mapping. A common activation function is the $a(\vx) = \max(0, \vx)$, or the so called Rectified Linear Unit (ReLU) activation, which outputs $\vx$ when $\vx > 0$ or otherwise zero. By stacking two layers together in a neural network with a ReLU activation, we then obtain the representation $\vh = \mW_2\max(0,  \mW_1\vx)$. Note here that this representation could be predicted class scores, such that $\vh = \hat{\vy}$, if we would use two-layer MLP for a classication task. 
-
-
-\begin{comment}
-	
-
-are based on neural networks that approximate functions by 
-
-Neural networks is a class of machine learning models which popularity have grown immensely due to their ability to learn from large and high-dimensional datasets.
-
-Deep learning contains a family of machine learning models based on neural networks that are parametric function approximators used for representing some function of interest.
-
-Much of the successes of deep learning methods have been in supervised learning settings, especially in applications where there are large amounts of labelled data and sufficiently large model in terms of number of parameters in the network. In the following sections, we will introduce the deep learning frameworks and models that we have used in this thesis.  
-
-\MK{Describe training first and then architectures.}
-
-In this section, we give a brief overview of deep learning~\cite{goodfellow2016deep} which is the main building block for the models we use in this thesis. Deep learning contains a family of machine learning models based on neural networks that are parametric function approximators used for representing some function of interest. Much of the successes of deep learning methods have been in supervised learning settings, especially in applications where there are large amounts of labelled data and sufficiently large model in terms of number of parameters in the network. In the following sections, we will introduce the deep learning frameworks and models that we have used in this thesis.   
-
-%For many applications, neural networks have been shown to  that are used for representing functions  are parametric function approximators. 
-
-\subsection{Deep Neural Networks}\label{sec:deep_neural_networks}
-
-
-
-Neural networks is a class of machine learning models which popularity have grown immensely due to their ability to learn from large and high-dimensional datasets. Moreover, neural networks have been successfully applied in various number of fields in computer vision~\cite{he2016deep, krizhevsky2012imagenet}, natural language processing~\cite{devlin2018bert}, and reinforcement learning~\cite{mnih2015human, silver2016mastering}. These models are constructed by stacking layers of parameters that extract intermediate representations of the input data. The last layer outputs the target answer from the queried input and is specific for the task. For example, in image classification, the last layer outputs class scores representing which class the image is most likely to belong to. 
-
-Next, we will describe three popular types of neural networks, namely, multilayer perceptrons (MLPs), convolutional neural networks (CNNs), and recurrent neural networks (RNNs). \MK{TO-DO: It would be nice to have some simple illustrations of how the networks process the data, I can take inspiration from how other people have done it.}
-
-
-\begin{wrapfigure}{r}{0.39\textwidth}
-	\centering
-	\vspace{-3mm}
-	\resizebox{0.39\textwidth}{!}{
-	\input{Chapter2/tikz/mlp}
-	}
-	\captionsetup{width=.9\linewidth}
-	\caption{Illustration of MLP with 2 hidden layers.}
-	\vspace{-3mm}
-	\label{fig:mlp}
-\end{wrapfigure}
-\paragraph{Multilayer Perceptrons.} The simplest form of feedforward neural networks is the MLP. Let the vector $\vx = (x_1, \dots, x_d)^{T}$ be some form of data where $x_i$ is the $i$-th feature for $i = 1, \dots, d$. Every layer in the MLP constitutes of weights $\mW$ that are used for transforming the input such that the output reveals some hidden structure useful for solving the task of interest. The transformation is performed with a matrix multiplication, i.e., $\vh = \mW \vx$, to receive the intermediate representation $\vh$. An essential part for enabling neural networks to learn non-linear functions is to add an activation function right after the matrix multiplication of each layer. Otherwise, the neural network would only be capable of learning linear functions since the matrix multiplication is a linear mapping. A common activation function is the $a(\vx) = \max(0, \vx)$, or the so called Rectified Linear Unit (ReLU) activation, which outputs $\vx$ when $\vx > 0$ or otherwise zero. By stacking two layers together in a neural network with a ReLU activation, we then obtain the representation $\vh = \mW_2\max(0,  \mW_1\vx)$. Note here that this representation could be predicted class scores, such that $\vh = \hat{\vy}$, if we would use two-layer MLP for a classication task. 
-
-\paragraph{Convolutional Neural Networks.}
-For data where the spatial order of each feature can be salient for prediction tasks such as image classification, we need a network that can capture relationships between features. CNNs are special kinds of neural networks that can process data with grid-like structures. Convolutional layers constitutes of a set of filters with adaptable weight parameters. To produce the output, we slide each filter across the input across the width and height of the input and compute dot products between the filter weights and the input at any position. Each filter will then produce a 2-dimensional feature map that gives the responses of that filter at every spatial position. The 2-dimensional feature maps from all filters are then stacked depth-wise to obtain the output volume. The obtained feature maps are often downsampled along their spatial dimensions using a pooling operation after the activation function. The parameter sharing in convolutional layers where each weight in a filter is applied to every position of the input comes from the idea that if some visual features are important in one part of the image, it should intuitively be useful at some other location as well. Furthermore, this design choice also makes the model require fewer parameters and a lower number of operations to compute the outputs.
-
-\end{comment}
-
-
-
-
-%Intuitively, the network will learn filters that activate when they see some type of visual feature such as edges in early layers, and eventually object parts in later layers that are discriminative . 
-
-%Convolutional layers provide three important properties that can help the model, namely, sparse interactions, parameter sharing, and equivariant representations~\cite{goodfellow2016deep}. In MLPs, the matrix multiplication makes every output unit interact with every input unit. In contrast, CNNs typically establishes sparse interactions between the output and input by making the filter smaller than the input. This means that the model needs fewer parameters and fewer number of operations to compute the output. Furthermore, each weight is applied to every position of the input (except perhaps boundary pixels depending design choices of the layer) compared to in MLPs where a weight is multiplied with one element and never revisited.   
-
-%An intuitive example is to detect edges in an image with pixels around local region rather than using pixels 
-
-%Each filter operates on local regions of the input by computing the dot product between the weights and the local input region. The output is a feature map obtained by computing the dot product between the weights and the input by sliding the filter weights across the whole input.  same weights are slid across the whole input to obtain a feature map weights in a filter , where the dot product of the  
-
-%, we The MLP operates on each input feature individually. Hence, the order of the features is ignored. However, in images, we know that pixels can have strong relationships between each other where, for instance, two neighboring pixels often have similar color and may belong to the same object that we wish to recognize. 
-
-
-\begin{comment}
-
-For training deep networks, \textit{loss} functions are used for measuring how well the network performs to solve the task of interest. In classification tasks, the cross-entropy loss is commonly used where the predicted class scores $\hat{\vy}$ are compared against the true target class $\vy$,
-\begin{align}
-	\gL_{CE}(\hat{\vy}, \vy) = -\sum_{k=1}^{K} \vy[k] \log \hat{\vy}[k],
-\end{align}
-where the true target vector $\vy$ uses a one-hot representation where the true class $i$ is denoted in the vector by setting the $i$-th element in $\vy$ to one, as in $\vy[i] = 1$, and zero elsewhere. 
-
-Probably the most common optimization algorithm for deep learning is stochastic gradient descent (SGD). The model parameters are updated by first computing the gradient of the loss function with respect to the weights of the network, as in $\nabla_{\vtheta} \gL(f_{\vtheta}(\vx), \vy)$, for a single input-output pair with backpropagation~\cite{rumelhart1986learning}. We can then update the parameters with the equation 
-\begin{align}\label{eq:weight_update_sgd}
-	\vtheta = \vtheta - \eta \nabla_{\vtheta} \gL(f_{\vtheta}(\vx), \vy),
-\end{align} 
-where $\eta$ is the learning rate which is an important parameter for SGD determining how much the weights should be updated with the computed gradient. 	
-\end{comment}
-
+\vspace{3mm}
+\noindent Attention-based network architectures, such as Transformers~\cite{vaswani2017attention, dosovitskiy2020image} and Graph Neural Networks~\cite{battaglia2018relational, zhou2020graph}, are not covered in this thesis, so we refer the reader to the provided references for information on these networks.
 
 
 
