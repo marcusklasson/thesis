@@ -70,14 +70,20 @@ The available data views that are available for training image classifiers is de
 The simplest approach is to take a standard supervised approach and train a CNN from the natural image and class label pairs. An alternative is leverage from CNNs pre-trained on a large dataset, such as Imagenet~\cite{deng2009imagenet}, and fine-tune the final classification layer to the grocery item recognition task~\cite{sharif2014cnn}. We use ideas from multi-view learning~\cite{xu2013survey} and VAEs~\cite{kingma2013auto} for learning joint representations from the available data views that can be used for training the image classifiers, which we present in the next section.  
 
 
-\subsection{Multi-view Representation Learning of Grocery Items}
+\subsection{Multi-View Representation Learning of Grocery Items}
 
 This section describes the approach we took for learning representations of grocery items that are shared across the available data types. We employ a deep latent variable model called Variational Canonical Correlation Analysis~\cite{wang2016deep} (VCCA) for learning the shared representation. The main assumption in VCCA is that each data view have been generated from the same latent space. The goal then is to learn this latent space that captures the correspondences between all views into representations shared across the views for the grocery items. This representation can then be utilized for enhance the learning more accurate classifiers as well as for performing tasks such as synthesis and prediction of novel images. Next, we describe how to enable learning the shared latent space. 
 
 Capturing variations from each view in the learned representation is performed by predicting the original views from the latent space. To obtain the latent representation, we extract the representation by encoding the natural images with neural network. The extracted representation is then used for predicting each view individually by inputting the representation through separate neural networks. Note that we only use the natural images for extracting the latent representation here since it is the only view that is available at test time when we want to use the learned classifier in the grocery store. We have two options for exploiting the new representation to train classifiers. The first option is to train the classifier with the latent representations after we have learned the latent space as described above. The second option is to train the classifier and learning the latent space simultaneously by adding an additional classifier network predicting the class label with the latent representation as input. 
 
-\MK{TO-DO: I should add a figure of the architecture for extra clarity on the method. }
-%The architecture that we used is shown in Figure X. 
+\begin{figure}[t]
+	\centering
+	\resizebox{0.95\textwidth}{!}{
+		\input{Chapter3/tikz/vcca}
+	}
+	\caption{VCCA architecture used in Paper \ref{paperB}}
+	\label{fig:vcca_architecture}
+\end{figure}
 
 
 
