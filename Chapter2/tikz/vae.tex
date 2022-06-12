@@ -1,0 +1,39 @@
+\begin{tikzpicture}
+	
+	
+	\node[fill=Green!20, minimum width=0.5cm, minimum height=3.0cm, draw] (x) at (0,0) {\large $\boldsymbol x$};
+	
+	\draw[fill=Green!20] ([xshift=0.5cm]x.north east) -- ([xshift=2.5cm,yshift=0.5cm]x.east) -- ([xshift=2.5cm,yshift=-0.5cm]x.east) -- ([xshift=0.5cm]x.south east) -- cycle; 
+	\node at (1.75,0.4) {{\small\sf \textbf{Probabilistic}}};
+	\node at (1.75,0.1) {{\small\sf \textbf{Encoder}}};
+	\node at (1.75,-0.3) {\large $q_{\boldsymbol{\phi}}(\boldsymbol{z} | \boldsymbol{x})$};
+	
+	\draw[-stealth] (x.east) -- ([xshift=0.5cm]x.east);
+	
+	\node[fill=Green!20, minimum width=0.5cm, minimum height=1.0cm, draw] (mu) at (4.0cm,0.75cm) {\large $\boldsymbol \mu$};
+	\node[fill=Green!20, minimum width=0.5cm, minimum height=1.0cm, draw] (sigma) at (4.0cm,-0.75cm) {\large $\boldsymbol \sigma$};
+	
+	\node at (4.0cm,-1.5cm) {\large $\boldsymbol{z} = \boldsymbol{\mu} + \boldsymbol{\sigma} \odot \boldsymbol{\epsilon}$};
+	\node at (4.0cm,-2.0cm) {\large $\boldsymbol{\epsilon} \sim \mathcal{N}(\mathbf{0}, \mathbf{I})$};
+	
+	\node[fill=red!20, minimum width=0.5cm, minimum height=1.0cm, draw] (z) at (5.5cm,0.0) {\large $\boldsymbol z$};
+	
+	\draw[-stealth] ([xshift=-2.5cm]z.west) -> ([xshift=-2.0cm]z.west);
+	\draw[-stealth] ([xshift=-0.5cm,yshift=-0.75cm]mu.west) -- ([xshift=-0.5cm]mu.west) |- (mu.west);
+	\draw[-stealth] ([xshift=-0.5cm,yshift=0.75cm]sigma.west) -- ([xshift=-0.5cm]sigma.west) |- (sigma.west);
+	%\draw[-stealth] (mu.west) -- ([xshift=-0.5cm]mu.west) |- ([xshift=-0.5cm]sigma.west) -- (sigma.west);
+	\draw (mu.east) -- ([xshift=0.5cm]mu.east) |- ([xshift=0.5cm]sigma.east) -- (sigma.east);
+	\draw[-stealth] ([xshift=-0.45cm]z.west) -> (z.west);
+	
+	\draw[fill=blue!20] ([xshift=0.5cm]z.north east) -- ([xshift=2.5cm,yshift=1.0cm]z.north east) -- ([xshift=2.5cm,yshift=-1.0cm]z.south east) -- ([xshift=0.5cm]z.south east) -- cycle;
+	\node at (7.25,0.4) {{\small\sf \textbf{Probabilistic}}};
+	\node at (7.25,0.1) {{\small\sf \textbf{Decoder}}};
+	\node at (7.25,-0.3) {\large $p_{\boldsymbol{\theta}}(\boldsymbol{x} | \boldsymbol{z})$};
+	
+	\node[fill=blue!20, minimum width=0.5cm, minimum height=3.0cm, draw] (xhat) at (9.0cm,0) {\large $\boldsymbol{\hat{x}}$};
+	
+	\draw[-stealth] (z.east) -- ([xshift=0.5cm]z.east);
+	\draw[-stealth] ([xshift=-0.5cm]xhat.west) -- (xhat.west);
+	
+	
+\end{tikzpicture}

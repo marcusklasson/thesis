@@ -5,17 +5,62 @@
 \chapter{Background}
 \label{chap2}
 
-The goal with this chapter is to provide the reader with preliminaries that are useful for comprehending the included papers. We assume that the reader has some knowledge in calculus, linear algebra, and probability theory, but we intend to keep it on a basic level. First, we give the notation that will be used throughout the thesis. Then, we will introduce a selection of related works to place the thesis into context. 
+In this chapter, we provide an overview of the preliminaries for comprehending the methodology in the included papers in this thesis. We assume that the reader has some basic knowledge in calculus, linear algebra, and probability theory. Section \ref{sec:problem_settings_in_ml} gives an introduction to machine learning, including different problem settings, some terminology, as well as the notation that will be used throughout this thesis. In Section \ref{sec:deep_learning}, we give an overview of deep learning~\cite{goodfellow2016deep}, where we cover the different types of network architectures that has been used in the thesis, as well as a brief introduction to deep reinforcement learning. 
 
+%The goal with this chapter is to provide the reader with preliminaries that are useful for comprehending the included papers. We assume that the reader has some knowledge in calculus, linear algebra, and probability theory, but we intend to keep it on a basic level. First, we give the notation that will be used throughout the thesis. Then, we will introduce a selection of related works to place the thesis into context. 
+
+%\MK{What is chapter about? Add references to sections! We focus on deep learning architectures rather than how they are trained.}
+
+
+
+\section{Problem Settings in Machine Learning}\label{sec:problem_settings_in_ml}
+
+Machine learning tasks can be divided into three main fields, namely, \textit{supervised learning}, \textit{unsupervised learning}, and \textit{reinforcement learning} (RL). In this section, we will give a brief introduction to these topics to provide some context on the challenges that we are addressing in this thesis. 
+
+We will begin by introducing some algebraic notation that will be used throughout this thesis. For representing data, we use the vector $\vx$ which is a column vector 
+\begin{align*}
+	\vx = [x_1, \dots, x_D]^T,
+\end{align*}
+where $x_i$ for $1 \leq i \leq D$ is the $i$-th scalar, real-valued feature of the data vector, and the superscript $T$ transposes the column vector into a row vector. In some cases, each data vector $\vx$ have an assigned class label $y$ which is an integer number. Scalars can hence both represent real values and integers. The data vectors $\vx$ will often represent a 2-dimensional image, where each feature $x_i$ is a pixel, in this thesis, but we still represent images as column vectors for simplicity. 
+
+We assume that the data follows some underlying distribution, $p_{data}(\vx)$, usually referred to as the data generating distribution. In machine learning, we are often interested in approximating $p_{data}$ with a distribution $p_{\vtheta}(\vx)$ parameterized by $\vtheta$ given a finite dataset $\gD = \{\vx^{(i)}\}_{i=1}^{N}$ of $N$ samples where $x^{(i)} \sim p_{data}(\vx)$. Estimating the parameters $\vtheta$ from the dataset $\gD$ is called the \textit{training phase}. A central goal for most applications in machine learning is to make predictions on new data which is called \textit{generalization}. We measure the generalization capability by evaluating the task of interest on a held-out dataset during the \textit{test phase}.
+
+\vspace{-3mm}
+\paragraph{Supervised Learning.} In this setting, we are given a dataset $\{(\vx^{(i)}, y^{(i)})\}_{i=1}^{N}$ where each data point $\vx^{(i)}$ is accompanied with a target $y^{(i)}$. In classification problems, the target $y \in \{1, \dots, C\}$ belongs to one of $C$ discrete categories, while in regression problems, the targets $y \in \R$ are continuous and real-valued. The goal is to estimate $p_{\vtheta}(y | \vx)$ which is the probability of assigning the target $y$ given data $\vx$. We represent $p_{\vtheta}(y | \vx) = f_{\vtheta}(x)$ with the parameterized function $f_{\vtheta}(x)$ which maps data $\vx$ to target variables $y$.  
+
+%a function $f_{\vtheta}(\vx)$ that assigns the correct target to each example in the training set as accurately as possible. In classification problems, each target belongs to one of $K$ discrete categories, such that $\vy = \{1, \dots, K\}$, and we want to predict which of the categories that new data belongs to. Classification tasks will be involved in all included papers of this thesis wherein Paper \ref{chap:paperA} and B we focus on assigning the correct product category to images of grocery items. Another problem type in supervised learning is regression where the targets are continuous and real-valued. An example of a regression task is to predict the outdoors temperature tomorrow given the observed temperature today. 
+
+\vspace{-3mm}
+\paragraph{Unsupervised Learning.} The goal in the unsupervised setting is to reveal hidden structures in the given dataset $\{\vx^{(i)}\}_{i=1}^{N}$ without access to target variables. For example, we might be interested in estimating the data generating distribution $p_{data}$ with $p_{\vtheta}$ (as mentioned above), discovering groups of similar data points using clustering techniques, or project high-dimensional data into two or three dimensions for visualization purposes. 
+
+%Here, we are given a dataset $\{\vx^{(i)}\}_{i=1}^{N}$ without access to any corresponding targets. The goal in this unsupervised setting may then be to find hidden structures in the given dataset. For example, we might be interested in discovering groups of similar examples with \textit{clustering} techniques, or we may want to use \textit{density estimation} where we approximate the true data distribution $p_{data}$ with a parametric distribution $p_{\vtheta}$ using the collected dataset, or we may want to project high-dimensional data into two or three dimensions for \textit{visualization} purposes. We will get back to these goals when we introduce representation learning in Section X. 
+
+\vspace{-3mm}
+\paragraph{Reinforcement Learning.} For these problems, we have a \textit{learning agent}
+that performs actions based on perceived states of the environment to reach some specific goal represented by a reward signal $r$. An example of such a task Mountain Car problem~\cite{sutton2018reinforcement} where the agent tries to drive a car over the top of a hill. The action selection is modeled by the policy $\pi_{\vtheta}(a | \vs)$ which is a mapping from states $\vs$ to actions $a$. The goal for the agent is to learn a policy that maximizes the reward within a specified time limit. 
+
+
+%For these problems, we have a \textit{learning agent} that wants reach a goal in an environment by performing a given set of actions. After performing an action, the agent observes the state of the environment and receives a reward from the environment saying how good or bad the taken action was to reach the goal. The objective for the agent is to maximize the reward signal within the time the agent reaches the goal. The agent then has to learn a policy for deciding which actions to perform in certain situations in the environment. The policy $\pi_{\vtheta}(\va | \vs)$ is a mapping from perceived states $\vs$ in the environment to actions $\va$ that should maximize the reward signal. An example of a task that can be framed as a RL problem is the so called Mountain Car problem, where the agent is a car that is trying to drive up to the top of a hill. The state represents the position and velocity of the car and the agent must take actions that will move the car forward or backwards. The objective is to reach the goal with as little time as possible, and the agent is encouraged to do so by the environment by sending the agent a negative reward for every time step that passes without reaching the top of the hill. We will return to the RL framework later when we describe the prerequisites for Paper D. \vspace{1mm}
+
+\begin{comment}
 \section{Notation and Terminology}\label{sec:notation}
 
-We will begin by providing some algebraic notation that will be used for representing various types of data in the thesis. Scalars (both integer and real) are denoted by italic letters such as $a$. Vectors are denoted by lowercase bold italic letters such as $\vx$, where all vectors are assumed to be column vectors. A superscript $T$ denotes the transpose of a vector or matrix, such that $\vx^{T}$ becomes a row vector. Matrices are denoted as uppercase bold italic letters such as $\mW$. The notation $(w_1, \dots, w_m)$ denotes a row vector with $m$ elements, where the corresponding column vector is denoted as $(w_1, \dots, w_m)^{T}$. 
+We will begin by introducing some algebraic notation that will be used throughout this thesis. For representing data, we use the vector $\vx$ which is a column vector 
+\begin{align*}
+	\vx = [x_1, \dots, x_D]^T,
+\end{align*}
+where $x_i$ for $1 \leq i \leq D$ is the $i$-th scalar, real-valued feature of the data vector, and the superscript $T$ transposes the column vector into a row vector. In some cases, each data vector $\vx$ have an assigned class label $y$ which is an integer number. Scalars can hence both represent real values and integers. The data vectors $\vx$ will often represent a 2-dimensional image, where each feature $x_i$ is a pixel, in this thesis, but we still represent images as column vectors for simplicity. 
 
-A dataset is denoted by the set $\gD = \{\vx^{(1)}, \dots, \vx^{(N)} \}$, where $\vx^{(i)}$ is the $i$-th example among the $N$ data points. Each data point is assumed to belong in a space of vectors denoted by $\gX$, such that $\vx \in \gX$. The data generating distribution is denoted by $p_{data}(\gX)$ which is usually unknown. To provide an example, we let the vector $\vx = (x_1, \dots, x_m)$ represent a flattened image of $m$ pixels. In this case, all possible images that can exist belong to the space $\gX$ and the data generating distribution $p_{data}(\gX)$ gives the probability of how likely each image is to occur in the world. In supervised learning, there is also a target, either denoted as $y^{(i)}$ or $\vy^{(i)}$, associated with $\vx^{(i)}$. The target belongs to the target space $\gY$, where the space is discrete $\gY = \{1, \dots, C\}$ for classification tasks over $C$ number of classes, or continuous $\gY = (-\infty, \infty)$ over an interval of real values for regression tasks. 
 
-%Perhaps can skip spaces and use $\vy \in \{1, \dots, C\}$ to represent the labels and $\vx \in \mathbb{R}$, since I don't really use $\gX$ anywhere but in the RL part for state and action spaces but perhaps it's good to introduce the space notation then...
+%We will begin by providing some algebraic notation that will be used for representing various types of data in the thesis. Scalars (both integer and real) are denoted by italic letters such as $a$. Vectors are denoted by lowercase bold italic letters such as $\vx$, where all vectors are assumed to be column vectors. A superscript $T$ denotes the transpose of a vector or matrix, such that $\vx^{T}$ becomes a row vector. Matrices are denoted as uppercase bold italic letters such as $\mW$. The notation $(w_1, \dots, w_m)$ denotes a row vector with $m$ elements, where the corresponding column vector is denoted as $(w_1, \dots, w_m)^{T}$. 
 
-Throughout this thesis, we take a machine learning approach to solve tasks by tuning an adaptive model using a dataset called the \textit{training set}. In our case, we will represent the model with a function $f_{\vtheta}(\vx)$ that allows us to predict outcomes of events/data $\vx$ from the task of interest. The parameters $\vtheta$ expresses the function and we use machine learning algorithms for tuning parameters with the given dataset during the training phase. Once the model is trained, we often enter the \textit{test phase} where we want to evaluate the model by predicting outcomes on an unseen dataset called the \textit{test set}. The ability to predict outcomes of new data that is different from the examples seen during training is called \textit{generalization}, which is a central goal for most applications in machine learning and pattern recognition. 
+We assume that the data follows some underlying distribution, $p_{data}(\vx)$, usually referred to as the data generating distribution. In machine learning, we are often interested in approximating $p_{data}$ with a distribution $p_{\vtheta}(\vx)$ parameterized by $\vtheta$ given a finite dataset $\gD = \{\vx^{(i)}\}_{i=1}^{N}$ of $N$ samples where $x^{(i)} \sim p_{data}(\vx)$. Estimating the parameters $\vtheta$ from the dataset $\gD$ is called the \textit{training phase}. A central goal for most applications in machine learning is to make predictions on new data which is called \textit{generalization}. We measure the generalization capability by evaluating the task of interest on a held-out dataset during the \textit{test phase}.
+
+
+%A dataset is denoted by the set $\gD = \{\vx^{(1)}, \dots, \vx^{(N)} \}$, where $\vx^{(i)}$ is the $i$-th example among the $N$ data points. Each data point is assumed to belong in a space of vectors denoted by $\gX$, such that $\vx \in \gX$. The data generating distribution is denoted by $p_{data}(\gX)$ which is usually unknown. To provide an example, we let the vector $\vx = (x_1, \dots, x_m)$ represent a flattened image of $m$ pixels. In this case, all possible images that can exist belong to the space $\gX$ and the data generating distribution $p_{data}(\gX)$ gives the probability of how likely each image is to occur in the world. In supervised learning, there is also a target, either denoted as $y^{(i)}$ or $\vy^{(i)}$, associated with $\vx^{(i)}$. The target belongs to the target space $\gY$, where the space is discrete $\gY = \{1, \dots, C\}$ for classification tasks over $C$ number of classes, or continuous $\gY = (-\infty, \infty)$ over an interval of real values for regression tasks. 
+
+
+%Throughout this thesis, we take a machine learning approach to solve tasks by tuning an adaptive model using a dataset called the \textit{training set}. In our case, we will represent the model with a function $f_{\vtheta}(\vx)$ that allows us to predict outcomes of events/data $\vx$ from the task of interest. The parameters $\vtheta$ expresses the function and we use machine learning algorithms for tuning parameters with the given dataset during the training phase. Once the model is trained, we often enter the \textit{test phase} where we want to evaluate the model by predicting outcomes on an unseen dataset called the \textit{test set}. The ability to predict outcomes of new data that is different from the examples seen during training is called \textit{generalization}, which is a central goal for most applications in machine learning and pattern recognition. 
 
 
 \section{Problem Settings in Machine Learning}
@@ -35,59 +80,171 @@ There exist many different methods for solving problems within these three field
 
 
 %In this paradigm, we are concerned with decision-making where the goal is to take actions that maximize some reward. The decision-making is modeled by a policy which bases the action selection on observations that are collected by interacting with the task environment through the selected actions. One main challenge is how to handle the trade-off between exploration of different actions in new situations and exploitation by selecting actions where the agent already has experienced good reward signals. Furthermore, the reward signal can be received either in dense or sparse forms, where sparse rewards are typically more challenging to learn from and are less sample-efficient. 
-
+\end{comment}
 
 \section{Deep Learning}\label{sec:deep_learning}
 
-In this section, we give a brief overview of deep learning~\cite{goodfellow2016deep} which is the main building block for the models we use in this thesis. Deep learning contains a family of machine learning models based on neural networks that are parametric function approximators used for representing some function of interest. Much of the successes of deep learning methods have been in supervised learning settings, especially in applications where there are large amounts of labelled data and sufficiently large model in terms of number of parameters in the network. In the following sections, we will introduce the deep learning frameworks and models that we have used in this thesis.   
+In this section, we give an introduction to deep learning~\cite{goodfellow2016deep} which is a family of machine learning methods that we have used in this thesis. 
+Deep learning methods are capable of learning tasks from large and high-dimensional datasets due to more efficient machine learning algorithms and advances in computer hardware in the last decades. A deep learning architecture is constructed by stacking layers of parameters that extract intermediate representations of the input data, where the last layer usually outputs a predicted target answer from the queried input. This approach has been successfully applied in various number of fields such as computer vision~\cite{he2016deep, krizhevsky2012imagenet}, natural language processing~\cite{devlin2018bert}, and reinforcement learning~\cite{mnih2015human, silver2016mastering}. 
 
-%For many applications, neural networks have been shown to  that are used for representing functions  are parametric function approximators. 
-
-\subsection{Deep Neural Networks}\label{sec:deep_neural_networks}
-
-Neural networks is a class of machine learning models which popularity have grown immensely due to their ability to learn from large and high-dimensional datasets. Moreover, neural networks have been successfully applied in various number of fields in computer vision~\cite{he2016deep, krizhevsky2012imagenet}, natural language processing~\cite{devlin2018bert}, and reinforcement learning~\cite{mnih2015human, silver2016mastering}. These models are constructed by stacking layers of parameters that extract intermediate representations of the input data. The last layer outputs the target answer from the queried input and is specific for the task. For example, in image classification, the last layer outputs class scores representing which class the image is most likely to belong to. 
-
-Next, we will describe three popular types of neural networks, namely, multilayer perceptrons (MLPs), convolutional neural networks (CNNs), and recurrent neural networks (RNNs). \MK{TO-DO: It would be nice to have some simple illustrations of how the networks process the data, I can take inspiration from how other people have done it.}
-
-\paragraph{Multilayer Perceptrons.} The simplest form of feedforward neural networks is the MLP. Let the vector $\vx = (x_1, \dots, x_d)^{T}$ be some form of data where $x_i$ is the $i$-th feature for $i = 1, \dots, d$. Every layer in the MLP constitutes of weights $\mW$ that are used for transforming the input such that the output reveals some hidden structure useful for solving the task of interest. The transformation is performed with a matrix multiplication, i.e., $\vh = \mW \vx$, to receive the intermediate representation $\vh$. An essential part for enabling neural networks to learn non-linear functions is to add an activation function right after the matrix multiplication of each layer. Otherwise, the neural network would only be capable of learning linear functions since the matrix multiplication is a linear mapping. A common activation function is the $a(\vx) = \max(0, \vx)$, or the so called Rectified Linear Unit (ReLU) activation, which outputs $\vx$ when $\vx > 0$ or otherwise zero. By stacking two layers together in a neural network with a ReLU activation, we then obtain the representation $\vh = \mW_2\max(0,  \mW_1\vx)$. Note here that this representation could be predicted class scores, such that $\vh = \hat{\vy}$, if we would use two-layer MLP for a classication task. 
-
-\paragraph{Convolutional Neural Networks.} For data where the spatial order of each feature can be salient for prediction tasks such as image classification, we need a network that can capture relationships between features. CNNs are special kinds of neural networks that can process data with grid-like structures. Convolutional layers constitutes of a set of filters with adaptable weight parameters. To produce the output, we slide each filter across the input across the width and height of the input and compute dot products between the filter weights and the input at any position. Each filter will then produce a 2-dimensional feature map that gives the responses of that filter at every spatial position. The 2-dimensional feature maps from all filters are then stacked depth-wise to obtain the output volume. The obtained feature maps are often downsampled along their spatial dimensions using a pooling operation after the activation function. The parameter sharing in convolutional layers where each weight in a filter is applied to every position of the input comes from the idea that if some visual features are important in one part of the image, it should intuitively be useful at some other location as well. Furthermore, this design choice also makes the model require fewer parameters and a lower number of operations to compute the outputs.
-
-%Intuitively, the network will learn filters that activate when they see some type of visual feature such as edges in early layers, and eventually object parts in later layers that are discriminative . 
-
-%Convolutional layers provide three important properties that can help the model, namely, sparse interactions, parameter sharing, and equivariant representations~\cite{goodfellow2016deep}. In MLPs, the matrix multiplication makes every output unit interact with every input unit. In contrast, CNNs typically establishes sparse interactions between the output and input by making the filter smaller than the input. This means that the model needs fewer parameters and fewer number of operations to compute the output. Furthermore, each weight is applied to every position of the input (except perhaps boundary pixels depending design choices of the layer) compared to in MLPs where a weight is multiplied with one element and never revisited.   
-
-%An intuitive example is to detect edges in an image with pixels around local region rather than using pixels 
-
-%Each filter operates on local regions of the input by computing the dot product between the weights and the local input region. The output is a feature map obtained by computing the dot product between the weights and the input by sliding the filter weights across the whole input.  same weights are slid across the whole input to obtain a feature map weights in a filter , where the dot product of the  
-
-%, we The MLP operates on each input feature individually. Hence, the order of the features is ignored. However, in images, we know that pixels can have strong relationships between each other where, for instance, two neighboring pixels often have similar color and may belong to the same object that we wish to recognize. 
-
-
-\paragraph{Recurrent Neural Networks.} RNNs are a family of neural network models specialized for processing sequences of data. Similar to CNNs, these models use parameter sharing by applying the same weights across several time steps. The parameter sharing is important in RNNs as it enables the model to handle different sequence lengths as well as being capable of recognizing relevant information that can appear at different locations in the sequence. Many RNNs follow the same procedure through the equation $\vh^{(t)} = f_{\vtheta}(\vh^{(t-1)}, \vx^{(t)})$, where the RNN produces the current state $\vh^{(t)}$ by incorporating the input data $\vx^{(t)}$ at time $t$ into the previous hidden state $\vh^{(t-1)}$. Hence, the hidden state $\vh^{(t)}$ will now contain information about the whole past sequence up to time $t$. In most applications, there will be an extra output layer that reads the information from state $\vh^{(t)}$ to make predictions. An example application for RNNs is predicting the next word in a sentence given previous words, where the RNN should store the necessary information about previous words to predict the rest of the sentence. A common choice of RNN model is the Long Short-Term Memory~\cite{hochreiter1997long} (LSTM) which mitigates problems with vanishing gradients during the training phase. \vspace{1mm}
-
-For training deep networks, \textit{loss} functions are used for measuring how well the network performs to solve the task of interest. In classification tasks, the cross-entropy loss is commonly used where the predicted class scores $\hat{\vy}$ are compared against the true target class $\vy$,
-\begin{align}
-	\gL_{CE}(\hat{\vy}, \vy) = -\sum_{k=1}^{K} \vy[k] \log \hat{\vy}[k],
-\end{align}
-where the true target vector $\vy$ uses a one-hot representation where the true class $i$ is denoted in the vector by setting the $i$-th element in $\vy$ to one, as in $\vy[i] = 1$, and zero elsewhere. 
-
-Probably the most common optimization algorithm for deep learning is stochastic gradient descent (SGD). The model parameters are updated by first computing the gradient of the loss function with respect to the weights of the network, as in $\nabla_{\vtheta} \gL(f_{\vtheta}(\vx), \vy)$, for a single input-output pair with backpropagation~\cite{rumelhart1986learning}. We can then update the parameters with the equation 
+Deep networks are most commonly optimized using the Stochastic Gradient Descent (SGD) algorithm. This procedure uses gradients of a loss function $\gL(f_{\vtheta}(\vx), \vy)$ with respect to every parameter to perform the update step
 \begin{align}\label{eq:weight_update_sgd}
 	\vtheta = \vtheta - \eta \nabla_{\vtheta} \gL(f_{\vtheta}(\vx), \vy),
 \end{align} 
-where $\eta$ is the learning rate which is an important parameter for SGD determining how much the weights should be updated with the computed gradient. 
+where $\eta$ is the learning rate which determines how much the weights should be updated with the computed gradient. Common loss functions $\gL$ are the cross-entropy loss for classification and the mean-squared error for regression tasks. The gradients are computed using the backpropagation algorithm~\cite{rumelhart1986learning} which computes the gradients iteratively backwards one layer at a time. To improve the computational efficiency, we compute the average of the gradients from a randomly sampled mini-batch of data from the dataset during the parameter updates.
+
+Many innovations have been designed in recent years to stabilize the training of deep neural network architectures. For instance, dropout~\cite{srivastava2014dropout} is used for mitigating overfitting to the training data by randomly keeping layer outputs active to encourage the parameters to take more (or less) responsibility for the inputs. Batch normalization~\cite{ioffe2015batch, santurkar2018does} normalizes the layer inputs to enable faster and more stable learning. Residual connections~\cite{he2016deep} eases training networks with hundreds of layers by mitigating the degradation problem, where adding more layers resulted in higher training error. Furthermore, various adaptive learning rate optimizers~\cite{kingma2014adam,liu2019variance,tieleman2012lecture} for the SGD updates, learning rate schedulers~\cite{smith2017cyclical}, and network initializations~\cite{glorot2010understanding, he2015delving} have been proposed to enable more efficient training. We refer the reader to the provided references for the details on these techniques.
+Next, we will describe three popular types of neural networks that have been applied in the experiments of this thesis, namely, multilayer perceptrons (MLPs), convolutional neural networks (CNNs), and recurrent neural networks (RNNs).
+
+\vspace{-3mm}
+\begin{wrapfigure}{r}{0.39\textwidth}
+	\centering
+	\vspace{-3mm}
+	\resizebox{0.39\textwidth}{!}{
+		\input{Chapter2/tikz/mlp}
+	}
+	\captionsetup{width=.9\linewidth}
+	\caption{Illustration of MLP with two hidden layers.}
+	\vspace{-3mm}
+	\label{fig:mlp}
+\end{wrapfigure}
+\paragraph{Multilayer Perceptrons.} The simplest form of feedforward neural networks is the MLP based on the Perceptron~\cite{rosenblatt1958perceptron}. Basically, MLPs constitutes of multiple hidden layers performing matrix multiplication to extract intermediate representations of the input. Each matrix multiplication is followed by an activation function, such as the Rectified Linear Unit (ReLU) activation, which is an essential step for enabling neural networks to learn non-linear functions. Figure \ref{fig:mlp} shows an illustration of an MLP with two hidden layers. The edges between two columns of units represent the matrix multiplication where each edge corresponds to a parameter in the network. The hidden layers are often called fully-connected layers in MLPs. 
+
+%The parameters are updated to approximate the function of interest as accurately as possible given some learning criterion which we will introduce later.  
+
+
+
+\begin{figure}[t]
+	\centering
+	\resizebox{0.95\textwidth}{!}{
+		\input{Chapter2/tikz/cnn_simple}
+	}
+	\caption{Simple CNN architecture with two convolutional layers (Conv) for extracting feature maps, two subsampling layers performing a pooling operation (Pooling), and one fully-connected layer (FC) to produce the network output.}
+	\label{fig:cnn_simple}
+\end{figure}
+
+\vspace{-3mm}
+\paragraph{Convolutional Neural Networks.} Convolutional layers constitutes of a set of filters with adaptable parameters to capture relationships between neighboring features in the data~\cite{lecun1998gradient}. The parameters in every filter are shared across every spatial location in the data when extracting the succeeding feature representation. This design choice enables each filter to extract important features at any location in the data. Furthermore, parameter sharing also reduces the amount of parameters in the network and lowers the number of operations for computing the outputs. Figure \ref{fig:cnn_simple} shows an illustration of a CNN architecture. Each filter slides across the width and height of the input to compute dot products between the filter weights and the local input region to produce a 2-dimensional feature map. The feature maps from all filters are then stacked depth-wise to obtain the output volume, which are often subsampled along their spatial dimensions with a pooling operation after a non-linear activation function. The feature maps in the last subsampling layer are flattened and fed into an arbitrary number of fully-connected layers (an MLP) to produce the final output. 
+
+
+\vspace{-3mm}
+\begin{wrapfigure}{r}{0.39\textwidth}
+	\centering
+	\vspace{-3mm}
+	\resizebox{0.39\textwidth}{!}{
+		\input{Chapter2/tikz/rnn}
+	}
+	\captionsetup{width=.9\linewidth}
+	\caption{Graphical representation of RNN.}
+	\vspace{-3mm}
+	\label{fig:rnn}
+\end{wrapfigure}
+\paragraph{Recurrent Neural Networks.} RNNs are a family of neural network models specialized for processing sequences of data. These networks predicts the next output given the past sequence and uses an extension of backpropagation to compute gradients across different time steps. 
+Similar to CNNs, RNNs apply parameter sharing across time steps to enable extracting relevant information that can appear at different positions in the sequence. RNNs makes an assumption that all relevant information about the past sequence $\vx_{1:t-1}$ can be summarized in a hidden state $\vh_t$. The state evolves over time through the updated equation $\vh_t = f_{\vtheta}(\vh_{t-1}, \vx_{t-1})$ where $f_{\vtheta}$ is a neural network for capturing the long-term dependencies. Common choices for this network are the Long Short-Term Memory (LSTM)~\cite{hochreiter1997long} and Gated Recurrent Unit (GRU)~\cite{chung2014empirical} which use gating functions for determining what information is relevant for the future time steps. Figure \ref{fig:rnn} shows a graphical representation of an RNN. The initial hidden state $\vh_0$ is usually set to zero or learned. 
+
+\vspace{3mm}
+\noindent Attention-based network architectures, such as Transformers~\cite{vaswani2017attention, dosovitskiy2020image} and Graph Neural Networks~\cite{battaglia2018relational, zhou2020graph}, are not covered in this thesis, so we refer the reader to the provided references for information on these networks.
 
 
 
 \subsection{Deep Autoencoders}\label{sec:deep_autoencoders}
 
-A common architecture type for deep learning in unsupervised learning are autoencoders for learning hidden representations of unlabeled data. Autoencoders are commonly used for dimensionality reduction of high-dimensional data, where the lower-dimensional representation can be used for classification tasks, or to visualize hidden structures in the data that are hard to reveal from the original input data. The objective of the model is to reconstruct the original input data. The network architecture is built using two networks called \textit{encoder} and \textit{decoder} with a bottleneck layer between the networks for extracting the hidden representation $\vh$. The encoder and decoder architectures can be of any neural network type, such as MLPs, CNNs, or RNNs, that fits the given dataset. The encoder is used for obtaining the hidden representation of the input data, while the decoder tries to reconstruct the original input from the obtained representation. Therefore, the idea is that the learned representation should contain the relevant information for reconstructing the data. 
+\begin{wrapfigure}{r}{0.42\textwidth}
+	\centering
+	\vspace{-3mm}
+	\resizebox{0.39\textwidth}{!}{
+		\input{Chapter2/tikz/autoencoder}
+	}
+	\captionsetup{width=.9\linewidth}
+	\caption{Illustration of an autoencoder network.}
+	\label{fig:autoencoder}
+	\vspace{-3mm}
+\end{wrapfigure}
+A common network architecture for learning latent representations of high-dimensional data in unsupervised fashions with deep learning are autoencoders. These architectures are typically built using two networks called decoder $f_{\vtheta}$ and encoder $g_{\vphi}$ with a bottleneck layer between the networks that extracts a low-dimensional representation $\vz$ of the data $\vx$. The idea is that the learned representation $\vz$ should contain enough relevant information for reconstructing the input data. Figure \ref{fig:autoencoder} shows an illustration of an autoencoder network. The encoder extracts the latent representation with $\vz = g_{\vphi}(\vx)$, while the decoder aims to reconstruct the original input, such that $\hat{\vx} = f_{\vtheta}(\vz)$ where $\hat{\vx} \approx \vx$. There exist various autoencoder approaches for improving the quality of the learned representations. For example, denoising autoencoders~\cite{vincent2008extracting} adds noise to the input data to avoid overfitting, and sparse autoencoders~\cite{ng2011sparse} induces adds sparsity constraints on the activation functions to improve robustness.
 
-Mathematically, we denote the decoder as $f_{\vtheta}$ and the encoder as $g_{\vphi}$. The encoder extracts the hidden representation $\vh = g_{\vphi}(\vx)$ from the input $\vx$, then the decoder produces a reconstruction $\hat{\vx} = f_{\vtheta}(\vh)$ from $\vh$. We train the encoder and decoder simultaneously by minimizing a reconstruction loss $\gL(f_{\vtheta}(g_{\vphi}(\vx)), \vx)$, for instance mean-squared error loss, using SGD similarly as for the feedforward networks described above. There exist various kinds of methods for improving the quality of the learned representations in autoencoders. For example, we can adjust target task by adding noise to the inputs and let the decoder reconstruct the original input from noise variants~\cite{vincent2008extracting}, or we can induce different constraints in the bottleneck layer to, for example, obtain a sparse lower-dimensional representation of the data. Next, we will introduce the variational autoencoder which originates from latent variable models. 
+
+
+
+\begin{figure}[t]
+	\centering
+	\resizebox{0.6\textwidth}{!}{
+		\input{Chapter2/tikz/multimodal_autoencoder}
+	}
+	\caption{Illustration of multimodal autoencoder network for learning joint representation $\vz$ from the different but related data types $\vx$ and $\vy$. 
+	}
+	\label{fig:multimodal_autoencoder}
+	\vspace{-3mm}
+\end{figure}
+
+\paragraph{Multimodal Autoencoders.} Autoencoders can easily be extended to handling multiple types of data. The goal here is usually to learn one joint latent representation for capturing correspondences between the data types~\cite{baltruvsaitis2018multimodal}. Consider the multimodal dataset $\gD = \{(\vx_i, \vy_i)\}_{i=1}^{N}$ where $\vx$ and $\vy$ originate from two different data views (real-world images, web images) or modalities (visual signals, text descriptions) that share some high-level information. For example, $\vx$ could be an image of a living room and $\vy$ is a text sentence describing the appearance of the room, where objects are located etc. 
+Figure \ref{fig:multimodal_autoencoder} shows an illustration of the network architecture. The input $\vx$ and $\vy$ have two separate encoders, $g_{\vphi_{\vx}}(\vx)$ and $g_{\vphi_{\vy}}(\vy)$, that extracts the intermediate latent representations $\vh_{\vx}$ and $\vh_{\vy}$ respectively. The intermediate representations are then combined into the joint latent representation $\vz$, often through some element-wise operation (addition, multiplication) or concatenation. The joint multimodal representation $\vz$ is then passed through two separate decoder networks, $f_{\vtheta_{\vx}}(\vz)$ and $f_{\vtheta_{\vy}}(\vz)$, for predicting the original input data separately. 
+Combining different modalities, such as image and video, natural language, and audio signals, with autoencoders for learning more rich representations of data has been studied frequently the last decade~\cite{owens2018audio, ngiam2011multimodal, silberer2014learning, lee2020making} [Add REFs]. One advantage is that the network architecture can be trained in an trained end-to-end fashion to be used for both learning representations and making predictions of the used data types.
+However, a major challenge is how to handle scenarios where some data types could be missing. An option here is to learn a joint representation by using a single encoder for the data type that is available at both training and test phases that is used for predicting each data type~\cite{ngiam2011multimodal}. 
+%We can also  handle missing modalities for the encoders which enables cross-modal data generation between the modalities.
+
+
+%Learning representations from different types of data is a highly active research field in deep learning~\cite{baltruvsaitis2018multimodal}. Combining visual data with other modalities such as natural language and audio signals for learning more rich representations of data has been studied frequently the last decade~\cite{owens2018audio, ngiam2011multimodal, silberer2014learning, lee2020making} [Add REFs]. A common framework in such applications is to use autoencoders for incorporating information from the different data types into a single joint representation. Learning from multiple sources then opens up for capturing correspondences between the data types and obtaining better representations that can be used for downstream tasks such as classification. 
+
+%Let $\vx$ and $\vy$ originate from two different data sources but share some high-level information. For example, $\vx$ could be an image of a living room and $\vy$ is text describing the appearance of the room, where objects are located etc. Constructing a joint representation is then done by projecting both $\vx$ and $\vy$ with separate encoder networks into the same latent space. The joint multimodal representation is then passed through two separate decoder networks used for predicting the original input data individually. The advantage of multimodal autoencoders is that they can be trained end-to-end for both learning representations as well as making predictions of the used modalities. However, a major challenge is how to handle scenarios where modalities might be missing. One option is to only encode the data modality that we know will be available at both training and test phases and then establish a joint representation by decoding two both modalities~\cite{ngiam2011multimodal}.
+
+%Multimodal autoencoders have frequently been extended to deep generative models, mainly VAEs~\cite{wang2016deep, wu2018multimodal, shi2019variational, vedantam2017generative, suzuki2016joint}. These models are capable of generating new data through sampling from the latent space in addition to learning joint representations. Furthermore, they can handle missing modalities for the encoders which enables cross-modal data generation between the modalities. In Paper B [Add REF], we employ Variational Canonical Correlation Analysis (VCCA) for learning joint representations of natural images and web-scraped information of grocery items to facilitate learning image classifiers. 
+
+
+
+
+%A common architecture type for deep learning in unsupervised learning are autoencoders for learning hidden representations of unlabeled data. Autoencoders are commonly used for dimensionality reduction of high-dimensional data, where the lower-dimensional representation can be used for classification tasks, or to visualize hidden structures in the data that are hard to reveal from the original input data. The objective of the model is to reconstruct the original input data. The network architecture is built using two networks called \textit{encoder} and \textit{decoder} with a bottleneck layer between the networks for extracting the hidden representation $\vh$. The encoder and decoder architectures can be of any neural network type, such as MLPs, CNNs, or RNNs, that fits the given dataset. The encoder is used for obtaining the hidden representation of the input data, while the decoder tries to reconstruct the original input from the obtained representation. Therefore, the idea is that the learned representation should contain the relevant information for reconstructing the data. 
+
+%Mathematically, we denote the decoder as $f_{\vtheta}$ and the encoder as $g_{\vphi}$. The encoder extracts the hidden representation $\vh = g_{\vphi}(\vx)$ from the input $\vx$, then the decoder produces a reconstruction $\hat{\vx} = f_{\vtheta}(\vh)$ from $\vh$. We train the encoder and decoder simultaneously by minimizing a reconstruction loss $\gL(f_{\vtheta}(g_{\vphi}(\vx)), \vx)$, for instance mean-squared error loss, using SGD similarly as for the feedforward networks described above. There exist various kinds of methods for improving the quality of the learned representations in autoencoders. For example, we can adjust target task by adding noise to the inputs and let the decoder reconstruct the original input from noise variants~\cite{vincent2008extracting}, or we can induce different constraints in the bottleneck layer to, for example, obtain a sparse lower-dimensional representation of the data. Next, we will introduce the variational autoencoder which originates from latent variable models. 
 
 \subsubsection{Variational Autoencoders}\label{sec:variational_autoencoders}
 
+In this section, we give an overview of the variational autoencoder (VAE)~\cite{kingma2013auto, kingma2019introduction} that we apply for representation learning in Paper \ref{paperA} and \ref{paperB}. 
+The VAE is a deep generative model that enable learns representations of data by combining ideas from deep learning and probabilistic graphical models~\cite{koller2009probabilistic}. As commonly done in unsupervised learning, VAEs aim to learn a parametric distribution $p_{\vtheta}(\vx)$ that approximates the data distribution $p_{data}$ given a dataset $\gD = {\vx_i}_{i=1}^{N}$ where $\vx_i \sim p_{data}$. We frame the problem of learning $p_{\vtheta}(\vx)$ by expressing the distribution using latent variables $\vz$, such that
+\begin{equation}\label{eq:px}
+	p_{\vtheta}(\vx) = \int p_{\vtheta}(\vx, \vz) \, d\vz = \int p_{\vtheta}(\vx | \vz) p(\vz) \, d\vz,
+\end{equation}
+where the joint distribution $p_{\vtheta}(\vx, \vz)$ is the model which factorizes into the likelihood $p_{\vtheta}(\vx | \vz)$ and the prior distribution $p(\vz)$ for the latent variables. The latent variables $\vz$ are introduced for representing underlying structures and relationships in $\vx$ that can be difficult to observe from the data itself. We can view $\vz$ as containing meaningful information for the data generation process by assuming that the data was generated with the following steps: 
+\begin{enumerate}[topsep=1pt,noitemsep]
+	\item sample the latent vector $\vz \sim p(\vz)$ from the prior.
+	\item generate data point $\vx \sim p_{\vtheta}(\vx | \vz)$ given the sampled $\vz$.
+\end{enumerate}
+
+\vspace{-3mm}
+\paragraph{The Evidence Lower Bound.} The problem with learning the parameters $\vtheta$ that maximizes $p_{\vtheta}(\vx)$ is that the integral in Equation \ref{eq:px} is almost always intractable due to the immense amount of values for $\vz$ that needs to be evaluated. Instead, we can compute $p_{\vtheta}(\vx)$ using Bayes' rule 
+\begin{equation}
+	p_{\vtheta}(\vx) = \frac{p_{\vtheta}(\vx | \vz) p(\vz) }{p_{\vtheta}(\vz | \vx)},
+\end{equation}
+where the posterior distribution $p_{\vtheta}(\vz | \vx)$ can facilitate faster learning by inferring the latents $\vz$ from data $\vx$. However, we need to resort to approximating the posterior using variational inference~\cite{zhang2018advances,blei2017variational} since the posterior needs access to $p_{\vtheta}(\vx)$ to be computed. We then define an approximate posterior distribution $q_{\vphi}(\vz | \vx)$ parameterized by $\vphi$ to infer the latents $\vz$. This allows us to a form lower bound on the marginal log-likelihood $\log p_{\vtheta}(\vx)$ given by 
+\begin{align}\label{eq:elbo}
+	\log p_{\vtheta}(\vx) \geq \E_{z \sim q_{\vphi}(\vz | \vx)}[\log p_{\vtheta}(\vx | \vz)] - \KL[q_{\vphi}(\vz |  \vx) \, || \, p(\vz)] ,
+\end{align}
+which is called the evidence lower bound (ELBO). The expected value over $\log p_{\vtheta}(\vx | \vz)$ can be estimated with Monte Carlo sampling using $q_{\vphi}(\vz | \vx)$, and the Kullback-Leibler (KL) divergence between $q_{\vphi}(\vz |  \vx)$ and $p(\vz)$ can be computed analytically depending on how we choose these distributions. Commonly, the approximate posterior is selected to be Gaussian distribution $q_{\vphi}(\vz | \vx) = \gN(\vz; \vmu_{\vphi}(\vx), \text{diag}(\vsigma_{\vphi}(\vx)))$ where the parameters $\vphi$ are used for computing the mean $\vmu_{\vphi}(\vx)$ and standard deviation $\vsigma_{\vphi}(\vx)$ of the approximate posterior given $\vx$, and $\text{diag}(\cdot)$ is for constraining the covariance matrix to be a diagonal matrix. The prior distribution is also selected to be a zero-mean, standard Gaussian distribution $p(\vz) = \gN(\vz; \mathbf{0}, \mathbf{I})$ where $\mathbf{I}$ is the identity matrix. 
+
+\begin{figure}[t]
+	\centering
+	\resizebox{0.6\textwidth}{!}{
+		\input{Chapter2/tikz/vae}
+	}
+	\caption{Illustration of a VAE. 
+	}
+	\label{fig:vae}
+	\vspace{-3mm}
+\end{figure}
+
+\vspace{-3mm}
+\paragraph{Network Architecture.} The VAE architecture resembles a standard autoencoder where the encoder and decoder networks are probabilistic in the sense that they output parameters of probability distributions. In contrast to autoencoders that learn latent representations $\vz$ that minimizes the reconstruction error on the data, VAEs learns an approximate posterior $q_{\vphi}(\vz | \vx)$ that maximizes the likelihood of $p_{\vtheta}(\vx)$. Similar to autoencoders, we can extract latent representations of the data with the probabilistic encoder. However, VAEs can also estimate the likelihood of unseen data points under the learned model, as well as generate new data by decoding latents sampled from the prior. 
+Figure \ref{fig:vae} shows an illustration of a VAE architecture. The encoder represents the approximate posterior $q_{\vphi}(\vz | \vx)$ which outputs the mean $\vmu_{\vphi}(\vx)$ and standard deviation $\vsigma_{\vphi}(\vx)$ of a Gaussian distribution over $\vz$, which is the standard choice for $q_{\vphi}$~\cite{kingma2013auto}. The latent vector is sampled using the "reparametrization trick"~\cite{rezende2014stochastic, kingma2013auto} by computing 
+\begin{equation}
+	\vz = \vmu_{\vphi}(\vx) + \vsigma_{\vphi}(\vx) \odot \vepsilon, \quad \text{where} \quad \vepsilon \sim \gN(\bm{0}, \mathbf{I}),
+\end{equation}
+where $\odot$ denotes element-wise multiplication. The reparametrization enables computing gradients of the expectation $\E_{z \sim q_{\vphi}(\vz | \vx)}[\log p_{\vtheta}(\vx | \vz)]$ in Equation \ref{eq:elbo} with the backpropagation algorithm. The decoder represents the likelihood $p_{\vtheta}(\vx | \vz)$ that can be used to generate data $\vx$ from sampled latents $\vz$, where the distributional form depends on the data type of $\vx$. 
+
+\vspace{3mm}
+VAEs have been used in various applications for modeling images, text, and audio data [Add REFs]. Furthermore, they have been extended to modeling data from different modalities due to their capability of handling missing modalities to enable cross-modal data generation~\cite{wang2016deep, wu2018multimodal, shi2019variational, vedantam2017generative, suzuki2016joint}. In Paper \ref{paperA} and \ref{paperB}, we employ Variational Canonical Correlation Analysis (VCCA)~\cite{wang2016deep} for learning joint representations of natural images and web-scraped information of grocery items to facilitate learning image classifiers. 
+
+
+
+\begin{comment}
 The variational autoencoder~\cite{kingma2013auto} (VAE) is a variant of autoencoders where learning is viewed from the perspective of probabilistic modeling. These models come from the family of deep generative models, where the goal is to approximate some underlying data distribution $p_{data}$ with a parametric distribution $p_{\vtheta}$ learned from a dataset $\gD \sim p_{data}$. A common approach for estimating $p_{\vtheta}$ is to use a latent variable model that infers hidden structures in the data to facilitate learning the distribution. VAEs is a deep latent variable model that uses neural networks for learning $p_{\vtheta}$ making the training scalable to large high-dimensional datasets. 
 
 The main idea with introducing latent variables is that they should encode some semantically meaningful information about the observed data. Latent variable models are usually expressed by the joint distribution 
@@ -104,6 +261,11 @@ The right-hand side is called the evidence lower bound (ELBO) and comprises of t
 
 VAEs have been used in various applications for modeling images, text, and audio data, as well as when combining data from different modalities. Next, we will briefly introduce how autoencoders can be used when learning representations from multiple data types from different modalities. 
 
+Multimodal autoencoders have frequently been extended to deep generative models, mainly VAEs~\cite{wang2016deep, wu2018multimodal, shi2019variational, vedantam2017generative, suzuki2016joint}. These models are capable of generating new data through sampling from the latent space in addition to learning joint representations. Furthermore, they can handle missing modalities for the encoders which enables cross-modal data generation between the modalities. In Paper B [Add REF], we employ Variational Canonical Correlation Analysis (VCCA) for learning joint representations of natural images and web-scraped information of grocery items to facilitate learning image classifiers. 
+\end{comment}
+
+
+\begin{comment}
 
 
 \subsubsection{Multimodal Learning using Autoencoders}
@@ -114,12 +276,43 @@ Let $\vx$ and $\vy$ originate from two different data sources but share some hig
 
 Multimodal autoencoders have frequently been extended to deep generative models, mainly VAEs~\cite{wang2016deep, wu2018multimodal, shi2019variational, vedantam2017generative, suzuki2016joint}. These models are capable of generating new data through sampling from the latent space in addition to learning joint representations. Furthermore, they can handle missing modalities for the encoders which enables cross-modal data generation between the modalities. In Paper B [Add REF], we employ Variational Canonical Correlation Analysis (VCCA) for learning joint representations of natural images and web-scraped information of grocery items to facilitate learning image classifiers. 
 
+\end{comment}
 
 %% talk about notation, then go into DQN, actor-critic methods and PPO briefly
 \subsection{Deep Reinforcement Learning}\label{sec:deep_rl}
 
-In this section, we give a brief overview to Reinforcement Learning~\cite{sutton2018reinforcement} (RL) and introduce some approaches for how to incorporate deep neural networks in RL. We begin by outlining the notation for the problem setup in RL that will be used in Paper D. Next, we introduce two popular methods for learning RL policies, namely, Deep Q-Networks~\cite{mnih2013playing, mnih2015human} (DQNs) and policy-based methods~\cite{mnih2016asynchronous, schulman2017proximal}. 
 
+In this section, we give a brief overview RL to provide some preliminaries for Paper \ref{paperD}. The RL setup considers a learning agent that interacts with an environment $E$ over a number of discrete time steps~\cite{sutton2018reinforcement}. The environment is modeled with a Markov Decision Process (MDP)~\cite{bellman1957markovian} represented as a tuple $E = (\gS, \gA, P, R, \mu, \gamma)$ consisting of the state space $\gS$, action space $\gA$, state transition probability $P(s' | s, a)$, reward function $R(s, a)$, initial state distribution $\mu(s_1)$, and discount factor $\gamma$. At each time step $t$, the agent receives a state $s_t$ from the environment, selects an action $a_t \in \gA$ using a policy $\pi(a | s)$, and enters the next state $s_{t+1}$ with transition probability $P(s_{t+1} | s_t, a_t)$ and receives a numerical reward following $r_t$ from the environment. This procedure is repeated until the agent reaches a terminal state in which the procedure can be restarted. The return $G_t = \sum_{k=0}^{\infty} \gamma^{k} r_{t+k}$ is the discounted accumulated reward from time step $t$. The goal for the agent is to learns policy that maximizes the expected return. 
+
+The value function $V^{\pi}(s) = \E[G_t | s_t=s]$ defines the expected return following policy $\pi$ from state $s$. Value functions are essential for learning as they can be used for comparing policies, such that $\pi \geq \pi'$ if and only if $V^{\pi}(s) \geq V^{\pi'}(s)$~\cite{sutton2018reinforcement}. An optimal policy $\pi^{*}$ is defined as a policy that is better than or equal to all other policies. There may exist several optimal policies $\pi^{*}$ that share the same optimal value function given by $V^{*}(s) = \max_{\pi} V^{\pi}(s)$ for all states $s \in \gS$. 
+Similar to the value function, we also have the action value function $Q^{\pi}(s, a) = \E[G_t | s_t=s, a_t=a]$ which is the expected return for selecting action $a$ in state $s$ and following policy $\pi$. Optimal policis also share the same action value function given by $Q^{*}(s, a) = \max_{\pi} Q^{\pi}(s, a)$ for all states $s \in \gS$ and actions $a \in \gA$. The optimal action value function $Q^{*}$ can be written in terms of the optimal value function $V^{*}$ as
+\begin{align}
+	Q^{*}(s, a) = \E[r_{t+1} + \gamma V^{*}(s) | s_t=s, a_t=a]. 
+\end{align}
+This means that if we have access to $Q^{*}$, we can directly obtain the optimal action $a*$ in state $s$ by using $a^{*} = \argmax_{a} Q^{*}(s, a)$ to maximize the expected return. 
+
+
+\vspace{-3mm}
+\paragraph{Deep Q-Networks.} The Deep Q-Network (DQN)~\cite{mnih2013playing, mnih2015human} is a value-based RL algorithm which aims to approximate the optimal action value function as $Q^{*}(s, a) \approx Q_{\vtheta}(s, a)$ with a neural network $Q_{\vtheta}$ parameterized by $\vtheta$. For learning the function $Q_{\vtheta}$, we collect data from the environment with by using an epsilon-greedy policy, i.e., $a_t = \argmax_a Q_{\vtheta}(s_t, a)$, in state $s_t$. For estimating $Q_{\vtheta}$, we minimize the following loss based on the Bellman equation:
+\begin{align}
+	\gL_{\text{DQN}}(\vtheta) = (r_t + \gamma \max_{a'} Q_{\vtheta^{-}}(s_{t+1}, a') - Q_{\vtheta}(s_t, a_t))^2 , 
+\end{align}
+where $\vtheta^{-}$ is a previous copy of the network $\vtheta$ referred to as the target network. In addition to the introduction of target networks, several methods have been proposed for stabilizing the learning process, such as using experience replay~\cite{lin1992self} to sample training data stored in a replay buffer, applying L1-smoothing to the loss, correcting the action value estimates~\cite{van2016deep}, and improving generalization across actions~\cite{wang2016dueling}. 
+
+\vspace{-3mm}
+\paragraph{Policy Gradient Methods.} An alternative to value-based RL is using policy gradient methods for learning the policy. Here, the optimal policy is estimated directly with a parameterized form $\pi_{\vtheta}(a | s)$ where $\vtheta$ represents the parameters of a neural network. The policy network takes the state $s_t$ as input and outputs a distribution over the possible actions $a_t$. Policy gradient methods often use an actor-critic approach~\cite{sutton2018reinforcement,konda1999actor}, where the policy is known as the actor that selects actions, and the critic evaluates the actions made by the actor by estimating the value function $V_{\vlambda}(s_{t})$ parameterized by ${\vlambda}$. 
+For updating the policy, the agent collects experiences from the environment with the current policy and aims to minimize the loss 
+\begin{align}
+	\gL_{\text{PG}}(\vtheta) = \E_{s_t \sim E, a_t \sim \pi_{\vtheta}}[\log \pi_{\vtheta}(a_t | s_t) \hat{A}(s_t, a_t)],
+\end{align}
+where $\hat{A}(s, a)$ is an estimate of the advantage function, which describes how much better or worse a taken action is on average, and is given by 
+\begin{align}
+	\hat{A}(s_t, a_t) = \sum_{i=0}^{k-1} = \gamma^{i} r_i + \gamma^{k} V_{\vlambda}(s_{t+k}) - V_{\vlambda}(s_{t}) ,
+\end{align}
+where $k$ can vary depending on if we reached a terminal state from $s_t$ and is upper-bounded by the number of steps between updates $t_{max}$~\cite{mnih2016asynchronous}. A popular actor-critic method is Proximal Policy Optimization~\cite{schulman2017proximal} that incorporates constraints on the policy updates, as well as mini-batches and epochs of learning between each interaction with the environment. 
+
+
+\begin{comment}
 The RL setup considers an agent interacting with an environment $\gE$ over a number of discrete time steps. The environment is modeled with a Markov Decision Process~\cite{bellman1957markovian} represented as a tuple $(\gS, \gA, P, R, \gamma)$, where $\gS$ is the state space, $\gA$ an action space, $P(s' | s, a)$ is the state-to-state transition probability distribution with $s, s' \in \gS$, $R(s, a)$ is the reward function, and $\gamma \in [0, 1)$ is the discount factor. At each time step $t$, the agent receives a state $s_t$ from the environment, selects an action $a_t \in \gA$ using a policy $\pi(a | s)$, and enters the next state $s_{t+1}$ with transition probability $P(s_{t+1} | s_t, a_t)$ and receives a numerical reward following $r_t$ from the environment. This procedure is repeated until the agent reaches a terminal state in which the procedure can be restarted. The return $G_t = \sum_{k=0}^{\infty} \gamma^{k} r_{t+k}$ is the discounted accumulated reward from time step $t$. The goal of the agent is to maximize the expected return from every state $s_t$. 
 
 The action value $Q^{\pi}(s, a) = \E[G_t | s_t=s, a]$  is the expected return for selecting action $a$ in state $s$ and following policy $\pi$. The optimal action value $Q^{*}(s, a) = \max_{\pi} Q^{\pi}(s, a)$
@@ -137,6 +330,18 @@ Next, we briefly introduce some popular algorithms in deep RL.
 	\gL(\vtheta) = \E[\log \pi_{\vtheta}(a | s) \hat{A}(s_t, a_t)],
 \end{align}
 where $\hat{A}_{\vtheta_v}(s_t, a_t)$ is an estimate of the advantage function given by $\sum_{i=0}^{k-1} = \gamma^{i} r_i + \gamma^{k} V_{\vtheta_v}(s_{t+k}) - V_{\vtheta_v}(s_{t})$. The value function here is estimated with a neural network parameterized by $\vtheta_v$, which usually share the parameters $\vtheta$ with the policy. The policy and value function are updated after $t_{max}$ actions or when a terminal state is reached~\cite{mnih2016asynchronous}. A popular variant of policy-based methods is Proximal Policy Optimization~\cite{schulman2017proximal} that incorporates constraints on the policy updates, as well as mini-batches and epochs of learning between each interaction with the environment. 
+
+The RL setup considers an agent interacting with an environment $E$ over a number of discrete time steps~\cite{sutton2018reinforcement}. The environment is modeled with a Markov Decision Process (MDP)~\cite{bellman1957markovian} represented as a tuple $E = (\gS, \gA, P, R, \mu, \gamma)$ consisting of the state space $\gS$, action space $\gA$, state transition probability $P(s' | s, a)$, reward function $R(s, a)$, initial state distribution $\mu(s_1)$, and discount factor $\gamma$. At each time step $t$, the agent receives a state $s_t$ from the environment, selects an action $a_t \in \gA$ using a policy $\pi(a | s)$, and enters the next state $s_{t+1}$ with transition probability $P(s_{t+1} | s_t, a_t)$ and receives a numerical reward following $r_t$ from the environment. This procedure is repeated until the agent reaches a terminal state in which the procedure can be restarted. The return $G_t = \sum_{k=0}^{\infty} \gamma^{k} r_{t+k}$ is the discounted accumulated reward from time step $t$. The goal for the agent is to learns  policy that maximizes the expected return.
+\end{comment}
+
+%The action value $Q^{\pi}(s, a) = \E[G_t | s_t=s, a]$  is the expected return for selecting action $a$ in state $s$ and following policy $\pi$. The optimal action value $Q^{*}(s, a) = \max_{\pi} Q^{\pi}(s, a)$ is defined as the maximum action value for state $s$ and action $a$ for any given policy $\pi$. Deep Q-Networks (DQNs)~\cite{mnih2013playing, mnih2015human} is a value-based RL algorithm which aims to approximate the optimal action value function as $Q^{*}(s, a) \approx Q_{\vtheta}(s, a)$ with a neural network $Q_{\vtheta}$ parameterized by $\vtheta$. For learning the function $Q_{\vtheta}$, we collect data from the environment with by using an epsilon-greedy policy~\cite{sutton2018reinforcement} to estimate $Q_{\vtheta}$ by minimizing the loss $\gL_{\DQN}(\vtheta) = (y_t - Q_{\vtheta}(s_t, a_t))^2$ with $y_t = r_t + \gamma \max_{a'} Q_{\vtheta^{-}}(s_{t+1}, a')$, where $\vtheta^{-}$ is a previous copy of the network $\vtheta$ referred to as the target network. In addition to the introduction of target networks, several methods have been proposed for stabilizing the learning process, such as using experience replay~\cite{lin1992self} to sample training data stored in a replay buffer, applying L1-smoothing to the loss, and correcting the action value estimates~\cite{van2016deep}. 
+
+%An alternative to value-based RL is policy gradient methods where the optimal policy is estimated directly with a parameterized form $\pi_{\vtheta}(a | s)$ where $\vtheta$ represents the parameters of a neural network. 
+%Similar to the action value function, the value function $V^{\pi}(s) = \E[G_t | s_t=s]$ defines the expected return following policy $\pi$ from state $s$. In actor critic methods~\citep{mnih2016asynchronous, schulman2015high, schulman2017proximal, konda1999actor}, we estimate the value function with a neural network $V_{\vtheta_v}$ to reduce variance of the gradients. 
+%The policy network takes the state $s_t$ as input and outputs a distribution over the possible actions $a_t$. The agent collects experiences from the environment with the current policy to use for updating the parameters $\vtheta$ by minimizing the loss $\gL_{\text{PG}}(\vtheta) = \E[\log \pi_{\vtheta}(a | s) \hat{A}(s_t, a_t)],$, where $\hat{A}_{\vtheta_v}(s_t, a_t)$ is an estimate of the advantage function given by $\sum_{i=0}^{k-1} = \gamma^{i} r_i + \gamma^{k} V_{\vtheta_v}(s_{t+k}) - V_{\vtheta_v}(s_{t})$. The policy and value function can be updated after $t_{max}$ actions or when a terminal state is reached~\cite{mnih2016asynchronous}.
+
+
+
 
 %s unknown, so we collect data from the environment to learn a function $Q_{\vtheta}(s, a)$ parameterized by $\vtheta$ that estimates the Q-function by minimizing the loss $L(\vtheta) = (y_t - Q_{\vtheta}(s_t, a_t))^2$ where $y_t = r_t + \gamma \max_{a'} Q_{\vtheta}(s_{t+1}, a')$. The learned Q-function is parameterized by a neural network to ease the estimation in problems with high-dimensional state spaces. To stabilize the learning, DQNs use target networks from previous iterations to compute the target values $y_t$, incorporates experience replay~\citep{lin1992self}, and can apply Double Q-learning~\citep{van2016deep} to mitigate overestimation of the state-action values.  
 
