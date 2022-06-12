@@ -94,7 +94,7 @@ In this section, we describe our procedure for collecting the image dataset of g
 	%\vspace{-7mm}
 \end{table}
 
-\section{Fine-Grained Classification of Grocery Items}\label{chap3:sec:fgr_of_grocery_items}
+\section{Fine-Grained Image Classification of Grocery Items}\label{chap3:sec:fgr_of_grocery_items}
 
 This section describes the approaches we used for classification of grocery items from the available data types in the collected dataset. We begin by introducing the problem setting, followed by describing the methods for learning representations from the available data views. 
 
@@ -103,8 +103,9 @@ This section describes the approaches we used for classification of grocery item
 The application we are focusing on is grocery shopping with an assistive vision device. The device could for instance be a mobile phone app where the groceries are recognized by an in-built image classifier from natural images taken with the camera. Training such image classifier to be robust in grocery store environments would typically require an immense amount of labeled training examples of all available groceries. To reduce the need for labeled training data, we aim to combine the collected natural images with web-scraped information about the groceries when training the classifier. The goal is that incorporating the web-scraped information should help the classifier to learn fine-grained details about the items to enhance the classification performance and robustness. 
 
 The available data views that are available for training image classifiers is denoted as follows:
-\begin{itemize}[itemsep=0em,topsep=1pt]
-	\item $\vx$: Natural images of the grocery items in the grocery stores.
+\begin{itemize}[noitemsep,topsep=1pt]
+	\item $\vI$: Natural images of the grocery items in the grocery stores.
+	\item $\vx$: Feature vectors of the natural images $\vI$ extracted from a pretrained CNN $f_{\vvarphi}$ parameterized by $\vvarphi$. 
 	\item $\vy$: Class labels of grocery items from corresponding natural images.
 	\item $\vi$: Iconic images of the grocery items scraped from a supermarket website.
 	\item $\vw$: Text description of the grocery items scraped from the same supermarket website as $\vi$.
