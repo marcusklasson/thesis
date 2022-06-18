@@ -85,7 +85,7 @@ In this section, we describe our procedure for collecting the image dataset of g
 
 \begin{table}[t]
 	\centering
-	\caption{\small{ Examples of grocery item classes in the Grocery Store dataset. We display four different items (coarse-grained class in parenthesis), followed by two natural images taken with a mobile phone inside grocery stores. Next comes the web-scraped information of the items consisting of an iconic image and a text description. We have highlighted ingredients and flavors in the text description that are characteristic for the specific item. }}
+	\caption{Examples of grocery item classes in the Grocery Store dataset. We display four different items (coarse-grained class in parenthesis), followed by two natural images taken with a mobile phone inside grocery stores. Next comes the web-scraped information of the items consisting of an iconic image and a text description. We have highlighted ingredients and flavors in the text description that are characteristic for the specific item. }
 	\vspace{-10pt}
 	\setlength{\fboxsep}{0pt} 
 	\setlength{\fboxrule}{0.33pt}
@@ -94,24 +94,33 @@ In this section, we describe our procedure for collecting the image dataset of g
 	%\vspace{-7mm}
 \end{table}
 
-\section{Fine-Grained Image Classification of Grocery Items}\label{chap3:sec:fgr_of_grocery_items}
+\section{Fine-Grained Image Recognition of Grocery Items}\label{chap3:sec:fgr_of_grocery_items}
 
-\MK{Här är du nu MK}
-This section describes the approaches we used for classification of grocery items from the available data types in the collected dataset. We begin by introducing the problem setting, followed by describing the methods for learning representations from the available data views. 
+In this section, we describe the problem setting of the grocery item classification task from the dataset collected in Paper \ref{paperA}. Moreover, we describe our approach from Paper \ref{paperB} for learning joint representations of the available data views to improve the classification performance. 
+
+%This section describes the approaches we used for classification of grocery items from the available data types in the collected dataset. We begin by introducing the problem setting, followed by describing the methods for learning representations from the available data views. 
 
 \subsection{Problem Setting}
 
-The application we are focusing on is grocery shopping with an assistive vision device. The device could for instance be a mobile phone app where the groceries are recognized by an in-built image classifier from natural images taken with the camera. Training such image classifier to be robust in grocery store environments would typically require an immense amount of labeled training examples of all available groceries. To reduce the need for labeled training data, we aim to combine the collected natural images with web-scraped information about the groceries when training the classifier. The goal is that incorporating the web-scraped information should help the classifier to learn fine-grained details about the items to enhance the classification performance and robustness. 
+We focus on the application of training an image recognition app in mobile phones for assisting VIs with grocery shopping. Training such image classifiers typically requires immense amounts of annotated images of the groceries. Additionally, the natural images should be collected in scenarios where the app would be used, such as grocery stores or home environments, which further complicates the collection procedure. To reduce the need for collecting and annotating natural images from mobile phones, we aim to use web-scraped information about the groceries as additional supervision when training the image classifiers. The web-scraped information should help the classifier to focus on learning the learn fine-grained details of the items to improve the classification performance and robustness in real environments. 
 
-The available data views that are available for training image classifiers is denoted as follows:
+%The application we are focusing on is grocery shopping with an assistive vision device. The device could for instance be a mobile phone app where the groceries are recognized by an in-built image classifier from natural images taken with the camera. Training such image classifier to be robust in grocery store environments would typically require an immense amount of labeled training examples of all available groceries. To reduce the need for labeled training data, we aim to combine the collected natural images with web-scraped information about the groceries when training the classifier. The goal is that incorporating the web-scraped information should help the classifier to learn fine-grained details about the items to enhance the classification performance and robustness. 
+
+The following data views are available in the dataset for training the image classifiers:
+%The available data views that are available for training image classifiers is denoted as follows:
 \begin{itemize}[noitemsep,topsep=1pt]
-	\item $\vI$: Natural images of the grocery items in the grocery stores.
-	\item $\vx$: Feature vectors of the natural images $\vI$ extracted from a pretrained CNN $f_{\vvarphi}$ parameterized by $\vvarphi$. 
-	\item $\vy$: Class labels of grocery items from corresponding natural images.
+	\item $\vI$: Natural images of the grocery items taken inside grocery stores.
+	\item $\vx$: Feature vectors of the natural images $\vI$ extracted from some CNN $f_{\vvarphi}$ parameterized by $\vvarphi$. 
+	\item $\vy$: Class labels of the grocery items in the corresponding natural images.
 	\item $\vi$: Iconic images of the grocery items scraped from a supermarket website.
 	\item $\vw$: Text description of the grocery items scraped from the same supermarket website as $\vi$.
 \end{itemize}
-The simplest approach is to take a standard supervised approach and train a CNN from the natural image and class label pairs. An alternative is leverage from CNNs pre-trained on a large dataset, such as Imagenet~\cite{deng2009imagenet}, and fine-tune the final classification layer to the grocery item recognition task~\cite{sharif2014cnn}. We use ideas from multi-view learning~\cite{xu2013survey} and VAEs~\cite{kingma2013auto} for learning joint representations from the available data views that can be used for training the image classifiers, which we present in the next section.  
+See Table \ref{tab:grocery_store_dataset} for examples of the data views. 
+The straightforward approach is to train a CNN with pairs of natural images $\vI$ and class labels $\vy$ in a supervised setting. However, the number of samples may be insufficient for training a CNN from scratch, which can lead to overfitting and low generalization capability to new images. 
+One alternative is to employ transfer learning~\cite{zhuang2020comprehensive} where parameters from a CNN pretrained on some large dataset, such as Imagenet~\cite{deng2009imagenet}, are used for initialization and we adapt the network to the grocery item recognition task by either 1) fine-tune some of the final layers, or 2) train a linear classifier from extracted features~\cite{sharif2014cnn}. We take the latter approach and use extracted features for training to mitigate overfitting. Furthermore, we use the web-scraped data views for learning more rich representations of the grocery items that can be used for training more accurate and robust image classifiers, which we present in the next section.
+
+
+%The simplest approach is to take a standard supervised approach and train a CNN from the natural image and class label pairs. An alternative is leverage from CNNs pre-trained on a large dataset, such as Imagenet~\cite{deng2009imagenet}, and fine-tune the final classification layer to the grocery item recognition task~\cite{sharif2014cnn}. We use ideas from multi-view learning~\cite{xu2013survey} and VAEs~\cite{kingma2013auto} for learning joint representations from the available data views that can be used for training the image classifiers, which we present in the next section.  
 
 
 \subsection{Multi-View Representation Learning of Grocery Items}
