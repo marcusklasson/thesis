@@ -2,6 +2,8 @@
 %*********************************** Fourth Chapter ****************************
 %*******************************************************************************
 
+
+
 \chapter{Continual Learning}\label{chap4}
 
 
@@ -11,6 +13,13 @@ This chapter introduces the idea of replay scheduling for mitigating catastrophi
 
 %\MK{TO-DO: Motivate replay scheduling from mobile phone perspective, perhaps from perspective that phones can store lots of data but how to select which classes to replay. Maybe it should also be from the computational perspective, that we want such scheduling policy to work in many scenarios without additional compute cost for the policy learning. }
 
+
+\begin{figure}[t]
+	\centering
+	\includegraphics[width=0.8\textwidth]{Chapter4/imgs/cf_new.pdf}
+	\caption{Illustration of catastrophic forgetting in a continual learning scenario. }
+	\label{fig:example_catastrophic_forgetting}
+\end{figure}
 
 \section{Related Work}\label{ch4/sec:related_work}
 
@@ -28,6 +37,7 @@ More recent works have focused on evolving the memory samples through data augme
 Regularization techniques from supervised learning have been used to investigate whether these can enhance generalization in RL~\cite{cobbe2019quantifying, farebrother2018generalization, igl2019generalization}, and also how variations in the environments help to obtain agents that generalize better~\cite{packer2018assessing, zhang2018dissection}. Algorithms for enabling fast adaptation to new environments, such as new tasks~\cite{finn2017model, kessler2021same} and new action spaces~\cite{chandak2019learning, jain2020generalization}, has also been studied. The survey by Kirk \etal~\cite{kirk2021survey} focuses on zero-shot policy transfer where the policy must generalize to unseen dynamics in the test environments as additional queries could be disallowed in real-world scenarios~\cite{yang2019single, ball2021augmented}. 
 In Paper \ref{paperD}, we consider using RL for learning policies for scheduling which tasks to replay in CL settings to mitigate catastrophic forgetting in the classifier. The policy is trained using experiences from multiple CL environments and then tested in new CL environments with unseen dynamics such as new task orders and datasets. 
 %We evaluate our learned policies on the zero-shot policy transfer setting where the goal is to mitigate catastrophic forgetting in new CL scenarios. The rewards are accessible through accuracies calculated on validation datasets, however, fine-tuning the policy during CL training is prohibited.  
+
 
 
 % General CL papers, add new papers that you have seen. Then Replay/memory-based CL approaches, add new and contrastive approaches. Perhaps something on meta-policy learning approaches, would be useful to tell how we use reinforcement learning here
