@@ -72,7 +72,8 @@ Selecting the time to replay old tasks has mostly been ignored in the literature
 
 \section{Replay Scheduling in Continual Learning}\label{chap4:sec:replay_scheduling_in_cl}
 
-In this section, we present our proposed replay scheduling approach studied in Paper \ref{paperC} and \ref{paperD} for mitigating catastrophic forgetting in CL. In Paper  \ref{paperC}, we introduce a slightly new CL setting that considers real-world needs where all historical data can be available since data storage is cheap. Additionally, we demonstrate the advantages of replay scheduling in such setting where we select which tasks to replay, where we use Monte Carlo tree search (MCTS)~\cite{coulom2006efficient} to search for efficient replay schedules by allowing multiple episodes in single CL environments. In Paper \ref{paperD}, we aim to enable replay scheduling in real-world CL scenarios by learning policies that can be transferred to new CL environments to mitigate catastrophic forgetting. We propose an RL-based framework for policy learning and show that the policies can generalize to new task orders and datasets without additional computational cost in the test environments. 
+In this section, we present our proposed replay scheduling approach studied in Paper \ref{paperC} and \ref{paperD} for mitigating catastrophic forgetting in CL. 
+More specifically, we focus on the contributions in Paper \ref{paperC}, where we introduce a slightly new CL setting that considers real-world needs where all historical data can be available since data storage is cheap. Additionally, we demonstrate the advantages of replay scheduling in such setting where we select which tasks to replay, where we use Monte Carlo tree search (MCTS)~\cite{coulom2006efficient} to search for efficient replay schedules by allowing multiple episodes in single CL environments. 
 
 
 %In this section, we introduce a slightly new CL setting considering the real-world needs where all historical data can be available since data storage is cheap. However, the amount of compute is limited when the model is updated on new data due to operational costs. Hence, it is impossible for the model to leverage from all the available historical data to mitigate catastrophic forgetting. The goal then becomes to learn how we can select subsets of historical data for replay to efficiently reduce forgetting of the old tasks. We will refer to these subsets of historical data as the \textit{replay memory} throughout this chapter. The size of the replay memory affects the processing time when learning new tasks as well as the allowed time for the training phase. When composing the replay memory, we focus on determining the number of samples to draw from the seen tasks in the historical data rather than selecting single stored instances. Next, we introduce the problem setting in more detail as well as the notation of the new CL setting. 
@@ -143,23 +144,45 @@ To make the selection of task proportions tractable, we construct a discrete act
 The task proportions are then computed by counting the number of occurrences of each task index in $\vb_i$ and dividing by $i$, such that $\vp_i = \texttt{bincount}(\vb_i) / (i)$. From this specification, we have built a tree $\gT$ with different task proportions that can be selected at different time steps. A replay schedule $S$ is constructed by traversing through $\gT$ and appending a single task proportion from every task level to $S$.  
 
 
-
-\MK{här är jag}
-We are interested in studying whether the time to replay different tasks is important in the new CL setting. One option is to use a brute-force approach, for example, breadth-first search, and evaluate every possible replay schedule in the tree. However, as the tree grows fast with the number of tasks, we need a scalable method that can perform searches in large action spaces. We suggest using Monte Carlo tree search~\cite{coulom2006efficient} (MCTS) due to its previous successes in applications with similar conditions as ours~\cite{browne2012survey, silver2016mastering, chaudhry2018feature}. The use of MCTS enables performing search for datasets with longer task horizons. Furthermore, MCTS encourages searches in promising paths based on the selected reward function, which we set as the average accuracy of all tasks after learning the final task achieved by the network. We provide the full details on how MCTS is used to search for replay schedules in Paper \ref{paperC}. 
-%\MK{Question: More info on MCTS?}
+The tree-shaped action space of task proportions grows fast with the number of tasks, which complicates studying replay scheduling in datasets with longer task-horizons. 
+Therefore, we proposed using MCTS since it has been successful in applications with large action spaces~\cite{browne2012survey, chaudhry2018feature, silver2016mastering}. In our case, MCTS concentrates the search for replay schedules in directions with promising CL performance in the environment. 
+Each memory composition in the action space corresponds to a node that can be visited by MCTS. For instance, at task $t$, the node $v_t$ is related to a task proportions $\vp_{t}$ that can be used for retrieving a replay memory from the historical data. 
+We store the related task proportion $\vp_t$ from every visited node $v_t$ in the replay schedule $S$. The final replay schedule is then used for constructing the replay memories at each task during the CL training. 
+Figure \ref{fig:mcts_outline} shows an illustration of the procedure for executing MCTS to search for replay schedules, where each step involves the following:
 
 \begin{figure}[t]
 	\centering
 	\input{Chapter4/imgs/mcts_outline}
-	\caption{Outline of MCTS when searching for replay schedules. \MK{fix text and arrow heads!}}
+	\caption{Outline of MCTS when searching for replay schedules. }
 	\label{fig:mcts_outline}
+	\vspace{-2mm}
 \end{figure}
 
-%% Have section for MCTS. include a limitations paragraph there that can be referred to later in Discussion. It kind of bridges over well to the meta-policy learning too. Say that we will use MCTS for studying if scheduling is important in this new setting.
+\begin{itemize}[topsep=1pt, itemsep=1pt, label={}, leftmargin=*]
+	\item {\bf Selection.} During a rollout, the tree policy either selects an unvisited child randomly from the current node $v_t$, or selects the next node by evaluating the Upper Confidence Tree (UCT)~\cite{kocsis2006bandit} if all children has been visited earlier.
+	The child $v_{t+1}$ with the highest UCT score is selected using the function from \cite{chaudhry2018feature}:
+	\begin{align}\label{eq:uct}
+		UCT(v_t, v_{t+1}) = \text{max}(q(v_{t+1})) + C \sqrt{\frac{2 \log(n(v_{t}))}{n(v_{t+1})}},
+	\end{align}
+	where $q(\cdot)$ is the reward function, $C$ the exploration constant, and $n(\cdot)$ the number of node visits. The tree policy is executed until a leaf node $v_t$ is reached.
+	
+	\item {\bf Expansion.} If the leaf node $v_t$ has unvisited children, the search tree is expanded with one of the unvisited child nodes $v_{t+1}$ selected with uniform sampling. 
+	
+	\item {\bf Simulation and Reward.} After the expansion step, the succeeding nodes are selected randomly until reaching a terminal node $v_T$. The task proportions $\vp_{1:T-1}$ from the visited nodes in the rollout constitutes the replay schedule $S$. After training the network using $S$ for replay, we calculate the reward for the rollout given by $r = \frac{1}{T} \sum_{i=1}^T A_{T, i}^{(val)}$, where $A_{T, i}^{(val)}$ is the validation accuracy of task $i$ at task $T$.  
+	
+	\item {\bf Backpropagation.} The reward $r$ is backpropagated from the expanded node $v_{t+1}$ to the root node, where the reward function $q(\cdot)$ and number of visits $n(\cdot)$ are updated at each node in the path. 
+\end{itemize}
 
 
-\section{Meta Policy Learning for Replay Scheduling}
-\label{sec:meta_policy_learning_for_replay_scheduling}
+
+
+
+
+%\section{Meta Policy Learning for Replay Scheduling}\label{sec:meta_policy_learning_for_replay_scheduling}
+\section{Policy Learning for Replay Scheduling}\label{chap4:sec:policy_learning_for_replay_scheduling}
+
+In this section, we introduce the RL-based framework for learning replay scheduling policies that was proposed in Paper \ref{paperD}. 
+In Paper \ref{paperD}, we aim to enable replay scheduling in real-world CL scenarios by learning policies that can be transferred to new CL environments to mitigate catastrophic forgetting. We propose an RL-based framework for policy learning and show that the policies can generalize to new task orders and datasets without additional computational cost in the test environments. 
 
 In this section, we present an RL-based framework to learn policies for selecting which tasks to replay in CL scenarios. We are interested in learning such policy that can be transferred to new CL scenarios, such as new task orders and new datasets, without any additional computational cost for updating on the new domain. We take a meta-learning approach where the policy learns from episodes of experience collected from training a classifier in CL settings. The experience from the environment is represented as the classification performance on each seen task in the dataset. The policy receives the task performances for basing its action on which task that needs to be replayed at the next time step. Our goal is to obtain a policy that can generalize to be used for replay scheduling in new CL scenarios to mitigate catastrophic forgetting. Next, we describe in more detail how the framework for learning this policy works.
 

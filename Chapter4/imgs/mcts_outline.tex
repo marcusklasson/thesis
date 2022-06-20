@@ -15,16 +15,17 @@ text centered, font=\footnotesize\sffamily]
 \definecolor{midnightblue}{rgb}{0.1, 0.1, 0.44}
 \definecolor{royalblue}{rgb}{0.25, 0.41, 0.88}
 
-\begin{tikzpicture}[font=\small\sffamily]
+\begin{tikzpicture}[font=\small\sffamily,
+					>={Stealth[inset=0pt,length=5pt,]}]
 	% Place nodes
 	\node [block] (selection) {Selection}; 
 	\node [block, right of=selection] (expansion) {Expansion};
 	\node [block, right of=expansion] (simulation) {Simulation};
 	\node [block, right of=simulation] (backprop) {Backpropagation};
 	\node [rectangle, text centered, above of=expansion, xshift=4em, yshift=-0.8em] (repeat) {Repeat X times};
-	\node [textblock, below of=selection, yshift=-6em] (test) {Execute tree policy until a leaf node at task $t$ is reached};
-	\node [textblock, below of=expansion, yshift=-6em] (test) {Create new node in tree at task $t+1$};
-	\node [textblock, below of=backprop, yshift=-6.5em] (test) {The result from replay schedule is backpropagated through the tree};
+	\node [textblock, below of=selection, yshift=-6em] (test) {Execute tree policy until leaf node $v_t$ at task $t$ is reached};
+	\node [textblock, below of=expansion, yshift=-6em] (test) {Create new node $v_{t+1}$ at task $t+1$};
+	\node [textblock, below of=backprop, yshift=-6.5em,xshift=0.2em] (test) {Backpropagate reward $r$ from replay schedule $S$ from $v_{t+1}$ to root};%The result from replay schedule is backpropagated through the tree};
 	% Draw edges
 	\path [line] (selection) -- (expansion);
 	\path [line] (expansion) -- (simulation);
@@ -61,7 +62,7 @@ text centered, font=\footnotesize\sffamily]
 		child[] { node [treenode] {}}
 		child[] { node [treenode] {}
 			child[] { node [treenode, very thick, royalblue] {}
-				child[very thick, dashed, royalblue, ->] { node [triangle, yshift=-3em, solid] {} edge from parent node [right, black, text width=5em, font=\footnotesize\sffamily, xshift=0.4em] {Simulation until task $T$ is reached}}
+				child[very thick, dashed, royalblue, ->] { node [triangle, yshift=-3em, solid] {} edge from parent node [right, black, text width=5em, font=\footnotesize\sffamily, xshift=0.4em] {Randomly select next nodes until reaching \\task $T$}}
 			} 
 		}
 	}
