@@ -148,6 +148,12 @@ The task proportions are then computed by counting the number of occurrences of 
 We are interested in studying whether the time to replay different tasks is important in the new CL setting. One option is to use a brute-force approach, for example, breadth-first search, and evaluate every possible replay schedule in the tree. However, as the tree grows fast with the number of tasks, we need a scalable method that can perform searches in large action spaces. We suggest using Monte Carlo tree search~\cite{coulom2006efficient} (MCTS) due to its previous successes in applications with similar conditions as ours~\cite{browne2012survey, silver2016mastering, chaudhry2018feature}. The use of MCTS enables performing search for datasets with longer task horizons. Furthermore, MCTS encourages searches in promising paths based on the selected reward function, which we set as the average accuracy of all tasks after learning the final task achieved by the network. We provide the full details on how MCTS is used to search for replay schedules in Paper \ref{paperC}. 
 %\MK{Question: More info on MCTS?}
 
+\begin{figure}[t]
+	\centering
+	\input{Chapter4/imgs/mcts_outline}
+	\caption{Outline of MCTS when searching for replay schedules. \MK{fix text and arrow heads!}}
+	\label{fig:mcts_outline}
+\end{figure}
 
 %% Have section for MCTS. include a limitations paragraph there that can be referred to later in Discussion. It kind of bridges over well to the meta-policy learning too. Say that we will use MCTS for studying if scheduling is important in this new setting.
 
