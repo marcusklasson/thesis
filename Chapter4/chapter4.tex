@@ -3,11 +3,24 @@
 %*******************************************************************************
 
 
-
 \chapter{Continual Learning}\label{chap4}
 
-\MK{Här är jag!}
+In this chapter, we give an overview of Paper \ref{paperC} and \ref{paperD} where we focus on continual learning (CL)~\cite{delange2021continual,parisi2019continual}. A CL system receives samples of classes to learn continuously over time while maintaining its overall performance on every seen class. Such capability is critical for assistive vision systems as the system may need to adapt to unseen items in new environments. Furthermore, CL on mobile devices would enable personalizing the devices to specific items that the VI user wants to locate and recognize. 
+The main challenge with the CL setup is catastrophic forgetting~\cite{mccloskey1989catastrophic} where previously learned abilities are overwritten by recent acquired knowledge (see Figure \ref{fig:catastrophic_forgetting_example}). However, retraining on all previously seen data may be prohibited due to lack of computational budget or accessibility to the seen datasets. Replay-based CL methods efficiently mitigate catastrophic forgetting by revisiting old samples stored in a small memory buffer~\cite{chaudhry2019tiny,lopez2017gradient,hayes2020remind}.  
+
+
+
+The gap we see is that most replay methods assume that time is ignored in most works on CL, which is important in human learning. Furthermore, the memory storage is often assumed to be limited which is rarely the case in real-world applications for machine learning.
+
+In Paper \ref{paperC}, we propose a new CL setting where memory storage is unlimited while the budget for mitigating catastrophic forgetting is limited. We then demonstrate the importance of time of replay by proposing replay scheduling where we select which tasks to replay at different times. In Paper \ref{paperD}, we present a framework based on reinforcement learning (RL)~\cite{sutton2018reinforcement} for learning replay scheduling policies that can generalize to new CL scenarios without added computational cost. 
+Our proposed replay scheduling approach opens up for new research directions that can bring current CL research closer to real-world needs. 
+
+Moreover, to improve the scheduling efficiency itself, we propose to use reinforcement learning to learn the replay scheduling policies that can generalize to new continual learning scenarios without added computational cost. In our experiments, we show the advantages of learning the time to learn, which brings current continual learning research closer to real-world needs. 
+
 This chapter introduces the idea of replay scheduling for mitigating catastrophic forgetting in continual learning (CL). The problem setting of CL is on learning tasks of recognizing a new set of classes with a dataset given at the current time step. In the standard setting, one main assumption is that the data from past tasks can never be fully revisited by the model. However, in the real-world, many organizations record data from incoming streams for storage rather than deleting it~\cite{bailis2017macrobase, mitchell1999machinelearning} [Add at least 1 more REF]. In contrast to the assumption on data storage in standard CL, we suggest a new setting where we assume that all seen data is accessible at any time for the model to revisit. The challenge then becomes how to select which tasks that needs to be remembered via replay as the data is still incoming from a stream. We propose to learn the time when replaying a certain task is necessary when the model is updating its knowledge with new incoming tasks. In Paper \ref{paperC}, we propose the new CL setting where historical data is accessible and introduce the idea of replay scheduling and how it can be used in CL. In Paper \ref{paperD}, we propose a framework based on reinforcement learning~\cite{sutton2018reinforcement} (RL) for learning replay scheduling policies that can be applied in new CL scenarios. 
+
+This chapter introduces the idea of replay scheduling for mitigating catastrophic forgetting in continual learning (CL). The problem setting of CL is on learning tasks of recognizing a new set of classes with a dataset given at the current time step. In the standard setting, one main assumption is that the data from past tasks can never be fully revisited by the model. However, in the real-world, many organizations record data from incoming streams for storage rather than deleting it~\cite{bailis2017macrobase, mitchell1999machinelearning} [Add at least 1 more REF]. In contrast to the assumption on data storage in standard CL, we suggest a new setting where we assume that all seen data is accessible at any time for the model to revisit. The challenge then becomes how to select which tasks that needs to be remembered via replay as the data is still incoming from a stream. We propose to learn the time when replaying a certain task is necessary when the model is updating its knowledge with new incoming tasks. In Paper \ref{paperC}, we propose the new CL setting where historical data is accessible and introduce the idea of replay scheduling and how it can be used in CL. In Paper \ref{paperD}, we propose a framework based on reinforcement learning~\cite{sutton2018reinforcement} (RL) for learning replay scheduling policies that can be applied in new CL scenarios. 
+
 %A simple, yet effcient, approach to mitigate catastrophically forgetting past tasks is to add some 
 %Replay scheduling involves selecting which tasks to fetch examples from and add to a replay memory at different times. The replay memory is then mixed with a batch of examples from the current task to learn to help the network to remember the previously learned tasks selected by the scheduler. 
 
@@ -17,8 +30,8 @@ This chapter introduces the idea of replay scheduling for mitigating catastrophi
 \begin{figure}[t]
 	\centering
 	\includegraphics[width=0.8\textwidth]{Chapter4/imgs/cf_new.pdf}
-	\caption{Illustration of catastrophic forgetting in a continual learning scenario. }
-	\label{fig:example_catastrophic_forgetting}
+	\caption{Illustration of catastrophic forgetting in a continual learning scenario. \MK{Should add thicker borders on the images and the classifier boxes!} }
+	\label{fig:catastrophic_forgetting_example}
 \end{figure}
 
 \section{Related Work}\label{ch4/sec:related_work}
