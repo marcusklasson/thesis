@@ -78,7 +78,7 @@ In this section, we present our proposed replay scheduling approach studied in P
 %In this section, we introduce a slightly new CL setting considering the real-world needs where all historical data can be available since data storage is cheap. However, the amount of compute is limited when the model is updated on new data due to operational costs. Hence, it is impossible for the model to leverage from all the available historical data to mitigate catastrophic forgetting. The goal then becomes to learn how we can select subsets of historical data for replay to efficiently reduce forgetting of the old tasks. We will refer to these subsets of historical data as the \textit{replay memory} throughout this chapter. The size of the replay memory affects the processing time when learning new tasks as well as the allowed time for the training phase. When composing the replay memory, we focus on determining the number of samples to draw from the seen tasks in the historical data rather than selecting single stored instances. Next, we introduce the problem setting in more detail as well as the notation of the new CL setting. 
 
 
-\subsection{New Problem Setting in Continual Learning}
+\subsection{New Problem Setting for Continual Learning}
 
 In this section, we describe the proposed CL setting presented in Paper \ref{paperC}. We assume that historical data is accessible at any time for mitigating catastrophic forgetting in the model. However, re-training the model on all available historical data is prohibited due to limitations on compute and data transmission times. Therefore, the goal is to determine which historical tasks to replay and sample a small replay memory from the selected tasks to mitigate catastrophic forgetting as efficiently as possible. 
 
@@ -107,35 +107,44 @@ The only difference with this setting and traditional CL is that all historical 
 
 
 
-\subsection{Replay Scheduling for Mitigating Catastrophic Forgetting}
+%\subsection{Replay Scheduling for Mitigating Catastrophic Forgetting}
+\subsection{Monte Carlo Tree Search for Replay Scheduling}
 
-In this section, we describe our replay scheduling method for selecting the replay memory at different time steps. A replay schedule is defined as a sequence $S = (\vp_1, \dots, \vp_{T-1})$, where $\vp_i = (p_1, \dots, p_{T-1})$ for $1 \leq i \leq T-1$ is the sequence of task proportions for determining how many samples per task to fill the replay memory with at time step $i$. To make the selection of task proportions tractable, we construct an action space with a discrete number of choices for the task proportions from historical tasks. 
+In this section, we describe how we used MCTS in Paper \ref{paperC} to show the advantages of replay scheduling in the new CL setting. We focus on an ideal CL environment where executing multiple episodes is allowed to enable searching for replay schedules. For demonstration purposes, we use MCTS for finding replay schedules that efficiently mitigate catastrophic forgetting by selecting compositions of replay memories at different time steps. 
 
-We show the procedure for creating the discrete action space in Algorithm \ref{alg:action_space_discretization}. At task $i$, we have $i-1$ historical tasks that we can choose from. We then generate all possible bin vectors $\vb_i = [b_1, \dots, b_{i}] \in \gB_i$ of size $i$ where each element are a task index $1, ..., i$. We sort all bin vectors by the order of task indices and only keep the unique bin vectors. For example, at $i=2$, the unique choices of vectors are $[1,1], [1,2], [2,2]$, where $[1,1]$ indicates that all samples in the replay memory should be from task 1, $[1,2]$ indicates that half memory is from task 1 and the other half are from task etc. The task proportions are then computed by counting the number of occurrences of each task index in $\vb_i$ and dividing by $i$, such that $\vp_i = \texttt{bincount}(\vb_i) / (i)$. From this specification, we have built a tree $\gT$ with different task proportions that can be selected at different time steps. We construct a replay schedule $S$ by traversing through $\gT$ and select a task proportion on every level to append to $S$. We can then evaluate the replay schedule $S$ by training a network on the CL task sequence and use $S$ to compose the replay memory to use for mitigating catastrophic forgetting at every task. %\MK{Question, Wrap algorithm around this paragraph and remove the comments? Algorithm with comments could be placed in Appendix of Paper D.}
-
-
-\begin{algorithm}[t]
+\begin{wrapfigure}{r}{0.43\textwidth}
+\hspace{-4mm}
+\begin{minipage}{0.43\textwidth}
+\vspace{-7mm}
+\begin{algorithm}[H]
+	\footnotesize
 	\caption{Discretization of action space with task proportions}
 	\label{alg:action_space_discretization}
 	\begin{algorithmic}[1]
 		\Require Number of tasks $T$
-		\State $\gT = ()$ \Comment{Initialize sequence for storing actions}
+		\State $\gT = ()$ %\Comment{Initialize sequence for storing actions}
 		\For{$i = 1, \dots, T-1$}
-		\State $\gP_i = \{\}$ \Comment{Set for storing task proportions at $i$}
-		\State $\gB = \texttt{combinations}([1:i], i)$ \Comment{Get bin vectors of size $i$ with bins $1, ..., i$}
-		\State $\bar{\gB} = \texttt{unique}(\texttt{sort}(\gB))$ \Comment{Only keep unique bin vectors}
-		\For{$\vb_i \in \hat{\gB}$}
-		\State $\vp_i = \texttt{bincount}(\vb_i) / i$ \Comment{Calculate task proportion}
-		\State $\gP_i = \gP_i \cup \{ \vp_i \}$ \Comment{Add task proportion to set}
+		\State $\gP_i = \{\}$ %\Comment{Set for storing task proportions at $i$}
+		\State $\gB = \texttt{combinations}([1:i], i)$ %\Comment{Get bin vectors of size $i$ with bins $1, ..., i$}
+		\State $\gB^{*} = \texttt{unique}(\texttt{sort}(\gB))$ %\Comment{Only keep unique bin vectors}
+		\For{$\vb_i \in \gB^{*}$}
+		\State $\vp_i = \texttt{bincount}(\vb_i) / i$ %\Comment{Calculate task proportion}
+		\State $\gP_i = \gP_i \cup \{ \vp_i \}$ %\Comment{Add task proportion to set}
 		\EndFor
-		\State $\gT[i] = \gP_i$ \Comment{Add set of task proportions to action sequence}
+		\State $\gT[i] = \gP_i$ %\Comment{Add set of task proportions to action sequence}
 		\EndFor
-		\State \Return $\gT$ \Comment{Return action sequence as discrete action space}
+		\State \Return $\gT$ %\Comment{Return action sequence as discrete action space}
 	\end{algorithmic}
 \end{algorithm}
+\end{minipage}
+\end{wrapfigure}
+We define a replay schedule as a sequence $S = (\vp_1, \dots, \vp_{T-1})$, where $\vp_i = (p_1, \dots, p_{T-1})$ for $1 \leq i \leq T-1$ is the sequence of task proportions for determining how many samples per task to fill the replay memory with at time step $i$. 
+To make the selection of task proportions tractable, we construct a discrete action space with a finite number of choices for how to construct the replay memory at different time steps. Algorithm \ref{alg:action_space_discretization} shows the procedure for creating this action space. At task $i$, we have $i-1$ historical tasks that we can choose from. We then generate all possible bin vectors $\vb_i = [b_1, \dots, b_{i}] \in \gB_i$ of size $i$ where each element are a task index $1, ..., i$. The elements in each bin vector are sorted by task index, and we only keep the unique bin vectors after sorting. For example, at $i=2$, the unique choices of vectors are $[1,1], [1,2], [2,2]$, where $[1,1]$ indicates that all samples in the replay memory should be from task 1, $[1,2]$ indicates that half memory is from task 1 and the other half are from task etc. 
+The task proportions are then computed by counting the number of occurrences of each task index in $\vb_i$ and dividing by $i$, such that $\vp_i = \texttt{bincount}(\vb_i) / (i)$. From this specification, we have built a tree $\gT$ with different task proportions that can be selected at different time steps. A replay schedule $S$ is constructed by traversing through $\gT$ and appending a single task proportion from every task level to $S$.  
 
 
 
+\MK{här är jag}
 We are interested in studying whether the time to replay different tasks is important in the new CL setting. One option is to use a brute-force approach, for example, breadth-first search, and evaluate every possible replay schedule in the tree. However, as the tree grows fast with the number of tasks, we need a scalable method that can perform searches in large action spaces. We suggest using Monte Carlo tree search~\cite{coulom2006efficient} (MCTS) due to its previous successes in applications with similar conditions as ours~\cite{browne2012survey, silver2016mastering, chaudhry2018feature}. The use of MCTS enables performing search for datasets with longer task horizons. Furthermore, MCTS encourages searches in promising paths based on the selected reward function, which we set as the average accuracy of all tasks after learning the final task achieved by the network. We provide the full details on how MCTS is used to search for replay schedules in Paper \ref{paperC}. 
 %\MK{Question: More info on MCTS?}
 
