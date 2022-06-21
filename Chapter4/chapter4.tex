@@ -278,15 +278,13 @@ We show that the learned policies can efficiently mitigate catastrophic forgetti
 \subsection{Results on Replay Scheduling with Monte Carlo Tree Search}
 
 Here, we provide a selection of the experimental results from Paper \ref{paperC}. Our approach has been named Replay Scheduling MCTS (RS-MCTS). 
-We evaluate the CL performance of RS-MCTS for varying memory sizes to illustrate the importance of replay scheduling. Moreover, we show that replay scheduling can benefit any replay-based method by combining scheduling with three recent CL methods, namely, HAL~\cite{chaudhry2021using}, MER~\cite{riemer2018learning}, and DER~\cite{buzzega2020dark}. Finally, we demonstrate the efficiency benefits of replay scheduling in settings when the memory size is smaller than the number of classes. See Paper \ref{paperC} for the full experimental results and settings. 
+We evaluate the CL performance of RS-MCTS for varying memory sizes to illustrate the importance of replay scheduling. Moreover, we show that replay scheduling can benefit any replay-based method by combining scheduling with three recent CL methods, namely, HAL~\cite{chaudhry2021using}, MER~\cite{riemer2018learning}, and DER~\cite{buzzega2020dark}. Finally, we demonstrate the efficiency benefits of replay scheduling in settings when the memory size is smaller than the number of classes. We give an overview of the experimental settings, see Paper \ref{paperC} for the full experimental results and hyperparameter settings. 
 
 \vspace{-3mm}
-\paragraph{Datasets and Architectures.} In Paper \ref{paperC} and \ref{paperD}, we perform experiments on common CL benchmark datasets with 5 tasks such as Split MNIST~\cite{zenke2017continual}, Split Fashion-MNIST~\cite{xiao2017fashion}, Split notMNIST~\cite{bulatov2011notMNIST}, and Split CIFAR10~\cite{krizhevsky2009learning}, 10-task Permuted MNIST~\cite{goodfellow2013empirical}, and 20-task Split CIFAR-100~\cite{krizhevsky2009learning, lopez2017gradient, rebuffi2017icarl} and Split miniImagenet~\cite{vinyals2016matching}. We use a 2-layer MLP with 256 hidden units and ReLU activation for Split MNIST, Split FashionMNIST, Split notMNIST, and Permuted MNIST. We use a multi-head output layer for each dataset except Permuted MNIST where the network uses single-head output layer. For Split CIFAR-10 and CIFAR-100, we use a multi-head CNN architecture built according to the CNN in \cite{adel2019continual, schwarz2018progress, vinyals2016matching}. For Split mniImagenet, we use the reduced ResNet-18 from \cite{lopez2017gradient} with multi-head output layer. See each paper for training details and hyperparameter settings. 
-
-
+\paragraph{Datasets and Architectures.} We perform experiments on common CL benchmark datasets such as Split MNIST~\cite{zenke2017continual}, Split Fashion-MNIST~\cite{xiao2017fashion}, Split notMNIST~\cite{bulatov2011notMNIST}, Permuted MNIST~\cite{goodfellow2013empirical}, and Split CIFAR-100~\cite{krizhevsky2009learning, lopez2017gradient, rebuffi2017icarl} and Split miniImagenet~\cite{vinyals2016matching}. We use a 2-layer MLP with 256 hidden units and ReLU activations for Split MNIST, Split FashionMNIST, Split notMNIST, and Permuted MNIST.  For Split CIFAR-10 and CIFAR-100, we use the CNN architecture used in \cite{adel2019continual, schwarz2018progress, vinyals2016matching}, and a reduced ResNet-18 from \cite{lopez2017gradient} for Split mini-Imagenet. We use a multi-head output layer for each dataset, except Permuted MNIST where the network uses single-head output layer, such that we assume that task labels are available at test time~\cite{van2019three}. 
 
 \vspace{-3mm}
-\paragraph{Baselines.} We compare our methods with several scheduling baselines to verify the importance of learning replay schedules. The baselines we compare against are
+\paragraph{Baselines.} We compare our method against the following scheduling baselines:
 \begin{itemize}[itemsep=0em,topsep=1pt]
 	\item {\bf Random Schedule}: Randomly select which tasks to replay.
 	\item {\bf Equal Task Schedule (ETS)}: Replay all seen tasks equally.
@@ -294,71 +292,66 @@ We evaluate the CL performance of RS-MCTS for varying memory sizes to illustrate
 \end{itemize} 
 
 \vspace{-3mm}
-\paragraph{Evaluation.} The evaluation metric we use for measuring the CL performance is defined as
+\paragraph{Evaluation.} We use the following evaluation metric for measuring the CL performance
 \begin{align}
-	\ACC = \frac{1}{T} \sum_{j=1}^{T} A_{T, j}^{\test},
+	\ACC = \frac{1}{T} \sum_{j=1}^{T} A_{T, j}^{test},
 \end{align}
-where $A_{T, j}^{\test}$ is the accuracy of task $j$ after learning the final task $T$.  In Paper \ref{paperD}, we use a ranking method for comparing the ACC performance of each scheduling method within the testing environments, since the performance between environments can differ significantly when the task order changes. We then average all obtained ranking lists over the number of testing environments to obtain the ranking metric. 
-
-
-\subsection{Replay Scheduling Using Monte Carlo Tree Search}
-
-In this section, we provide an overview of the experimental results from Paper \ref{paperC}. We have named our approach as Replay Scheduling MCTS (RS-MCTS) below. Firstly, we evaluate the CL performance of RS-MCTS and the baselines on experiments with varying memory sizes. Secondly, we add replay scheduling to three recent CL methods to show that scheduling is applicable to any memory-based method. Finally, we demonstrate the efficiency benefits of replay scheduling in settings when the memory size is smaller than the number of classes. See Paper \ref{paperC} for the full experimental results and settings. 
-%We show that our method can improve the performance across different choices of memory size.
-%In this experiment, we set the replay memory size to ensure the ETS baseline replays an equal number of samples per class at the final task. 
-%The memory size is set to $M = n_{cpt} \cdot n_{spc} \cdot (T-1)$, where $n_{cpt}$ is the number of classes per task in the dataset and $n_{spc}$ are the number of samples per class we wish to replay at task $T$ for the ETS baseline. 
-%In Figure \ref{fig:acc_over_replay_memory_size}, we observe that RS-MCTS obtains better task accuracies than ETS, especially for small memory sizes. Both RS-MCTS and ETS perform better than Heuristic as $M$ increases showing that Heuristic requires careful tuning of the validation accuracy threshold. 
-
+where $A_{T, j}^{test}$ is the accuracy of task $j$ after learning the final task $T$.  
+%In Paper \ref{paperD}, we use a ranking method for comparing the ACC performance of each scheduling method within the testing environments, since the performance between environments can differ significantly when the task order changes. We then average all obtained ranking lists over the number of testing environments to obtain the ranking metric. 
 
 \vspace{-3mm}
-\begin{wrapfigure}{r}{0.5\textwidth}
-	\centering
-	\setlength{\figwidth}{0.36\textwidth}
-	\setlength{\figheight}{.16\textheight}
+\begin{wrapfigure}{r}{0.50\textwidth}
+	%\centering
 	\vspace{-3mm}
 	\hspace{-11mm}
+	%\begin{minipage}{0.50\textwidth}
+	\setlength{\figwidth}{0.36\textwidth}
+	\setlength{\figheight}{.16\textheight}
 	\resizebox{0.58\textwidth}{!}{
-	\input{Chapter4/figures/acc_over_memory_size_100iters/acc_over_memory_size_groupplot}
+		\input{Chapter4/figures/acc_over_memory_size_100iters/acc_over_memory_size_groupplot}
 	}
 	\vspace{-7mm}
 	\captionsetup{width=.9\linewidth}
 	\caption{Performance comparisons with ACC over different replay memory sizes $M$ for RS-MCTS (Ours) and the baselines. All results have been averaged over 5 seeds. %The results show that replay scheduling can outperform replaying with random and ETS schedules, %equal task proportions,
-	%especially for small $M$, on both small and large datasets across different backbone choices. %Furthermore, our method requires less careful tuning than the Heuristic baseline as $M$ increases.
-}
-\vspace{-3mm}
-\label{fig:acc_over_replay_memory_size}
+		%especially for small $M$, on both small and large datasets across different backbone choices. %Furthermore, our method requires less careful tuning than the Heuristic baseline as $M$ increases.
+	}
+	%\end{minipage}
+	\vspace{-3mm}
+	\label{fig:acc_over_memory_size}
 \end{wrapfigure}
-\paragraph{Varying Memory Size.} We show that the replay schedules found by MCTS improves the CL performance across different memory sizes. In Figure \ref{fig:acc_over_replay_memory_size}, we observe that RS-MCTS obtains better task accuracies than ETS, especially for small memory sizes. Both RS-MCTS and ETS perform better than Heuristic as $M$ increases showing that Heuristic requires careful tuning of the validation accuracy threshold. Finally, these results show that replay scheduling can outperform simpler scheduling methods on both small and large datasets. 
-
-\vspace{-3mm}
-\paragraph{Applying Scheduling to Recent Replay Methods.} We show that replay scheduling can be combined with any memory-based CL method to enhance the performance. We combine replay scheduling with three recent memory-based CL methods called Hindsight Anchor Learning (HAL)~\cite{chaudhry2021using}, Meta-Experience Replay (MER)~\cite{riemer2018learning}, Dark Experience Replay (DER)~\cite{buzzega2020dark}. Table \ref{tab:results_applying_scheduling_to_recent_replay_methods} shows the performance comparison between our RS-MCTS against using Random, ETS, and Heuristic schedules for each method. Especially for HAL and DER, the schedule found by RS-MCTS mostly outperforms the other schedules across the different datasets. For MER, the Heuristic baseline performs better than RS-MCTS and Permuted-MNIST and Split miniImagenet which could potentially be adjusted with more hyperparameter searches. Furthermore, the Heuristic baseline occasionally did not converge for some seeds which could indicate that this scheduling method is more sensitive to the settings than the other scheduling methods. Finally, the results in this experiment confirm that replay scheduling is important for the final performance given the same memory constraints and it can benefit any existing CL framework. 
+\paragraph{Varying Memory Size.} We show that the replay schedules found by MCTS improves the CL performance across different memory sizes. In Figure \ref{fig:acc_over_memory_size}, we observe that RS-MCTS obtains better task accuracies than ETS, especially for small memory sizes. Both RS-MCTS and ETS perform better than Heuristic as $M$ increases showing that Heuristic requires careful tuning of the validation accuracy threshold. These results show that replay scheduling can outperform the baselines, especially for small $M$, on both small and large datasets across different backbone choices.
 
 \input{Chapter4/figures/table_applying_scheduling_to_recent_replay_methods}
 
+\vspace{-3mm}
+\paragraph{Applying Scheduling to Recent Replay Methods.} We show that replay scheduling can be combined with any memory-based CL method to enhance the performance. %We combine replay scheduling with three recent memory-based CL methods called Hindsight Anchor Learning (HAL)~\cite{chaudhry2021using}, Meta-Experience Replay (MER)~\cite{riemer2018learning}, Dark Experience Replay (DER)~\cite{buzzega2020dark}. 
+Table \ref{tab:results_applying_scheduling_to_recent_methods} shows the performance comparison between our RS-MCTS against using Random, ETS, and Heuristic schedules for each method. Especially for HAL and DER, the schedule found by RS-MCTS mostly outperforms the other schedules across the different datasets. For MER, the Heuristic baseline performs better than RS-MCTS and Permuted-MNIST and Split miniImagenet which could potentially be adjusted with more hyperparameter searches. Furthermore, the Heuristic baseline occasionally did not converge for some seeds which could indicate that this scheduling method is more sensitive to the settings than the other scheduling methods. These results confirm that replay scheduling is important for the final performance given the same memory constraints and it can benefit any existing CL framework. 
+
+
+
 
 \vspace{-3mm}
-\paragraph{Efficiency of Replay Scheduling.} We illustrate the efficiency of replay scheduling with comparisons to several common replay-based CL baselines in an even more extreme memory setting.
+\paragraph{Efficiency of Replay Scheduling.} We illustrate the efficiency of replay scheduling with comparisons to several common replay-based CL baselines in a memory setting where we can only store 1 sample/class.
 Our goal is to investigate if scheduling over which tasks to replay can be more efficient in situations where the memory size is even smaller than the number of classes. 
 To this end, we set the replay memory size for our method
-to $M=2$ for the 5-task datasets. We then compare against the most memory efficient CL baselines, namely A-GEM~\cite{chaudhry2018efficient}, ER-Ring~\cite{chaudhry2019tiny} which show promising results with 1 sample per class for replay, as well as with uniform memory selection as reference. 
+to $M=2$ for the 5-task datasets. We then compare against the most memory efficient CL baselines, namely A-GEM~\cite{chaudhry2018efficient}, ER-Ring~\cite{chaudhry2019tiny} which have shown promising results with 1 sample/class for replay, as well as with uniform memory selection as reference. 
 Additionally, we compare to using random replay schedules (Random) with the same memory setting as for RS-MCTS.
-We visualize the memory usage for our method and the baselines when training on a 5-task dataset in Figure \ref{fig:tiny_memory_experiment_memory_usage}. In Paper \ref{paperC}, we provide results for the same experiments with the larger datasets Permuted MNIST, Split CIFAR-100, and Split miniImagenet. 
-
+We visualize the memory usage for our method and the baselines when training on a 5-task dataset in Figure \ref{fig:tiny_memory_usage_5task_datasets}. %In Paper \ref{paperC}, we provide results for similar experiments with the larger datasets Permuted MNIST, Split CIFAR-100, and Split miniImagenet. 
 Table \ref{tab:efficiency_of_replay_scheduling_5task_datasets} shows the ACC for each method across the 5-task datasets. Despite using significantly fewer samples for replay, RS-MCTS performs better or on par with the best baselines on each dataset. These results show that replay scheduling can be even more efficient than the common memory efficient replay-based methods, which indicate that learning the time to learn is an important research direction in CL.
 
 \begin{figure} % necessary to add figure environment for setting up right captions
 \begin{minipage}{\textwidth}
-	\begin{minipage}[b]{0.34\textwidth}
+	\begin{minipage}[b]{0.38\textwidth}
 		\centering
 		\setlength{\figwidth}{0.96\textwidth}
 		\setlength{\figheight}{.15\textheight}
 		\input{Chapter4/figures/memory_usage_barplot}
 		\vspace{-3mm}
 		\caption{Number of replayed samples per task for the 5-task datasets for RS-MCTS (Ours) and the baselines in the tiny memory setting.}
-		\label{fig:tiny_memory_experiment_memory_usage}
+		\label{fig:tiny_memory_usage_5task_datasets}
 	\end{minipage}
 	\hfill
-	\begin{minipage}[b]{0.64\textwidth}
+	\begin{minipage}[b]{0.6\textwidth}
 		\centering
 		\footnotesize
 		\vspace{-3mm}
@@ -383,7 +376,7 @@ Table \ref{tab:efficiency_of_replay_scheduling_5task_datasets} shows the ACC for
 		\label{tab:efficiency_of_replay_scheduling_5task_datasets}
 	\end{minipage}
 \end{minipage}
-\vspace{-3mm}
+\vspace{-2mm}
 \end{figure}
 
 
