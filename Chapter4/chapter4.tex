@@ -293,7 +293,7 @@ We evaluate the CL performance of RS-MCTS for varying memory sizes to illustrate
 
 \vspace{-3mm}
 \paragraph{Evaluation.} We use the following evaluation metric for measuring the CL performance
-\begin{align}
+\begin{align}\label{eq:acc}
 	\ACC = \frac{1}{T} \sum_{j=1}^{T} A_{T, j}^{test},
 \end{align}
 where $A_{T, j}^{test}$ is the accuracy of task $j$ after learning the final task $T$.  
@@ -383,6 +383,101 @@ Table \ref{tab:efficiency_of_replay_scheduling_5task_datasets} shows the ACC for
 
 \subsection{Policy Generalization to New Continual Learning Scenarios}
 
+In this section, we present the experimental results from Paper \ref{paperD} showing that the policies learned with our RL-based framework using DQN and A2C are capable of generalizing across CL environments with new task orders and datasets unseen during training. We run experiments on 5-task datasets Split MNIST~\cite{zenke2017continual}, Split FashionMNIST~\cite{xiao2017fashion}, Split notMNIST~\cite{bulatov2011notMNIST}, and Split CIFAR-10~\cite{krizhevsky2009learning} where there are 2 classes/task. We resort to CL benchmark datasets with $T=5$ tasks to have feasible size of the discrete action space. The replay memory size is set to $M=10$ in all experiments. See Paper \ref{paperD} for full details on the experimental setup. 
+
+\vspace{-3mm}
+\paragraph{DQN and A2C Architectures.}
+The input layer has size $T-1$ where each unit is inputting the task performances since the states are represented by the validation accuracies $s_t = [A_{t, 1}^{(val)}, ..., A_{t, t}^{(val)}, 0, ..., 0]$. The current task can therefore be determined by the number of non-zero state inputs. The output layer has 35 units representing the possible actions at $T=5$ in the discrete action space. We use action masking on the output units to prevent the network from selection invalid actions for constructing the replay memory at the current task. The DQN is a 2-layer MLP with 512 hidden units and ReLU activations. For A2C, we use separate networks for parameterizing the policy and the value function, where both networks are 2-layer MLPs with 64 hidden units of Tanh activations.
+
+\vspace{-3mm}
+\paragraph{Baselines.}
+We add two more heuristic scheduling baselines:
+\begin{itemize}[itemsep=0em,topsep=1pt]
+	\item {\bf Heuristic Local Drop (Heur-LD).} Heuristic policy that replays tasks with validation accuracy below a threshold proportional to the previous achieved validation accuracy on the task. 
+	\item {\bf Heuristic Accuracy Threshold (Heur-AT).} Heuristic policy that replays tasks with validation accuracy below a fixed threshold. 
+\end{itemize}
+Here, we name the Heuristic from the experiments in Paper \ref{paperC} as Heuristic Global Drop (Heur-GD). The Random and ETS baselines are the same as earlier. 
+
+\vspace{-3mm}
+\paragraph{Evaluation Protocol.} We use ACC from Equation \ref{eq:acc} to evaluate the performance in the CL environments. The reported results have been evaluated on the test set where the replay schedules are selected from evaluating the validation sets, where 15\% of the training data is used for creating the validation sets. To assess generalization capability, we use a ranking method based on the $\ACC$ between the methods in every test environment for comparison (see Paper \ref{paperD} for details).  
+
+
+\vspace{-3mm}
+\begin{wrapfigure}{r}{0.49\textwidth}
+	%\centering
+	\setlength{\figwidth}{0.25\textwidth}
+	\setlength{\figheight}{.14\textheight}
+	\vspace{-3mm}
+	\begin{subfigure}[b]{0.48\textwidth}
+		\centering
+		\input{Chapter4/figures/policy_cifar10/groupplot_a2c}
+		\vspace{-1mm}
+		\caption{A2C - ACC: 89.75\%}
+		\label{fig:policy_cifar10_a2c_chap4}
+	\end{subfigure}
+	%\\
+	\begin{subfigure}[b]{0.48\textwidth}
+		\centering
+		\input{Chapter4/figures/policy_cifar10/groupplot_ets}
+		\caption{ETS - ACC: 88.32\%}
+		\vspace{-2mm}
+		\label{fig:policy_cifar10_ets_chap4}
+	\end{subfigure}
+	%\vspace{-3mm}
+	\captionsetup{width=.9\linewidth}
+	\caption{Task accuracies and replay schedules for A2C and ETS for a Split CIFAR-10 environment.% The replay schedules are visualized as bubble plots and results are taken from 1 seed. %  Task order in environment is [[7, 9], [0, 4], [2, 1], [6, 5], [8, 3]].
+	}
+	\vspace{-3mm}
+	\label{fig:policy_cifar10_chap4}
+\end{wrapfigure}
+\paragraph{Generalization to New Task Orders.} 
+We show that the learned replay scheduling policies can generalize to CL environments with previously unseen task orders. We generate training and test environments with unique task orders for three datasets, namely, Split MNIST, FashionMNIST, and CIFAR-10. Table \ref{tab:average_rankings_generalization} shows the average ranking for the DQN, A2C, and the baselines when being applied in 10 test environments. 
+Our learned policies obtain the best average ranking across the datasets, where the DQN performs best for Split MNIST and FashionMNIST while A2C outperforms all methods on Split CIFAR-10. 
+We provide further insights in the benefits of learning the replay scheduling policy by visualizing the replay schedule and task accuracy progress from A2C in one Split CIFAR-10 test environment in Figure \ref{fig:policy_cifar10_chap4}. Additionally, we show the replay schedule and task accuracies from the ETS baseline in the same environment. The replay schedules are visualized with bubble plots showing the selected task proportion to use for composing the replay memories at each task. In Figure \ref{fig:policy_cifar10_a2c_chap4}, we observe that A2C decides to replay task 2 more than task 1 as the performance on task 2 decreases, which results in a slightly better ACC metric achieved by A2C than ETS. These results show that the learned policy can flexibly consider replaying forgotten tasks to enhance the CL performance.
+%or use other advanced RL methods which may generalize better. 
+
+
+\vspace{-3mm}
+\paragraph{Generalization to New Datasets.}
+We show that the learned replay scheduling policy is capable of generalizing to CL environments with new datasets unseen in the training environments. We perform two sets of experiments, 1) train with environments generated with Split MNIST and FashionMNIST and test on environments generated with Split notMNIST, and 2) train with environments generated with Split MNIST and notMNIST and test on environments generated with Split FashionMNIST.
+Table \ref{tab:average_rankings_generalization} shows the average ranking for DQN, A2C, and the baselines when generalization to test environments with new datasets. We observe that both A2C and DQN successfully generalize to Split notMNIST environments outperforming all baselines. However, the learned policies have difficulties to generalize to Split FashionMNIST environments, which could be due to high variations in the dynamics between training and test environments. 
+The policy may exhibit state transition dynamics which has not been experienced during training, which makes generalization difficult for both DQN and A2C.
+Potentially, the performance could be improved by generating more training environments for the agent to exhibit more variations in the CL scenarios or by using other advanced RL methods which may generalize better~\cite{igl2019generalization}.
+
+
+\begin{table}[t]
+	\footnotesize%\small
+	\centering
+	\caption{Average ranking (lower is better) for experiments on generalizing policies to environments with new task orders or a new dataset. %'S' stands for 'Split'%We train the DQN on 30 training Split MNIST environments and evaluate on 10 test environments. 
+		We average the results over 10 test environments. %as well as 3 seeds for DQN and A2C.
+	}
+	\vspace{-3mm}
+	\label{tab:average_rankings_generalization}
+	\resizebox{0.9\textwidth}{!}{
+		\begin{tabular}{l c c c c c}
+			\toprule %\toprule
+			& \multicolumn{3}{c}{ {\bf New Task Order}} & \multicolumn{2}{c}{ {\bf New Dataset}}\\
+			\cmidrule(lr){2-4}  \cmidrule(lr){5-6}
+			{\bf Method} & S-MNIST & S-FashionMNIST & S-CIFAR-10 & S-notMNIST & S-FashionMNIST  \\ 
+			\midrule
+			Random         & 4.23   & 3.60 & 5.03 & 3.87 & 3.95\\ 
+			ETS            & 3.80 & 4.57 & 5.37 & 4.27 & 3.63 \\
+			\midrule 
+			Heur-GD        & 4.48 & 4.25 & 3.98 & 4.58 & {\bf 2.77} \\
+			Heur-LD        & 4.65 & 3.65 & 3.75 & 4.97 & 5.10 \\
+			Heur-AT        & 4.33 & 3.87 & 3.43 & 4.28 & 3.72 \\
+			\midrule
+			DQN (Ours)     & {\bf 3.23} & {\bf 3.55} & 3.68 & 3.20 & 4.37 \\
+			A2C (Ours)     & 3.27 & 4.52 & {\bf 2.75} & {\bf 2.83} & 4.47 \\
+			\bottomrule %\bottomrule
+		\end{tabular}
+		}
+	\vspace{-3mm}
+\end{table}
+
+
+
+\begin{comment}
 In Paper \ref{paperD}, we perform two experiments to evaluate how well the learned replay scheduling policy can generalize to new CL scenarios. First, we investigate whether the policy can be applied to environments with new dataset task splits which are different from the splits that the policy was trained on. Secondly, we study if the policy can be applied to environments with new datasets than it was originally trained on. Finally, we visualize the learned policy and compare it against one of the heuristic baselines to bring further insights into the advantages of learning the replay scheduling policy.
 
 We run experiments on CL datasets of $T=5$ tasks to have a discrete action space of reasonable size. The replay memory size is set to $M=10$ in all experiments. We use 15\% of the training set for validation for the DQN and the Heuristic baselines. The Random and ETS baselines use the validation set for training since these policies are fixed.  
@@ -471,7 +566,7 @@ The heuristic baseline Heur-LD enables replay on tasks 3 and 5 according to its 
 	\vspace{-3mm}
 	\label{fig:mnist_policy_illustration_dqn_vs_heuristic2}
 \end{figure}
-
+\end{comment}
 
 
 \section{Discussion}
