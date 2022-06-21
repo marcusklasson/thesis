@@ -172,19 +172,31 @@ Figure \ref{fig:mcts_outline} shows an illustration of the procedure for executi
 	
 	\item {\bf Backpropagation.} The reward $r$ is backpropagated from the expanded node $v_{t+1}$ to the root node, where the reward function $q(\cdot)$ and number of visits $n(\cdot)$ are updated at each node in the path. 
 \end{itemize}
-
-
-
-
+As mentioned earlier, we use MCTS to search for replay schedules to illustrate the importance of learning the time to learn. To this end, we study replay scheduling in an ideal CL environment where multiple episodes is allowed to find replay schedules. However, in the standard CL setting, multiple episodes are prohibited which currently prevents replay scheduling to be applied in real-world CL scenarios. In the next section, we present a policy learning framework based on RL to learn replay scheduling policies that generalize. 
 
 
 %\section{Meta Policy Learning for Replay Scheduling}\label{sec:meta_policy_learning_for_replay_scheduling}
 \section{Policy Learning for Replay Scheduling}\label{chap4:sec:policy_learning_for_replay_scheduling}
 
-In this section, we introduce the RL-based framework for learning replay scheduling policies that was proposed in Paper \ref{paperD}. 
-In Paper \ref{paperD}, we aim to enable replay scheduling in real-world CL scenarios by learning policies that can be transferred to new CL environments to mitigate catastrophic forgetting. We propose an RL-based framework for policy learning and show that the policies can generalize to new task orders and datasets without additional computational cost in the test environments. 
+In this section, we introduce the RL-based framework for learning replay scheduling policies that was proposed in Paper \ref{paperD}. In real-world CL settings, learning the policy with multiple episodes is infeasible, which is why we need a general policy for replay scheduling.
+Our intuition is that there may exist general patterns regarding the replay scheduling, e.g., tasks that are harder or have been forgotten should be replayed more often. Moreover, the policy may non-trivially take task properties into consideration. Therefore, we aim to learn policies that select which tasks to replay from states representing the current task performance in the CL environments. The policy can then be applied for mitigating catastrophic forgetting in new CL scenarios. 
 
-In this section, we present an RL-based framework to learn policies for selecting which tasks to replay in CL scenarios. We are interested in learning such policy that can be transferred to new CL scenarios, such as new task orders and new datasets, without any additional computational cost for updating on the new domain. We take a meta-learning approach where the policy learns from episodes of experience collected from training a classifier in CL settings. The experience from the environment is represented as the classification performance on each seen task in the dataset. The policy receives the task performances for basing its action on which task that needs to be replayed at the next time step. Our goal is to obtain a policy that can generalize to be used for replay scheduling in new CL scenarios to mitigate catastrophic forgetting. Next, we describe in more detail how the framework for learning this policy works.
+We model the CL environments as Markov Decision Processes~\cite{bellman1957markovian} (MDPs) where each MDP is represented as a tuple $E_i = (\gS_i, \gA, P_i, R_i, \mu_i, \gamma)$ consisting of the state space $\gS_i$, action space $\gA$, state transition probability $P_i(s' | s, a)$, reward function $R_i(s, a)$, initial state distribution $\mu_i(s_1)$, and discount factor $\gamma$.
+We assume that we have access to a fixed set of training environments $\gE^{(train)} = \{E_1, \dots, E_K\}$ sampled from a distribution of CL environments, i.e., $E_i \sim p(E)$ for $i=1, ..., K$. 
+Each environment $E_i$ contains of a network $f_{\vphi}$ and $T$ datasets $\gD_{1:T}$ where the $t$-th dataset is learned by $f_{\vphi}$ at time step $t$. Note that we will use task and time step interchangeably. 
+To generate diverse CL environments, we obtain environments with different initializations of the network $f_{\vphi}$ and shuffled task orders in the dataset when we sample environments from $p(E)$. 
+
+We define the state $s_t$ of the environment as the validation accuracies $A_{t, 1:t}^{(val)}$ on each seen task $1, ..., t$ from $f_{\vphi}$ at task $t$, i.e., $s_t = [A_{t, 1}, ..., A_{t, t}, 0, ..., 0]$, where we use zero-padding on future tasks. The action space $\gA$ is constructed as described in Algorithm \ref{alg:action_space_discretization} (Section \ref{chap4:sec:replay_scheduling_in_cl}), such that the $a_t \in \gA$ corresponds to a task proportion $\vp_t$ used for sampling the replay memory $\gM_t$. We use a dense reward based on the average validation accuracies at task $t$, i.e., $r_{t} = \frac{1}{t}\sum_{i=1}^{t} A_{t, i}^{(val)}$. The state transition distribution $P_i(s' | s, a)$ represents the dynamics of the environment, which depend on the initialization of $f_{\vphi}$ and also the task order in the dataset. More specifically, the dynamics represent how the validation accuracies varies after $f_{\vphi}$ replays according to the action $a_t$ when learning the current task. 
+
+The procedure for training the policy goes as follows: 
+The state $s_t$ is obtained by evaluating the network $f_{\vphi}$ on the validation sets $\gD_{1:t}^{(val)}$ after learning the $t$-th task from $\gD_t^{(train)}$. Action $a_t$ is selected under the policy $\pi_{\vtheta}(a | s_t)$ parameterized by $\vtheta$. The action is converted into task proportion $\vp_t$ that is used for sampling the replay memory $\gM_t$ from the historical datasets. 
+We then train classifier $f_{\vphi}$ with $\gD_{t+1}^{(train)}$ and $\gM_t$, and obtain the reward $r_{t+1}$ and the next state $s_{t+1}$ by evaluating $f_{\vphi}$ on the validation sets $\gD_{1:t+1}^{(val)}$. The collected transitions $(s_t, a_t, r_{t+1}, s_{t+1})$ are used for updating the policy.  A new episode starts after $f_{\vphi}$ has learned the final task $T$. 
+
+We evaluate the learned policy by applying it to mitigate catastrophic forgetting in new CL environments at test time. To foster generalization across environments, we train the policy on multiple environments with different dynamics, such as task orders and datasets, to learn from a diverse set of training data. The goal for the agent is to maximize the sum of rewards in each training environment. 
+At test time, the policy is applied on new CL classifiers and datasets in the test environments without added computational cost nor experience collection. In Section \ref{chap4:sec:experiments}, we test the policies generalization capability to new CL environments where the task orders and datasets are unseen during training.
+
+
+%In this section, we present an RL-based framework to learn policies for selecting which tasks to replay in CL scenarios. We are interested in learning such policy that can be transferred to new CL scenarios, such as new task orders and new datasets, without any additional computational cost for updating on the new domain. We take a meta-learning approach where the policy learns from episodes of experience collected from training a classifier in CL settings. The experience from the environment is represented as the classification performance on each seen task in the dataset. The policy receives the task performances for basing its action on which task that needs to be replayed at the next time step. Our goal is to obtain a policy that can generalize to be used for replay scheduling in new CL scenarios to mitigate catastrophic forgetting. Next, we describe in more detail how the framework for learning this policy works.
 
 %By learning from gathering experience, the policy learns better for the future on how to select the tasks to replay. However, as 
 
@@ -193,7 +205,8 @@ In this section, we present an RL-based framework to learn policies for selectin
 
 %Limitations here are of course that we potentially need lots of data for learning a policy that generalizes. Additionally, we need lots of training time and hyperparameter tuning as we are dealing with RL. Also, we need to store the data somewhere which is cheap, but it must be secure due to privacy concerns. An alternative there could be to store features instead of raw data, which is not completely flawless (I think that it's possible to revert features back to the real data to some extent) but at least it is a safer alternative. Another option for the data needed can be to gather experience from simulated environments and benchmark datasets. As the policy only takes in states with task performances, we can make use mixes of benchmark datasets and data from real contributing users. 
 
-  
+\begin{comment}
+	
 \subsection{Problem Setting}
 
 We consider the setting where an agent selects replay schedules to mitigate catastrophic forgetting in a classifier trained in the CL setting. The environment that the agent interacts with contains a network $f_{\vphi}$ and a dataset $\gD_{1:T}$ of $T$ tasks that $f_{\vphi}$ should learn in sequential order. The dataset is split into training, validation, and test sets as $\gD_{1:T} = \{\gD_{1:T}^{\train}, \gD_{1:T}^{\val}, \gD_{1:T}^{\test}\}$ respectively. The training sets $\gD_{1:T}^{\train}$ are for the network to learn all $T$ tasks sequentially, while the $\gD_{1:T}^{\val}$ are for evaluating how well the network performs on each task during training. The task performances on the validation sets can be used for dense rewards to the RL agent. The test sets are for final evaluation and are unseen during training as standard practice to avoid overfitting.  
@@ -250,10 +263,10 @@ where $A_{t, i}^{\val}$ is the validation accuracy on task $i$ after $f_{\vphi}$
 	\gL_{\text{DQN}}(\vtheta) = r_j + \max_{a'} Q_{\vtheta^{-}}(s_{j+1}, a') - Q_{\vtheta}(s_j, a_j), 
 \end{align}  
 where $\vtheta^{-}$ is target network which is copy of the parameters $\vtheta$ from some previous time step. By using the shared replay buffer, the DQN is trained on diverse set of environments that can generalize well to new environments with unseen dynamics from an unseen task order or a new dataset. Next, we will describe the experiments we perform to evaluate the generalization capability of the policy to new CL scenarios. 
+\end{comment}
 
 
-
-\section{Experiments}
+\section{Experiments}\label{chap4:sec:experiments}
 
 In this section, we give an overview of the experimental results in Paper \ref{paperC} and \ref{paperD}. In Paper \ref{paperC}, we perform experiments to show that the importance of replay scheduling in our proposed problem setting for CL described in Section \ref{sec:replay_scheduling_in_cl}. We demonstrate that learning when to replay different tasks by using MCTS as an exemplar method for finding good replay schedules that are efficient in mitigating catastrophic forgetting in the classifier. In Paper \ref{paperD}, we demonstrate on benchmark datasets for CL how our RL-based framework can be used for learning replay scheduling policies. We show that our proposed method can learn policies that generalize to CL scenarios with new task orders and datasets unseen during training.  
 
