@@ -3,39 +3,63 @@
 %*******************************************************************************
 
 
-
 \chapter{Continual Learning}\label{chap4}
 
+In this chapter, we give an overview of Paper \ref{paperC} and \ref{paperD} where we focus on continual learning (CL)~\cite{delange2021continual,parisi2019continual}. A CL system receives samples of classes to learn continuously over time while maintaining its overall performance on every seen class. Such capability is critical for assistive vision systems as the system may need to adapt to unseen items in new environments. Furthermore, CL on mobile devices would enable personalizing the devices to specific items that the VI user wants to locate and recognize. 
+The main challenge with the CL setup is catastrophic forgetting~\cite{mccloskey1989catastrophic} where previously learned abilities are overwritten by recent acquired knowledge (see Figure \ref{fig:catastrophic_forgetting_example}). However, retraining on all previously seen data may be prohibited due to lack of computational budget or accessibility to the seen datasets. Replay-based CL methods efficiently mitigate catastrophic forgetting by revisiting old samples stored in a small memory buffer~\cite{chaudhry2019tiny,lopez2017gradient,hayes2020remind}. 
 
-This chapter introduces the idea of replay scheduling for mitigating catastrophic forgetting in continual learning (CL). The problem setting of CL is on learning tasks of recognizing a new set of classes with a dataset given at the current time step. In the standard setting, one main assumption is that the data from past tasks can never be fully revisited by the model. However, in the real-world, many organizations record data from incoming streams for storage rather than deleting it~\cite{bailis2017macrobase, mitchell1999machinelearning} [Add at least 1 more REF]. In contrast to the assumption on data storage in standard CL, we suggest a new setting where we assume that all seen data is accessible at any time for the model to revisit. The challenge then becomes how to select which tasks that needs to be remembered via replay as the data is still incoming from a stream. We propose to learn the time when replaying a certain task is necessary when the model is updating its knowledge with new incoming tasks. In Paper \ref{paperC}, we propose the new CL setting where historical data is accessible and introduce the idea of replay scheduling and how it can be used in CL. In Paper \ref{paperD}, we propose a framework based on reinforcement learning~\cite{sutton2018reinforcement} (RL) for learning replay scheduling policies that can be applied in new CL scenarios. 
+Most replay-based methods in CL use simple strategies for retrieving replay samples and ignore the time to learn which is important for memory retention in human learning~\cite{dempster1989spacing,landauer1978optimum,hawley2008comparison}. 
+Furthermore, most works rely on tiny memory buffers although historical data is almost always available in many real-world machine learning applications~\cite{mitchell1999machinelearning,bailis2017macrobase,hazelwood2018applied}. Nevertheless, the requirement of small replay memories remains as due to limitations on computational budget and data transmission times. 
+To this end, we propose in Paper \ref{paperC} a new CL setting where historical data is
+available while the processing time is limited. For this new setting, we propose \textit{replay scheduling} where we select which tasks to replay at different times, and demonstrate the advantages of considering time to replay in CL. 
+In Paper \ref{paperD}, we present a framework based on reinforcement learning (RL)~\cite{sutton2018reinforcement} for learning replay scheduling policies that can be transferred to new CL scenarios for mitigating catastrophic forgetting without added computational cost. 
+Our proposed replay scheduling approach opens up for new research directions that can bring current CL research closer to real-world needs. 
+
+
+%This chapter introduces the idea of replay scheduling for mitigating catastrophic forgetting in continual learning (CL). The problem setting of CL is on learning tasks of recognizing a new set of classes with a dataset given at the current time step. In the standard setting, one main assumption is that the data from past tasks can never be fully revisited by the model. However, in the real-world, many organizations record data from incoming streams for storage rather than deleting it~\cite{bailis2017macrobase, mitchell1999machinelearning} [Add at least 1 more REF]. In contrast to the assumption on data storage in standard CL, we suggest a new setting where we assume that all seen data is accessible at any time for the model to revisit. The challenge then becomes how to select which tasks that needs to be remembered via replay as the data is still incoming from a stream. We propose to learn the time when replaying a certain task is necessary when the model is updating its knowledge with new incoming tasks. In Paper \ref{paperC}, we propose the new CL setting where historical data is accessible and introduce the idea of replay scheduling and how it can be used in CL. In Paper \ref{paperD}, we propose a framework based on reinforcement learning~\cite{sutton2018reinforcement} (RL) for learning replay scheduling policies that can be applied in new CL scenarios. 
+
 %A simple, yet effcient, approach to mitigate catastrophically forgetting past tasks is to add some 
 %Replay scheduling involves selecting which tasks to fetch examples from and add to a replay memory at different times. The replay memory is then mixed with a batch of examples from the current task to learn to help the network to remember the previously learned tasks selected by the scheduler. 
 
 %\MK{TO-DO: Motivate replay scheduling from mobile phone perspective, perhaps from perspective that phones can store lots of data but how to select which classes to replay. Maybe it should also be from the computational perspective, that we want such scheduling policy to work in many scenarios without additional compute cost for the policy learning. }
 
-
 \begin{figure}[t]
 	\centering
 	\includegraphics[width=0.8\textwidth]{Chapter4/imgs/cf_new.pdf}
-	\caption{Illustration of catastrophic forgetting in a continual learning scenario. }
-	\label{fig:example_catastrophic_forgetting}
+	\caption{Illustration of catastrophic forgetting in a continual learning scenario. The network $f_{\vtheta}$ receives a task dataset of an Apple Juice class in $\gD_{t}^{train}$ to learn, and correctly predicts the Apple Juice class in the unseen test image in $\gD^{test}$. The next task dataset involves learning an Orange Juice class from $\gD_{t+1}^{train}$ which $f_{\vtheta}$ adapts to without retaining knowledge about the Apple Juice class, such that $f_{\vtheta}$ makes the wrong prediction during evaluation on $\gD^{test}$ again. }
+	\vspace{-2mm}
+	\label{fig:catastrophic_forgetting_example}
 \end{figure}
 
-\section{Related Work}\label{ch4/sec:related_work}
 
-In this section, we give an overview of previous works related to Paper C and D. We begin by describing different approaches in CL, especially replay-based approaches, and then discuss some approaches for fostering generalization in RL.
+\section{Related Work}\label{chap4:sec:related_work}
 
-\vspace{-3mm}
-\paragraph{Continual Learning.} There exist many different approaches in CL for mitigating catastrophic forgetting in neural networks. In general, these approaches can be divided into three main cores, namely, \textit{regularization-based}, \textit{architecture-based}, and \textit{replay-based} methods. Regularization-based methods are mainly focused on applying regularization techniques on parameters important for recognizing old tasks and fit the remaining parameters to new tasks~\cite{kirkpatrick2017overcoming, zenke2017continual, nguyen2017variational}. Knowledge distillation methods~\cite{hinton2015distilling} also belong to these approaches where classification logits are used for regularizing the output units for previous tasks in the network~\cite{li2017learning, schwarz2018progress}. More recently, there are some works that uses projection-based approaches for constraining the parameter updates to subspaces which avoid interference with previous tasks~\cite{saha2021gradient, kao2021natural}. Architecture-based approaches focuses on adding task-specific network modules for every seen task~\cite{rusu2016progressive, yoon2017lifelong, yoon2019scalable, ebrahimi2020adversarial}, or isolating parameters for predicting specific task in fixed-size networks~\cite{mallya2018packnet, serra2018overcoming, schwarz2021powerpropagation}. Replay-based methods re-trains on samples of old tasks when learning new tasks. The old samples are either stored in an external memory~\cite{chaudhry2019tiny, hayes2020remind, rolnick2018experience}, or synthesized with a generative model~\cite{shi2019variational, van2018generative, van2020brain, wu2018memory}. Both regularization- and architecture-based methods can be combined with replay for improving the models capability of remembering tasks [Add REFs]. Our replay scheduling idea is originated from replay-based methods which we will cover more in detail next. 
+In this section, we give an overview of different approaches in CL, especially replay-based methods which our proposed replay scheduling approach in Paper \ref{paperC} and \ref{paperD} is based on. 
 
 \vspace{-3mm}
-\paragraph{Replay-based Continual Learning.} In this thesis, we focus on replay-based methods with external memories for storing historical data. The most common selection strategy for filling the memory is random sampling from the used datasets. There exist several works focusing on selecting high quality samples for storing in the memory [Add REFs]. However, in image classification problems, random sampling has been shown to often perform on par with more elaborate selection strategies~\cite{chaudhry2018riemannian, hayes2020remind}. In contrast to using various memory selection methods, there has been proposals of retrieval policies over which samples to select for replay from the memory, for instance, selecting the samples that will mostly interfere with the parameter update with batches of new data~\cite{aljundi2019online}. Our replay scheduling approach differs from this method as we focus on selecting which tasks to select for replay rather than the individual samples to retrieve from the memory.  
-More recent works have focused on evolving the memory samples through data augmentation to avoid overfitting to the memory [Add REFs], and also by using contrastive learning to improve discriminating between tasks. Another direction has been to increasing the storage capacity to store more samples by compressing raw data into features that are more memory-cheap [Add REFs]. The above mentioned methods assume that the memory is small and allocates equal storage amount for all tasks. Our new problem setting for memory-based CL is different from this assumption as we argue that data storage is cheap in many real-world applications. Hence, we compose a replay memory with data from historical tasks before learning new tasks because the amount of compute is limited. However, replay scheduling can be combined with of the mentioned methods as it only differs with the standard memory-based CL setting in that the replay memory has to be selected at every new task. 
+\paragraph{Continual Learning.} The existing CL approaches for mitigating catastrophic forgetting in neural networks can broadly be divided into three main areas, namely, regularization-based, architecture-based, and replay-based methods. 
+Regularization-based methods mainly focus on 
+preventing the parameters important for previous tasks from wide changes and fit the remaining parameters to new tasks~\cite{kirkpatrick2017overcoming, zenke2017continual, nguyen2017variational}. 
+Knowledge distillation methods~\cite{hinton2015distilling} also belong to these methods where stored classification logits are used for regularizing the output units for previous tasks in the network~\cite{li2017learning, schwarz2018progress}.
+More recently, projection-based approaches have been proposed for constraining the parameter updates to subspaces which avoid interference with previous tasks~\cite{saha2021gradient, kao2021natural}. 
+Architecture-based methods focus on adding task-specific network modules for every seen task~\cite{rusu2016progressive, yoon2017lifelong, yoon2019scalable, ebrahimi2020adversarial,xu2018reinforced}, or isolating parameters for predicting specific task in fixed-size networks~\cite{mallya2018packnet, serra2018overcoming, schwarz2021powerpropagation}. 
+Replay-based methods revisits samples from old tasks when learning new tasks. The old samples are either stored in an external memory~\cite{chaudhry2019tiny, hayes2020remind, rolnick2018experience,jin2020gradient,verwimp2021rehearsal}, or synthesized with a generative model~\cite{shi2019variational, van2018generative, van2020brain, wu2018memory}. 
+Both regularization- and architecture-based methods can be combined with replay for improving the models capability of remembering tasks~\cite{buzzega2020dark,douillard2020podnet,ebrahimi2020adversarial,joseph2020meta,mirzadeh2020linear,nguyen2017variational,pan2020continual,von2019continual}. 
+Our replay scheduling idea is originated from replay-based methods which we will cover more in detail next. 
+
+%\paragraph{Continual Learning.} There exist many different approaches in CL for mitigating catastrophic forgetting in neural networks. In general, these approaches can be divided into three main cores, namely, \textit{regularization-based}, \textit{architecture-based}, and \textit{replay-based} methods. Regularization-based methods are mainly focused on applying regularization techniques on parameters important for recognizing old tasks and fit the remaining parameters to new tasks~\cite{kirkpatrick2017overcoming, zenke2017continual, nguyen2017variational}. Knowledge distillation methods~\cite{hinton2015distilling} also belong to these approaches where classification logits are used for regularizing the output units for previous tasks in the network~\cite{li2017learning, schwarz2018progress}. More recently, there are some works that uses projection-based approaches for constraining the parameter updates to subspaces which avoid interference with previous tasks~\cite{saha2021gradient, kao2021natural}. Architecture-based approaches focuses on adding task-specific network modules for every seen task~\cite{rusu2016progressive, yoon2017lifelong, yoon2019scalable, ebrahimi2020adversarial}, or isolating parameters for predicting specific task in fixed-size networks~\cite{mallya2018packnet, serra2018overcoming, schwarz2021powerpropagation}. Replay-based methods re-trains on samples of old tasks when learning new tasks. The old samples are either stored in an external memory~\cite{chaudhry2019tiny, hayes2020remind, rolnick2018experience}, or synthesized with a generative model~\cite{shi2019variational, van2018generative, van2020brain, wu2018memory}. Both regularization- and architecture-based methods can be combined with replay for improving the models capability of remembering tasks [Add REFs]. Our replay scheduling idea is originated from replay-based methods which we will cover more in detail next. 
 
 \vspace{-3mm}
-\paragraph{Generalization in Reinforcement Learning.} Generalization in RL is an active research field where much focus has been put on developing proper benchmark datasets for evaluating generalization capabilities of RL agents~\cite{cobbe2019quantifying, cobbe2020leveraging, nichol2018gotta, yu2020meta}. 
-Regularization techniques from supervised learning have been used to investigate whether these can enhance generalization in RL~\cite{cobbe2019quantifying, farebrother2018generalization, igl2019generalization}, and also how variations in the environments help to obtain agents that generalize better~\cite{packer2018assessing, zhang2018dissection}. Algorithms for enabling fast adaptation to new environments, such as new tasks~\cite{finn2017model, kessler2021same} and new action spaces~\cite{chandak2019learning, jain2020generalization}, has also been studied. The survey by Kirk \etal~\cite{kirk2021survey} focuses on zero-shot policy transfer where the policy must generalize to unseen dynamics in the test environments as additional queries could be disallowed in real-world scenarios~\cite{yang2019single, ball2021augmented}. 
-In Paper \ref{paperD}, we consider using RL for learning policies for scheduling which tasks to replay in CL settings to mitigate catastrophic forgetting in the classifier. The policy is trained using experiences from multiple CL environments and then tested in new CL environments with unseen dynamics such as new task orders and datasets. 
+\paragraph{Replay-based Continual Learning.} 
+Much research effort in replay-based CL has focused on selecting higher quality samples to store in memory~\cite{aljundi2019gradient, borsos2020coresets, chaudhry2019tiny, chrysakis2020online, hayes2019memory, isele2018selective, lopez2017gradient, nguyen2017variational, rebuffi2017icarl, yoon2021online}. In \cite{chaudhry2019tiny}, several selection strategies are reviewed in scenarios with tiny memory capacity, such as reservoir sampling~\cite{vitter1985random}, first-in first-out buffer~\cite{lopez2017gradient}, k-Means, and Mean-of-Features~\cite{rebuffi2017icarl}. However, elaborate selection strategies have been shown to give little benefit over random selection for image classification problems~\cite{chaudhry2018riemannian, hayes2020remind}. 
+More recent work has been focused on enhancing the memory capacity by storing compressed features rather than raw data~\cite{hayes2020remind, iscen2020memory, pellegrini2019latent}, evolving the memory samples using data augmentation to avoid overfitting~\cite{jin2020gradient,bang2021rainbow}, and using contrastive learning to improve memory retention~\cite{cha2021co2l,mai2021supervised}. 
+Selecting the time to replay old tasks has mostly been ignored in the literature, with an exception in~\cite{aljundi2019online} which replays memory samples that would most interfere with a foreseen parameter update. Our replay scheduling approach differs from the above mentioned works since we focus on learning to select which tasks to replay. Nevertheless, our scheduling can be combined with any selection strategy and replay-based method.
+
+
+%\paragraph{Replay-based Continual Learning.} In this thesis, we focus on replay-based methods with external memories for storing historical data. The most common selection strategy for filling the memory is random sampling from the used datasets. There exist several works focusing on selecting high quality samples for storing in the memory [Add REFs]. However, in image classification problems, random sampling has been shown to often perform on par with more elaborate selection strategies~\cite{chaudhry2018riemannian, hayes2020remind}. In contrast to using various memory selection methods, there has been proposals of retrieval policies over which samples to select for replay from the memory, for instance, selecting the samples that will mostly interfere with the parameter update with batches of new data~\cite{aljundi2019online}. Our replay scheduling approach differs from this method as we focus on selecting which tasks to select for replay rather than the individual samples to retrieve from the memory. More recent works have focused on evolving the memory samples through data augmentation to avoid overfitting to the memory [Add REFs], and also by using contrastive learning to improve discriminating between tasks. Another direction has been to increasing the storage capacity to store more samples by compressing raw data into features that are more memory-cheap [Add REFs]. The above mentioned methods assume that the memory is small and allocates equal storage amount for all tasks. Our new problem setting for memory-based CL is different from this assumption as we argue that data storage is cheap in many real-world applications. Hence, we compose a replay memory with data from historical tasks before learning new tasks because the amount of compute is limited. However, replay scheduling can be combined with of the mentioned methods as it only differs with the standard memory-based CL setting in that the replay memory has to be selected at every new task. 
+
+%\vspace{-3mm}
+%\paragraph{Generalization in Reinforcement Learning.} Generalization in RL is an active research field where much focus has been put on developing proper benchmark datasets for evaluating generalization capabilities of RL agents~\cite{cobbe2019quantifying, cobbe2020leveraging, nichol2018gotta, yu2020meta}.  Regularization techniques from supervised learning have been used to investigate whether these can enhance generalization in RL~\cite{cobbe2019quantifying, farebrother2018generalization, igl2019generalization}, and also how variations in the environments help to obtain agents that generalize better~\cite{packer2018assessing, zhang2018dissection}. Algorithms for enabling fast adaptation to new environments, such as new tasks~\cite{finn2017model, kessler2021same} and new action spaces~\cite{chandak2019learning, jain2020generalization}, has also been studied. The survey by Kirk \etal~\cite{kirk2021survey} focuses on zero-shot policy transfer where the policy must generalize to unseen dynamics in the test environments as additional queries could be disallowed in real-world scenarios~\cite{yang2019single, ball2021augmented}. In Paper \ref{paperD}, we consider using RL for learning policies for scheduling which tasks to replay in CL settings to mitigate catastrophic forgetting in the classifier. The policy is trained using experiences from multiple CL environments and then tested in new CL environments with unseen dynamics such as new task orders and datasets. 
 %We evaluate our learned policies on the zero-shot policy transfer setting where the goal is to mitigate catastrophic forgetting in new CL scenarios. The rewards are accessible through accuracies calculated on validation datasets, however, fine-tuning the policy during CL training is prohibited.  
 
 
@@ -45,69 +69,134 @@ In Paper \ref{paperD}, we consider using RL for learning policies for scheduling
 %TO-DO \MK{A short and cozy table fo this, similar to survey by Delange etal 2021}
 %\paragraph{Similarities and Differences between Continual Learning and other fields.} \MK{A short and cozy table fo this, similar to survey by Delange etal 2021}
 
-\section{Replay Scheduling in Continual Learning}\label{sec:replay_scheduling_in_cl}
 
-In this section, we introduce a slightly new CL setting considering the real-world needs where all historical data can be available since data storage is cheap. However, the amount of compute is limited when the model is updated on new data due to operational costs. Hence, it is impossible for the model to leverage from all the available historical data to mitigate catastrophic forgetting. The goal then becomes to learn how we can select subsets of historical data for replay to efficiently reduce forgetting of the old tasks. We will refer to these subsets of historical data as the \textit{replay memory} throughout this chapter. The size of the replay memory affects the processing time when learning new tasks as well as the allowed time for the training phase. When composing the replay memory, we focus on determining the number of samples to draw from the seen tasks in the historical data rather than selecting single stored instances. Next, we introduce the problem setting in more detail as well as the notation of the new CL setting. 
+\section{Replay Scheduling in Continual Learning}\label{chap4:sec:replay_scheduling_in_cl}
+
+In this section, we present our proposed replay scheduling approach studied in Paper \ref{paperC} and \ref{paperD} for mitigating catastrophic forgetting in CL. 
+More specifically, we focus on the contributions in Paper \ref{paperC}, where we introduce a slightly new CL setting that considers real-world needs where all historical data can be available since data storage is cheap. Additionally, we demonstrate the advantages of replay scheduling in such setting where we select which tasks to replay, where we use Monte Carlo tree search (MCTS)~\cite{coulom2006efficient} to search for efficient replay schedules by allowing multiple episodes in single CL environments. 
 
 
-\subsection{Problem Setting}
+%In this section, we introduce a slightly new CL setting considering the real-world needs where all historical data can be available since data storage is cheap. However, the amount of compute is limited when the model is updated on new data due to operational costs. Hence, it is impossible for the model to leverage from all the available historical data to mitigate catastrophic forgetting. The goal then becomes to learn how we can select subsets of historical data for replay to efficiently reduce forgetting of the old tasks. We will refer to these subsets of historical data as the \textit{replay memory} throughout this chapter. The size of the replay memory affects the processing time when learning new tasks as well as the allowed time for the training phase. When composing the replay memory, we focus on determining the number of samples to draw from the seen tasks in the historical data rather than selecting single stored instances. Next, we introduce the problem setting in more detail as well as the notation of the new CL setting. 
 
-We introduce the notation of our problem setting which resembles the traditional CL setting for image classification. We let a neural network $f_{\vtheta}$, parameterized by $\vtheta$, learn $T$ tasks from the datasets $\gD_1, \dots, \gD_T$ arriving sequentially one at a time. The $t$-th dataset $\gD_t = \{(\vx_{t}^{(i)}, \vy_{t}^{(i)})\}_{i=1}^{N_{t}}$ consists of $N_t$ samples where $\vx_{t}^{(i)}$ and $\vy_{t}^{(i)}$ are the $i$-th data point and class label respectively. The training objective at task $t$ is given by 
-\vspace{-2mm}
+
+\subsection{New Problem Setting for Continual Learning}
+
+In this section, we describe the proposed CL setting presented in Paper \ref{paperC}. We assume that historical data is accessible at any time for mitigating catastrophic forgetting in the model. However, re-training the model on all available historical data is prohibited due to limitations on compute and data transmission times. Therefore, the goal is to determine which historical tasks to replay and sample a small replay memory from the selected tasks to mitigate catastrophic forgetting as efficiently as possible. 
+
+The notation of this problem setting resembles the traditional CL setting for image classification. We let a neural network $f_{\vphi}$, parameterized by $\vphi$, learn $T$ tasks from the datasets $\gD_1, \dots, \gD_T$ arriving sequentially one at a time. The $t$-th dataset $\gD_t = \{(\vx_{t}^{(i)}, y_{t}^{(i)})\}_{i=1}^{N_{t}}$ consists of $N_t$ samples where $\vx_{t}^{(i)}$ and $y_{t}^{(i)}$ are the $i$-th data point and class label respectively. Additionally, the dataset is split into training, validation, and test sets such that $\gD_{1:T} = \{(\gD_{t}^{train}, \gD_{t}^{val}, \gD_{t}^{test})\}_{t=1}^{T}$. The training objective at task $t$ is given by 
+%\vspace{-2mm}
 \begin{align}
-	\underset{\vtheta}{\text{min}} \sum_{i=1}^{N_t} \gL(f_{\vtheta}(\vx_t^{(i)}), \vy_{t}^{(i)}),
+	\underset{\vphi}{\text{min}} \sum_{i=1}^{N_t} \gL(f_{\vphi}(\vx_t^{(i)}), y_{t}^{(i)}),
 \end{align}
-where $\gL(\cdot)$ is the loss function, which in our case is the cross-entropy loss.  
-When learning task $t$, the network $f_{\vtheta}$ is at risk of catastrophically forgetting the previous $t-1$ tasks. The forgetting effect shows as the decrease in task accuracy between time steps, for example, $A_{t, i} < A_{t, i-1}$ where $A_{t, i}$ is the accuracy for task $t$ at time step $i$. Replay-based methods mitigate catastrophic forgetting by storing a few number of examples from historical tasks in an external memory. The network $f_{\vtheta}$ is then allowed to fetch old examples from the memory and mix these with the current task dataset to remind itself about the previous tasks during training. 
+where $\gL(\cdot)$ is the loss function, which in our case is the cross-entropy loss. The challenge is for the network $f_{\vphi}$ to retain its classification performance on the previous $t-1$ tasks. 
 
-In the new problem setting, we assume that historical data from old tasks are accessible at any time step. However, we can only fill a small replay memory $\gM$ with $M$ historical samples for replaying old tasks due to processing time constraints prohibiting re-using all historical data at the same time. The challenge then becomes how to know which tasks to include in the replay memory that efficiently retain the previous knowledge when learning new tasks. We decide to fill the replay memory with $M$ historical samples using sequence of task proportions $(p_1, \dots, p_{t-1})$ where $\sum_{i=1}^{t-1} p_i = 1$ and $p_{i} \geq 0$. The number of samples from task $i$ to place in $\gM$ is given by $p_i \cdot M$. In the next section, we introduce a method for selecting the task proportions of which old tasks to replay. 
+We assume that historical data from old tasks are accessible at any time step. However, we can only fill a small replay memory $\gM$ with $M$ historical samples for mitigating catastrophic forgetting of old tasks due to processing time constraints. The challenge then becomes how to select the $M$ samples from the historical data to include in the replay memory that efficiently retain the previous knowledge. 
+We focus on selecting the samples on task-level by deciding on the task proportions $(p_1, \dots, p_{t-1})$ on samples to fetch from each task, where $\sum_{i=1}^{t-1} p_i = 1$ and $p_{i} \geq 0$. The number of samples from task $i$ to place in $\gM$ is given by $p_i \cdot M$. To simplify the selection of which tasks to replay, we construct a finite set of possible task proportions that can be used for constructing $\gM$. 
+
+This problem setting shares several assumptions with traditional CL, such as:
+\begin{itemize}[noitemsep,topsep=1pt]
+	\item The model receives the datasets at different time steps from a continuous stream.
+	\item Re-training on all historical data is prohibited.
+	\item The model should perform well overall across all seen tasks and, hence, mitigate catastrophic forgetting.
+	\item Replay memory size $M$ is small.
+\end{itemize}
+The only difference with this setting and traditional CL is that all historical has been stored rather than deleted, and we can access this data to fill the replay memory $\gM$ to mitigate catastrophic forgetting. We argue that this setting aligns well with real-world needs as data storage is cheap and easy to maintain but retraining large machine learning models is computationally expensive. Therefore, we use small replay memory sizes to limit the processing times of replay when the model is learning new tasks. 
 
 
-\paragraph{Comparison to Traditional CL.} The new setting has several similarities to the traditional CL setting. Both settings share the fundamental setting that the data arrive in streams and re-training on all historical data is prohibited. Also, the goal that the model should perform well both historical tasks and tasks associated with new data remains the same. In replay-based CL, we also share the same constraints that the memory size is limited. However, we argue that this limitation is mainly associated with compute rather than of storage. Our assumption aligns with the real-world where data storage is cheap and easy to maintain, but retraining large machine learning models is computationally expensive. The only difference is that we allow filling the limited replay memory from historical data or some other external memory. Here, we argue that historical data is stored rather than deleted in many real-world settings~\cite{bailis2017macrobase}. Thus, we should keep the limited memory assumption for training but allow access to historical data to fill the replay memory to make CL align with real-world needs.
+%\paragraph{Comparison to Traditional CL.} The new setting has several similarities to the traditional CL setting. Both settings share the fundamental setting that the data arrive in streams and re-training on all historical data is prohibited. Also, the goal that the model should perform well both historical tasks and tasks associated with new data remains the same. In replay-based CL, we also share the same constraints that the memory size is limited. However, we argue that this limitation is mainly associated with compute rather than of storage. Our assumption aligns with the real-world where data storage is cheap and easy to maintain, but retraining large machine learning models is computationally expensive. The only difference is that we allow filling the limited replay memory from historical data or some other external memory. Here, we argue that historical data is stored rather than deleted in many real-world settings~\cite{bailis2017macrobase}. Thus, we should keep the limited memory assumption for training but allow access to historical data to fill the replay memory to make CL align with real-world needs.
 %\MK{TO-DO: this paragraph can be written in a more humble way, more like "this is something worth to investigate"}
 
 
 
-\subsection{Replay Scheduling for Mitigating Catastrophic Forgetting}
+%\subsection{Replay Scheduling for Mitigating Catastrophic Forgetting}
+\subsection{Monte Carlo Tree Search for Replay Scheduling}
 
-In this section, we describe our replay scheduling method for selecting the replay memory at different time steps. A replay schedule is defined as a sequence $S = (\vp_1, \dots, \vp_{T-1})$, where $\vp_i = (p_1, \dots, p_{T-1})$ for $1 \leq i \leq T-1$ is the sequence of task proportions for determining how many samples per task to fill the replay memory with at time step $i$. To make the selection of task proportions tractable, we construct an action space with a discrete number of choices for the task proportions from historical tasks. 
+In this section, we describe how we used MCTS in Paper \ref{paperC} to show the advantages of replay scheduling in the new CL setting. We focus on an ideal CL environment where executing multiple episodes is allowed to enable searching for replay schedules. For demonstration purposes, we use MCTS for finding replay schedules that efficiently mitigate catastrophic forgetting by selecting compositions of replay memories at different time steps. 
 
-We show the procedure for creating the discrete action space in Algorithm \ref{alg:action_space_discretization}. At task $i$, we have $i-1$ historical tasks that we can choose from. We then generate all possible bin vectors $\vb_i = [b_1, \dots, b_{i}] \in \gB_i$ of size $i$ where each element are a task index $1, ..., i$. We sort all bin vectors by the order of task indices and only keep the unique bin vectors. For example, at $i=2$, the unique choices of vectors are $[1,1], [1,2], [2,2]$, where $[1,1]$ indicates that all samples in the replay memory should be from task 1, $[1,2]$ indicates that half memory is from task 1 and the other half are from task etc. The task proportions are then computed by counting the number of occurrences of each task index in $\vb_i$ and dividing by $i$, such that $\vp_i = \texttt{bincount}(\vb_i) / (i)$. From this specification, we have built a tree $\gT$ with different task proportions that can be selected at different time steps. We construct a replay schedule $S$ by traversing through $\gT$ and select a task proportion on every level to append to $S$. We can then evaluate the replay schedule $S$ by training a network on the CL task sequence and use $S$ to compose the replay memory to use for mitigating catastrophic forgetting at every task. %\MK{Question, Wrap algorithm around this paragraph and remove the comments? Algorithm with comments could be placed in Appendix of Paper D.}
-
-
-\begin{algorithm}[t]
+\begin{wrapfigure}{r}{0.43\textwidth}
+\hspace{-4mm}
+\begin{minipage}{0.43\textwidth}
+\vspace{-7mm}
+\begin{algorithm}[H]
+	\footnotesize
 	\caption{Discretization of action space with task proportions}
 	\label{alg:action_space_discretization}
 	\begin{algorithmic}[1]
 		\Require Number of tasks $T$
-		\State $\gT = ()$ \Comment{Initialize sequence for storing actions}
+		\State $\gT = ()$ %\Comment{Initialize sequence for storing actions}
 		\For{$i = 1, \dots, T-1$}
-		\State $\gP_i = \{\}$ \Comment{Set for storing task proportions at $i$}
-		\State $\gB = \texttt{combinations}([1:i], i)$ \Comment{Get bin vectors of size $i$ with bins $1, ..., i$}
-		\State $\bar{\gB} = \texttt{unique}(\texttt{sort}(\gB))$ \Comment{Only keep unique bin vectors}
-		\For{$\vb_i \in \hat{\gB}$}
-		\State $\vp_i = \texttt{bincount}(\vb_i) / i$ \Comment{Calculate task proportion}
-		\State $\gP_i = \gP_i \cup \{ \vp_i \}$ \Comment{Add task proportion to set}
+		\State $\gP_i = \{\}$ %\Comment{Set for storing task proportions at $i$}
+		\State $\gB = \texttt{combinations}([1:i], i)$ %\Comment{Get bin vectors of size $i$ with bins $1, ..., i$}
+		\State $\gB^{*} = \texttt{unique}(\texttt{sort}(\gB))$ %\Comment{Only keep unique bin vectors}
+		\For{$\vb_i \in \gB^{*}$}
+		\State $\vp_i = \texttt{bincount}(\vb_i) / i$ %\Comment{Calculate task proportion}
+		\State $\gP_i = \gP_i \cup \{ \vp_i \}$ %\Comment{Add task proportion to set}
 		\EndFor
-		\State $\gT[i] = \gP_i$ \Comment{Add set of task proportions to action sequence}
+		\State $\gT[i] = \gP_i$ %\Comment{Add set of task proportions to action sequence}
 		\EndFor
-		\State \Return $\gT$ \Comment{Return action sequence as discrete action space}
+		\State \Return $\gT$ %\Comment{Return action sequence as discrete action space}
 	\end{algorithmic}
 \end{algorithm}
+\end{minipage}
+\end{wrapfigure}
+We define a replay schedule as a sequence $S = (\vp_1, \dots, \vp_{T-1})$, where $\vp_i = (p_1, \dots, p_{T-1})$ for $1 \leq i \leq T-1$ is the sequence of task proportions for determining how many samples per task to fill the replay memory with at time step $i$. 
+To make the selection of task proportions tractable, we construct a discrete action space with a finite number of choices for how to construct the replay memory at different time steps. Algorithm \ref{alg:action_space_discretization} shows the procedure for creating this action space. At task $i$, we have $i-1$ historical tasks that we can choose from. We then generate all possible bin vectors $\vb_i = [b_1, \dots, b_{i}] \in \gB_i$ of size $i$ where each element are a task index $1, ..., i$. The elements in each bin vector are sorted by task index, and we only keep the unique bin vectors after sorting. For example, at $i=2$, the unique choices of vectors are $[1,1], [1,2], [2,2]$, where $[1,1]$ indicates that all samples in the replay memory should be from task 1, $[1,2]$ indicates that half memory is from task 1 and the other half are from task etc. 
+The task proportions are then computed by counting the number of occurrences of each task index in $\vb_i$ and dividing by $i$, such that $\vp_i = \texttt{bincount}(\vb_i) / (i)$. From this specification, we have built a tree $\gT$ with different task proportions that can be selected at different time steps. A replay schedule $S$ is constructed by traversing through $\gT$ and appending a single task proportion from every task level to $S$.  
 
 
+The tree-shaped action space of task proportions grows fast with the number of tasks, which complicates studying replay scheduling in datasets with longer task-horizons. 
+Therefore, we proposed using MCTS since it has been successful in applications with large action spaces~\cite{browne2012survey, chaudhry2018feature, silver2016mastering}. In our case, MCTS concentrates the search for replay schedules in directions with promising CL performance in the environment. 
+Each memory composition in the action space corresponds to a node that can be visited by MCTS. For instance, at task $t$, the node $v_t$ is related to a task proportions $\vp_{t}$ that can be used for retrieving a replay memory from the historical data. 
+We store the related task proportion $\vp_t$ from every visited node $v_t$ in the replay schedule $S$. The final replay schedule is then used for constructing the replay memories at each task during the CL training. 
+Figure \ref{fig:mcts_outline} shows an illustration of the procedure for executing MCTS to search for replay schedules, where each step involves the following:
 
-We are interested in studying whether the time to replay different tasks is important in the new CL setting. One option is to use a brute-force approach, for example, breadth-first search, and evaluate every possible replay schedule in the tree. However, as the tree grows fast with the number of tasks, we need a scalable method that can perform searches in large action spaces. We suggest using Monte Carlo tree search~\cite{coulom2006efficient} (MCTS) due to its previous successes in applications with similar conditions as ours~\cite{browne2012survey, silver2016mastering, chaudhry2018feature}. The use of MCTS enables performing search for datasets with longer task horizons. Furthermore, MCTS encourages searches in promising paths based on the selected reward function, which we set as the average accuracy of all tasks after learning the final task achieved by the network. We provide the full details on how MCTS is used to search for replay schedules in Paper \ref{paperC}. 
-%\MK{Question: More info on MCTS?}
+\begin{figure}[t]
+	\centering
+	\input{Chapter4/imgs/mcts_outline}
+	\caption{Outline of MCTS when searching for replay schedules. }
+	\label{fig:mcts_outline}
+	\vspace{-2mm}
+\end{figure}
+
+\begin{itemize}[topsep=1pt, itemsep=1pt, label={}, leftmargin=*]
+	\item {\bf Selection.} During a rollout, the tree policy either selects an unvisited child randomly from the current node $v_t$, or selects the next node by evaluating the Upper Confidence Tree (UCT)~\cite{kocsis2006bandit} if all children has been visited earlier.
+	The child $v_{t+1}$ with the highest UCT score is selected using the function from \cite{chaudhry2018feature}:
+	\begin{align}\label{eq:uct}
+		UCT(v_t, v_{t+1}) = \text{max}(q(v_{t+1})) + C \sqrt{\frac{2 \log(n(v_{t}))}{n(v_{t+1})}},
+	\end{align}
+	where $q(\cdot)$ is the reward function, $C$ the exploration constant, and $n(\cdot)$ the number of node visits. The tree policy is executed until a leaf node $v_t$ is reached.
+	
+	\item {\bf Expansion.} If the leaf node $v_t$ has unvisited children, the search tree is expanded with one of the unvisited child nodes $v_{t+1}$ selected with uniform sampling. 
+	
+	\item {\bf Simulation and Reward.} After the expansion step, the succeeding nodes are selected randomly until reaching a terminal node $v_T$. The task proportions $\vp_{1:T-1}$ from the visited nodes in the rollout constitutes the replay schedule $S$. After training the network using $S$ for replay, we calculate the reward for the rollout given by $r = \frac{1}{T} \sum_{i=1}^T A_{T, i}^{(val)}$, where $A_{T, i}^{(val)}$ is the validation accuracy of task $i$ at task $T$.  
+	
+	\item {\bf Backpropagation.} The reward $r$ is backpropagated from the expanded node $v_{t+1}$ to the root node, where the reward function $q(\cdot)$ and number of visits $n(\cdot)$ are updated at each node in the path. 
+\end{itemize}
+As mentioned earlier, we use MCTS to search for replay schedules to illustrate the importance of learning the time to learn. To this end, we study replay scheduling in an ideal CL environment where multiple episodes is allowed to find replay schedules. However, in the standard CL setting, multiple episodes are prohibited which currently prevents replay scheduling to be applied in real-world CL scenarios. In the next section, we present a policy learning framework based on RL to learn replay scheduling policies that generalize. 
 
 
-%% Have section for MCTS. include a limitations paragraph there that can be referred to later in Discussion. It kind of bridges over well to the meta-policy learning too. Say that we will use MCTS for studying if scheduling is important in this new setting.
+%\section{Meta Policy Learning for Replay Scheduling}\label{sec:meta_policy_learning_for_replay_scheduling}
+\section{Policy Learning for Replay Scheduling}\label{chap4:sec:policy_learning_for_replay_scheduling}
+
+In this section, we introduce the RL-based framework for learning replay scheduling policies that was proposed in Paper \ref{paperD}. In real-world CL settings, learning the policy with multiple episodes is infeasible, which is why we need a general policy for replay scheduling.
+Our intuition is that there may exist general patterns regarding the replay scheduling, e.g., tasks that are harder or have been forgotten should be replayed more often. Moreover, the policy may non-trivially take task properties into consideration. Therefore, we aim to learn policies that select which tasks to replay from states representing the current task performance in the CL environments. The policy can then be applied for mitigating catastrophic forgetting in new CL scenarios. 
+
+We model the CL environments as Markov Decision Processes~\cite{bellman1957markovian} (MDPs) where each MDP is represented as a tuple $E_i = (\gS_i, \gA, P_i, R_i, \mu_i, \gamma)$ consisting of the state space $\gS_i$, action space $\gA$, state transition probability $P_i(s' | s, a)$, reward function $R_i(s, a)$, initial state distribution $\mu_i(s_1)$, and discount factor $\gamma$.
+We assume that we have access to a fixed set of training environments $\gE^{(train)} = \{E_1, \dots, E_K\}$ sampled from a distribution of CL environments, i.e., $E_i \sim p(E)$ for $i=1, ..., K$. 
+Each environment $E_i$ contains of a network $f_{\vphi}$ and $T$ datasets $\gD_{1:T}$ where the $t$-th dataset is learned by $f_{\vphi}$ at time step $t$. Note that we will use task and time step interchangeably. 
+To generate diverse CL environments, we obtain environments with different initializations of the network $f_{\vphi}$ and shuffled task orders in the dataset when we sample environments from $p(E)$. 
+
+We define the state $s_t$ of the environment as the validation accuracies $A_{t, 1:t}^{(val)}$ on each seen task $1, ..., t$ from $f_{\vphi}$ at task $t$, i.e., $s_t = [A_{t, 1}, ..., A_{t, t}, 0, ..., 0]$, where we use zero-padding on future tasks. The action space $\gA$ is constructed as described in Algorithm \ref{alg:action_space_discretization} (Section \ref{chap4:sec:replay_scheduling_in_cl}), such that the $a_t \in \gA$ corresponds to a task proportion $\vp_t$ used for sampling the replay memory $\gM_t$. We use a dense reward based on the average validation accuracies at task $t$, i.e., $r_{t} = \frac{1}{t}\sum_{i=1}^{t} A_{t, i}^{(val)}$. The state transition distribution $P_i(s' | s, a)$ represents the dynamics of the environment, which depend on the initialization of $f_{\vphi}$ and also the task order in the dataset. More specifically, the dynamics represent how the validation accuracies varies after $f_{\vphi}$ replays according to the action $a_t$ when learning the current task. 
+
+The procedure for training the policy goes as follows: 
+The state $s_t$ is obtained by evaluating the network $f_{\vphi}$ on the validation sets $\gD_{1:t}^{(val)}$ after learning the $t$-th task from $\gD_t^{(train)}$. Action $a_t$ is selected under the policy $\pi_{\vtheta}(a | s_t)$ parameterized by $\vtheta$. The action is converted into task proportion $\vp_t$ that is used for sampling the replay memory $\gM_t$ from the historical datasets. 
+We then train classifier $f_{\vphi}$ with $\gD_{t+1}^{(train)}$ and $\gM_t$, and obtain the reward $r_{t+1}$ and the next state $s_{t+1}$ by evaluating $f_{\vphi}$ on the validation sets $\gD_{1:t+1}^{(val)}$. The collected transitions $(s_t, a_t, r_{t+1}, s_{t+1})$ are used for updating the policy.  A new episode starts after $f_{\vphi}$ has learned the final task $T$. 
+
+We evaluate the learned policy by applying it to mitigate catastrophic forgetting in new CL environments at test time. To foster generalization across environments, we train the policy on multiple environments with different dynamics, such as task orders and datasets, to learn from a diverse set of training data. The goal for the agent is to maximize the sum of rewards in each training environment. 
+At test time, the policy is applied on new CL classifiers and datasets in the test environments without added computational cost nor experience collection. In Section \ref{chap4:sec:experiments}, we test the policies generalization capability to new CL environments where the task orders and datasets are unseen during training.
 
 
-\section{Meta Policy Learning for Replay Scheduling}
-\label{sec:meta_policy_learning_for_replay_scheduling}
-
-In this section, we present an RL-based framework to learn policies for selecting which tasks to replay in CL scenarios. We are interested in learning such policy that can be transferred to new CL scenarios, such as new task orders and new datasets, without any additional computational cost for updating on the new domain. We take a meta-learning approach where the policy learns from episodes of experience collected from training a classifier in CL settings. The experience from the environment is represented as the classification performance on each seen task in the dataset. The policy receives the task performances for basing its action on which task that needs to be replayed at the next time step. Our goal is to obtain a policy that can generalize to be used for replay scheduling in new CL scenarios to mitigate catastrophic forgetting. Next, we describe in more detail how the framework for learning this policy works.
+%In this section, we present an RL-based framework to learn policies for selecting which tasks to replay in CL scenarios. We are interested in learning such policy that can be transferred to new CL scenarios, such as new task orders and new datasets, without any additional computational cost for updating on the new domain. We take a meta-learning approach where the policy learns from episodes of experience collected from training a classifier in CL settings. The experience from the environment is represented as the classification performance on each seen task in the dataset. The policy receives the task performances for basing its action on which task that needs to be replayed at the next time step. Our goal is to obtain a policy that can generalize to be used for replay scheduling in new CL scenarios to mitigate catastrophic forgetting. Next, we describe in more detail how the framework for learning this policy works.
 
 %By learning from gathering experience, the policy learns better for the future on how to select the tasks to replay. However, as 
 
@@ -116,7 +205,8 @@ In this section, we present an RL-based framework to learn policies for selectin
 
 %Limitations here are of course that we potentially need lots of data for learning a policy that generalizes. Additionally, we need lots of training time and hyperparameter tuning as we are dealing with RL. Also, we need to store the data somewhere which is cheap, but it must be secure due to privacy concerns. An alternative there could be to store features instead of raw data, which is not completely flawless (I think that it's possible to revert features back to the real data to some extent) but at least it is a safer alternative. Another option for the data needed can be to gather experience from simulated environments and benchmark datasets. As the policy only takes in states with task performances, we can make use mixes of benchmark datasets and data from real contributing users. 
 
-  
+\begin{comment}
+	
 \subsection{Problem Setting}
 
 We consider the setting where an agent selects replay schedules to mitigate catastrophic forgetting in a classifier trained in the CL setting. The environment that the agent interacts with contains a network $f_{\vphi}$ and a dataset $\gD_{1:T}$ of $T$ tasks that $f_{\vphi}$ should learn in sequential order. The dataset is split into training, validation, and test sets as $\gD_{1:T} = \{\gD_{1:T}^{\train}, \gD_{1:T}^{\val}, \gD_{1:T}^{\test}\}$ respectively. The training sets $\gD_{1:T}^{\train}$ are for the network to learn all $T$ tasks sequentially, while the $\gD_{1:T}^{\val}$ are for evaluating how well the network performs on each task during training. The task performances on the validation sets can be used for dense rewards to the RL agent. The test sets are for final evaluation and are unseen during training as standard practice to avoid overfitting.  
@@ -173,20 +263,28 @@ where $A_{t, i}^{\val}$ is the validation accuracy on task $i$ after $f_{\vphi}$
 	\gL_{\text{DQN}}(\vtheta) = r_j + \max_{a'} Q_{\vtheta^{-}}(s_{j+1}, a') - Q_{\vtheta}(s_j, a_j), 
 \end{align}  
 where $\vtheta^{-}$ is target network which is copy of the parameters $\vtheta$ from some previous time step. By using the shared replay buffer, the DQN is trained on diverse set of environments that can generalize well to new environments with unseen dynamics from an unseen task order or a new dataset. Next, we will describe the experiments we perform to evaluate the generalization capability of the policy to new CL scenarios. 
+\end{comment}
 
 
+\section{Experiments}\label{chap4:sec:experiments}
 
-\section{Experiments}
+In this section, we give an overview of the experimental results from Paper \ref{paperC} and \ref{paperD}. In Paper \ref{paperC}, we evaluate the benefits of replay scheduling in single CL environments using MCTS for finding replay schedules. We perform extensive evaluation to show that the replay schedules from MCTS can outperform the baselines across several CL benchmarks and different backbones. 
+In Paper \ref{paperD}, we evaluate our RL-based framework using DQN~\cite{mnih2013playing} and A2C~\cite{mnih2016asynchronous} for learning policies that generalize to new CL scenarios.
+We show that the learned policies can efficiently mitigate catastrophic forgetting in CL environments with new task orders and datasets that are unseen during training. 
+%Full details on experimental settings and additional results are in Appendix \ref{app:experimental_settings} and \ref{app:additional_experimental_results}. Code is available as supplementary material.  
 
-In this section, we give an overview of the experimental results in Paper \ref{paperC} and \ref{paperD}. In Paper \ref{paperC}, we perform experiments to show that the importance of replay scheduling in our proposed problem setting for CL described in Section \ref{sec:replay_scheduling_in_cl}. We demonstrate that learning when to replay different tasks by using MCTS as an exemplar method for finding good replay schedules that are efficient in mitigating catastrophic forgetting in the classifier. In Paper \ref{paperD}, we demonstrate on benchmark datasets for CL how our RL-based framework can be used for learning replay scheduling policies. We show that our proposed method can learn policies that generalize to CL scenarios with new task orders and datasets unseen during training.  
+%In this section, we give an overview of the experimental results in Paper \ref{paperC} and \ref{paperD}. In Paper \ref{paperC}, we perform experiments to show that the importance of replay scheduling in our proposed problem setting for CL described in Section \ref{sec:replay_scheduling_in_cl}. We demonstrate that learning when to replay different tasks by using MCTS as an exemplar method for finding good replay schedules that are efficient in mitigating catastrophic forgetting in the classifier. In Paper \ref{paperD}, we demonstrate on benchmark datasets for CL how our RL-based framework can be used for learning replay scheduling policies. We show that our proposed method can learn policies that generalize to CL scenarios with new task orders and datasets unseen during training.  
+
+\subsection{Results on Replay Scheduling with Monte Carlo Tree Search}
+
+Here, we provide a selection of the experimental results from Paper \ref{paperC}. Our approach has been named Replay Scheduling MCTS (RS-MCTS). 
+We evaluate the CL performance of RS-MCTS for varying memory sizes to illustrate the importance of replay scheduling. Moreover, we show that replay scheduling can benefit any replay-based method by combining scheduling with three recent CL methods, namely, HAL~\cite{chaudhry2021using}, MER~\cite{riemer2018learning}, and DER~\cite{buzzega2020dark}. Finally, we demonstrate the efficiency benefits of replay scheduling in settings when the memory size is smaller than the number of classes. We give an overview of the experimental settings, see Paper \ref{paperC} for the full experimental results and hyperparameter settings. 
 
 \vspace{-3mm}
-\paragraph{Datasets and Architectures.} In Paper \ref{paperC} and \ref{paperD}, we perform experiments on common CL benchmark datasets with 5 tasks such as Split MNIST~\cite{zenke2017continual}, Split Fashion-MNIST~\cite{xiao2017fashion}, Split notMNIST~\cite{bulatov2011notMNIST}, and Split CIFAR10~\cite{krizhevsky2009learning}, 10-task Permuted MNIST~\cite{goodfellow2013empirical}, and 20-task Split CIFAR-100~\cite{krizhevsky2009learning, lopez2017gradient, rebuffi2017icarl} and Split miniImagenet~\cite{vinyals2016matching}. We use a 2-layer MLP with 256 hidden units and ReLU activation for Split MNIST, Split FashionMNIST, Split notMNIST, and Permuted MNIST. We use a multi-head output layer for each dataset except Permuted MNIST where the network uses single-head output layer. For Split CIFAR-10 and CIFAR-100, we use a multi-head CNN architecture built according to the CNN in \cite{adel2019continual, schwarz2018progress, vinyals2016matching}. For Split mniImagenet, we use the reduced ResNet-18 from \cite{lopez2017gradient} with multi-head output layer. See each paper for training details and hyperparameter settings. 
-
-
+\paragraph{Datasets and Architectures.} We perform experiments on common CL benchmark datasets such as Split MNIST~\cite{zenke2017continual}, Split Fashion-MNIST~\cite{xiao2017fashion}, Split notMNIST~\cite{bulatov2011notMNIST}, Permuted MNIST~\cite{goodfellow2013empirical}, and Split CIFAR-100~\cite{krizhevsky2009learning, lopez2017gradient, rebuffi2017icarl} and Split miniImagenet~\cite{vinyals2016matching}. We use a 2-layer MLP with 256 hidden units and ReLU activations for Split MNIST, Split FashionMNIST, Split notMNIST, and Permuted MNIST.  For Split CIFAR-10 and CIFAR-100, we use the CNN architecture used in \cite{adel2019continual, schwarz2018progress, vinyals2016matching}, and a reduced ResNet-18 from \cite{lopez2017gradient} for Split mini-Imagenet. We use a multi-head output layer for each dataset, except Permuted MNIST where the network uses single-head output layer, such that we assume that task labels are available at test time~\cite{van2019three}. 
 
 \vspace{-3mm}
-\paragraph{Baselines.} We compare our methods with several scheduling baselines to verify the importance of learning replay schedules. The baselines we compare against are
+\paragraph{Baselines.} We compare our method against the following scheduling baselines:
 \begin{itemize}[itemsep=0em,topsep=1pt]
 	\item {\bf Random Schedule}: Randomly select which tasks to replay.
 	\item {\bf Equal Task Schedule (ETS)}: Replay all seen tasks equally.
@@ -194,71 +292,66 @@ In this section, we give an overview of the experimental results in Paper \ref{p
 \end{itemize} 
 
 \vspace{-3mm}
-\paragraph{Evaluation.} The evaluation metric we use for measuring the CL performance is defined as
-\begin{align}
-	\ACC = \frac{1}{T} \sum_{j=1}^{T} A_{T, j}^{\test},
+\paragraph{Evaluation.} We use the following evaluation metric for measuring the CL performance
+\begin{align}\label{eq:acc}
+	\ACC = \frac{1}{T} \sum_{j=1}^{T} A_{T, j}^{test},
 \end{align}
-where $A_{T, j}^{\test}$ is the accuracy of task $j$ after learning the final task $T$.  In Paper \ref{paperD}, we use a ranking method for comparing the ACC performance of each scheduling method within the testing environments, since the performance between environments can differ significantly when the task order changes. We then average all obtained ranking lists over the number of testing environments to obtain the ranking metric. 
-
-
-\subsection{Replay Scheduling Using Monte Carlo Tree Search}
-
-In this section, we provide an overview of the experimental results from Paper \ref{paperC}. We have named our approach as Replay Scheduling MCTS (RS-MCTS) below. Firstly, we evaluate the CL performance of RS-MCTS and the baselines on experiments with varying memory sizes. Secondly, we add replay scheduling to three recent CL methods to show that scheduling is applicable to any memory-based method. Finally, we demonstrate the efficiency benefits of replay scheduling in settings when the memory size is smaller than the number of classes. See Paper \ref{paperC} for the full experimental results and settings. 
-%We show that our method can improve the performance across different choices of memory size.
-%In this experiment, we set the replay memory size to ensure the ETS baseline replays an equal number of samples per class at the final task. 
-%The memory size is set to $M = n_{cpt} \cdot n_{spc} \cdot (T-1)$, where $n_{cpt}$ is the number of classes per task in the dataset and $n_{spc}$ are the number of samples per class we wish to replay at task $T$ for the ETS baseline. 
-%In Figure \ref{fig:acc_over_replay_memory_size}, we observe that RS-MCTS obtains better task accuracies than ETS, especially for small memory sizes. Both RS-MCTS and ETS perform better than Heuristic as $M$ increases showing that Heuristic requires careful tuning of the validation accuracy threshold. 
-
+where $A_{T, j}^{test}$ is the accuracy of task $j$ after learning the final task $T$.  
+%In Paper \ref{paperD}, we use a ranking method for comparing the ACC performance of each scheduling method within the testing environments, since the performance between environments can differ significantly when the task order changes. We then average all obtained ranking lists over the number of testing environments to obtain the ranking metric. 
 
 \vspace{-3mm}
-\begin{wrapfigure}{r}{0.5\textwidth}
-	\centering
-	\setlength{\figwidth}{0.36\textwidth}
-	\setlength{\figheight}{.16\textheight}
+\begin{wrapfigure}{r}{0.50\textwidth}
+	%\centering
 	\vspace{-3mm}
 	\hspace{-11mm}
+	%\begin{minipage}{0.50\textwidth}
+	\setlength{\figwidth}{0.36\textwidth}
+	\setlength{\figheight}{.16\textheight}
 	\resizebox{0.58\textwidth}{!}{
-	\input{Chapter4/figures/acc_over_memory_size_100iters/acc_over_memory_size_groupplot}
+		\input{Chapter4/figures/acc_over_memory_size_100iters/acc_over_memory_size_groupplot}
 	}
 	\vspace{-7mm}
 	\captionsetup{width=.9\linewidth}
 	\caption{Performance comparisons with ACC over different replay memory sizes $M$ for RS-MCTS (Ours) and the baselines. All results have been averaged over 5 seeds. %The results show that replay scheduling can outperform replaying with random and ETS schedules, %equal task proportions,
-	%especially for small $M$, on both small and large datasets across different backbone choices. %Furthermore, our method requires less careful tuning than the Heuristic baseline as $M$ increases.
-}
-\vspace{-3mm}
-\label{fig:acc_over_replay_memory_size}
+		%especially for small $M$, on both small and large datasets across different backbone choices. %Furthermore, our method requires less careful tuning than the Heuristic baseline as $M$ increases.
+	}
+	%\end{minipage}
+	\vspace{-3mm}
+	\label{fig:acc_over_memory_size}
 \end{wrapfigure}
-\paragraph{Varying Memory Size.} We show that the replay schedules found by MCTS improves the CL performance across different memory sizes. In Figure \ref{fig:acc_over_replay_memory_size}, we observe that RS-MCTS obtains better task accuracies than ETS, especially for small memory sizes. Both RS-MCTS and ETS perform better than Heuristic as $M$ increases showing that Heuristic requires careful tuning of the validation accuracy threshold. Finally, these results show that replay scheduling can outperform simpler scheduling methods on both small and large datasets. 
-
-\vspace{-3mm}
-\paragraph{Applying Scheduling to Recent Replay Methods.} We show that replay scheduling can be combined with any memory-based CL method to enhance the performance. We combine replay scheduling with three recent memory-based CL methods called Hindsight Anchor Learning (HAL)~\cite{chaudhry2021using}, Meta-Experience Replay (MER)~\cite{riemer2018learning}, Dark Experience Replay (DER)~\cite{buzzega2020dark}. Table \ref{tab:results_applying_scheduling_to_recent_replay_methods} shows the performance comparison between our RS-MCTS against using Random, ETS, and Heuristic schedules for each method. Especially for HAL and DER, the schedule found by RS-MCTS mostly outperforms the other schedules across the different datasets. For MER, the Heuristic baseline performs better than RS-MCTS and Permuted-MNIST and Split miniImagenet which could potentially be adjusted with more hyperparameter searches. Furthermore, the Heuristic baseline occasionally did not converge for some seeds which could indicate that this scheduling method is more sensitive to the settings than the other scheduling methods. Finally, the results in this experiment confirm that replay scheduling is important for the final performance given the same memory constraints and it can benefit any existing CL framework. 
+\paragraph{Varying Memory Size.} We show that the replay schedules found by MCTS improves the CL performance across different memory sizes. In Figure \ref{fig:acc_over_memory_size}, we observe that RS-MCTS obtains better task accuracies than ETS, especially for small memory sizes. Both RS-MCTS and ETS perform better than Heuristic as $M$ increases showing that Heuristic requires careful tuning of the validation accuracy threshold. These results show that replay scheduling can outperform the baselines, especially for small $M$, on both small and large datasets across different backbone choices.
 
 \input{Chapter4/figures/table_applying_scheduling_to_recent_replay_methods}
 
+\vspace{-3mm}
+\paragraph{Applying Scheduling to Recent Replay Methods.} We show that replay scheduling can be combined with any memory-based CL method to enhance the performance. %We combine replay scheduling with three recent memory-based CL methods called Hindsight Anchor Learning (HAL)~\cite{chaudhry2021using}, Meta-Experience Replay (MER)~\cite{riemer2018learning}, Dark Experience Replay (DER)~\cite{buzzega2020dark}. 
+Table \ref{tab:results_applying_scheduling_to_recent_methods} shows the performance comparison between our RS-MCTS against using Random, ETS, and Heuristic schedules for each method. Especially for HAL and DER, the schedule found by RS-MCTS mostly outperforms the other schedules across the different datasets. For MER, the Heuristic baseline performs better than RS-MCTS and Permuted-MNIST and Split miniImagenet which could potentially be adjusted with more hyperparameter searches. Furthermore, the Heuristic baseline occasionally did not converge for some seeds which could indicate that this scheduling method is more sensitive to the settings than the other scheduling methods. These results confirm that replay scheduling is important for the final performance given the same memory constraints and it can benefit any existing CL framework. 
+
+
+
 
 \vspace{-3mm}
-\paragraph{Efficiency of Replay Scheduling.} We illustrate the efficiency of replay scheduling with comparisons to several common replay-based CL baselines in an even more extreme memory setting.
+\paragraph{Efficiency of Replay Scheduling.} We illustrate the efficiency of replay scheduling with comparisons to several common replay-based CL baselines in a memory setting where we can only store 1 sample/class.
 Our goal is to investigate if scheduling over which tasks to replay can be more efficient in situations where the memory size is even smaller than the number of classes. 
 To this end, we set the replay memory size for our method
-to $M=2$ for the 5-task datasets. We then compare against the most memory efficient CL baselines, namely A-GEM~\cite{chaudhry2018efficient}, ER-Ring~\cite{chaudhry2019tiny} which show promising results with 1 sample per class for replay, as well as with uniform memory selection as reference. 
+to $M=2$ for the 5-task datasets. We then compare against the most memory efficient CL baselines, namely A-GEM~\cite{chaudhry2018efficient}, ER-Ring~\cite{chaudhry2019tiny} which have shown promising results with 1 sample/class for replay, as well as with uniform memory selection as reference. 
 Additionally, we compare to using random replay schedules (Random) with the same memory setting as for RS-MCTS.
-We visualize the memory usage for our method and the baselines when training on a 5-task dataset in Figure \ref{fig:tiny_memory_experiment_memory_usage}. In Paper \ref{paperC}, we provide results for the same experiments with the larger datasets Permuted MNIST, Split CIFAR-100, and Split miniImagenet. 
-
+We visualize the memory usage for our method and the baselines when training on a 5-task dataset in Figure \ref{fig:tiny_memory_usage_5task_datasets}. %In Paper \ref{paperC}, we provide results for similar experiments with the larger datasets Permuted MNIST, Split CIFAR-100, and Split miniImagenet. 
 Table \ref{tab:efficiency_of_replay_scheduling_5task_datasets} shows the ACC for each method across the 5-task datasets. Despite using significantly fewer samples for replay, RS-MCTS performs better or on par with the best baselines on each dataset. These results show that replay scheduling can be even more efficient than the common memory efficient replay-based methods, which indicate that learning the time to learn is an important research direction in CL.
 
 \begin{figure} % necessary to add figure environment for setting up right captions
 \begin{minipage}{\textwidth}
-	\begin{minipage}[b]{0.34\textwidth}
+	\begin{minipage}[b]{0.38\textwidth}
 		\centering
 		\setlength{\figwidth}{0.96\textwidth}
 		\setlength{\figheight}{.15\textheight}
 		\input{Chapter4/figures/memory_usage_barplot}
 		\vspace{-3mm}
 		\caption{Number of replayed samples per task for the 5-task datasets for RS-MCTS (Ours) and the baselines in the tiny memory setting.}
-		\label{fig:tiny_memory_experiment_memory_usage}
+		\label{fig:tiny_memory_usage_5task_datasets}
 	\end{minipage}
 	\hfill
-	\begin{minipage}[b]{0.64\textwidth}
+	\begin{minipage}[b]{0.6\textwidth}
 		\centering
 		\footnotesize
 		\vspace{-3mm}
@@ -283,13 +376,108 @@ Table \ref{tab:efficiency_of_replay_scheduling_5task_datasets} shows the ACC for
 		\label{tab:efficiency_of_replay_scheduling_5task_datasets}
 	\end{minipage}
 \end{minipage}
-\vspace{-3mm}
+\vspace{-2mm}
 \end{figure}
 
 
 
 \subsection{Policy Generalization to New Continual Learning Scenarios}
 
+In this section, we present the experimental results from Paper \ref{paperD} showing that the policies learned with our RL-based framework using DQN and A2C are capable of generalizing across CL environments with new task orders and datasets unseen during training. We run experiments on 5-task datasets Split MNIST~\cite{zenke2017continual}, Split FashionMNIST~\cite{xiao2017fashion}, Split notMNIST~\cite{bulatov2011notMNIST}, and Split CIFAR-10~\cite{krizhevsky2009learning} where there are 2 classes/task. We resort to CL benchmark datasets with $T=5$ tasks to have feasible size of the discrete action space. The replay memory size is set to $M=10$ in all experiments. See Paper \ref{paperD} for full details on the experimental setup. 
+
+\vspace{-3mm}
+\paragraph{DQN and A2C Architectures.}
+The input layer has size $T-1$ where each unit is inputting the task performances since the states are represented by the validation accuracies $s_t = [A_{t, 1}^{(val)}, ..., A_{t, t}^{(val)}, 0, ..., 0]$. The current task can therefore be determined by the number of non-zero state inputs. The output layer has 35 units representing the possible actions at $T=5$ in the discrete action space. We use action masking on the output units to prevent the network from selection invalid actions for constructing the replay memory at the current task. The DQN is a 2-layer MLP with 512 hidden units and ReLU activations. For A2C, we use separate networks for parameterizing the policy and the value function, where both networks are 2-layer MLPs with 64 hidden units of Tanh activations.
+
+\vspace{-3mm}
+\paragraph{Baselines.}
+We add two more heuristic scheduling baselines:
+\begin{itemize}[itemsep=0em,topsep=1pt]
+	\item {\bf Heuristic Local Drop (Heur-LD).} Heuristic policy that replays tasks with validation accuracy below a threshold proportional to the previous achieved validation accuracy on the task. 
+	\item {\bf Heuristic Accuracy Threshold (Heur-AT).} Heuristic policy that replays tasks with validation accuracy below a fixed threshold. 
+\end{itemize}
+Here, we name the Heuristic from the experiments in Paper \ref{paperC} as Heuristic Global Drop (Heur-GD). The Random and ETS baselines are the same as earlier. 
+
+\vspace{-3mm}
+\paragraph{Evaluation Protocol.} We use ACC from Equation \ref{eq:acc} to evaluate the performance in the CL environments. The reported results have been evaluated on the test set where the replay schedules are selected from evaluating the validation sets, where 15\% of the training data is used for creating the validation sets. To assess generalization capability, we use a ranking method based on the $\ACC$ between the methods in every test environment for comparison (see Paper \ref{paperD} for details).  
+
+
+\vspace{-3mm}
+\begin{wrapfigure}{r}{0.49\textwidth}
+	%\centering
+	\setlength{\figwidth}{0.25\textwidth}
+	\setlength{\figheight}{.14\textheight}
+	\vspace{-3mm}
+	\begin{subfigure}[b]{0.48\textwidth}
+		\centering
+		\input{Chapter4/figures/policy_cifar10/groupplot_a2c}
+		\vspace{-1mm}
+		\caption{A2C - ACC: 89.75\%}
+		\label{fig:policy_cifar10_a2c_chap4}
+	\end{subfigure}
+	%\\
+	\begin{subfigure}[b]{0.48\textwidth}
+		\centering
+		\input{Chapter4/figures/policy_cifar10/groupplot_ets}
+		\caption{ETS - ACC: 88.32\%}
+		\vspace{-2mm}
+		\label{fig:policy_cifar10_ets_chap4}
+	\end{subfigure}
+	%\vspace{-3mm}
+	\captionsetup{width=.9\linewidth}
+	\caption{Task accuracies and replay schedules for A2C and ETS for a Split CIFAR-10 environment.% The replay schedules are visualized as bubble plots and results are taken from 1 seed. %  Task order in environment is [[7, 9], [0, 4], [2, 1], [6, 5], [8, 3]].
+	}
+	\vspace{-3mm}
+	\label{fig:policy_cifar10_chap4}
+\end{wrapfigure}
+\paragraph{Generalization to New Task Orders.} 
+We show that the learned replay scheduling policies can generalize to CL environments with previously unseen task orders. We generate training and test environments with unique task orders for three datasets, namely, Split MNIST, FashionMNIST, and CIFAR-10. Table \ref{tab:average_rankings_generalization} shows the average ranking for the DQN, A2C, and the baselines when being applied in 10 test environments. 
+Our learned policies obtain the best average ranking across the datasets, where the DQN performs best for Split MNIST and FashionMNIST while A2C outperforms all methods on Split CIFAR-10. 
+We provide further insights in the benefits of learning the replay scheduling policy by visualizing the replay schedule and task accuracy progress from A2C in one Split CIFAR-10 test environment in Figure \ref{fig:policy_cifar10_chap4}. Additionally, we show the replay schedule and task accuracies from the ETS baseline in the same environment. The replay schedules are visualized with bubble plots showing the selected task proportion to use for composing the replay memories at each task. In Figure \ref{fig:policy_cifar10_a2c_chap4}, we observe that A2C decides to replay task 2 more than task 1 as the performance on task 2 decreases, which results in a slightly better ACC metric achieved by A2C than ETS. These results show that the learned policy can flexibly consider replaying forgotten tasks to enhance the CL performance.
+%or use other advanced RL methods which may generalize better. 
+
+
+\vspace{-3mm}
+\paragraph{Generalization to New Datasets.}
+We show that the learned replay scheduling policy is capable of generalizing to CL environments with new datasets unseen in the training environments. We perform two sets of experiments, 1) train with environments generated with Split MNIST and FashionMNIST and test on environments generated with Split notMNIST, and 2) train with environments generated with Split MNIST and notMNIST and test on environments generated with Split FashionMNIST.
+Table \ref{tab:average_rankings_generalization} shows the average ranking for DQN, A2C, and the baselines when generalization to test environments with new datasets. We observe that both A2C and DQN successfully generalize to Split notMNIST environments outperforming all baselines. However, the learned policies have difficulties to generalize to Split FashionMNIST environments, which could be due to high variations in the dynamics between training and test environments. 
+The policy may exhibit state transition dynamics which has not been experienced during training, which makes generalization difficult for both DQN and A2C.
+Potentially, the performance could be improved by generating more training environments for the agent to exhibit more variations in the CL scenarios or by using other advanced RL methods which may generalize better~\cite{igl2019generalization}.
+
+
+\begin{table}[t]
+	\footnotesize%\small
+	\centering
+	\caption{Average ranking (lower is better) for experiments on generalizing policies to environments with new task orders or a new dataset. %'S' stands for 'Split'%We train the DQN on 30 training Split MNIST environments and evaluate on 10 test environments. 
+		We average the results over 10 test environments. %as well as 3 seeds for DQN and A2C.
+	}
+	\vspace{-3mm}
+	\label{tab:average_rankings_generalization}
+	\resizebox{0.9\textwidth}{!}{
+		\begin{tabular}{l c c c c c}
+			\toprule %\toprule
+			& \multicolumn{3}{c}{ {\bf New Task Order}} & \multicolumn{2}{c}{ {\bf New Dataset}}\\
+			\cmidrule(lr){2-4}  \cmidrule(lr){5-6}
+			{\bf Method} & S-MNIST & S-FashionMNIST & S-CIFAR-10 & S-notMNIST & S-FashionMNIST  \\ 
+			\midrule
+			Random         & 4.23   & 3.60 & 5.03 & 3.87 & 3.95\\ 
+			ETS            & 3.80 & 4.57 & 5.37 & 4.27 & 3.63 \\
+			\midrule 
+			Heur-GD        & 4.48 & 4.25 & 3.98 & 4.58 & {\bf 2.77} \\
+			Heur-LD        & 4.65 & 3.65 & 3.75 & 4.97 & 5.10 \\
+			Heur-AT        & 4.33 & 3.87 & 3.43 & 4.28 & 3.72 \\
+			\midrule
+			DQN (Ours)     & {\bf 3.23} & {\bf 3.55} & 3.68 & 3.20 & 4.37 \\
+			A2C (Ours)     & 3.27 & 4.52 & {\bf 2.75} & {\bf 2.83} & 4.47 \\
+			\bottomrule %\bottomrule
+		\end{tabular}
+		}
+	\vspace{-3mm}
+\end{table}
+
+
+
+\begin{comment}
 In Paper \ref{paperD}, we perform two experiments to evaluate how well the learned replay scheduling policy can generalize to new CL scenarios. First, we investigate whether the policy can be applied to environments with new dataset task splits which are different from the splits that the policy was trained on. Secondly, we study if the policy can be applied to environments with new datasets than it was originally trained on. Finally, we visualize the learned policy and compare it against one of the heuristic baselines to bring further insights into the advantages of learning the replay scheduling policy.
 
 We run experiments on CL datasets of $T=5$ tasks to have a discrete action space of reasonable size. The replay memory size is set to $M=10$ in all experiments. We use 15\% of the training set for validation for the DQN and the Heuristic baselines. The Random and ETS baselines use the validation set for training since these policies are fixed.  
@@ -378,11 +566,27 @@ The heuristic baseline Heur-LD enables replay on tasks 3 and 5 according to its 
 	\vspace{-3mm}
 	\label{fig:mnist_policy_illustration_dqn_vs_heuristic2}
 \end{figure}
+\end{comment}
+
+
+\section{Discussion}\label{chap4:sec:discussion}
+
+In this chapter, we summarized our contributions in CL presented in Paper \ref{paperC} and \ref{paperD}. In Paper \ref{paperC}, we focused on a new CL setting where historical data is accessible at any time for mitigating catastrophic forgetting, but replaying all historical data is prohibited due to processing time constraints. We then proposed learning the time to learn for a CL system where we learn replay schedules over which tasks to replay at different time steps. 
+To demonstrate the importance of learning the time to learn, we use MCTS to find the proper replay schedule and show that it can significantly outperform fixed scheduling policies in terms of CL performance. In Paper \ref{paperD}, we address the efficiency of replay scheduling by proposing to use RL to learn the replay scheduling policies that can generalize to new continual learning scenarios without added computational cost. In the experiments, we show that the learned policies can propose replay schedules that efficiently mitigate catastrophic forgetting in environments with previously unseen task orders and datasets. 
+The proposed approaches opens up for new research directions in replay-based CL that stems well with real-world needs where training CL systems can be limited by processing time constraints rather than storing historical data for maintaining overall performance.  
+
+We argue that replay scheduling brings current CL research closer to real-world CL scenarios. Take for example image classification apps on mobile phones that should assist VI people with recognizing objects in their surroundings. The users may want to customize their apps to recognize new and personal items continuously. The app should adapt fast from few samples while maintaining its performance on the already known classes which is where CL comes in. However, as we saw in Paper \ref{paperC} and \ref{paperD}, fixed replay policies show difficulties performing well given different task orders, which potentially complicates generalizing to different users and new environments. To this end, we could transfer a learned replay scheduling policy that generalizes to new users and their unseen environments to mitigate catastrophic forgetting efficiently for any user's personal image recognition app.  Moreover, a more general case for the importance of replay scheduling in CL is scenarios where the allowed replay memory size is smaller than the number of seen classes to remember. Scheduling over which task to replay at different times then becomes crucial to balance efficient learning of new classes while retaining previously learned abilities. 
+
+%where is replay scheduling useful? 1. CL on embedded device, user personalized assistive vision apps where we can transfer the replay scheduling policy to reduce forgetting for any user in any environment. 2) more general, replay scheduling is useful in scenarios where the number of seen classes is larger than the replay memory size. Then we need a method for selecting which tasks to replay when adapting the CL system to new tasks.  
+
+Generalization in RL is a challenging research topic by itself~\cite{kirk2021survey,zhang2018dissection,henderson2018deep}. The main limitation with the RL-based framework proposed in Paper \ref{paperD} is the requirements of large amounts of diverse data and training time to enable the learned policy to generalize well. This can be costly due to the high cost the generate the CL environments since each state transition involves training the classifier on a CL task. Moreover, we have currently only considered a discrete action space which is hard to construct especially when the number of tasks is large. Thus, in future work, we would explore more advanced RL methods which can handle continuous action spaces and generalize well~\cite{igl2019generalization}.  
+
+Finally, we want to highlight the privacy issues that can arise when applying replay scheduling. Any replay-based CL method inherently can violate privacy if raw samples are stored in the memory, but these risks can be mitigated by instead storing compressed feature representations. Furthermore, as mentioned above, we needed substantial amounts of data and training time for learning policies that generalize which increases the need for secure data storage solutions. As the states were defined using validation accuracies rather than images, we have circumvented the potential privacy issues as only the state transitions are stored from the generated CL environments to use for training the policy.  
 
 
 
-\section{Discussion}
 
+\begin{comment}
 In this chapter, we have focused on a new problem setting in CL where historical data is cheap to store but processing time is still limited. In Paper \ref{paperC}, we present this new setting and demonstrate the importance of scheduling which tasks to replay at different times with MCTS. We show that using a good replay schedule can mitigate catastrophic forgetting significantly across several small and large datasets as well as different backbone choices which indicates that learning the time to learn old tasks again will be important in settings where the historical data storage is huge. As MCTS requires multiple trials to find a good scheduling policy, we are disallowed to use MCTS in a real CL setting as this would violate the premise that tasks can never be fully revisited in CL. Therefore, in Paper \ref{paperD}, we propose a framework based on RL for learning a general replay scheduling policy that can be trained on several CL environments and then transferred to new CL scenarios. We used DQN as the RL agent and showed that the learned policies managed to generalize to new task orders and a new dataset without additional computational cost. The next step here is to apply RL-methods that scale to datasets with longer task horizons and large action spaces. 
 
 These results bring the applicability of replay scheduling closer to applying this idea to real-world CL scenarios. For example, the policy could be used for mitigating catastrophic forgetting in assistive vision devices that are personalized to the specific environments of users where new objects need to recognized regularly. Assume that we have access to data collected by several users that have applied their assistive device to learn how to recognize different objects. The stored data could then be used to learn a replay scheduling policy that can be deployed in assistive devices of new users for learning personalized classifiers without additional computational cost in potentially unseen environments. Another example when replay scheduling would be useful is in scenarios where the replay memory size is much smaller than the total number of seen classes. For instance, consider a machine learning system operated by a large company, such as Facebook or Amazon, that regularly receives examples of new object classes to be classified in addition to the old ones, where the incoming data is stored rather than deleted. However, as the system cannot reprocess all stored data when it has to learn new concepts, CL is needed to circumvent bottlenecks on processing and transmission times since the number of samples to use for replay is much smaller than the number of stored classes. Then, it becomes crucial for the system to have a policy for scheduling which classes to replay to mitigate catastrophic forgetting efficiently.
@@ -390,6 +594,7 @@ These results bring the applicability of replay scheduling closer to applying th
 There exist limitations with our proposed framework for learning policies for replay scheduling. Firstly, using RL potentially requires lots of training data for learning a policy that generalizes. Acquiring state transitions in the CL environment is more expensive compared to common benchmark environments in RL~\cite{brockman2016openai, bellemare2013arcade, duan2016benchmarking} since a step involves learning a task with the classifier given some training protocol. Moreover, RL is well-known for needing many learning episodes before obtaining successful policies as well as time for hyperparameter tuning. There are also other algorithms that should be studied for replay scheduling, such as policy gradient methods~\cite{mnih2016asynchronous, schulman2017proximal}, that can be applied to continuous action spaces for making the framework applicable to longer task horizons. In the future, it will be important to focus on how to enhance the sample-efficiency as well as scaling up replay scheduling policies to datasets with larger number of tasks to make our framework more useful in real-world CL scenarios.
 
 From a CL perspective, there are indeed privacy concerns that needs to be fulfilled as we are currently training the classifiers on raw image data. A benefit with our framework here is that the CL environment utilizes the data in an isolated way and transmit the achieved performance to the policy learning module rather than raw data, as the policy only uses CL metrics to represent the states. Furthermore, the classifier can also be trained using compressed features as has been done in previous works on replay-based CL~\cite{hayes2020remind, pellegrini2019latent}. Another important direction is to study how the replay scheduling approach behaves in so called \textit{class incremental learning} scenarios where task labels are unknown~\cite{van2019three}. This setting is considered as the most challenging in CL as the classifier must both infer the task and the class of the input data making the classifier more prone to catastrophic forgetting. Replay scheduling can indeed be applied in this setting to mitigate the forgetting effect by always replaying at least one example of all seen classes and then letting the scheduler decide how to compose the rest of the memory. However, this setting requires that the replay memory size can at least store one example from all classes, which may not be the case in real-world scenarios. This is why further investigations of replay scheduling approaches needs to be made to reduce the gap between CL research and real-world applications.  
+\end{comment}
 
  %However, the next step in scaling up the framework the framework 
  
