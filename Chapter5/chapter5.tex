@@ -1,6 +1,8 @@
 
 \chapter{Conclusions and Future Directions}\label{chap5}
 
+\MK{här är jag}
+
 In this chapter, we summarize and provide conclusions to each included paper in the thesis as well as discuss future work (Section \ref{chap5:sec:conclusions}). Finally, we discuss potential long-term future directions for this project that could be interesting for future researchers to dive into for developing computer vision methods for assisting the visually impaired (Section \ref{chap5:sec:future_directions}).
 
 \section{Conclusions}\label{chap5:sec:conclusions}
@@ -8,7 +10,7 @@ In this chapter, we summarize and provide conclusions to each included paper in 
 We divide the conclusions into two parts where Paper \ref{paperA} and \ref{paperB} are discussed in the first part on fine-grained classification followed by the the second part on continual learning where the conclusions for Paper \ref{paperC} and \ref{paperD} are discussed.
 
 \subsection{Fine-Grained Image Classification of Groceries}
-
+%% online CL, how does the dataset work there?
 
 In Paper \ref{paperA}, we presented a challenging fine-grained and hierarchically labeled image classification dataset of grocery items\footnote{Publicly available at \url{https://github.com/marcusklasson/GroceryStoreDataset}.}. All images are taken with a mobile phone camera to simulate the scenario of shopping with an assistive vision app for recognizing groceries. Therefore, the images includes natural variations common in grocery stores such as misplaced items, varying lighting conditions and backgrounds, as well as images with multiple instances of the target class and items from different classes. In addition to the natural images, we also collect external information by web-scraping a supermarket website for an iconic image and a text description of each grocery class. There are several lessons learned from collecting this dataset. First of all, recording videos would have enhanced the number of images in the dataset and potentially eased the collection process. The dataset could then be used for benchmarking on both image and video recognition tasks, where the latter would also be more user-friendly as this increases the chance of capturing frames containing the item. Furthermore, we could have provided more annotations for the items in the natural images. For example, we could have placed bounding boxes over the location of items of the target class as well as provided labels for if the whole item is captured in the image, and whether there are multiple instances of the target class or if there are several different classes present. Moreover, collecting multiple instances of the web-scraped information could be beneficial to increase the chances of extracting the fine-grained details of the grocery items. Finally, it would have been valuable to have blind/low-vision collectors of the images to reduce the gap between the collected data and how the data is later encountered in application use~\cite{theodorou2021disability}. 
 
