@@ -60,11 +60,23 @@
 	%linkbordercolor = {blue},
 }
 
+
+
 \usepackage{tikz}
 \usetikzlibrary{tikzmark,calc,decorations.pathreplacing}
 \newcommand{\Depth}{2}
 \newcommand{\Height}{2}
 \newcommand{\Width}{2}
+
+\usetikzlibrary{shapes, arrows}
+\usetikzlibrary{calc}
+\usetikzlibrary{backgrounds,fit}
+\usetikzlibrary{matrix}
+\usetikzlibrary{arrows.meta}
+
+% for CNN
+\usepackage{amsmath, amssymb, latexsym}
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
 
 \usepackage{pgfplots}
 \usetikzlibrary{matrix, positioning, patterns}
@@ -108,6 +120,10 @@
 %%%%%%%%% Document starts here %%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
+	
+% for reducing the space between text and equation environments
+\setlength{\abovedisplayskip}{3pt} 
+\setlength{\belowdisplayskip}{3pt}
 	
 \newcommand*{\BuildingFromMainFile}{}
 	
