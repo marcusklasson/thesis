@@ -3,7 +3,7 @@
 \pgfplotsset{every tick label/.append style={font=\tiny}}
 \pgfplotsset{every major tick/.append style={major tick length=2pt}}
 \pgfplotsset{every axis x label/.append style={at={(0.5,-0.10)}}}
-\pgfplotsset{every axis y label/.append style={at={(-0.10,0.5)}}}
+\pgfplotsset{every axis y label/.append style={at={(-0.08,0.5)}}}
 \begin{tikzpicture}
 \tikzstyle{every node}=[font=\scriptsize]
 
@@ -51,7 +51,7 @@ visualization depends on={value \thisrow{fill} \as \fillcolor},
 scatter/@pre marker code/.append style=
 {/tikz/mark size=\perpointmarksize}
 ]
-table[x=x, y=y, meta=sizedata]{figures/replay_schedule_visualizations/cifar100/table_seed3.dat};
+table[x=x, y=y, meta=sizedata]{PaperC/figures/replay_schedule_visualizations/cifar100/table_seed3.dat};
 \end{axis}
 
 \end{tikzpicture}

@@ -1,0 +1,78 @@
+
+\section{Experimental Settings}\label{paperD:app:experimental_settings}
+
+In this section, we provide more details on the experimental settings. 
+
+
+\subsection{Hyperparameter Settings}
+
+\paragraph{Continual Learning Training.} We use a 2-layer MLP with 256 hidden units and ReLU activation for the MNIST, FashionMNIST, and notMNIST datasets. For CIFAR10, we use the ConvNet from~\citeD{D:vinyals2016matching} consisting of 4 blocks with 3$\times$3 convolution and 64 filters followed by 2$\times$2 max pooling before the classification layer. For all architectures, we use the Adam optimizer~\citeD{D:kingma2014adam} with learning rate $\eta = 0.0001$ with default hyperparameters $\beta_1=0.9$ and $\beta_2=0.999$. The training details for each dataset are given below:
+\begin{itemize}
+    \item MNIST: Batch size 128, 10 epochs/task
+    \item FashionMNIST: Batch size 128, 10 epochs/task
+    \item notMNIST: Batch size 128, 20 epochs/task
+    \item CIFAR10: Batch size 256, 20 epochs/task
+\end{itemize}
+
+\paragraph{Heuristic Baselines.} We performed a grid search for the threshold ratio constant $\tau$ used in the heuristic scheduling baselines Heuristic Global Drop (Heur-GD), Heuristic Local Drop (Heur-LD), and Heuristic Accuracy Threshold (Heur-AT). We used the search range $\tau \in [0.85, 0.999]$ for each baseline and selected the best parameter value based on the mean test set performance in the environments used for training for each experiment.
+
+\begin{itemize}
+    \item Test on MNIST with new task splits, training with 10 MNIST environments
+    \begin{itemize}
+        \item {\bf Heur-GD:} Selected $\tau^{(best)} = 0.90$. %Search range $\tau \in [0.80, 0.999]$.
+        \item {\bf Heur-LD:} Selected $\tau^{(best)} = 0.95$. %Search range $\tau \in [0.80, 0.999]$.
+        \item {\bf Heur-AT:} Selected $\tau^{(best)} = 0.90$. %Search range $\tau \in [0.80, 0.999]$.
+    \end{itemize}
+    \item Test on CIFAR-10 with new task splits, training with 10 CIFAR-10 environments
+    \begin{itemize}
+        \item {\bf Heur-GD:} Selected $\tau^{(best)} = 0.96$. %Search range $\tau \in [0.80, 0.999]$.
+        \item {\bf Heur-LD:} Selected $\tau^{(best)} = 0.999$. %Search range $\tau \in [0.80, 0.999]$.
+        \item {\bf Heur-AT:} Selected $\tau^{(best)} = 0.91$. %Search range $\tau \in [0.80, 0.999]$.
+    \end{itemize}
+    %\item Mixed datasets (10 MNIST + 10 FashionMNIST)
+    %\begin{itemize}
+    %    \item {\bf Heuristic1:} Selected $\tau^{(best)} = 0.91$. Search range $\tau \in [0.80, 0.999]$.
+    %    \item {\bf Heuristic2:} Selected $\tau^{(best)} = 0.95$. Search range $\tau \in [0.80, 0.999]$.
+    %\end{itemize}
+    %\item Mixed datasets (5 MNIST + 5 FashionMNIST)
+    %\begin{itemize}
+    %    \item {\bf Heuristic1:} Selected $\tau^{(best)} = 0.99$. Search range $\tau \in [0.80, 0.999]$.
+    %    \item {\bf Heuristic2:} Selected $\tau^{(best)} = 0.95$. Search range $\tau \in [0.80, 0.999]$.
+    %\end{itemize}
+    \item Test on FashionMNIST, train on 5 MNIST + 5 notMNIST environments
+    \begin{itemize}
+        \item {\bf Heur-GD:} Selected $\tau^{(best)} = 0.99$. %Search range $\tau \in [0.85, 0.999]$.
+        \item {\bf Heur-LD:} Selected $\tau^{(best)} = 0.95$. %Search range $\tau \in [0.85, 0.999]$.
+        \item {\bf Heur-AT:} Selected $\tau^{(best)} = 0.93$. %Search range $\tau \in [0.80, 0.999]$.
+    \end{itemize}
+\end{itemize}
+
+
+
+\subsection{DQN Hyperparameter Choices}\label{app:dqn_hyperparameter_choices}
+
+\begin{table}[h]
+%\small
+\centering
+\caption{DQN hyperparameter choices used for generating the results in the experiments (Section \ref{paperD:sec:experiments}). The hyperparameters in the column foir Split FashionMNIST correspond to the values used when generalizing to this dataset when training on Split MNIST and Split notMNIST environments. The {\bf bold} numbers correspond to the ones used in the experimental results from a hyperparameter search.  }
+\label{tab:dqn_hyperparameter_choices}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{l c c c}
+\toprule
+ {\bf Hyperparameters} & {\bf Split MNIST} & {\bf Split CIFAR-10} & {\bf Split FashionMNIST}\\
+ \midrule
+ Double DQN     & True & True & True\\
+ Learning Rate  & 0.0001 & 0.0001 & 0.0001 \\
+ Optimizer      & Adam & Adam & Adam \\
+ Buffer Size    & [{\bf 1000}, 5000] & [1000, {\bf 5000}] & [{\bf 1000}, 5000]  \\
+ Target Update per step  & 500 & 500 & 500 \\
+ Batch Size     & 32 & 32 & 32 \\
+ Discount Factor $\gamma$ & 1.0 & 1.0 & 1.0 \\
+ Exploration Start $\epsilon_{start}$ & 1 & 1 & 1 \\
+ Exploration Final $\epsilon_{final}$ & [0.02, {\bf 0.05}] & [0.02, {\bf 0.05}] & [{\bf 0.02}, 0.05] \\
+ Exploration Annealing (episodes) & 1250 & 1250 & 1250 \\
+ Training Episodes & 5000 & 5000 & 5000 \\
+\bottomrule
+\end{tabular}
+}
+\end{table}

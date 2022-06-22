@@ -1,5 +1,7 @@
 
 
+\begin{comment}
+
 \begin{table}[t]
 \footnotesize %\scriptsize
 \centering
@@ -42,15 +44,21 @@ RS-MCTS performs on par with the best baselines on all datasets except S-CIFAR-1
 \label{tab:efficiency_of_replay_scheduling_all_datasets}
 \end{table}
 
+\end{comment}
 
-\begin{comment}
-\begin{table*}[t]
+
+\begin{table}[t]
 \scriptsize
 \centering
 \caption{
-Accuracy comparison in the 1 example per class memory setting evaluated across all datasets. We use 'S' and 'P' as short for 'Split' and 'Permuted' for the datasets. RS-MCTS has replay memory size $M=2$ and $M=50$ for the 5-task and 10/20-task datasets respectively. The baselines replay all available memory samples. We report the mean and standard deviation averaged over 5 seeds. RS-MCTS performs on par with the best baselines on all datasets except S-CIFAR-100. \MK{Try moving to one-column format}
+	Performance comparison with ACC averaged over 5 seeds in the 1 ex/class %example per class 
+	memory setting evaluated across all datasets. %We use 'S' and 'P' as short for 'Split' and 'Permuted' for the datasets. 
+	RS-MCTS (Ours) has replay memory size $M=2$ and $M=50$ for the 5-task and 10/20-task datasets respectively. The baselines replay all available memory samples. 
+	%We report the mean and standard deviation averaged over 5 seeds. 
+	RS-MCTS performs on par with the best baselines on all datasets except S-CIFAR-100.
 }
-%\vspace{-3mm}
+\vspace{-3mm}
+\resizebox{\textwidth}{!}{
 \begin{tabular}{l c c c c c c}
     \toprule
      & \multicolumn{3}{c}{{\bf 5-task Datasets}} & \multicolumn{3}{c}{{\bf 10- and 20-task Datasets}} \\
@@ -65,8 +73,9 @@ Accuracy comparison in the 1 example per class memory setting evaluated across a
     RS-MCTS (Ours) & 96.07 $\pm$ 1.60 &  97.17 $\pm$ 0.78 & 93.41 $\pm$ 1.11 & 72.52 $\pm$ 0.54 & 51.50 $\pm$ 1.19 & 50.70 $\pm$ 0.54 \\
     \bottomrule
 \end{tabular}
+}
 \vspace{-3mm}
 \label{tab:efficiency_of_replay_scheduling_all_datasets}
-\end{table*}
-\end{comment}
+\end{table}
+
 

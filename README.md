@@ -34,6 +34,8 @@ If you get this error "Package pdftex.def Error: File `KTHLogo-eps-converted-to.
 sudo apt install texlive-font-utils
 ```
 
+May 5: For some reason I had to install this package again when I had to input eps files in the replay scheduing tree in Paper C...
+
 ## Using separate References using multibib package 
 I had many issues with fixing using separate references in each chapter.
 

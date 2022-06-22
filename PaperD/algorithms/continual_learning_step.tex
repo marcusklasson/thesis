@@ -1,0 +1,14 @@
+
+\begin{algorithm}[t]
+   \caption{Continual Learning Step}
+   \label{alg:continual_learning_step}
+\begin{algorithmic}[1]
+   \Require $\vphi$: Continaul learning model
+   \Require $\gD_{1:T}$: Task datasets, $a_t$: action from policy
+   \State Sample replay memory $\gM_t$ of historical data using the task proportions in action $a_t$ 
+   \State Train $\vphi$ on task $t+1$ with data $\gD_{t+1}^{(train)} \cup \gM_t$
+   \State Calculate reward $r_t$ using Eq. \ref{eq:dense_reward}
+   \State Get next state $s_{t+1}$ with validation performance of $\vphi$ 
+   \Return reward $r_t$ and next state $s_{t+1}$ 
+\end{algorithmic}
+\end{algorithm}

@@ -1,0 +1,61 @@
+
+\begin{table}[t]
+%\small
+\centering
+\caption{Average ranking (Avg. Rank) and median of rankings for different label split experiment with Split MNIST and Split CIFAR-10. We train the DQN on 10 training envs and evaluate on 10 test envs. We average the results over 5 DQNs and the 10 test envs. 
+}
+\label{tab:average_ranking_single_datasets}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{l c c c c c c }
+\toprule
+ & \multicolumn{3}{c}{{\bf Split MNIST}} & \multicolumn{3}{c}{{\bf Split CIFAR-10}}  \\
+ \cmidrule(lr){2-4} \cmidrule(lr){5-7} 
+ {\bf Method} & Avg. Rank ($\downarrow$) & Median ($\downarrow$) & IQR & Avg. Rank ($\downarrow$) & Median ($\downarrow$) & IQR \\ 
+ \midrule
+ Random         & 3.70 $\pm$ 1.88 & 4.00 & 3.00 & 3.98 $\pm$ 1.88 & 5.00 & 3.75  \\
+ ETS            & 4.38 $\pm$ 1.70 & 5.00 & 2.00 & 3.74 $\pm$ 2.08 & 4.00 & 4.00  \\
+ Heur-GD        & 4.16 $\pm$ 0.95 & 4.00 & 2.00 & 3.84 $\pm$ 1.17 & 4.00 & 2.00  \\
+ Heur-LD        & 2.80 $\pm$ 1.46 & 2.00 & 1.00 & 3.28 $\pm$ 1.30 & 3.50 & 1.00  \\
+ Heur-AT    & 2.86 $\pm$ 1.25 & 3.00 & 2.00 & 3.26 $\pm$ 1.52 & 3.00 & 2.00  \\
+ \midrule
+ DQN (Ours)     & 3.10 $\pm$ 2.05 & 3.00 & 4.00 & 2.90 $\pm$ 1.85 & 3.00 & 3.00  \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+%\vspace{-3mm}
+
+
+
+
+
+
+\begin{comment}
+\begin{table}[t]
+%\small
+\centering
+\caption{Average ranking (Avg. Rank) and median of rankings for MNIST different label split experiment. We train the DQN on 10 training envs and evaluate on 10 test envs. We average the results over 5 DQNs and the 10 test envs. \CZ{Maybe add the detailed accuracy in the appendix}
+}
+\label{tab:mnist_with_new_label_splits}
+%\vspace{-1em}
+%\vskip 0.15in
+%\begin{sc}
+\begin{tabular}{l c c c}
+\toprule
+ & \multicolumn{3}{c}{{\bf Split MNIST}} \\
+ \cmidrule(lr){2-4}
+ {\bf Method} & Avg. Rank ($\downarrow$) & Median ($\downarrow$) & IQR ($\downarrow$) \\ 
+ \midrule
+ Random         & 3.16 $\pm$ 1.50 & 3.00 & 2.75 \\
+ ETS            & 3.78 $\pm$ 1.22 & 4.00 & 2.00 \\
+ Heuristic1     & 3.26 $\pm$ 0.93 & 3.00 & 1.00 \\
+ Heuristic2     & 2.34 $\pm$ 1.26 & 2.00 & 2.00 \\
+ \midrule
+ DQN (Ours)     & 2.46 $\pm$ 1.54 & 2.00 & 2.75\\
+\bottomrule
+\end{tabular}
+%\end{sc}
+\vskip -0.1in
+\end{table}
+\vspace{-3mm}
+\end{comment}

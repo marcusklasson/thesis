@@ -38,10 +38,10 @@
 %\usepackage[resetlabels, labeled]{multibib}
 \usepackage[resetlabels]{multibib}
 \usepackage{hyperref}  %for references
-\newcites{A, B, C, D}{References, References, References, References}
-%\newcites{B}{References}
-%\newcites{C}{References}
-%\newcites{D}{References}
+\newcites{A}{References}
+\newcites{B}{References}
+\newcites{C}{References}
+\newcites{D}{References}
 
 % https://tex.stackexchange.com/questions/2441/how-to-add-a-forced-line-break-inside-a-table-cell
 \usepackage{array}
@@ -60,11 +60,23 @@
 	%linkbordercolor = {blue},
 }
 
+
+
 \usepackage{tikz}
 \usetikzlibrary{tikzmark,calc,decorations.pathreplacing}
 \newcommand{\Depth}{2}
 \newcommand{\Height}{2}
 \newcommand{\Width}{2}
+
+\usetikzlibrary{shapes, arrows}
+\usetikzlibrary{calc}
+\usetikzlibrary{backgrounds,fit}
+\usetikzlibrary{matrix}
+\usetikzlibrary{arrows.meta}
+
+% for CNN
+\usepackage{amsmath, amssymb, latexsym}
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
 
 \usepackage{pgfplots}
 \usetikzlibrary{matrix, positioning, patterns}
@@ -73,6 +85,8 @@
 
 \newlength{\figheight}
 \newlength{\figwidth}
+
+\usetikzlibrary{bayesnet}
 
 \makeatletter
 %\@addtoreset{section}{part}
@@ -107,12 +121,16 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
 	
+% for reducing the space between text and equation environments
+\setlength{\abovedisplayskip}{3pt} 
+\setlength{\belowdisplayskip}{3pt}
+	
 \newcommand*{\BuildingFromMainFile}{}
 	
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%% First and second pages %%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\title{Fine-grained and Continual Visual Recognition for Assisting Visually Impaired People}
+\title{Fine-Grained and Continual Visual Recognition for Assisting Visually Impaired People}
 %\subtitle{\textbf{sub-title}}
 \author{Marcus Klasson}
 \date{date}
@@ -239,6 +257,7 @@
 \setcounter{section}{0}
 \input{PaperD/paperD}
 \cleardoublepage	
+
 
 %--------------------------------------------------
 	

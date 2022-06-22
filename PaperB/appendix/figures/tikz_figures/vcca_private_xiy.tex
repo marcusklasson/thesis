@@ -1,0 +1,35 @@
+% model_lda.tex
+%
+% Copyright (C) 2010,2011 Laura Dietz
+% Copyright (C) 2012 Jaakko Luttinen
+%
+% The MIT License
+%
+% See LICENSE file for more details.
+
+% Latent Diriclet allocation model
+
+\tikzstyle{obs}=[circle,draw=black!50,fill=gray!25,thick,inner sep=0pt,minimum size=6mm]
+\tikzstyle{latent}=[circle,draw=black!50,thick,inner sep=0pt,minimum size=6mm]
+\tikzstyle{solid}=[draw=black!50, thick, >=stealth]
+
+\begin{tikzpicture}[x=1.cm,y=1.cm]
+
+  % Nodes
+  \node[obs]                    (x)    {$x$} ; %
+  \node[obs, right=0.3cm of x]  (y)    {$y$} ; %
+  \node[obs, right=0.3cm of y]  (i)    {$i$} ; %
+  \node[latent, above= of x]    (ux)     {$u_{x}$} ; %
+  \node[latent, above=of y]    (z)     {$z$} ; %
+  \node[latent, above= of i]    (ui)     {$u_{i}$} ; %
+  
+  % Factors
+  % Connect nodes
+  \edge [solid] {z} {x} ; %
+  \edge [solid] {z} {i} ; %
+  \edge [solid] {z} {y} ; %
+  \edge [solid] {ux} {x} ; %
+  \edge [solid] {ui} {i} ; %
+
+\end{tikzpicture}
+

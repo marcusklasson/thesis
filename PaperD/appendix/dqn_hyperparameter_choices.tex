@@ -1,0 +1,62 @@
+
+\section{DQN Hyperparameter Choices}\label{paperD:app:dqn_hyperparameter_choices}
+
+\begin{table}[t]
+%\small
+\centering
+\caption{DQN hyperparameter choices used for generating the results in the experiments (Section \ref{paperD:sec:experiments}). The hyperparameters in the column foir Split FashionMNIST correspond to the values used when generalizing to this dataset when training on Split MNIST and Split notMNIST environments. The {\bf bold} numbers correspond to the ones used in the experimental results from a hyperparameter search.  }
+\label{tab:dqn_hyperparameter_choices}
+%\vspace{-1em}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{l c c c}
+\toprule
+ {\bf Hyperparameters} & {\bf Split MNIST} & {\bf Split CIFAR-10} & {\bf Split FashionMNIST}\\
+ \midrule
+ Double DQN     & True & True & True\\
+ Learning Rate  & 0.0001 & 0.0001 & 0.0001 \\
+ Optimizer      & Adam & Adam & Adam \\
+ Buffer Size    & [{\bf 1000}, 5000] & [1000, {\bf 5000}] & [{\bf 1000}, 5000]  \\
+ Target Update per step  & 500 & 500 & 500 \\
+ Batch Size     & 32 & 32 & 32 \\
+ Discount Factor $\gamma$ & 1.0 & 1.0 & 1.0 \\
+ Exploration Start $\epsilon_{start}$ & 1 & 1 & 1 \\
+ Exploration Final $\epsilon_{final}$ & [0.02, {\bf 0.05}] & [0.02, {\bf 0.05}] & [{\bf 0.02}, 0.05] \\
+ Exploration Annealing (episodes) & 1250 & 1250 & 1250 \\
+ Training Episodes & 5000 & 5000 & 5000 \\
+\bottomrule
+\end{tabular}
+}
+%\end{sc}
+%\vskip -0.1in
+\end{table}
+
+
+
+%%% OLD
+\begin{comment}
+\begin{table}[h]
+%\small
+\centering
+\caption{DQN hyperparameter choices for experiment on Split MNIST with different label splits. The hyperparameters in Mixed Dataset correspond to the values used when generalizing to Split notMNIST in Section \ref{sec:generalization_to_split_notmnist_environments}. The {\bf bold} numbers correspond to the ones used in the experimental results from a hyperparameter search.  
+}
+\label{tab:dqn_hyperparameter_choices}
+\begin{tabular}{l c c c}
+\toprule
+ {\bf Hyperparameters} & {\bf Split MNIST} & {\bf Split CIFAR-10} & {\bf Mixed Dataset}\\
+ \midrule
+ Double DQN     & True & True & True\\
+ Learning Rate  & 0.0001 & 0.0001 & 0.0001 \\
+ Optimizer      & Adam & Adam & Adam \\
+ Buffer Size    & 200 & [200, 400, {\bf 800}] & [200, 400, {\bf 800}]  \\
+ Target Update per time step  & 10 & [{\bf 5}, 10] & [{\bf 5}, 10] \\
+ Batch Size     & 32 & 32 & 32 \\
+ Discount Factor & 1.0 & 1.0 & 1.0 \\
+ Exploration Annealing (1 $\rightarrow \epsilon_{final}$) & 200 episodes & 200 episodes & 200 episodes \\
+ Exploration Constant $\epsilon_{final}$ & 0.1 & [{\bf 0.05}, 0.1] & [{\bf 0.05}, 0.1] \\
+ Number of Episodes & 2000 & 2000 & 2000 \\
+\bottomrule
+\end{tabular}
+%\end{sc}
+\vskip -0.1in
+\end{table}
+\end{comment}

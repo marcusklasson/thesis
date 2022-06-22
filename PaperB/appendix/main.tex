@@ -1,0 +1,102 @@
+\documentclass[a4paper, 10pt]{article}
+
+%% Language and font encodings
+\usepackage[english]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage[T1]{fontenc}
+
+
+%% Sets page size and margins
+\usepackage[a4paper,top=3cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+
+%% Useful packages
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorinlistoftodos]{todonotes}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage[skip=1pt]{caption}
+\usepackage{url}
+\usepackage{xcolor}
+\usepackage{adjustbox}
+\usepackage{comment}
+\usepackage{subfigure}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[super,comma,compress]{natbib} 
+
+\usepackage{subfigure}
+
+\usepackage{multirow}
+\usepackage{color, colortbl}
+\usepackage{makecell}
+\usepackage{verbatim} % for multiline comments using \begin{comment} ...comments... \end{comment}
+\usepackage{booktabs} % Used in Table with examples from GroceryStore dataset
+\usepackage[normalem]{ulem} % for striking through text
+\usepackage{tcolorbox} % for tcolorbox
+\usepackage{caption}
+\usepackage{bigstrut}
+\usepackage{makecell}
+
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{lipsum}
+
+\usepackage{changepage}
+
+\pagenumbering{gobble} % removes page numbering
+%\renewcommand\refname{whatever}
+
+\newcommand{\etal}{\textit{et al}.}
+\newcommand{\E}{\mathbb{E}} % Expected value
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\KL}{D_{\mathrm{KL}}}
+
+\usepackage{subcaption}
+\renewcommand{\thefigure}{S\arabic{figure}}
+\renewcommand{\thetable}{S\arabic{table}}
+%\renewcommand{\thesubfigure}{\arabic{subfigure}}
+\renewcommand{\tablename}{Tbl}
+\renewcommand{\figurename}{Image}
+
+\usepackage{tikz} % For BayesNet tikz library
+\usetikzlibrary{bayesnet}
+
+
+\title{\textbf{Supplemental Information} }
+\date{}
+
+\newcommand{\cz}[1]{{\color{red} #1}}%cheng's change
+\newcommand{\CZ}[1]{\textbf{\color{red} CZ: #1}} %cheng's comment
+\newcommand{\mk}[1]{{\color{purple} #1}}
+\newcommand{\MK}[1]{\textbf{\color{purple} MK: #1}} 
+\newcommand{\hk}[1]{{\color{blue} #1}}
+\newcommand{\HK}[1]{\textbf{\color{blue} HK: #1}} 
+
+\begin{document}
+\maketitle
+
+%%% SECTIONS
+\clearpage
+\input{sections/supplemental_figures}
+
+%\newpage
+
+\section*{Supplemental Experimental Procedures}
+\input{sections/details_on_experimental_setup}
+
+\input{sections/posterior_collapse_in_vcca_private}
+
+\input{sections/investigating_latent_representations_in_vcca_private_xi}
+
+\input{sections/derivation_of_elbo_for_vcca}
+
+\medskip
+
+{\small
+\bibliographystyle{unsrtnat_mk}
+\bibliography{ref}
+}
+
+
+\end{document}
