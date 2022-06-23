@@ -1,18 +1,32 @@
 
 \chapter{Conclusions and Future Directions}\label{chap5}
 
-\MK{här är jag}
+In this chapter, we provide our conclusions from the works described in this thesis (Section \ref{chap5:sec:conclusions}). Thereafter, we discuss potential future directions for work towards better computer vision methods for assisting visually impaired (VI) people (Section \ref{chap5:sec:future_directions}). 
 
-In this chapter, we summarize and provide conclusions to each included paper in the thesis as well as discuss future work (Section \ref{chap5:sec:conclusions}). Finally, we discuss potential long-term future directions for this project that could be interesting for future researchers to dive into for developing computer vision methods for assisting the visually impaired (Section \ref{chap5:sec:future_directions}).
+%In this chapter, we summarize and provide conclusions to each included paper in the thesis as well as discuss future work (Section \ref{chap5:sec:conclusions}). Finally, we discuss potential long-term future directions for this project that could be interesting for future researchers to dive into for developing computer vision methods for assisting the visually impaired (Section \ref{chap5:sec:future_directions}).
 
 \section{Conclusions}\label{chap5:sec:conclusions}
 
-We divide the conclusions into two parts where Paper \ref{paperA} and \ref{paperB} are discussed in the first part on fine-grained classification followed by the the second part on continual learning where the conclusions for Paper \ref{paperC} and \ref{paperD} are discussed.
+We have divided our conclusions into two parts, where we first provide our insights on the work on fine-grained image recognition (FGIR) of grocery items presented in Chapter \ref{chap3}, and thereafter our insights on our proposed replay scheduling method for continual learning (CL) presented in Chapter \ref{chap4}. 
 
-\subsection{Fine-Grained Image Classification of Groceries}
-%% online CL, how does the dataset work there?
+%We divide the conclusions into two parts where Paper \ref{paperA} and \ref{paperB} are discussed in the first part on fine-grained classification followed by the the second part on continual learning where the conclusions for Paper \ref{paperC} and \ref{paperD} are discussed.
+
+\subsection{Fine-Grained Image Recognition of Groceries}
+
+\begin{itemize}
+	\item Insight: Collecting real-world data is hard and time consuming (video could have helped here). Run evaluation across several methods and backbones (Mobilenet, Efficientnet) that are suitable for the end-user case, architectures with different memory consumption and inference times matter.  
+	\item Does the collected data represent scenarios that could happen for the end user? Is the dataset challenging enough? How is evaluation performed?
+	\item What annotations or external information can be used to build more robust methods? Meta-data like location of image is relevant since methods shouldn't overfit to specific stores.   
+\end{itemize}
 
 In Paper \ref{paperA}, we presented a challenging fine-grained and hierarchically labeled image classification dataset of grocery items\footnote{Publicly available at \url{https://github.com/marcusklasson/GroceryStoreDataset}.}. All images are taken with a mobile phone camera to simulate the scenario of shopping with an assistive vision app for recognizing groceries. Therefore, the images includes natural variations common in grocery stores such as misplaced items, varying lighting conditions and backgrounds, as well as images with multiple instances of the target class and items from different classes. In addition to the natural images, we also collect external information by web-scraping a supermarket website for an iconic image and a text description of each grocery class. There are several lessons learned from collecting this dataset. First of all, recording videos would have enhanced the number of images in the dataset and potentially eased the collection process. The dataset could then be used for benchmarking on both image and video recognition tasks, where the latter would also be more user-friendly as this increases the chance of capturing frames containing the item. Furthermore, we could have provided more annotations for the items in the natural images. For example, we could have placed bounding boxes over the location of items of the target class as well as provided labels for if the whole item is captured in the image, and whether there are multiple instances of the target class or if there are several different classes present. Moreover, collecting multiple instances of the web-scraped information could be beneficial to increase the chances of extracting the fine-grained details of the grocery items. Finally, it would have been valuable to have blind/low-vision collectors of the images to reduce the gap between the collected data and how the data is later encountered in application use~\cite{theodorou2021disability}. 
+
+\begin{itemize}
+	\item Insight: web-scraped views can help in boosting FGIR. 
+	\item Better methods for handling the web-scraped views?
+	\item How can we evaluate that the model has learned the fine-grained details in the items? Grad-CAM to evaluate this?
+	\item Study how methods from other applications, such as few-shot learning and online CL, perform on this dataset in other settings than FGIR.
+\end{itemize}
 
 In Paper \ref{paperB}, we showed that the web-scraped iconic images and text descriptions in the dataset from Paper \ref{paperA} are useful for enhancing the fine-grained classification performance. We employ the multi-view autoencoder VCCA~\cite{wang2016deep} for learning joint representations between the data views to capture the fine-grained details of the groceries items better by utilizing the web-scraped views. We perform an ablation study over the available data views and find that VCCA structures the latent space differently depending on which views that are used in the model. More specifically, the iconic images structures the items based on visual similarities, such as color and shape, in the latent space, while the text descriptions structures the items based on ingredients and flavors. Using the more web-scraped views yields better fine-grained classification performance compared to approaches that only use the natural images for training the classifier. Hence, the more easily available views can potentially reduce the need for large amounts of natural images to obtain reasonable classification performance of groceries in assistive vision devices. One limitation of VCCA is its inability of learning the view-specific variations when learning from single instances of the web-scraped views, which would help the model to separate the shared information across the utilized views from the private information for each view. A different direction than using autoencoder-based approaches could be to study attention-based methods~\cite{fu2017look, zheng2019looking, luong2015effective} in combination with the natural images and the web-scraped images and text. Furthermore, it would also be interesting to test VCCA on images of the items in different environments than the gropcery stores to check its robustness. Finally, we believe that the dataset would be suitable for zero/few-shot learning and continual learning settings where the model should adapt fast to new classes from potentially few available samples, which would be interesting to investigate for testing the VCCA model in other realistic scenarios. 
 
