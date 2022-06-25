@@ -3,28 +3,33 @@
 %*******************************************************************************
 
 \chapter{Introduction}
-\label{chap:introduction}
+\label{chap1:sec:introduction}
 
-Vision is probably the most important of all senses that humans possess. Our society is built on having this ability. For example, if we would like to cross a street, there are thick colored stripes on the road or signs above head height that indicate where the cross walk is located such that we can cross the street in an appropriate way. Another example is how we use text to communicate with each other, where words and sentences are composed by structured sequences of symbols that constitute a specific language. 
-%Much media and entertainment, such as computers, television, and theatres, with performers acting various scenes requires our capability to see. 
-Furthermore, it has been shown that learning from both images and text can improve comprehension over learning from text only~\cite{eitel2013picture, hibbing2003picture}. 
-%it has been shown that being able to create visual images facilitate reading comprehension for middle school struggling readers~\cite{hibbing2003picture}. 
-Possessing normal vision capabilities basically make everyday tasks easier when it comes to reaching destinations in the world, communicating with other people, and learning new concepts.  
+Vision is probably the most important of all senses that humans possess. Our society is built on having the ability to see. For example, if we want to cross a street, thick colored stripes on the road and signs above our heads indicate where the cross walk is located in order for us to cross the street appropriately. Another example is how we use text to communicate with each other, where messages that we read and write consist of sequences of symbols that are structured into words of some specific language. Furthermore, visuals are used frequently in education to help students comprehend new information and concepts. Basically, many everyday tasks such as traveling, communication, and learning become more convenient with normal vision. 
 
-However, there are unfortunately people who partly or fully lack the ability to see.
-In 2020, it was estimated that 43.3 million people who were considered blind and 295 million people having a moderate or severe visual impairment in the world~\cite{bourne2021trends}. To enhance the mobility of visually impaired (VI) people, there exist various kinds of assistive devices and tools, such as screen readers and Braille typewriter machines, for supporting them with receiving information and communicating through text. More recently, several computer vision-based assistive vision tools have emerged in the form of wearable devices and mobile applications for helping VIs with tasks where visual information is a must, for example, object recognition~\cite{ahmetovic2020recog, jafri2014computer, kacorri2017teachable} and wayfinding in natural environments~\cite{coughlan2009functional, kacorri2018environmental, loomis2020assisting} and . 
+%Vision is probably the most important of all senses that humans possess. Our society is built on having this ability. For example, if we would like to cross a street, there are thick colored stripes on the road or signs above head height that indicate where the cross walk is located such that we can cross the street in an appropriate way. Another example is how we use text to communicate with each other, where words and sentences are composed by structured sequences of symbols that constitute a specific language. 
+%%Much media and entertainment, such as computers, television, and theatres, with performers acting various scenes requires our capability to see. 
+%Furthermore, it has been shown that learning from both images and text can improve comprehension over learning from text only~\cite{eitel2013picture, hibbing2003picture}. Possessing normal vision capabilities basically make everyday tasks easier when it comes to reaching destinations in the world, communicating with other people, and learning new concepts.  
 
-Despite the recent successes in computer vision~\cite{he2016deep, redmon2017yolo9000, xu2015show}, these methods can face several challenges when deployed in the real-world, which makes their recognition performance suffer. For example, it can be difficult for the methods to distinguish between similar items on a fine-grained level, such as different brands of apples and pears, as well as performing robustly in environments with noisy backgrounds and poor lighting. 
-Part of the reason for such challenges is that it si difficult to specify a model and inject it with knowledge about the rich complexity that can exist in the real world~\cite{szeliski2010computer}.
-%Part of the reason for such challenges is that specifying a model of the visual world that has been injected with knowledge about the rich complexity that can exist in images is very difficult~\cite{szeliski2010computer}. 
-Therefore, there is a necessity for developing computer vision methods that can recognize different appearances of objects, adapt to changes of known objects, and learn what new objects look like. 
-At the same time, these tasks should be possible to execute in a time-efficient and robust manner 
-to enhance the user experience. 
+Millions of people have visual impairments that cannot be treated with correctable eyewear~\cite{bourne2021trends}. To enhance the mobility of visually impaired (VI) people, there exist various kinds of assistive tools, such as screen readers and Braille typewriting machines, for supporting them with receiving information and communicating through text. 
+More recently, several assistive vision technologies have emerged in the form of mobile phone applications~\cite{microsoft2017seeing, clary2018lookout,cloudsight2013taptapsee, envision2018app,bemyeyes2017be, aira2017aira} and wearable devices~\cite{orcam2019myeye, envision2020glasses,caraiman2017soundofvision}. Furthermore, several works in computer vision research has been specifically focused developing methods for assisting VI people with e.g. object recognition~\cite{ahmetovic2020recog, jafri2014computer, kacorri2017teachable,gurari2018vizwiz,massiceti2021orbit,kacorri2017people,lee2019hands,lee2019revisiting} and wayfinding~\cite{coughlan2009functional, kacorri2018environmental, loomis2020assisting,szpiro2016finding,tian2013toward,lee2020pedestrian}. 
 
-In this thesis, we address %the 
-challenges on robustness in fine-grained image recognition %fine-grained classification 
-as well as how to enable computer vision methods to update themselves with new object classes to recognize. %the method can learn to recognize new object classes. 
-We will begin this introduction by briefly describing vision impairments in Section \ref{sec:vision_impairments}, followed by a summary of assistive vision technologies in Section \ref{sec:assistive_vision}. Then we describe the scope of the thesis in Section \ref{sec:scope_of_thesis} and summarize the contributions of the included papers in Section \ref{sec:contributions}. Finally, in Section \ref{sec:outline}, we give the outline to the rest of the contents in this thesis. 
+%However, there are unfortunately people who partly or fully lack the ability to see. In 2020, it was estimated that 43.3 million people who were considered blind and 295 million people having a moderate or severe visual impairment in the world~\cite{bourne2021trends}. To enhance the mobility of visually impaired (VI) people, there exist various kinds of assistive devices and tools, such as screen readers and Braille typewriter machines, for supporting them with receiving information and communicating through text. More recently, several computer vision-based assistive vision tools have emerged in the form of wearable devices and mobile applications for helping VIs with tasks where visual information is a must, e.g., object recognition~\cite{ahmetovic2020recog, jafri2014computer, kacorri2017teachable} and wayfinding in natural environments~\cite{coughlan2009functional, kacorri2018environmental, loomis2020assisting} and . 
+
+
+
+Despite the recent advances in deep learning for computer vision~\cite{krizhevsky2012imagenet,he2016deep, redmon2017yolo9000,xu2015show,anderson2018bottom}, several challenges have been demonstrated when deploying computer vision models in real-world scenarios. For example, the models may surprisingly fail to recognize known objects appearing in new poses~\cite{alcorn2019strike}, lighting conditions~\cite{dai2018dark}, and geographical locations~\cite{de2019does}, models trained on images from one set of hospitals may perform poorly on image conditions from another~\cite{koh2021wilds}, and models can suffer from biases that disadvantage certain users based on their gender and ethnicity~\cite{buolamwini2018gender}. Part of the reason for these challenges is that specifying a model that can be injected with the rich complexity of the real world is difficult~\cite{szeliski2010computer}. 
+To enhance their applicability in the real-world, researchers are striving for developing computer vision models that can recognize objects in detail, learn new abilities continuously, and adapt fast to new scenarios from few examples. Furthermore, such tasks should be possible to execute in a time-efficient and robust manner to improve the user experience.  
+
+
+%Despite the recent successes in computer vision~\cite{he2016deep, redmon2017yolo9000, xu2015show,krizhevsky2012imagenet,anderson2018bottom}, these methods can face several challenges when deployed in the real-world, which makes their recognition performance suffer. For example, it can be difficult for the methods to distinguish between similar items on a fine-grained level, such as different brands of apples and pears, as well as performing robustly in environments with noisy backgrounds and poor lighting. Part of the reason for such challenges is that it is difficult to specify a model and inject it with knowledge about the rich complexity that can exist in the real world~\cite{szeliski2010computer}.
+%%Part of the reason for such challenges is that specifying a model of the visual world that has been injected with knowledge about the rich complexity that can exist in images is very difficult~\cite{szeliski2010computer}. 
+%Therefore, there is a necessity for developing computer vision methods that can recognize different appearances of objects, adapt to changes of known objects, and learn what new objects look like. At the same time, these tasks should be possible to execute in a time-efficient and robust manner to enhance the user experience. 
+
+In this thesis, we address challenges on computer vision models for recognizing objects and their fine-grained details as well as continually adapting the models to new concepts while retaining its previously learned knowledge. 
+We will begin this introduction by briefly describing visual impairments in Section \ref{chap1:sec:vision_impairments}, followed by a summary of assistive vision technologies in Section \ref{chap1:sec:assistive_vision}. Thereafter, we describe the scope of the thesis in Section \ref{chap1:sec:scope_of_thesis}, and summarize the contributions of the included papers in Section \ref{chap1:sec:contributions}. Finally, in Section \ref{chap1:sec:outline}, we present the overall outline of this thesis. 
+
+%In this thesis, we address challenges on robustness in fine-grained image recognition as well as how to enable computer vision methods to update themselves with new object classes to recognize. We will begin this introduction by briefly describing vision impairments in Section \ref{chap1:sec:vision_impairments}, followed by a summary of assistive vision technologies in Section \ref{chap1:sec:assistive_vision}. Then we describe the scope of the thesis in Section \ref{chap1:sec:scope_of_thesis} and summarize the contributions of the included papers in Section \ref{chap1:sec:contributions}. Finally, in Section \ref{chap1:sec:outline}, we give the outline to the rest of the contents in this thesis. 
 
 
 %Vision is one of the most important senses that humans possess. It is an amazing process of how the eyes and brain translate light waves into interpreted images of our surroundings. Reflected light waves from objects are bent, or refracted, when passing through the cornea, then bent again passing through the lens and eventually hits the retina. The image is translated into impulses that travels to the brain, more specifically the occipital lobe, through the optic nerve such that the image can be interpreted. The shape of eyes affect how we things in the world are seen and kept in focus. For people with normal vision, the light waves hits the retina at the focal point where the light waves coincide. However, the eyes are longer for nearsighted eyes which moves the focal point closer to the lens such that the light waves are more spread out across the retina. For farsighted people, the eyes are shorter which moves the focal point behind the retina. Luckily, the position of the focal point can be corrected for both near- and farsighted eyes by placing a concave and convex lens respectively in front of the eyes, e.g., by using eyeglasses. However, there exist many severe cases of low vision where not even eyeglasses can help where other kinds of help is necessary for assisting the people in situations where vision is a necessity. 
@@ -36,7 +41,7 @@ We will begin this introduction by briefly describing vision impairments in Sect
 
 
 
-\section{Vision Impairments}\label{sec:vision_impairments}
+\section{Visual Impairments}\label{chap1:sec:vision_impairments}
 
 Vision impairment (VI) is defined as the decrease of one's ability to see from various distances~\cite{who2022international}. There are different types of VIs ranging from various degrees of blindness to having issues with seeing from far or near distances. The visual capabilities are in general assessed by measuring the \textit{visual acuity} (sharpness) of seeing, for example, a letter or symbol, from some fixed distance. The visual acuity measured differently based on whether near- or far-sighted VI is assessed. For far-sighted VI, the visual acuity is calculated by the ratio between the distance in which %that 
 the subject can see the item and the distance in which a normal-sighted person could recognize the item. When assessing near-sighted VI, one checks the font size of letters that the subject can see using a standardized point system for measuring the symbol size~\cite{who2019world}. %Worth noting is that to be considered having a VI, it is taken into account whether the the vision capabilities are possible to correct with eye-glasses or contact lenses [citeation here].   
@@ -74,7 +79,7 @@ Next, we will discuss the recent emergence of various computer technologies that
 %VIPs that had to change their careers due to inaccessible apps and systems at their workplace~\cite{gotesson2019challenges, gotesson2019utmaningar}. Conclusion was that VIPs should be involved in the development and design process of such products, and that this should be included when educating User Experience (UX) designers. 
 
 
-\section{Assistive Vision Technologies}\label{sec:assistive_vision} %\section{Object Recognition for Assistive Vision}
+\section{Assistive Vision Technologies}\label{chap1:sec:assistive_vision} %\section{Object Recognition for Assistive Vision}
 
 Cameras are used by people with VIs, including blindness, to record events and memories similarly as normal-sighted people~\cite{jayant2011supporting}. This has opened up for opportunities where VI people can use their cameras for more than recording events, for example, object recognition, document text recognition, and color identification. Object recognition has been shown to be considered an everyday challenge, where VI people would like to ask questions about objects where visual information is necessary for identification~\cite{brady2013visual}. For example, it can be very difficult to distinguish between different containers and packages that have similar shapes but different content without being able to see. These findings have encouraged development of technical aids that use computer vision for assisting VI people. 
 
@@ -105,7 +110,7 @@ Current assistive vision technologies face several challenges that need to be ta
 
 
 
-\section{Scope of Thesis}\label{sec:scope_of_thesis}
+\section{Scope of Thesis}\label{chap1:sec:scope_of_thesis}
 
 This thesis focuses on two applications for machine learning and computer vision-based assistive technologies, namely \textit{fine-grained image recognition}~\cite{wei2021fine} and \textit{continual learning}~\cite{delange2021continual, parisi2019continual}. 
 Fine-grained image recognition (FGIR) involves identifying subcategories and details of general object classes, which can be important when distinguishing between visually similar items. An example is when one has to distinguish between two kinds of juice packages from the same brand that are visually very similar but with different ingredients. In Paper \ref{paperA} and \ref{paperB}, we study FGIR from the real-world application of recognizing groceries with an assistive vision device. %where the main ingredients are apples and oranges in the packages.
@@ -155,13 +160,12 @@ Most previous works on replay-based continual learning ignores the time to repla
 
 
 \section{Thesis Contributions}
-\label{sec:contributions}
+\label{chap1:sec:contributions}
 
 In this section, we provide summaries of the included papers as well as stating the contributions of each author to the manuscripts. 
 
 
 \subsection{\underline{Paper A}: A Hierarchical Grocery Store Image Dataset with Visual and Semantic Labels}
-\label{sec:paperA}
 
 \begin{table}[t]
 	\centering
@@ -191,7 +195,6 @@ CZ and HK presented the idea and the data collection procedure for the natural i
 
 
 \subsection{\underline{Paper B}: Using Variational Multi-View Learning for Classification of Grocery Items}
-\label{sec:paperB}
 
 \begin{comment}
 	
@@ -271,7 +274,6 @@ All authors took part in discussing the results and contributed to writing the m
 
 
 \subsection{\underline{Paper C}: Learn the Time to Learn: Replay Scheduling for Continual Learning}
-\label{sec:paperC}
 
 \begin{figure}[t]
 	\centering 
@@ -308,7 +310,6 @@ All authors took part in discussing the results and contributed to writing the m
 
 \subsection{\underline{Paper D}: %Meta 
 	Policy Learning for Replay Scheduling in Continual Learning}
-\label{sec:paperD}
 
 
 \begin{figure}[t]
@@ -338,5 +339,5 @@ All authors took part in discussing the results and contributed to writing the m
 
 
 % Thesis outline
-\section{Thesis Outline}\label{sec:outline}
+\section{Thesis Outline}\label{chap1:sec:outline}
 The rest of the thesis is organized as follows. We provide some background and preliminaries on the computer vision and machine learning methodology used in this thesis in Chapter \ref{chap2}. Chapter \ref{chap3} is focused on our contributions in fine-grained image classification where we first describe the related work in this field followed by explaining the frameworks used in our work. Similarly, in Chapter \ref{chap4}, we focus on our contributions in continual learning by first describing the related work to place our contributions in context and then describing the framework we used for enabling replay scheduling in continual learning. Finally, in Chapter \ref{chap5}, we provide our conclusions of the presented works and present some research directions that we believe would be interesting to look deeper into in the future. 
