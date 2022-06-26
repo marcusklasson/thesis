@@ -7,7 +7,7 @@
   \input{PaperC/figures/mcts_rewards_comparison/mcts_rewards_groupplot_single_row}
   \vspace{-3mm}
   \caption{ Average test accuracies over tasks after learning the final task (ACC) over the MCTS simulations for all datasets, where 'S' and 'P' are used as short for 'Split' and 'Permuted'. We compare performance for RS-MCTS (Ours) against random replay schedules (Random), Equal Task Schedule (ETS), and Heuristic Scheduling (Heuristic) baselines. 
-  For the first three datasets, we show the best ACC found from a breadth-first search (BFS) as an upper bound. All results have been averaged over 5 seeds. These results show that replay scheduling can improve over ETS and outperform or perform on par with Heuristic across different datasets and network architectures. 
+  	For the first three datasets, we show the ACC for for training on all seen task datasets jointly (Joint), as well as the best ACC found from a breadth-first search (BFS) as two upper bounds. All results have been averaged over 5 seeds. These results show that replay scheduling can improve over ETS and outperform or perform on par with Heuristic across different datasets and network architectures.
   }
   \label{fig:mcts_best_rewards}
   \vspace{-3mm}

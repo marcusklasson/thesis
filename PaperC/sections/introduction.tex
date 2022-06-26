@@ -1,16 +1,19 @@
 
 \section{Introduction}\label{paperC:sec:introduction}
 
-Many organizations deploying machine learning systems receive large volumes of data daily where these new data are often associated with new tasks. Although all historical data are stored in the cloud in practice, retraining machine learning systems on a daily basis is prohibitive both in time and cost. 
-In this setting, the systems must continuously adapt to new tasks without forgetting the previously learned abilities. Continual learning (CL) methods~\citeC{C:de2019continual, C:parisi2019continual} 
-address this challenge where, in particular, replay-based methods~\citeC{C:chaudhry2019tiny, C:hayes2020remind} have shown to be very effective in achieving great prediction performance and retaining knowledge of old tasks. 
-Replay-based methods mitigate catastrophic forgetting by revisiting a small set of samples, which is feasible to process compared to the size of the historical data.
-In the traditional CL literature, the replay memory is limited due to the assumption that historical data are not available. In the real-world setting where historical data are in fact always available, the requirement of small memory remains due to processing time and cost issues. % 
+Many organizations deploying machine learning systems receive large volumes of data daily~\citeC{C:bailis2017macrobase, C:hazelwood2018applied}. Although all historical data are stored in the cloud in practice, retraining machine learning systems on a daily basis is prohibitive both in time and cost. In this setting, the systems often need to continuously adapt to new tasks while retaining the previously learned abilities. Continual learning (CL) methods~\citeC{C:delange2021continual, parisi2019continual} address this challenge where, in particular, replay methods~\citeC{C:chaudhry2019tiny, C:hayes2020remind} have shown to be very effective in achieving great prediction performance. 
+Replay methods mitigate catastrophic forgetting by revisiting a small set of samples, which is feasible to process compared to the size of the historical data. In the traditional CL literature, replay memories are limited due to the assumption that historical data are not available. In the real-world setting where historical data are in fact always available, the requirement of small memory remains due to processing time and cost issues. 
 
+%Many organizations deploying machine learning systems receive large volumes of data daily where these new data are often associated with new tasks. Although all historical data are stored in the cloud in practice, retraining machine learning systems on a daily basis is prohibitive both in time and cost. In this setting, the systems must continuously adapt to new tasks without forgetting the previously learned abilities. Continual learning (CL) methods~\citeC{C:de2019continual, C:parisi2019continual} address this challenge where, in particular, replay-based methods~\citeC{C:chaudhry2019tiny, C:hayes2020remind} have shown to be very effective in achieving great prediction performance and retaining knowledge of old tasks. Replay-based methods mitigate catastrophic forgetting by revisiting a small set of samples, which is feasible to process compared to the size of the historical data. In the traditional CL literature, the replay memory is limited due to the assumption that historical data are not available. In the real-world setting where historical data are in fact always available, the requirement of small memory remains due to processing time and cost issues. % 
 
-Most research on replay-based CL has been focused on the sample quality in the memory~\citeC{C:aljundi2019gradient, C:borsos2020coresets, C:chaudhry2019tiny, C:chrysakis2020online, C:nguyen2017variational, C:rebuffi2017icarl, C:yoon2021online} or data compression to increase the memory capacity~\citeC{C:hayes2020remind, C:iscen2020memory, C:pellegrini2019latent}. Common for these methods is that the memory allocates an equal amount of space for storing samples from old tasks. When learning new tasks, the whole memory is replayed to mitigate catastrophic forgetting.
-However, in life-long learning settings, this simple strategy would be inefficient as the memory must store a large number of tasks. Furthermore, these methods ignore the time to learn old tasks again which is important in human learning. 
-Humans are CL systems, and different methods have been developed to enhance memory retention, such as spaced repetition~\citeC{C:dempster1989spacing, C:ebbinghaus2013memory, C:landauer1978optimum} which is often used in education. These education methods focus on the scheduling of learning and rehearsal of previous learned knowledge.  
+Recent research on replay-based CL has focused on the quality of memory samples
+~\citeC{C:aljundi2019gradient, C:borsos2020coresets, C:chaudhry2019tiny, C:chrysakis2020online, C:nguyen2017variational, C:rebuffi2017icarl, C:yoon2021online} 
+or data compression to increase the memory capacity~\citeC{C:hayes2020remind, C:iscen2020memory, C:pellegrini2019latent}. 
+Most previous methods allocate equal memory storage space for samples from old tasks, and replay the whole memory to mitigate catastrophic forgetting.
+However, in life-long learning settings, this simple strategy would be inefficient as the memory must store a large number of tasks.
+Furthermore, uniform selection policy of samples to revisit is commonly used which ignores the time of which tasks to learn again. This stands in contrast to human learning where education methods focus on scheduling of learning and rehearsal of previous learned knowledge. For example, spaced repetition~\citeC{dempster1989spacing, ebbinghaus2013memory, landauer1978optimum}, where the time interval between rehearsal increases, has been shown to enhance memory retention. 
+
+%Most research on replay-based CL has been focused on the sample quality in the memory~\citeC{C:aljundi2019gradient, C:borsos2020coresets, C:chaudhry2019tiny, C:chrysakis2020online, C:nguyen2017variational, C:rebuffi2017icarl, C:yoon2021online} or data compression to increase the memory capacity~\citeC{C:hayes2020remind, C:iscen2020memory, C:pellegrini2019latent}. Common for these methods is that the memory allocates an equal amount of space for storing samples from old tasks. When learning new tasks, the whole memory is replayed to mitigate catastrophic forgetting. However, in life-long learning settings, this simple strategy would be inefficient as the memory must store a large number of tasks. Furthermore, these methods ignore the time to learn old tasks again which is important in human learning. Humans are CL systems, and different methods have been developed to enhance memory retention, such as spaced repetition~\citeC{C:dempster1989spacing, C:ebbinghaus2013memory, C:landauer1978optimum} which is often used in education. These education methods focus on the scheduling of learning and rehearsal of previous learned knowledge.  
 
 \begin{figure}[t]
 \centering
@@ -33,22 +36,23 @@ Figure \ref{fig:single_task_replay_with_M10} shows how the task performances pro
 Note that choosing different time points to replay the same memory leads to noticeably different results in the final performance. 
 These results indicate that scheduling the time when to apply replay can influence the final performance significantly of a CL system.  
 
-
 To this end, we propose learning the time to learn, in which we learn replay schedules of which tasks to replay at different times inspired from human learning~\citeC{C:dempster1989spacing}. 
-We illustrate the advantages with replay scheduling by using Monte Carlo tree search (MCTS)~\citeC{C:coulom2006efficient} to learn policies for replay. 
-More specifically, we train a neural network on the current task dataset mixed with the scheduled replay samples and measure the final performance of the network to evaluate the replay schedules selected by MCTS. 
+To show the importance of replay scheduling, we take an episodic-learning approach where a policy is learned from multiple trials selecting which tasks to replay in a CL scenario. 
+In particular, we illustrate in single CL environments by using Monte Carlo tree search (MCTS)~\citeC{C:coulom2006efficient} as an example method that searches for good replay schedules. %policies for replay. 
+The replay schedules from MCTS are evaluated by measuring the final performance of a network trained on a sequence of CL tasks where the scheduled replay samples have been used for mitigating catastrophic forgetting. 
+We use this way to show the importance of replay scheduling given an ideal environment to highlight the need for learning replay schedules in real-world large scale CL tasks. 
 In summary, our contributions are:
 \begin{itemize}[topsep=1pt,] %noitemsep,]
-    \setlength\itemsep{0.1mm}
-    \item We propose a new CL setting where historical data is available while the processing time is limited, in order to adjust current CL research closer to real-world needs (Section \ref{paperC:sec:problem_setting}). In this new setting, we introduce replay scheduling in CL where we learn the time to learn which tasks to replay (Section \ref{paperC:sec:replay_scheduling_in_continual_learning}).
-    %\item \mk{In this new CL setting, we introduce replay scheduling in CL where we learn the time to learn which tasks to replay (Section \ref{sec:replay_scheduling_in_continual_learning}).%we demonstrate the importance of replay scheduling in continual learning (Figure \ref{fig:single_task_replay_with_M10}) and propose to learn the time to learn which tasks to replay (Section \ref{sec:replay_scheduling_in_continual_learning}).
-    %}
-    %\item We demonstrate the importance of replay scheduling in continual learning and propose to learn the time to learn which tasks to replay (Section \ref{sec:problem_setting} and \ref{sec:replay_scheduling_in_continual_learning}). 
-    \item We use MCTS as an example method to illustrate how to learn replay scheduling policies by creating finite sets of memory compositions that can be replayed at every task (Section \ref{paperC:sec:mcts_for_replay_scheduling}).
-    %\item We use MCTS as an example method to illustrate how replay schedules in CL can be learned by establishing a finite set of memory compositions that can be replayed at every task (Section \ref{sec:mcts_for_replay_scheduling}). 
-    \item We demonstrate with six benchmark datasets that learned scheduling can improve the CL performance significantly in the fixed size memory setting (Section \ref{paperC:sec:results_with_mcts} and \ref{paperC:sec:results_with_varying_replay_memory_size}). Moreover, we show that our method can be combined with any memory selection technique and replay-based method (Section \ref{paperC:sec:alternative_memory_selection_methods} and \ref{paperC:sec:applying_scheduling_to_recent_replay_methods}), as well as being efficient in situations where the 
-    memory size is even smaller than the number of classes (Section \ref{paperC:sec:efficiency_of_replay_scheduling}). 
-    %Furthermore, we show that our method can be combined with any other memory selection methods (Section \ref{sec:alternative_memory_selection_methods}), as well as being efficient in situations where the memory size is even smaller than the number of classes (Section \ref{sec:efficiency_of_replay_scheduling}). 
+	\setlength\itemsep{0.1mm}
+	\item We propose a new CL setting where historical data is available while the processing time is limited, in order to adjust current CL research closer to real-world needs (Section \ref{paperC:sec:problem_setting}). In this new setting, we introduce replay scheduling where we learn the time of which tasks to replay (Section \ref{paperC:sec:replay_scheduling_in_continual_learning}).
+
+	\item We argue that learning the time to learn is essential for CL performance. We use MCTS as an example method to illustrate the benefits of replay scheduling in CL, where MCTS searches over finite sets of replay memory compositions at every task (Section \ref{paperC:sec:mcts_for_replay_scheduling}). 
+
+	\item We demonstrate with six benchmark datasets that learned scheduling can improve the CL performance significantly in the fixed size memory setting (Section \ref{paperC:sec:results_with_mcts} and \ref{paperC:sec:results_with_varying_replay_memory_size}). 
+	Moreover, we show that replay scheduling %our method 
+	can be combined with any memory selection technique and replay-based method (Section \ref{paperC:sec:alternative_memory_selection_methods} and \ref{paperC:sec:applying_scheduling_to_recent_replay_methods}), as well as being efficient in situations where the 
+	memory size is %even 
+	smaller than the number of classes (Section \ref{paperC:sec:efficiency_of_replay_scheduling}). 
 \end{itemize}
 
 

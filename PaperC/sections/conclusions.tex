@@ -1,20 +1,13 @@
 
 \section{Conclusions}\label{paperC:sec:conclusions}
 
-We propose learning the time to learn, i.e.,~in a real-world CL context, learning schedules of which tasks to replay at different times. %what previous tasks to replay at different times. 
-To the best of our knowledge, we are the first to consider the time to learn in machine learning inspired by human learning techniques. 
-We illustrate with MCTS how replay schedules can be learned and show that they can produce significantly improved results when comparing against methods without learned scheduling under the same memory budgets.
-%We demonstrate with an example method that learned replay schedules produce significantly improved results under the same memory budget when comparing with the method without scheduling.
-Furthermore, the dynamic behavior of the learned schedules showed similarities to human learning techniques, such as spaced repetition, by replaying previous tasks with varying time intervals.  
-Finally, we showed that replay scheduling can be combined with any replay-based method as well as utilize the memory efficiently even when the memory size is smaller than the number of classes. %allows for utilizing the memory more efficiently compared to standard benchmarks replaying all memory samples in the tiny memory setting.
-%Finally, we showed that replay scheduling allows for utilizing the memory more efficiently compared to standard benchmarks replaying all memory samples in the tiny memory setting.
+We propose learning the time to learn, i.e.,~in a real-world CL context, learning schedules of which tasks to replay at different times. 
+To the best of our knowledge, we are the first to consider the time to learn in CL inspired by human learning techniques. 
+We demonstrated the benefits with replay scheduling by showing the performance improvements with schedules found using MCTS on several CL benchmarks when comparing against methods with fixed scheduling policies under the same memory budgets. Furthermore, the dynamic behavior of the replay schedules showed similarities to human learning techniques, such as spaced repetition, by replaying previous tasks with varying time intervals.  We also showed that replay scheduling can be combined with any replay-based method as well as utilize the memory efficiently even when the memory size is smaller than the number of classes. The proposed problem setting brings CL research closer to real-world needs, especially in scenarios where CL is applied under limited processing times but with rich amounts of historical data available for replay.
 
+\vspace{-3mm}
+\paragraph{Limitations and Future Work.}
+In this work, we assumed that multiple episodes are allowed in the CL environments to use MCTS. However, this is prohibited in the CL setting since tasks can never be fully revisited.
+Hence, it would be useful if we could learn replay scheduling policies that generalize to new CL scenarios for mitigating catastrophic forgetting. Using MCTS for searching after such policies can be inefficient as the algorithm needs to run for each dataset and application separately. In future work, we will incorporate reinforcement learning methods that generalize and extend to learning general policies that can be directly applied to any new application and domain. This requires defining the state using various task performance metrics such as accuracies and forgetting metrics, the action either in the same space as in this work or as in continuous space with fractions of different tasks in the memory, and the reward as final or accumulated CL performance. Finally, we would like to explore choosing memory samples on an instance level as the current work selects samples on task level. This would also require a policy learning method that scales to large action spaces which is a research challenge by itself. 
 
-In future work, we would like to explore choosing memory samples on an instance level as the current work selects samples on task level. 
-This would need a policy learning method that scales to large action spaces which is a research challenge by itself. 
-Also, using MCTS for learning replay scheduling policies can be inefficient, %our demonstrated method with MCTS can be inefficient, 
-especially in CL settings, 
-in terms of training time and since it needs to learn for each dataset and application separately. 
-In future work, we will incorporate reinforcement learning methods that generalize and extend to learning general policies that can be directly applied to any new application and domain.
-%In future work, we will incorporate reinforcement learning methods that generalize. We will therefore extend replay scheduling to learn general policies that can be directly applied to any new application and domain.
 

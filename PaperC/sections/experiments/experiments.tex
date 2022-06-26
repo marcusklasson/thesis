@@ -5,14 +5,9 @@
 \section{Experiments}\label{paperC:sec:experiments}
 
 We evaluated our replay scheduling method empirically on six common benchmark datasets for CL. 
-%We show that scheduling of the replay memory improves significantly over replaying equal proportions across the tasks. 
-%Furthermore, we demonstrate that replay scheduling can be as efficient as replaying all available memory samples in settings where only 1 example per class can be stored for replay. 
 We denote our method as Replay Scheduling MCTS (RS-MCTS) and select the result on the held-out test sets from the replay schedule that yielded the best reward on the validation set during the search.
-%We perform experiments using 5 different seeds on all datasets. 
-%Our code is available as part of the supplementary material.
-%Next, we briefly describe the experimental settings. 
-Full details on experimental settings are in Appendix \ref{paperC:app:experimental_settings} and additional results are in Appendix \ref{paperC:app:additional_experimental_results}. %Additional information on experimental settings and results can be found in Appendix \ref{app:experimental_settings} and \ref{app:additional_experimental_results} respectively. 
-Our code is available in the supplementary material. %as part of the supplementary material.
+Full details on experimental settings are in Appendix \ref{paperC:app:experimental_settings} and additional results are in Appendix \ref{paperC:app:additional_experimental_results}. 
+%Code will be available upon acceptance.
 
 \vspace{-3mm}
 \paragraph{Datasets.} We conduct experiments on six datasets commonly used as benchmarks in the CL literature: Split MNIST~\citeC{C:lecun1998gradient, C:zenke2017continual}, Fashion-MNIST~\citeC{C:xiao2017fashion}, Split notMNIST~\citeC{C:bulatov2011notMNIST}, Permuted MNIST~\citeC{C:goodfellow2013empirical}, Split CIFAR-100~\citeC{C:krizhevsky2009learning}, and Split miniImagenet~\citeC{C:vinyals2016matching}. We randomly sample 15\% of the training data from each task to use for validation when computing the reward for the MCTS simulations. 
@@ -26,21 +21,24 @@ See Appendix \ref{paperC:app:heuristic_scheduling_baseline} for more details on 
 \input{PaperC/sections/experiments/tables/table_memory_selection_methods}
 
 \vspace{-3mm}
-\paragraph{Architectures.} We use a multi-head output layer for all datasets except for Permuted MNIST where the network uses single-head output. We use a 2-layer MLP with 256 hidden units for Split MNIST, Split FashionMNIST, Split notMNIST, and Permuted MNIST. For Split CIFAR-100, we use the CNN architecture used in Vinyals \etal~\citeC{C:vinyals2016matching} and Schwartz \etal~\citeC{C:schwarz2018progress}. For Split miniImagenet, we apply the reduced ResNet-18 from \citeC{C:lopez2017gradient}. 
+\paragraph{Architectures.} We use a multi-head output layer for all datasets except for Permuted MNIST where the network uses single-head output. We use a 2-layer MLP with 256 hidden units for Split MNIST, Split FashionMNIST, Split notMNIST, and Permuted MNIST. For Split CIFAR-100, we use the CNN architecture used in \citeC{C:vinyals2016matching,C:schwarz2018progress}. For Split miniImagenet, we apply the reduced ResNet-18 from \citeC{C:lopez2017gradient}. 
 
 \vspace{-3mm}
-\paragraph{Evaluation Metric.} We use the average test accuracy over all tasks after learning the final task, i.e., $\text{ACC} = \frac{1}{T} \sum_{i=1}^{T} A_{T, i}$ where $A_{T, i}$ is the test accuracy of task $i$ after learning task $T$. We report means and standard deviations of ACC using 5 different seeds on all datasets. 
+\paragraph{Evaluation Metric.} We use the average test accuracy over all tasks after learning the final task, i.e., $\text{ACC} = \frac{1}{T} \sum_{i=1}^{T} A_{T, i}^{(test)}$ where $A_{T, i}^{(test)}$ is the test accuracy of task $i$ after learning task $T$. We report means and standard deviations of ACC using 5 different seeds on all datasets. 
+
+
 
 
 
 %%% MCTS Results
 \input{PaperC/sections/experiments/results_with_mcts}
 
-%%% Table 2, put it here for placement
-\input{PaperC/sections/experiments/tables/table_applying_scheduling_to_recent_replay_methods}
+
 
 %%% Visualizations
 \input{PaperC/sections/experiments/replay_schedule_visualizations}
+
+\input{PaperC/sections/experiments/figures/replay_schedule_visualization}
 
 
 %%% Results on memory selection methods
@@ -48,10 +46,7 @@ See Appendix \ref{paperC:app:heuristic_scheduling_baseline} for more details on 
 
 %\input{sections/experiments/figures/replay_schedule_visualization}
 
-%%% Results on applying replay scheduling to recent replay methods
-\input{PaperC/sections/experiments/applying_scheduling_to_recent_replay_methods}
 
-\input{PaperC/sections/experiments/figures/replay_schedule_visualization}
 
 %%% Figure Acc over memory size
 \input{PaperC/sections/experiments/figures/accs_over_memory_size}
@@ -59,6 +54,11 @@ See Appendix \ref{paperC:app:heuristic_scheduling_baseline} for more details on 
 %%%% Results of ACC over memory size
 \input{PaperC/sections/experiments/results_with_varying_memory_size}
 
+%%% Table 2, put it here for placement
+\input{PaperC/sections/experiments/tables/table_applying_scheduling_to_recent_replay_methods}
+
+%%% Results on applying replay scheduling to recent replay methods
+\input{PaperC/sections/experiments/applying_scheduling_to_recent_replay_methods}
 
 %%% Efficiency of Replay Scheduling
 %\newpage
