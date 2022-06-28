@@ -1,0 +1,31 @@
+
+
+
+
+\pgfplotsset{every axis title/.append style={at={(0.5,0.85)}}}
+\pgfplotsset{every tick label/.append style={font=\scriptsize}}
+\pgfplotsset{every major tick/.append style={major tick length=2pt}}
+\pgfplotsset{every minor tick/.append style={minor tick length=1pt}}
+\pgfplotsset{every axis x label/.append style={at={(0.5,-0.22)}}}
+\pgfplotsset{every axis y label/.append style={at={(-0.30,0.5)}}}
+\begin{tikzpicture}
+\tikzstyle{every node}=[font=\scriptsize]
+\definecolor{color0}{rgb}{0.12156862745098,0.466666666666667,0.705882352941177}
+\definecolor{color1}{rgb}{1,0.498039215686275,0.0549019607843137}
+\definecolor{color2}{rgb}{0.172549019607843,0.627450980392157,0.172549019607843}
+\definecolor{color3}{rgb}{0.83921568627451,0.152941176470588,0.156862745098039}
+\definecolor{color4}{rgb}{0.580392156862745,0.403921568627451,0.741176470588235}
+\definecolor{color5}{rgb}{0.549019607843137,0.337254901960784,0.294117647058824}
+\definecolor{color6}{rgb}{0.890196078431372,0.466666666666667,0.76078431372549}
+
+\begin{groupplot}[group style={group size= 2 by 1, horizontal sep=1.00cm, vertical sep=1.20cm}]
+
+
+\input{PaperD/figures/rewards_notmnist_new_dataset/rewards_env2}
+
+\input{PaperD/figures/rewards_notmnist_new_dataset/rewards_env10}
+
+
+\end{groupplot}
+
+\end{tikzpicture}

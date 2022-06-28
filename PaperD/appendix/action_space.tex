@@ -1,0 +1,24 @@
+
+\section{Discrete Action Space with Task Proportions}\label{ref:action_space}
+
+We show the procedure for creating the discrete action space in Algorithm \ref{alg:action_space_discretization}. At task $i$, we have $i-1$ historical tasks that we can choose from. We then generate all possible bin vectors $\vb_i = [b_1, \dots, b_{i}] \in \gB_i$ of size $i$ where each element are a task index $1, ..., i$. We sort all bin vectors by the order of task indices and only keep the unique bin vectors. For example, at $i=2$, the unique choices of vectors are $[1,1], [1,2], [2,2]$, where $[1,1]$ indicates that all samples in the replay memory should be from task 1, $[1,2]$ indicates that half memory is from task 1 and the other half are from task etc. The task proportions are then computed by counting the number of occurrences of each task index in $\vb_i$ and dividing by $i$, such that $\vp_i = \texttt{bincount}(\vb_i) / (i)$. From this specification, we have built a tree $\gT$ with different task proportions that can be selected at different time steps. We construct a replay schedule $S$ by traversing through $\gT$ and select a task proportion on every level to append to $S$. We can then evaluate the replay schedule $S$ by training a network on the CL task sequence and use $S$ to compose the replay memory to use for mitigating catastrophic forgetting at every task. 
+
+\begin{algorithm}[t]
+	\caption{Discretization of action space with task proportions}
+	\label{alg:action_space_discretization}
+	\begin{algorithmic}[1]
+		\Require Number of tasks $T$
+		\State $\gT = ()$ \Comment{Initialize sequence for storing actions}
+		\For{$i = 1, \dots, T-1$}
+		\State $\gP_i = \{\}$ \Comment{Set for storing task proportions at $i$}
+		\State $\gB = \texttt{combinations}([1:i], i)$ \Comment{Get bin vectors of size $i$ with bins $1, ..., i$}
+		\State $\bar{\gB} = \texttt{unique}(\texttt{sort}(\gB))$ \Comment{Only keep unique bin vectors}
+		\For{$\vb_i \in \hat{\gB}$}
+		\State $\vp_i = \texttt{bincount}(\vb_i) / i$ \Comment{Calculate task proportion}
+		\State $\gP_i = \gP_i \cup \{ \vp_i \}$ \Comment{Add task proportion to set}
+		\EndFor
+		\State $\gT[i] = \gP_i$ \Comment{Add set of task proportions to action sequence}
+		\EndFor
+		\State \Return $\gT$ \Comment{Return action sequence as discrete action space}
+	\end{algorithmic}
+\end{algorithm}

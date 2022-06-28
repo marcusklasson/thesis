@@ -1,0 +1,61 @@
+
+\begin{table}[t]
+\caption{The ACC and rank for each seed (10-19) in every test environment with {\bf Split MNIST} for New Task Order experiment. Under each column named 'Seed X', we show the ACC (\%) and, in parenthesis, the rank for the corresponding method for the specific seed. We also show the average rank of each method in the test environment under 'Rank'. Note that the ACC for ETS, Heur-GD, Heur-LD, and Heur-AT are copied across the seeds, since the seed only affects the policy initialization in DQN and A2C and the random selection in Random.}
+\label{tab:rankings_mnist_new_task_order}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{lcccccccc}
+\toprule
+ \multicolumn{1}{l}{}   & \multicolumn{4}{c}{{\bf Test Env. Seed 10}}             & \multicolumn{4}{c}{{\bf Test Env. Seed 11}} \\
+    \cmidrule(lr){2-5} \cmidrule(lr){6-9} 
+Method     & Seed 1     & Seed 2     & Seed 3     & Rank & Seed 1     & Seed 2     & Seed 3     & Rank \\ \midrule
+Random     & 93.2 (6.0) & 93.7 (6.0) & 96.2 (1.0) & 4.33 & 92.2 (3.0) & 90.8 (7.0) & 90.5 (7.0) & 5.67 \\
+ETS        & 89.9 (7.0) & 89.9 (7.0) & 89.9 (7.0) & 7    & 93.8 (2.0) & 93.8 (3.0) & 93.8 (3.0) & 2.67 \\
+Heur-GD & 94.6 (3.5) & 94.6 (4.5) & 94.6 (5.5) & 4.5  & 91.3 (6.0) & 91.3 (5.0) & 91.3 (5.0) & 5.33 \\
+Heur-LD & 95.6 (1.0) & 95.6 (1.0) & 95.6 (3.0) & 1.67 & 91.3 (6.0) & 91.3 (5.0) & 91.3 (5.0) & 5.33 \\
+Heur-AT & 94.6 (3.5) & 94.6 (4.5) & 94.6 (5.5) & 4.5  & 91.3 (6.0) & 91.3 (5.0) & 91.3 (5.0) & 5.33 \\
+DQN        & 93.2 (5.0) & 95.5 (2.0) & 95.7 (2.0) & 3    & 91.8 (4.0) & 96.0 (2.0) & 95.7 (2.0) & 2.67 \\
+A2C        & 95.3 (2.0) & 95.3 (3.0) & 95.3 (4.0) & 3    & 96.5 (1.0) & 96.5 (1.0) & 96.5 (1.0) & 1    \\ \midrule
+    & \multicolumn{4}{c}{{\bf Test Env. Seed 12}}             & \multicolumn{4}{c}{{\bf Test Env. Seed 13}} \\
+    \cmidrule(lr){2-5} \cmidrule(lr){6-9} 
+Method     & Seed 1     & Seed 2     & Seed 3     & Rank & Seed 1     & Seed 2     & Seed 3     & Rank \\ \midrule
+Random     & 90.7 (7.0) & 88.8 (7.0) & 95.2 (1.0) & 5    & 93.4 (5.0) & 94.4 (6.0) & 89.9 (7.0) & 6    \\
+ETS        & 91.7 (6.0) & 91.7 (6.0) & 91.7 (7.0) & 6.33 & 95.0 (2.0) & 95.0 (3.0) & 95.0 (3.0) & 2.67 \\
+Heur-GD & 94.8 (1.5) & 94.8 (1.5) & 94.8 (2.5) & 1.83 & 94.7 (3.5) & 94.7 (4.5) & 94.7 (4.5) & 4.17 \\
+Heur-LD & 91.9 (5.0) & 91.9 (5.0) & 91.9 (6.0) & 5.33 & 93.2 (7.0) & 93.2 (7.0) & 93.2 (6.0) & 6.67 \\
+Heur-AT & 94.8 (1.5) & 94.8 (1.5) & 94.8 (2.5) & 1.83 & 94.7 (3.5) & 94.7 (4.5) & 94.7 (4.5) & 4.17 \\
+DQN        & 94.2 (3.0) & 94.5 (3.0) & 92.8 (5.0) & 3.67 & 93.2 (6.0) & 96.6 (1.0) & 96.2 (1.0) & 2.67 \\
+A2C        & 93.6 (4.0) & 93.6 (4.0) & 93.6 (4.0) & 4    & 95.6 (1.0) & 95.6 (2.0) & 95.6 (2.0) & 1.67 \\ \midrule
+    & \multicolumn{4}{c}{{\bf Test Env. Seed 14}}             & \multicolumn{4}{c}{{\bf Test Env. Seed 15}} \\
+    \cmidrule(lr){2-5} \cmidrule(lr){6-9} 
+Method     & Seed 1     & Seed 2     & Seed 3     & Rank & Seed 1     & Seed 2     & Seed 3     & Rank \\ \midrule
+Random     & 84.4 (3.0) & 80.5 (7.0) & 86.6 (3.0) & 4.33 & 93.8 (7.0) & 95.4 (4.0) & 91.9 (7.0) & 6    \\
+ETS        & 87.3 (2.0) & 87.3 (2.0) & 87.3 (2.0) & 2    & 95.3 (4.0) & 95.3 (5.0) & 95.3 (4.0) & 4.33 \\
+Heur-GD & 81.2 (6.5) & 81.2 (5.5) & 81.2 (6.5) & 6.17 & 95.9 (2.5) & 95.9 (2.5) & 95.9 (2.5) & 2.5  \\
+Heur-LD & 81.2 (6.5) & 81.2 (5.5) & 81.2 (6.5) & 6.17 & 96.1 (1.0) & 96.1 (1.0) & 96.1 (1.0) & 1    \\
+Heur-AT & 82.4 (5.0) & 82.4 (4.0) & 82.4 (5.0) & 4.67 & 95.9 (2.5) & 95.9 (2.5) & 95.9 (2.5) & 2.5  \\
+DQN        & 92.8 (1.0) & 86.8 (3.0) & 88.1 (1.0) & 1.67 & 94.8 (6.0) & 94.8 (7.0) & 94.3 (6.0) & 6.33 \\
+A2C        & 83.4 (4.0) & 95.3 (1.0) & 83.4 (4.0) & 3    & 94.8 (5.0) & 94.8 (6.0) & 94.8 (5.0) & 5.33 \\ \midrule
+    & \multicolumn{4}{c}{{\bf Test Env. Seed 16}}             & \multicolumn{4}{c}{{\bf Test Env. Seed 17}} \\ 
+    \cmidrule(lr){2-5} \cmidrule(lr){6-9} 
+Method     & Seed 1     & Seed 2     & Seed 3     & Rank & Seed 1     & Seed 2     & Seed 3     & Rank \\ \midrule
+Random     & 80.5 (6.0) & 87.5 (6.0) & 83.0 (6.0) & 6    & 96.4 (1.0) & 96.1 (3.0) & 96.1 (1.0) & 1.67 \\
+ETS        & 79.4 (7.0) & 79.4 (7.0) & 79.4 (7.0) & 7    & 95.7 (3.0) & 95.7 (4.0) & 95.7 (3.0) & 3.33 \\
+Heur-GD & 91.2 (3.0) & 91.2 (4.0) & 91.2 (3.0) & 3.33 & 93.5 (6.0) & 93.5 (6.0) & 93.5 (6.0) & 6    \\
+Heur-LD & 91.2 (3.0) & 91.2 (4.0) & 91.2 (3.0) & 3.33 & 93.5 (6.0) & 93.5 (6.0) & 93.5 (6.0) & 6    \\
+Heur-AT & 91.2 (3.0) & 91.2 (4.0) & 91.2 (3.0) & 3.33 & 93.5 (6.0) & 93.5 (6.0) & 93.5 (6.0) & 6    \\
+DQN        & 93.9 (1.0) & 92.9 (1.0) & 94.5 (1.0) & 1    & 95.7 (4.0) & 96.2 (2.0) & 95.7 (4.0) & 3.33 \\
+A2C        & 90.3 (5.0) & 92.3 (2.0) & 90.3 (5.0) & 4    & 96.1 (2.0) & 96.5 (1.0) & 96.1 (2.0) & 1.67 \\ \midrule
+    & \multicolumn{4}{c}{{\bf Test Env. Seed 18}}             & \multicolumn{4}{c}{{\bf Test Env. Seed 19}} \\
+    \cmidrule(lr){2-5} \cmidrule(lr){6-9} 
+Method     & Seed 1     & Seed 2     & Seed 3     & Rank & Seed 1     & Seed 2     & Seed 3     & Rank \\ \midrule
+Random     & 92.7 (2.0) & 94.2 (1.0) & 93.2 (1.0) & 1.33 & 97.3 (2.0) & 95.9 (2.0) & 91.6 (2.0) & 2    \\
+ETS        & 92.9 (1.0) & 92.9 (2.0) & 92.9 (2.0) & 1.67 & 97.4 (1.0) & 97.4 (1.0) & 97.4 (1.0) & 1    \\
+Heur-GD & 87.8 (6.0) & 87.8 (6.0) & 87.8 (6.0) & 6    & 88.3 (5.0) & 88.3 (6.0) & 88.3 (4.0) & 5    \\
+Heur-LD & 87.8 (6.0) & 87.8 (6.0) & 87.8 (6.0) & 6    & 88.3 (5.0) & 88.3 (6.0) & 88.3 (4.0) & 5    \\
+Heur-AT & 87.8 (6.0) & 87.8 (6.0) & 87.8 (6.0) & 6    & 88.3 (5.0) & 88.3 (6.0) & 88.3 (4.0) & 5    \\
+DQN        & 89.5 (4.0) & 89.4 (4.0) & 90.5 (4.0) & 4    & 89.4 (3.0) & 90.5 (3.0) & 87.5 (6.0) & 4    \\
+A2C        & 91.6 (3.0) & 91.6 (3.0) & 91.6 (3.0) & 3    & 86.1 (7.0) & 89.9 (4.0) & 86.1 (7.0) & 6   \\ 
+\bottomrule
+\end{tabular}
+}
+\end{table}
