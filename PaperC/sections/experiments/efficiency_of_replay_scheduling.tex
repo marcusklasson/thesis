@@ -19,7 +19,7 @@
 	\vspace{-3mm}
 	\captionsetup{width=.85\linewidth}
 	\caption{
-		Number of replayed samples per task for the 5-task datasets in the tiny memory setting. Ours use $M=2$ samples for replay, while the baselines increment their memory per task. %Our method uses a fixed $M=2$ samples for replay, while the baselines increment their memory per task. 
+		Number of replayed samples per task for the 5-task datasets in the tiny memory setting. Ours use $M=2$ samples for replay, while the baselines increment their memory per task.
 	}
 	%\vspace{-4mm}
 	\label{fig:tiny_memory_experiment_memory_usage}
@@ -31,11 +31,10 @@ to $M=2$ for the 5-task datasets, such that only 2 samples can be selected for r
 and with uniform memory selection as reference. 
 Additionally, we compare to using random replay schedules (Random) with the same memory setting as for RS-MCTS.
 We visualize the memory usage for our method and the baselines when training on a 5-task dataset in Figure \ref{fig:tiny_memory_experiment_memory_usage}. 
-%We visualize the memory usage when training on one of the 5-task datasets for our method and the baselines in Figure \ref{fig:tiny_memory_experiment_memory_usage}. 
-Figure \ref{fig:memory_usage_10_and_20task_datasets} in Appendix \ref{app:additional_figures} shows the memory usage for the other datasets.
-%We also visualize the memory usages for the other benchmarks in the Appendix \ref{app:additional_figures}.   
+Figure \ref{fig:memory_usage_10_and_20task_datasets} in Appendix \ref{paperC:app:additional_figures} shows the memory usage for the other datasets. 
 
-Table \ref{tab:efficiency_of_replay_scheduling_all_datasets} shows the ACC for each method across all datasets. Despite using significantly fewer samples for replay, RS-MCTS performs better or on par with the best baselines on all datasets except Split CIFAR-100. These results show that replay scheduling can be even more efficient than the state-of-the-art memory efficient replay-based methods, which indicate that learning the time to learn is an important research direction in CL.
+Table \ref{tab:efficiency_of_replay_scheduling_all_datasets} shows the ACC for each method across all datasets. Despite using significantly fewer samples for replay, RS-MCTS performs better or on par with the best baselines on all datasets except Split CIFAR-100. 
+These results indicate that replay scheduling is an important research direction in CL as storing 1 sample/class in the memory could be inefficient in settings with large number of tasks.
 
 %%% TABLE
 \input{PaperC/sections/experiments/tables/table_efficiency_replay_scheduling}

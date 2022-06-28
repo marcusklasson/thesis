@@ -1,15 +1,15 @@
 
-
 %%% Paper content
 
 \chapter{
-	\centering{Meta Policy Learning for Replay Scheduling in Continual Learning}
+	\centering{Policy Learning for Replay Scheduling in Continual Learning}
 }\label{paperD}
-\chaptermark{Meta Policy Learning for Replay Scheduling}
+\chaptermark{Policy Learning for Replay Scheduling}
 \vspace{-5mm}
 \begin{center}
-	\large{\textbf{Marcus Klasson$^{*}$, Hedvig Kjellström$^{*}$, Cheng Zhang$^{\dagger}$}} \\[2mm]
+	\large{\textbf{Marcus Klasson$^{*}$, Hedvig Kjellström$^{* \ddagger}$, Cheng Zhang$^{\dagger}$}} \\[2mm]
 	\small{$^{*}$KTH Royal Institute of Technology, Stockholm, Sweden} \\
+	\small{$^{\ddagger}$Silo AI} \\
 	\small{$^{\dagger}$Microsoft Research, Cambridge, United Kingdom} \\
 \end{center}
 
@@ -18,11 +18,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}
 	%\printinunitsof{in}\prntlen{\linewidth}
-	\noindent Learning the time to replay different tasks have been demonstrated to be important in continual learning. 
-	However, a replay scheduling policy that can be applied in any continual learning scenario is currently absent, which makes replay scheduling infeasible in real-world scenarios.  
-	To this end, we propose using reinforcement learning to enable learning general policies that can generalize across different data domains. Thus, an efficient replay schedule can be used in any new real-world continual learning scenario to improve the continual learning performance without any additional computational cost.
-	We compare the learned policies to several replay scheduling baselines and show that the learned policies can improve the continual learning performance given %any 
-	unseen tasks and datasets. 
+\noindent Scheduling over which tasks to select for replay at different times have been demonstrated to be important in continual learning. However, a replay scheduling policy that can be applied in any continual learning scenario is currently missing, which makes replay scheduling infeasible in real-world scenarios. To this end, we propose using reinforcement learning to enable learning policies that can be applied in new continual learning scenarios without additional computational cost. In our experiments, we show that the learned policies can propose replay schedules that efficiently mitigate catastrophic forgetting in environments with previously unseen task orders and datasets. The proposed approach opens up for new research directions in replay-based continual learning that stems well with real-world needs. 
 \end{abstract}
 
 
@@ -32,10 +28,11 @@
 \input{PaperD/sections/related_work}
 \input{PaperD/sections/methodology}
 \input{PaperD/sections/experiments}
-\input{PaperD/sections/discussion}
+%\input{PaperD/sections/discussion}
 \input{PaperD/sections/conclusions}
 
 \begin{appendices}
+\renewcommand{\thesection}{\Roman{section}}
 \input{PaperD/appendix/appendix}
 \end{appendices}
 %\clearpage

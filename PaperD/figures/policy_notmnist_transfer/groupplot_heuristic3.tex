@@ -1,0 +1,28 @@
+
+%\pgfplotsset{every axis title/.append style={at={(0.5,0.82)}}} %{at={(0.5,0.84)}}}
+%\pgfplotsset{every tick label/.append style={font=\tiny}}
+%\pgfplotsset{every major tick/.append style={major tick length=2pt}}
+%\pgfplotsset{every minor tick/.append style={minor tick length=1pt}}
+%\pgfplotsset{every axis x label/.append style={at={(0.5,-0.27)}}}
+%\pgfplotsset{every axis y label/.append style={at={(-0.17,0.5)}}}
+%\pgfplotsset{scaled x ticks=false} % switching off scientific notation for x ticks
+
+\begin{tikzpicture}
+\tikzstyle{every node}=[font=\scriptsize]
+\definecolor{color0}{rgb}{0.12156862745098,0.466666666666667,0.705882352941177}
+\definecolor{color1}{rgb}{1,0.498039215686275,0.0549019607843137}
+\definecolor{color2}{rgb}{0.172549019607843,0.627450980392157,0.172549019607843}
+\definecolor{color3}{rgb}{0.83921568627451,0.152941176470588,0.156862745098039}
+\definecolor{color4}{rgb}{0.580392156862745,0.403921568627451,0.741176470588235}
+\definecolor{color5}{rgb}{0.549019607843137,0.337254901960784,0.294117647058824}
+
+
+\begin{groupplot}[group style={group size= 2 by 1, horizontal sep=1.2cm, vertical sep=1.2cm}]
+
+\input{figures/policy_notmnist_transfer/task_acc_dataset_seed_6_heuristic3}
+
+\input{figures/policy_notmnist_transfer/bubble_rs_dataset_seed_6_heuristic3}
+
+\end{groupplot}
+
+\end{tikzpicture}

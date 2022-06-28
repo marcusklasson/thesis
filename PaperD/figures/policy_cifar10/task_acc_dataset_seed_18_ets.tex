@@ -1,0 +1,68 @@
+\nextgroupplot[
+height=\figheight,
+legend cell align={left},
+legend style={
+  fill opacity=0.8,
+  draw opacity=1,
+  text opacity=1,
+  at={(0.03,0.03)},
+  anchor=south west,
+  draw=white!80!black
+},
+minor xtick={},
+minor ytick={},
+tick align=outside,
+tick pos=left,
+title={},
+width=\figwidth,
+x grid style={white!69.0196078431373!black},
+xlabel={Task},
+xmajorgrids,
+xmin=0.8, xmax=5.2,
+xtick style={color=black},
+xtick={1,2,3,4,5},
+xticklabels={1,2,3,4,5},
+y grid style={white!69.0196078431373!black},
+ylabel={Accuracy  (\%)},
+ymajorgrids,
+ymin=0.5, ymax=1.01,
+ytick style={color=black},
+ytick={0.5,0.6,0.7,0.8,0.9,1,1.1},
+yticklabels={50,60,70,80,90,100,110}
+]
+\addplot [line width=1.5pt, color0, mark=*, mark size=1.5, mark options={solid}]
+table {%
+1 0.9555
+2 0.864
+3 0.8995
+4 0.8635
+5 0.852
+};
+%\addlegendentry{Task 1}
+\addplot [line width=1.5pt, color1, mark=*, mark size=1.5, mark options={solid}]
+table {%
+2 0.97
+3 0.8725
+4 0.7205
+5 0.8205
+};
+%\addlegendentry{Task 2}
+\addplot [line width=1.5pt, color2, mark=*, mark size=1.5, mark options={solid}]
+table {%
+3 0.981
+4 0.8755
+5 0.9325
+};
+%\addlegendentry{Task 3}
+\addplot [line width=1.5pt, color3, mark=*, mark size=1.5, mark options={solid}]
+table {%
+4 0.946
+5 0.84
+};
+%\addlegendentry{Task 4}
+\addplot [line width=1.5pt, color4, mark=*, mark size=1.5, mark options={solid}]
+table {%
+5 0.971
+};
+%\addlegendentry{Task 5}
+

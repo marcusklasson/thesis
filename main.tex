@@ -24,69 +24,9 @@
 \usepackage{lipsum}
 %\usepackage[dvipsnames]{xcolor}
 % my packages
-\usepackage{comment}
-\usepackage{afterpage} % for changing page color before included papers
+\input{packages}
 \input{math_commands}
-\input{additional_commands}
-\usepackage{subcaption}
-%\usepackage{multirow}
-\usepackage[shortlabels]{enumitem}
-\usepackage{multirow}
-\usepackage{wrapfig}
 
-%%% From Taras
-%\usepackage[resetlabels, labeled]{multibib}
-\usepackage[resetlabels]{multibib}
-\usepackage{hyperref}  %for references
-\newcites{A}{References}
-\newcites{B}{References}
-\newcites{C}{References}
-\newcites{D}{References}
-
-% https://tex.stackexchange.com/questions/2441/how-to-add-a-forced-line-break-inside-a-table-cell
-\usepackage{array}
-\usepackage{makecell}
-
-\renewcommand\theadalign{bc}
-\renewcommand\theadfont{\bfseries}
-\renewcommand\theadgape{\Gape[4pt]}
-\renewcommand\cellgape{\Gape[4pt]}
-
-\hypersetup{
-	colorlinks = true,
-	citecolor = {blue},
-	linkcolor=red,
-	%menubordercolor = {blue},
-	%linkbordercolor = {blue},
-}
-
-
-
-\usepackage{tikz}
-\usetikzlibrary{tikzmark,calc,decorations.pathreplacing}
-\newcommand{\Depth}{2}
-\newcommand{\Height}{2}
-\newcommand{\Width}{2}
-
-\usetikzlibrary{shapes, arrows}
-\usetikzlibrary{calc}
-\usetikzlibrary{backgrounds,fit}
-\usetikzlibrary{matrix}
-\usetikzlibrary{arrows.meta}
-
-% for CNN
-\usepackage{amsmath, amssymb, latexsym}
-\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
-
-\usepackage{pgfplots}
-\usetikzlibrary{matrix, positioning, patterns}
-\usepgfplotslibrary{groupplots}
-\pgfplotsset{compat=newest}
-
-\newlength{\figheight}
-\newlength{\figwidth}
-
-\usetikzlibrary{bayesnet}
 
 \makeatletter
 %\@addtoreset{section}{part}
@@ -169,7 +109,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%% ACKNOWLEDGMENT %%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\input{Acknowledgements/acknowledgements}
+%\input{Acknowledgements/acknowledgements}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%% ACRONYMS %%%%%%%%%%%%%%
