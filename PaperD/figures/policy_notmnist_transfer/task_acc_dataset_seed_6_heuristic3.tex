@@ -1,0 +1,66 @@
+\nextgroupplot[
+height=\figheight,
+legend cell align={left},
+legend style={
+  fill opacity=0.8,
+  draw opacity=1,
+  text opacity=1,
+  at={(0.03,0.03)},
+  anchor=south west,
+  draw=white!80!black
+},
+minor xtick={},
+minor ytick={},
+tick align=outside,
+tick pos=left,
+title={},
+width=\figwidth,
+x grid style={white!69.0196078431373!black},
+xlabel={Task Number},
+xmajorgrids,
+xmin=0.8, xmax=5.2,
+xtick style={color=black},
+xtick={1,2,3,4,5},
+y grid style={white!69.0196078431373!black},
+ylabel={Accuracy},
+ymajorgrids,
+ymin=0.5, ymax=1.01,
+ytick style={color=black},
+ytick={0.5,0.6,0.7,0.8,0.9,1,1.1}
+]
+\addplot [semithick, color0, mark=*, mark size=1.5, mark options={solid}]
+table {%
+1 0.939393939393939
+2 0.727272727272727
+3 0.621212121212121
+4 0.757575757575758
+5 0.893939393939394
+};
+%\addlegendentry{Task 1}
+\addplot [semithick, color1, mark=*, mark size=1.5, mark options={solid}]
+table {%
+2 0.930232558139535
+3 0.883720930232558
+4 0.883720930232558
+5 0.922480620155039
+};
+%\addlegendentry{Task 2}
+\addplot [semithick, color2, mark=*, mark size=1.5, mark options={solid}]
+table {%
+3 0.967032967032967
+4 0.967032967032967
+5 0.956043956043956
+};
+%\addlegendentry{Task 3}
+\addplot [semithick, color3, mark=*, mark size=1.5, mark options={solid}]
+table {%
+4 0.957894736842105
+5 0.926315789473684
+};
+%\addlegendentry{Task 4}
+\addplot [semithick, color4, mark=*, mark size=1.5, mark options={solid}]
+table {%
+5 0.974358974358974
+};
+%\addlegendentry{Task 5}
+

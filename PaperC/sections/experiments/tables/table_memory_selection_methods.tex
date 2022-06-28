@@ -3,7 +3,7 @@
 \footnotesize
 \centering
 \caption{
-Performance comparison with ACC between RS-MCTS (Ours), Random scheduling (Random), Equal Task Schedule (ETS), and Heuristic Scheduling (Heuristic) with various memory selection methods evaluated across all datasets. 
+Performance comparison with ACC between RS-MCTS (Ours), Random scheduling (Random), Equal Task Schedule (ETS), and Heuristic Scheduling (Heuristic) with various memory selection methods evaluated across all datasets. We provide the metrics for training on all seen task datasets jointly (Joint) as an upper bound, as well as include the results from a breadth-first search (BFS) with Uniform memory selection for the 5-task datasets. 
 %We use 'S' and 'P' as short for 'Split' and 'Permuted' for the datasets. 
 Replay memory sizes are $M=10$ and $M=100$ for the 5-task and 10/20-task datasets respectively. We report the mean and standard deviation averaged over 5 seeds. Ours performs better or on par with the baselines on most datasets and selection methods, where MoF yields the best results %performance 
 in general.
@@ -17,6 +17,9 @@ in general.
     \cmidrule(lr){3-5} \cmidrule(lr){6-8}
     {\bf Selection} & {\bf Method} & S-MNIST & S-FashionMNIST & S-notMNIST & P-MNIST & S-CIFAR-100 & S-miniImagenet \\
     \midrule 
+    \multicolumn{1}{c}{--} & Joint & 99.75 ($\pm$ 0.06) & 99.34 ($\pm$ 0.08) & 96.12 ($\pm$ 0.57) & 95.34 ($\pm$ 0.13) & 84.73 ($\pm$ 0.81) & 74.03 ($\pm$ 0.83) \\
+	Uniform & BFS & 98.28 ($\pm$ 0.49)  & 98.51 ($\pm$ 0.23) & 95.54 ($\pm$ 0.67) & -- & -- & -- \\
+	\midrule 
     \multirow{4}{*}{Uniform} & Random & 95.91 {\scriptsize ($\pm$ 1.56)}  & 95.82 {\scriptsize ($\pm$ 1.45)} & 92.39 {\scriptsize ($\pm$ 1.29)} & 72.44 {\scriptsize ($\pm$ 1.15)} & 53.99 {\scriptsize ($\pm$ 0.51)} & 48.08 {\scriptsize ($\pm$ 1.36)} \\
      & ETS  & 94.02 {\scriptsize ($\pm$ 4.25)} &  95.81 {\scriptsize ($\pm$ 3.53)} & 91.01 {\scriptsize ($\pm$ 1.39)} & 71.09 {\scriptsize ($\pm$ 2.31)} & 47.70 {\scriptsize ($\pm$ 2.16)} & 46.97 {\scriptsize ($\pm$ 1.24)} \\
      & Heuristic &  96.02 {\scriptsize ($\pm$ 2.32)} &  97.09 {\scriptsize ($\pm$ 0.62)} & 91.26 {\scriptsize ($\pm$ 3.99)} & {\bf 76.68} {\scriptsize ($\pm$ 2.13)} & {\bf 57.31} {\scriptsize ($\pm$ 1.21)} & 49.66 {\scriptsize ($\pm$ 1.10)} \\

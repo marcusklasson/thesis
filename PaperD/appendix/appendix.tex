@@ -1,45 +1,30 @@
 
-\section*{Appendix}
+\section*{Supplementary Material}
 
 This supplementary material is structured as follows:
 \begin{itemize}
-    \item Appendix \ref{paperD:app:experimental_settings}: Details of the experimental settings on the continual learning (CL) part, hyperparameter settings for the heuristic baselines, and hyperparameters for the Deep Q-Networks (DQNs). 
+    \item Appendix \ref{paperD:app:experimental_settings}: Details of the experimental settings on the CL and RL parts with hyperparameter settings for CL networks, DQN, and A2C. Moreover, we provide details on the heuristic scheduling baselines used in the experiments, as well as the ranking method used for assessing generalization capability. 
     
-    \item Appendix \ref{paperD:app:construction_of_the_action_space}: Details on the construction of the action space with task proportions. 
+    \item Appendix \ref{paperD:app:methodology}: Details on the methodology, such as construction of the action space and the training procedure of the policy with RL.
     
-    \item Appendix \ref{paperD:app:task_split_tables}: Tables over the task splits for Split FashionMNIST and Split CIFAR-10.  
+    \item Appendix \ref{paperD:app:task_split_tables}: Tables over the task splits in all test environments used in the experiments.  
+    
+    \item Appendix \ref{paperD:app:additional_experimental_results}: Additional figures and tables as part of the experimental results.  
 \end{itemize}
 
 \input{PaperD/appendix/experimental_settings}
 
-\input{PaperD/appendix/construction_of_the_action_space}
+\input{PaperD/appendix/additional_methodology}
+\clearpage
+%\input{appendix/construction_of_the_action_space}
 
-\newpage
-\input{PaperD/appendix/task_split_tables}
+%\input{appendix/dqn_hyperparameter_choices}
 
 %\newpage
-%\input{appendix/additional_experimental_results}
+%\input{appendix/task_split_tables}
 
-\begin{table}[h]
-%\small
-\centering
-%\caption{Avg Rank  }
-\label{tab:testing}
-\resizebox{\textwidth}{!}{
-\begin{tabular}{l c c c}
-\toprule
- & \multicolumn{2}{c}{{\bf New Task Order}} & {\bf New Dataset} \\
- \toprule 
- {\bf Method} & {\bf Split MNIST} & {\bf Split CIFAR-10} & {\bf Split FashionMNIST}\\
- \midrule
- Random     & 3.70 & 3.98 & 3.80\\
- ETS        & 4.38 & 3.74 & 4.60 \\
- Heur-Global Drop    & 4.16 & 3.84 & {\bf 2.56} \\
- Heur-Local Drop    & {\bf 2.80} & 3.28 & 4.12  \\
- Heur-Fixed    & 2.86 & 3.26 & 2.96 \\
- \midrule
-  DQN       & {\bf 3.10} & {\bf 2.90} & {\bf 2.96} \\
-\bottomrule
-\end{tabular}
-}
-\end{table}
+\input{PaperD/appendix/task_split_tables}
+\clearpage
+%\newpage
+\input{PaperD/appendix/additional_experimental_results}
+

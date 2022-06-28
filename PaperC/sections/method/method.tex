@@ -1,11 +1,10 @@
 
 \section{Method}\label{paperC:sec:method}
 
+In this section, we describe our new problem setting of CL where historical data are available while the processing time is limited when learning new tasks. 
+In Section \ref{paperC:sec:problem_setting} and \ref{paperC:sec:replay_scheduling_in_continual_learning}, we present the considered problem setting, as well as our idea of learning schedules over which tasks to replay at different time steps to mitigate catastrophic forgetting.
+We use MCTS~\citeC{C:coulom2006efficient} in an ideal CL environment that searches for good replay schedules to show the importance of replay scheduling in CL (Section \ref{paperC:sec:mcts_for_replay_scheduling}). 
 
-In this section, we describe our new problem setting in CL where historical data are available while the processing time is limited when learning new tasks. To this end, we present our method for learning replay schedules in CL where the idea is to learn schedules of which tasks the network should replay at different times. 
-%In this section, we describe our method for learning replay schedules in CL. The idea is to learn schedules of which tasks %memory examples 
-%the network should replay at different times. 
-We use Monte Carlo tree search (MCTS)~\citeC{C:coulom2006efficient} to learn a scheduling policy by encouraging searches for promising replay schedules based on the classification accuracy. 
 
 \input{PaperC/sections/method/problem_setting}
 
@@ -16,7 +15,7 @@ We use Monte Carlo tree search (MCTS)~\citeC{C:coulom2006efficient} to learn a s
 \setlength{\figheight}{.3\textheight}
 \input{PaperC/figures/rs_mcts_tree_example2}
 \vspace{-2mm}
-\caption{An exemplar tree of replay memory compositions from the proposed discretization method described in Section \ref{paperC:sec:replay_scheduling_in_continual_learning} for Split MNIST. The replay memories from one replay schedule are found by traversing from task 1-5 through the tree on the right hand side. The replay memory compositions have been structured according to the task where they can be used for replay. Note that the replay memory at task 1 is the empty set, i.e., $\gM = \emptyset$. Example images for each task are shown on the left.
+\caption{Tree-shaped action space of possible replay memory compositions with size $M=8$ at every task from the discretization method described in Section \ref{sec:replay_scheduling_in_continual_learning} for Split MNIST. A replay schedule is represented as a path traversal of different replay memory compositions from task 1 to task 5. 
 }
 \vspace{-3mm}
 \label{fig:replay_scheduling_mcts_tree_example}

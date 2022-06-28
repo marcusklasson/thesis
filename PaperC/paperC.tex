@@ -8,8 +8,9 @@
 \chaptermark{Replay Scheduling in Continual Learning}
 \vspace{-5mm}
 \begin{center}
-	\large{\textbf{Marcus Klasson$^{*}$, Hedvig Kjellström$^{*}$, Cheng Zhang$^{\dagger}$}} \\[2mm]
+	\large{\textbf{Marcus Klasson$^{*}$, Hedvig Kjellström$^{* \ddagger}$, Cheng Zhang$^{\dagger}$}} \\[2mm]
 	\small{$^{*}$KTH Royal Institute of Technology, Stockholm, Sweden} \\
+	\small{$^{\ddagger}$Silo AI} \\
 	\small{$^{\dagger}$Microsoft Research, Cambridge, United Kingdom} \\
 \end{center}
 
@@ -18,7 +19,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{abstract}
 	%\printinunitsof{in}\prntlen{\linewidth}
-	\noindent Replay-based continual learning has shown to be successful in mitigating catastrophic forgetting, where most works focus on improving the sample quality in the commonly small replay memory. However, in many real-world applications, replay memories would be limited by constraints on processing time rather than storage capacity as most organizations store all historical data in the cloud. Inspired by human learning, we demonstrate that scheduling over the time to replay is critical to the final performance with finite memory resources. To this end, we propose to learn the time to learn for a continual learning system, in which we learn schedules over which tasks to replay at different times. We use Monte Carlo tree search to illustrate this idea and show that our method can be combined with any replay-based method and memory selection technique. We perform extensive evaluation showing that learning replay schedules can significantly improve the performance compared to baselines without learned scheduling. Our results indicate that the learned schedules are also consistent with human learning insights.
+\noindent Replay-based continual learning have shown to be successful in mitigating catastrophic forgetting despite having limited access to historical data. However, storing historical data is cheap in many real-world applications, yet replaying all seen data would be prohibited due to processing time constraints. In such settings, we propose learning the time to learn for a continual learning system, in which we learn replay schedules over which tasks to replay at different time steps. To demonstrate the importance of learning the time to learn, we use Monte Carlo tree search in an ideal continual learning scenario to find the proper replay schedule. We perform extensive evaluations to show the benefits of replay scheduling in various memory settings and in combination with different replay methods. Moreover, the results indicate that the found schedules are consistent with human learning insights. Our findings opens up for new research directions that can bring current continual learning research closer to real-world needs. 
 \end{abstract}
 
 
@@ -30,12 +31,13 @@
 \input{PaperC/sections/conclusions}
 
 \begin{appendices}
+	\renewcommand{\thesection}{\Roman{section}}
 	\input{PaperC/appendix/appendix}
 \end{appendices}
 %\appendix
 %\renewcommand{\thesection}{\Roman{section}}
 %\input{PaperC/appendix/appendix}
-\clearpage
+%\clearpage
 
 %\renewcommand*{\bibname}{References}
 \bibliographystyleC{unsrt}

@@ -1,0 +1,103 @@
+
+\section{Additional Methodology}\label{paperD:app:methodology}
+
+We provide additional information on the construction of the action space with task proportions in Appendix \ref{paperD:app:action_space}, and outline the training procedure of the replay scheduling policy in Section \ref{paperD:app:rl_framework_algorithm}. 
+
+\subsection*{Discrete Action Space with Task Proportions}\label{paperD:app:action_space}
+
+We show the procedure for creating the discrete action space of task proportions in Algorithm \ref{alg:action_space_discretization_paperD} which was used in~\citeD{D:klasson2021learn}. At task $i$, we have $i-1$ historical tasks that we can choose from. We then generate all possible bin vectors $\vb_i = [b_1, \dots, b_{i}] \in \gB_i$ of size $i$ where each element are a task index $1, ..., i$. We sort all bin vectors by the order of task indices and only keep the unique bin vectors. For example, at $i=2$, the unique choices of vectors are $[1,1], [1,2], [2,2]$, where $[1,1]$ indicates that all samples in the replay memory should be from task 1, $[1,2]$ indicates that half memory is from task 1 and the other half are from task etc. The task proportions are then computed by counting the number of occurrences of each task index in $\vb_i$ and dividing by $i$, such that $\vp_i = \texttt{bincount}(\vb_i) / (i)$. From this specification, we have built a tree $\gT$ with different task proportions that can be selected at different time steps. We construct a replay schedule $S$ by traversing through $\gT$ and select a task proportion on every level to append to $S$. We can then evaluate the replay schedule $S$ by training a network on the CL task sequence and use $S$ to compose the replay memory to use for mitigating catastrophic forgetting at every task. 
+
+\begin{algorithm}[t]
+	\small
+	\caption{Discretization of action space with task proportions}
+	\label{alg:action_space_discretization_paperD}
+	\begin{algorithmic}[1]
+		\Require Number of tasks $T$
+		\State $\gT = ()$ \Comment{Initialize sequence for storing actions}
+		\For{$i = 1, \dots, T-1$}
+		\State $\gP_i = \{\}$ \Comment{Set for storing task proportions at $i$}
+		\State $\gB = \texttt{combinations}([1:i], i)$ \Comment{Get bin vectors of size $i$ with bins $1, ..., i$}
+		\State $\bar{\gB} = \texttt{unique}(\texttt{sort}(\gB))$ \Comment{Only keep unique bin vectors}
+		\For{$\vb_i \in \hat{\gB}$}
+		\State $\vp_i = \texttt{bincount}(\vb_i) / i$ \Comment{Calculate task proportion}
+		\State $\gP_i = \gP_i \cup \{ \vp_i \}$ \Comment{Add task proportion to set}
+		\EndFor
+		\State $\gT[i] = \gP_i$ \Comment{Add set of task proportions to action sequence}
+		\EndFor
+		\State \Return $\gT$ \Comment{Return action sequence as discrete action space}
+	\end{algorithmic}
+\end{algorithm}
+
+
+
+\subsection*{RL Framework Algorithm}\label{paperD:app:rl_framework_algorithm}
+%In this section, we outline the training procedure of the replay scheduling policy. 
+
+We provide pseudo-code for the RL-based framework for learning the replay scheduling policy with either DQN~\citeD{D:mnih2013playing} or A2C~\citeD{D:mnih2016asynchronous} in Algorithm \ref{alg:rl_framework_for_learning_replay_scheduling_policy}. The procedure collects experience from all training environments in $\gE^{(train)}$ at every time step $t$. The datasets and classifiers are specific for each environment $E_i \in \gE^{(train)}$. At $t=1$, we obtain the initial state $s_1^{(i)}$ by evaluating the classifier on the validation set $\gD_1^{(val)}$ after training the classifier on the task 1. Next, we get the replay memory for mitigating catastrophic forgetting when learning the next task $t+1$ by 1) taking action $a_t^{(i)}$ under policy $\pi_{\vtheta}$, 2) converting action $a_t^{(i)}$ into the task proportion $\vp_{t}$, and 3) sampling the replay memory $\gM_t$ from the historical datasets given the selected proportion. We then obtain the reward $r_t$ and the next state $s_{t+1}$ by evaluating the classifier on the validation sets $\gD_{1:t+1}^{(val)}$ after learning task $t+1$. The collected experience from each time step is stored in the experience buffer $\gB$ for both DQN and A2C. In $\textsc{UpdatePolicy}(\cdot)$, we outline the steps for updating the policy parameters $\vtheta$ with either DQN or A2C. 
+
+\begin{algorithm}[t]
+\footnotesize
+\caption{RL Framework for Learning Replay Scheduling Policy}
+\label{alg:rl_framework_for_learning_replay_scheduling_policy}
+\begin{algorithmic}[1]
+\Require $\gE^{(train)}$: Training environments, $\vtheta$: Policy parameters, $\gamma$: Discount factor
+\Require $\eta$: Learning rate, $n_{episodes}$: Number of episodes, $M$: Replay memory size
+\Require $n_{steps}$: Number of steps for A2C
+\State $\gB = \{\}$ \Comment{Initialize experience buffer}
+\For{$i = 1, \dots, n_{\text{episodes}}$}
+
+    %\State $s_1 \sim \mu$ \Comment{Get initial state}
+    \For{$t=1, \dots, T-1$}
+        
+        \For{$E_i \in \gE^{(train)}$}
+            \State $\gD_{1:t+1} = \textsc{GetDatasets}(E_i, t)$ \Comment{Get datasets from environment $E_i$}
+            \State $f_{\vphi}^{(i)} = \textsc{GetClassifier}(E_i)$ \Comment{Get classifier from environment $E_i$}
+            \If{$t==1$}
+                \State $\textsc{Train}(f_{\vphi}^{(i)}, \gD_{t}^{(train)}$ \Comment{Train classifier $f_{\vphi}^{(i)}$ on task 1}
+                \State $A_{1:t}^{(val)} = \textsc{Eval}(f_{\vphi}^{(i)}, \gD_{1:t}^{(val)})$ \Comment{Evaluate classifier $f_{\vphi}^{(i)}$ on task 1}
+                \State $s_{t}^{(i)} = A_{1:t}^{(val)} = [A_{1, 1}^{(val)}, 0, ..., 0]$ \Comment{Get initial state}
+            \EndIf 
+
+            \State $a_t^{(i)} \sim \pi_{\vtheta}(a, s_t^{(i)})$ \Comment{Take action under policy $\pi_{\vtheta}$}
+            \State $\vp_t = \textsc{GetTaskProportion}(a_t^{(i)})$ %\Comment{Get task proportion from action}
+            \State $\gM_t \sim \textsc{GetReplayMemory}(\gD_{1:t}^{(train)}, \vp_t, M)$ %\Comment{Sample replay memory from proportion}
+            \State $\textsc{Train}(f_{\vphi}^{(i)}, \gD_{t+1}^{(train)} \cup \gM_t)$ \Comment{Train classifier $f_{\vphi}^{(i)}$}
+            \State $A_{1:t+1}^{(val)} = \textsc{Eval}(f_{\vphi}^{(i)}, \gD_{1:t+1}^{(val)})$ \Comment{Evaluate classifier $f_{\vphi}^{(i)}$}
+            \State $s_{t+1}^{(i)} = A_{1:t+1}^{(val)} = [A_{t+1, 1}^{(val)}, ..., A_{t+1, t+1}^{(val)}, 0, ..., 0]$ \Comment{Get next state}
+            \State $r_{t}^{(i)} = \frac{1}{t+1}\sum_{j=1}^{t+1} A_{1:t+1}^{(val)}$ \Comment{Compute reward}
+            \State $\gB = \gB \cup \{(s_{t}^{(i)}, a_{t}^{(i)}, r_{t}^{(i)}, s_{t+1}^{(i)})\}$ \Comment{Store transition in buffer}
+            \If{time to update policy}
+                \State $\vtheta, \gB = \textsc{UpdatePolicy}(\vtheta, \gB, \gamma, \eta, n_{steps})$ \Comment{Update policy with experience}
+            \EndIf 
+        \EndFor
+\EndFor
+\EndFor 
+\State \Return $\vtheta$ \Comment{Return policy}
+
+\Statex
+	
+\Function{UpdatePolicy}{$\vtheta, \gB, \gamma, \eta, n_{steps}$}
+\If{DQN}
+    \State $(s_j, a_j, r_j, s_j') \sim \gB$ \Comment{Sample mini-batch from buffer}
+    \State $y_j = \begin{cases} r_j & \text{if $s_j'$ is terminal} \\
+                    r_j + \gamma \max_a Q_{\vtheta^{-}}(s_j', a) & \text{else}  \end{cases} $
+                    \Comment{Compute $y_j$ with target net $\vtheta^{-}$}
+    \State $\vtheta = \vtheta - \eta \nabla_{\vtheta}(y_j - Q_{\vtheta}(s_j, a_j))^2$ \Comment{Update $Q$-function}
+\ElsIf{A2C}
+    \State $s_t = \gB[n_{steps}]$ \Comment{Get last state in buffer}
+    \State $R = \begin{cases} 0 & \text{if $s_t$ is terminal} \\
+                    V_{\vtheta_v}(s_t) & \text{else}  \end{cases} $
+                    \Comment{Bootstrap from last state}
+    \For{$j = n_{steps}-1, ..., 0$}
+        \State $s_j, a_j, r_j = \gB[j]$ \Comment{Get state, action, and reward at step $j$}
+        \State $R = r_j + \gamma R$
+        \State $\vtheta = \vtheta - \eta \nabla_{\vtheta} \log \pi_{\vtheta}(a_j, s_j) (R - V_{\vtheta_v}(s_j))$ \Comment{Update policy}
+        \State $\vtheta_v = \vtheta_v - \eta \nabla_{\vtheta_v} (R - V_{\vtheta_v}(s_j))^2$ \Comment{Update value function}
+    \EndFor
+    \State $\gB = \{\}$ \Comment{Reset experience buffer}
+\EndIf 
+\State \Return $\vtheta, \gB$
+\EndFunction
+
+\end{algorithmic}
+\end{algorithm}
