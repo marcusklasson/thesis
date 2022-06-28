@@ -1,78 +1,274 @@
 
 \section{Experimental Settings}\label{paperD:app:experimental_settings}
 
-In this section, we provide more details on the experimental settings. 
+In this section, we describe the full details of the experimental settings used in this paper. We first provide details on hyperparameter settings for the CL and RL parts, including hyperparameters for DQN~\citeD{D:mnih2013playing, D:mnih2015human} and A2C~\citeD{D:mnih2016asynchronous}, followed by description of the heuristic baselines, and the ranking method for assesing the generalization capability of the learned policy.  
 
 
-\subsection{Hyperparameter Settings}
 
-\paragraph{Continual Learning Training.} We use a 2-layer MLP with 256 hidden units and ReLU activation for the MNIST, FashionMNIST, and notMNIST datasets. For CIFAR10, we use the ConvNet from~\citeD{D:vinyals2016matching} consisting of 4 blocks with 3$\times$3 convolution and 64 filters followed by 2$\times$2 max pooling before the classification layer. For all architectures, we use the Adam optimizer~\citeD{D:kingma2014adam} with learning rate $\eta = 0.0001$ with default hyperparameters $\beta_1=0.9$ and $\beta_2=0.999$. The training details for each dataset are given below:
-\begin{itemize}
-    \item MNIST: Batch size 128, 10 epochs/task
-    \item FashionMNIST: Batch size 128, 10 epochs/task
-    \item notMNIST: Batch size 128, 20 epochs/task
-    \item CIFAR10: Batch size 256, 20 epochs/task
+\vspace{-2mm}
+\paragraph{Datasets.}
+We generate CL environments with four datasets commonly used in the CL literature. 
+Split MNIST~\citeD{D:zenke2017continual} is a variant of the MNIST~\citeD{D:lecun1998gradient} dataset where the classes have been divided into 5 tasks incoming in the order 0/1, 2/3, 4/5, 6/7, and 8/9. Split FashionMNIST~\citeD{D:xiao2017fashion} is of similar size to MNIST and consists of grayscale images of different clothes, where the classes have been divided into the 5 tasks T-shirt/Trouser, Pullover/Dress, Coat/Sandals, Shirt/Sneaker, and Bag/Ankle boots. Similar to MNIST, Split notMNIST~\citeD{D:bulatov2011notMNIST} consists of 10 classes of the letters A-J with various fonts, where the classes are divided into the 5 tasks A/B, C/D, E/F, G/H, and I/J. We use training/test split provided by \citeD{D:ebrahimi2020adversarial} for Split notMNIST. 
+In Split CIFAR-10~\citeD{D:krizhevsky2009learning}, the 10 classes are divided into 5 tasks with 2 classes for each task. 
+
+\vspace{-2mm}
+\paragraph{CL Network Architectures.} We use a 2-layer MLP with 256 hidden units and ReLU activation for Split MNIST, Split FashionMNIST, and Split notMNIST. For Split CIFAR-10, we use the ConvNet architecture used in \citeD{D:adel2019continual, D:schwarz2018progress, D:vinyals2016matching}, which consists of four 3x3 convolutional blocks, i.e. convolutional layer followed by batch normalization~\citeD{D:ioffe2015batch}, with 64 filters, ReLU activations, and 2x2 Max-pooling. We use a multi-head output layer for each dataset and assume task labels are available at test time for selecting the correct output head related to the task. 
+
+\vspace{-2mm}
+\paragraph{CL Hyperparameters.} We train all networks with the Adam optimizer~\citeD{D:kingma2014adam} with learning rate $\eta = 0.001$ and hyperparameters $\beta_1 = 0.9$ and $\beta_2 = 0.999$. Note that the learning rate for Adam is not reset before training on a new task. Next, we give details on number of training epochs and batch sizes specific for each dataset:
+\begin{itemize}[topsep=1pt]
+    \item Split MNIST: 10 epochs/task, batch size 128.
+    \item Split FashionMNIST: 10 epochs/task, batch size 128.
+    \item Split notMNIST: 20 epochs/task, batch size 128.
+    \item Split CIFAR-100: 20 epochs/task, batch size 256.
 \end{itemize}
 
-\paragraph{Heuristic Baselines.} We performed a grid search for the threshold ratio constant $\tau$ used in the heuristic scheduling baselines Heuristic Global Drop (Heur-GD), Heuristic Local Drop (Heur-LD), and Heuristic Accuracy Threshold (Heur-AT). We used the search range $\tau \in [0.85, 0.999]$ for each baseline and selected the best parameter value based on the mean test set performance in the environments used for training for each experiment.
+\vspace{-2mm}
+\paragraph{Generating CL Environments.} We generate multiple CL environments with pre-set random seeds for initializing the network parameters $\vphi$ and shuffling the task order. The pre-set random seeds are in the range $0-49$, such that we have 50 environments for each dataset. We shuffle the task order by permuting the class order and then split the classes into 5 pairs (tasks) with 2 classes/pair. For environments with seed $0$, we keep the original task order in the dataset. 
+Taking a step at task $t$ in the CL environments involves training the CL network on the $t$-th dataset with a replay memory $\gM_t$ from the discrete action space described in Section \ref{paperD:app:action_space}. Therefore, to speed up the experiments with the RL algorithms, we run a breadth-first search (BFS) through the discrete action space and save the classification results for re-use during policy learning. Note that the action space has 1050 possible paths of replay schedules for the datasets with $T=5$ tasks, which makes the environment generation time-consuming. Hence, we only generate environments where the replay memory size $M=10$ have been used, and leave analysis of different memory sizes as future work. The CL environments that we used will be provided in the public code. 
 
-\begin{itemize}
-    \item Test on MNIST with new task splits, training with 10 MNIST environments
-    \begin{itemize}
-        \item {\bf Heur-GD:} Selected $\tau^{(best)} = 0.90$. %Search range $\tau \in [0.80, 0.999]$.
-        \item {\bf Heur-LD:} Selected $\tau^{(best)} = 0.95$. %Search range $\tau \in [0.80, 0.999]$.
-        \item {\bf Heur-AT:} Selected $\tau^{(best)} = 0.90$. %Search range $\tau \in [0.80, 0.999]$.
-    \end{itemize}
-    \item Test on CIFAR-10 with new task splits, training with 10 CIFAR-10 environments
-    \begin{itemize}
-        \item {\bf Heur-GD:} Selected $\tau^{(best)} = 0.96$. %Search range $\tau \in [0.80, 0.999]$.
-        \item {\bf Heur-LD:} Selected $\tau^{(best)} = 0.999$. %Search range $\tau \in [0.80, 0.999]$.
-        \item {\bf Heur-AT:} Selected $\tau^{(best)} = 0.91$. %Search range $\tau \in [0.80, 0.999]$.
-    \end{itemize}
-    %\item Mixed datasets (10 MNIST + 10 FashionMNIST)
-    %\begin{itemize}
-    %    \item {\bf Heuristic1:} Selected $\tau^{(best)} = 0.91$. Search range $\tau \in [0.80, 0.999]$.
-    %    \item {\bf Heuristic2:} Selected $\tau^{(best)} = 0.95$. Search range $\tau \in [0.80, 0.999]$.
-    %\end{itemize}
-    %\item Mixed datasets (5 MNIST + 5 FashionMNIST)
-    %\begin{itemize}
-    %    \item {\bf Heuristic1:} Selected $\tau^{(best)} = 0.99$. Search range $\tau \in [0.80, 0.999]$.
-    %    \item {\bf Heuristic2:} Selected $\tau^{(best)} = 0.95$. Search range $\tau \in [0.80, 0.999]$.
-    %\end{itemize}
-    \item Test on FashionMNIST, train on 5 MNIST + 5 notMNIST environments
-    \begin{itemize}
-        \item {\bf Heur-GD:} Selected $\tau^{(best)} = 0.99$. %Search range $\tau \in [0.85, 0.999]$.
-        \item {\bf Heur-LD:} Selected $\tau^{(best)} = 0.95$. %Search range $\tau \in [0.85, 0.999]$.
-        \item {\bf Heur-AT:} Selected $\tau^{(best)} = 0.93$. %Search range $\tau \in [0.80, 0.999]$.
-    \end{itemize}
-\end{itemize}
+\vspace{-2mm}
+\paragraph{Computational Cost.} 
+All experiments were performed on one NVIDIA GeForce RTW 2080Ti on an internal GPU cluster. Generating a CL environment for one seed with Split MNIST took on around 9.5 hours averaged over 10 runs of BFS. Similarly for Split CIFAR-10, generating one CL environment took on average 16.1 hours. Note that BFS runs 1050 iterations in total for all 5-task datasets. The wall clock time for ETS on Split MNIST was around 1.5 minutes. 
 
 
+\vspace{-2mm}
+\paragraph{DQN and A2C Architectures.}
+The input layer has size $T-1$ where each unit is inputting the task performances since the states are represented by the validation accuracies $s_t = [A_{t, 1}^{(val)}, ..., A_{t, t}^{(val)}, 0, ..., 0]$. The current task can therefore be determined by the number of non-zero state inputs. The output layer has 35 units representing the possible actions at $T=5$ with the discrete action space we have constructed in Section \ref{paperD:sec:replay_scheduling_in_continual_learning}. We use action masking on the output units to prevent the network from selection invalid actions for constructing the replay memory at the current task. The DQN is a 2-layer MLP with 512 hidden units and ReLU activations. For A2C, we use separate networks for parameterizing the policy and the value function, where both networks are 2-layer MLPs with 64 hidden units of Tanh activations. 
 
-\subsection{DQN Hyperparameter Choices}\label{app:dqn_hyperparameter_choices}
+\vspace{-2mm}
+\paragraph{DQN and A2C Hyperparameters.}
+We provide the hyperparameters for the both DQN and A2C in Table \ref{tab:dqn_hyperparameters_new_task_orders}-\ref{tab:a2c_hyperparameters_new_dataset}. Table \ref{tab:dqn_hyperparameters_new_task_orders} and \ref{tab:a2c_hyperparameters_new_task_orders} includes the hyperparameters on the New Task Order experiment for DQN and A2C respectively, while Table \ref{tab:dqn_hyperparameters_new_dataset} and \ref{tab:a2c_hyperparameters_new_dataset} includes the hyperparameters on the New Dataset experiment for DQN and A2C respectively. Regarding the training environments in Table \ref{tab:dqn_hyperparameters_new_dataset} and \ref{tab:a2c_hyperparameters_new_dataset}, we use two different datasets in the training environments to increase the diversity. When Spit notMNIST is for testing, half the amount of training environments are using Split MNIST and the other half uses Split FashionMNIST. For example, in Table \ref{tab:a2c_hyperparameters_new_dataset}, A2C uses 10 training environments which means that there are 5 Split MNIST environments and 5 Split FashionMNIST environments. Similarly, half the amount of training environments are using Split MNIST and the other half uses Split notMNIST when the testing environments uses Split FashionMNIST.   
+
+\vspace{-2mm}
+\paragraph{Implementations.} 
+The code for DQN was adapted from OpenAI baselines~\citeD{D:dhariwal2017baselines} and the PyTorch~\citeD{D:paszke2019pytorch} tutorial on DQN {\small \url{https://pytorch.org/tutorials/intermediate/reinforcement_q_learning.html}}. For A2C, we followed the implementations released by Kostrikov~\citeD{D:kostrikov2018pytorchrl} and Igl \etal~\citeD{D:igl2020transient}. We make the code publicly available upon acceptance. 
+
+%\clearpage
 
 \begin{table}[h]
-%\small
+\small
 \centering
-\caption{DQN hyperparameter choices used for generating the results in the experiments (Section \ref{paperD:sec:experiments}). The hyperparameters in the column foir Split FashionMNIST correspond to the values used when generalizing to this dataset when training on Split MNIST and Split notMNIST environments. The {\bf bold} numbers correspond to the ones used in the experimental results from a hyperparameter search.  }
-\label{tab:dqn_hyperparameter_choices}
-\resizebox{\textwidth}{!}{
+\caption{DQN hyperparameters for the experiments on {\bf New Task Orders} in Section \ref{paperD:sec:results_on_policy_generalization}.  
+}
+\label{tab:dqn_hyperparameters_new_task_orders}
+\resizebox{0.99\textwidth}{!}{
 \begin{tabular}{l c c c}
 \toprule
- {\bf Hyperparameters} & {\bf Split MNIST} & {\bf Split CIFAR-10} & {\bf Split FashionMNIST}\\
+ {\bf Hyperparameters} & {\bf Split MNIST} & {\bf Split FashionMNIST} & {\bf Split CIFAR-10} \\
  \midrule
- Double DQN     & True & True & True\\
- Learning Rate  & 0.0001 & 0.0001 & 0.0001 \\
+ Training Environments & 30 & 20 & 10 \\
+ Learning Rate  & 0.0001 & 0.0003 & 0.0003 \\
  Optimizer      & Adam & Adam & Adam \\
- Buffer Size    & [{\bf 1000}, 5000] & [1000, {\bf 5000}] & [{\bf 1000}, 5000]  \\
+ Buffer Size    & 10k & 10k & 10k  \\
  Target Update per step  & 500 & 500 & 500 \\
  Batch Size     & 32 & 32 & 32 \\
  Discount Factor $\gamma$ & 1.0 & 1.0 & 1.0 \\
- Exploration Start $\epsilon_{start}$ & 1 & 1 & 1 \\
- Exploration Final $\epsilon_{final}$ & [0.02, {\bf 0.05}] & [0.02, {\bf 0.05}] & [{\bf 0.02}, 0.05] \\
- Exploration Annealing (episodes) & 1250 & 1250 & 1250 \\
- Training Episodes & 5000 & 5000 & 5000 \\
+ Exploration Start $\epsilon_{start}$ & 1.0 & 1.0 & 1.0 \\
+ Exploration Final $\epsilon_{final}$ & 0.02 & 0.02 & 0.02 \\
+ Exploration Annealing (episodes) & 2.5k & 2.5k & 2.5k \\
+ Training Episodes & 10k & 10k & 10k \\
 \bottomrule
 \end{tabular}
 }
 \end{table}
+
+\begin{table}[h]
+\small
+\centering
+\caption{A2C hyperparameters for the experiments on {\bf New Task Orders} in Section \ref{paperD:sec:results_on_policy_generalization}.  
+}
+\label{tab:a2c_hyperparameters_new_task_orders}
+\begin{tabular}{l c c c}
+\toprule
+ {\bf Hyperparameters} & {\bf Split MNIST} & {\bf Split FashionMNIST} & {\bf Split CIFAR-10} \\
+ \midrule
+ Training Environments & 10 & 10 & 10 \\
+ Learning Rate  & 0.0001 & 0.0003 & 0.00003 \\
+ Optimizer      & RMSProp & RMSProp & RMSProp \\
+ Gradient Clipping & 0.5 & 0.5 & 0.5 \\
+ GAE parameter $\lambda$ & 0.95 & 0.95 & 0.95 \\
+ VF coefficient & 0.5 & 0.5 & 0.5 \\
+ Entropy coefficient & 0.01 & 0.01 & 0.01 \\
+ Number of steps $n_{steps}$ & 5 & 5 & 5 \\
+ Discount Factor $\gamma$ & 1.0 & 1.0 & 1.0 \\
+ Training Episodes & 100k & 100k & 100k \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\small
+\centering
+\caption{DQN hyperparameters for the experiments on {\bf New Dataset} in Section \ref{paperD:sec:results_on_policy_generalization}. Split notMNIST and Split FashionMNIST indicate the dataset used in the test environments. 
+}
+\label{tab:dqn_hyperparameters_new_dataset}
+\begin{tabular}{l c c}
+\toprule
+ {\bf Hyperparameters} & {\bf Split notMNIST} & {\bf Split FashionMNIST}  \\
+ \midrule
+ Training Environments & 30 & 30  \\
+ Learning Rate  & 0.0001 & 0.0001  \\
+ Optimizer      & Adam & Adam  \\
+ Buffer Size    & 10k & 10k   \\
+ Target Update per step  & 500 & 500  \\
+ Batch Size     & 32 & 32  \\
+ Discount Factor $\gamma$ & 1.0 & 1.0  \\
+ Exploration Start $\epsilon_{start}$ & 1.0 & 1.0 \\
+ Exploration Final $\epsilon_{final}$ & 0.02 & 0.02  \\
+ Exploration Annealing (episodes) & 2.5k & 2.5k  \\
+ Training Episodes & 10k & 10k  \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\small
+\centering
+\caption{A2C hyperparameters for the experiments on {\bf New Dataset} in Section \ref{paperD:sec:results_on_policy_generalization}. Split notMNIST and Split FashionMNIST indicate the dataset used in the test environments. 
+}
+\label{tab:a2c_hyperparameters_new_dataset}
+\begin{tabular}{l c c c}
+\toprule
+ {\bf Hyperparameters} & {\bf Split notMNIST} & {\bf Split FashionMNIST}  \\
+ \midrule
+ Training Environments & 10 & 10  \\
+ Learning Rate  & 0.0001 & 0.0003  \\
+ Optimizer      & RMSProp & RMSProp  \\
+ Gradient Clipping & 0.5 & 0.5  \\
+ GAE parameter $\lambda$ & 0.95 & 0.95  \\
+ VF coefficient & 0.5 & 0.5 \\
+ Entropy coefficient & 0.01 & 0.01  \\
+ Number of steps $n_{steps}$ & 5 & 5  \\
+ Discount Factor $\gamma$ & 1.0 & 1.0  \\
+ Training Episodes & 100k & 100k  \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+
+%\clearpage
+
+\subsection*{Heuristic Scheduling Baselines}\label{paperD:app:heuristic_scheduling_baselines}
+
+We implemented three heuristic scheduling baselines to compare against our proposed methods. These heuristics are based on the intuition of re-learning tasks when they have been forgotten. We keep a validation set for each task to determine whether any task should be replayed by comparing the validation accuracy against a hand-tuned threshold. If the validation accuracy is below the threshold, then the corresponding task is replayed. Let $A_{t, i}^{(val)}$ be the validation accuracy for task $t$ evaluated at time step $i$. The threshold is set differently in each of the baselines:
+\begin{itemize}[leftmargin=*, topsep=0pt]
+    \item {\bf Heuristic Global Drop (Heur-GD).} Heuristic policy that replays tasks  
+    with validation accuracy below a certain threshold proportional to the best achieved validation accuracy on the task. The best achieved validation accuracy for task $i$ is given by $A_{t, i}^{(best)} = \max\{(A_{1, i}^{(val)}, \dots, A_{t, i}^{(val)})\}$. Task $i$ is replayed if $A_{t, i}^{(val)} < \tau A_{t, i}^{(best)}$ where $\tau \in [0, 1]$ is a ratio representing the degree of how much the validation accuracy of a task is allowed to drop. 
+
+    \item {\bf Heuristic Local Drop (Heur-LD).} Heuristic policy that replays tasks with validation accuracy below a threshold proportional to the previous achieved validation accuracy on the task. Task $i$ is replayed if $A_{t, i}^{(val)} < \tau A_{t-1, i}^{(val)}$ where $tau$ again represents the degree of how much the validation accuracy of a task is allowed to drop. 
+
+    \item {\bf Heuristic Accuracy Threshold (Heur-AT).} Heuristic policy that replays tasks with validation accuracy below a fixed threshold. Task $i$ is replayed if if $A_{t, i}^{(val)} < \tau$ where $\tau \in [0, 1]$ represents the least tolerated accuracy before we need to replay the task. 
+    %The third heuristic has a fixed threshold $\tau \in [0, 1]$ on the accuracy such that task $i$ is replayed after learning task $t$ if $A_{t, i} < \tau$.
+\end{itemize}
+The replay memory is filled with $M/k$ samples from each selected task, where $k$ is the number of tasks that need to be replayed according to their decrease in validation accuracy. We skip replaying any tasks if no tasks are selected for replay, i.e., $k=0$. 
+
+
+\vspace{-1mm}
+\paragraph{Grid search for $\tau$.}
+We performed a grid search for the parameter $\tau$ for the three heuristic scheduling baselines for each experiment to compare against the learned replay scheduling policies. The validation set consists of 15\% of the training data and is identical to the validation set used for learning the RL policies. 
+We select the parameter based on ACC scores achieved in the same number of training environments used by either DQN or A2C. The search range we use is $\tau \in \{0.90, 0.95, 0.999\}$. In Table \ref{tab:grid_search_heuristics_multiple_cl_environments}, we show the selected parameter value of $\tau$ and the number of environments used for selecting the value for each method and experiment in Section \ref{sec:results_on_policy_generalization}. The same parameters are used to generate the results on the heuristics in Table \ref{tab:average_ranking_rl_experiment}. 
+
+\begin{table}[t]
+%\footnotesize%\small
+\centering
+\caption{The threshold parameter $\tau$ used in the heuristic scheudling baselines Heuristic Global Drop (Heur-GD), Heuristic Local Drop (Heur-LD), and Heuristic Accuracy Threshold (Heur-AT). The search range is $\tau \in \{0.90, 0.95, 0.999\}$ for all methods and we display the number of environments used for selecting the parameter used at test time.  
+}
+\label{tab:grid_search_heuristics_multiple_cl_environments}
+\resizebox{\textwidth}{!}{
+\begin{tabular}{l c c c c c c c c c c}
+\toprule %\toprule
+ & \multicolumn{6}{c}{ {\bf New Task Order}} & \multicolumn{4}{c}{ {\bf New Dataset}}\\
+ \cmidrule(lr){2-7}  \cmidrule(lr){8-11}
+ %{\bf Method} & S-MNIST & S-FashionMNIST & S-CIFAR-10 & S-notMNIST & S-FashionMNIST  \\
+  & \multicolumn{2}{c}{ {\bf S-MNIST}} & \multicolumn{2}{c}{ {\bf S-FashionMNIST}} & \multicolumn{2}{c}{ {\bf S-CIFAR-10}} & \multicolumn{2}{c}{ {\bf S-notMNIST}} & \multicolumn{2}{c}{ {\bf S-FashionMNIST}}   \\
+ \cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7} \cmidrule(lr){8-9} \cmidrule(lr){10-11} 
+ {\bf Method} & $\tau$ & \#Envs & $\tau$ & \#Envs & $\tau$ & \#Envs & $\tau$ & \#Envs & $\tau$ &  \#Envs \\
+ \midrule
+    Heur-GD & 0.9 & 10 & 0.95  & 20 & 0.9   & 10 & 0.9  & 10 & 0.9   & 10 \\ 
+    Heur-LD & 0.9 & 10 & 0.999 & 20 & 0.999 & 10 & 0.95 & 10 & 0.999 & 10 \\ 
+    Heur-AT & 0.9 & 10 & 0.999 & 20 & 0.9   & 10 & 0.9 & 10 & 0.95  & 10 \\
+    %Heur-GD        & \{0.90, 0.95, 0.999\} & \{0.90, 0.95, 0.999\} & \{0.90, 0.95, 0.999\} & \{0.90, 0.95, 0.999\} & \{0.90, 0.95, 0.999\} \\
+    %Heur-LD        & \{0.90, 0.95, 0.999\} & \{0.90, 0.95, 0.999\} & \{0.90, 0.95, 0.999\} & \{0.90, 0.95, 0.999\} & \{0.90, 0.95, 0.999\} \\
+    %Heur-AT        & \{0.90, 0.95, 0.999\} & \{0.90, 0.95, 0.999\} & \{0.90, 0.95, 0.999\} & \{0.90, 0.95, 0.999\} & \{0.90, 0.95, 0.999\} \\
+\bottomrule %\bottomrule
+\end{tabular}
+} 
+%\vspace{-3mm}
+\end{table}
+
+
+
+
+
+\subsection*{Assessing Generalization with Ranking Method}\label{paperD:app:ranking_method}
+
+We use a ranking method based on the CL performance in every test environment for performance comparison between the methods in Section \ref{paperD:sec:results_on_policy_generalization}. We use rankings because the performances can vary greatly between environments with different task orders and datasets. To measure the CL performance in the environments, we use the average test accuracy over all tasks after learning the final task, i.e.,
+\begin{align*}
+    \ACC = \frac{1}{T} \sum_{i=1}^{T} A_{T, i}^{(test)},
+\end{align*}
+where $A_{t, i}^{(test)}$ is the test accuracy of task $i$ after learning task $t$. Each method are ranked in descending order based on the ACC achieved in an environment. For example, assume that we want to compare the CL performance from using learned replay scheduling policies with DQN and A2C against a Random scheduling policy in one environment. The CL performances achieved for each method are given by
+\vspace{2mm}
+\begin{align*}
+    [\ACC_{\Random}, \ACC_{\DQN}, \ACC_{\text{A2C}}] = [90\%, 99\%, 95\%].
+\end{align*}
+
+We get the following ranking order between the methods based on their corresponding ACC:
+\vspace{2mm}
+\begin{align*}
+    \texttt{ranking}([\ACC_{\Random}, \ACC_{\DQN}, \ACC_{\text{A2C}}]) = [3, 1, 2],
+\end{align*} 
+
+where DQN is ranked in 1st place, A2C in 2nd, and Random in 3rd. When there are multiple environments for evaluation, we compute the average ranking across the ranking positions in every environment for each method to compare.
+
+The average ranking for DQN and A2C are computed over the seed for initializing the network parameters as well as the seed of the environment. Similarly, the Random baseline is affected by the seed setting the random selection of actions and the environment seed. However, the performance of the ETS and Heuristic baselines are affected by the seed of the environment as these policies are fixed. We use copied values of the performance in environments for the ETS and Heuristic baselines when we need to compare across different random seeds for Random, DQN, and A2C. We show an example of such ranking calculation for ETS, a Heuristic baseline, DQN, and A2C. Consider the following performances for one environment:
+\vspace{2mm}
+\begin{align*}
+\begin{bmatrix}
+\ACC_{\ETS}^{1} & \ACC_{\Heur}^{1} & \ACC_{\DQN}^{1} & \ACC_{\text{A2C}}^{1} \\[3pt] \ACC_{\ETS}^{2}  & \ACC_{\Heur}^{2} & \ACC_{\DQN}^{2} & \ACC_{\text{A2C}}^{2} 
+\end{bmatrix}  
+=
+\begin{bmatrix}
+90\% & 95\% & 95\% & 99\% \\[3pt]
+ * & * & 97\% & 98\%  
+\end{bmatrix}  ,
+\end{align*}
+
+where $*$ denotes a copy of the ACC  value in the first row. The subscript on ACC denotes the method and the superscript the seed used for initializing the policy network $\vtheta$. Therefore, we copy the values for ETS and Heur such that the $\ACC_{\DQN}^2$ for seed 2 can be compared against ETS and Heur. Note that there is a tie between $\ACC_{\Heur}^{1}$ and $\ACC_{\DQN}^{1}$ as they have ACC $95\%$. We handle ties by assigning tied methods the average of their ranks, such that the ranks for both seeds will be
+\vspace{2mm}
+\begin{align*}
+&
+\texttt{ranking}
+\left(
+\begin{bmatrix}
+\ACC_{\ETS}^{1} & \ACC_{\Heur}^{1} & \ACC_{\DQN}^{1} & \ACC_{\text{A2C}}^{1} \\[3pt] \ACC_{\ETS}^{2}  & \ACC_{\Heur}^{2} & \ACC_{\DQN}^{2} & \ACC_{\text{A2C}}^{2} 
+\end{bmatrix}, \texttt{axis=-1, keepdim=True}  \right) \\[3pt]
+= & 
+\texttt{ranking}
+\left(
+\begin{bmatrix}
+90\% & 95\% & 95\% & 99\% \\[3pt]
+90\% & 95\% & 97\% & 98\%  
+\end{bmatrix}, \texttt{axis=-1, keepdim=True}  \right) \\[3pt]
+= & 
+\begin{bmatrix}
+4 & 2.5 & 2.5 & 1 \\[3pt] 
+4 & 3 & 2 & 1 
+\end{bmatrix},
+\end{align*}
+
+where we inserted the copied values, such that $\ACC_{\ETS}^{1} = \ACC_{\ETS}^{2} = 90\%$ and $\ACC_{\Heur}^{1} = \ACC_{\Heur}^{2} = 95\%$. The mean ranking across the seeds thus becomes
+\vspace{2mm}
+\begin{align*}
+\texttt{mean}
+\left(
+\begin{bmatrix}
+4 & 2.5 & 2.5 & 1 \\[3pt] 
+4 & 3 & 2 & 1 
+\end{bmatrix}, \texttt{axis=0} \right)
+= 
+\begin{bmatrix} 4 & 2.75 & 2.25 & 1  \end{bmatrix} 
+\end{align*}
+
+where A2C comes in 1st place, DQN in 2nd, Heur. in 3rd, and ETS on 4th place. We average across seeds and environments to obtain the final ranking score for each method for comparison. 
+

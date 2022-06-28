@@ -7,13 +7,12 @@
 In the first experiments, we show that the replay schedules from RS-MCTS yield better performance than replaying an equal amount of samples per task. 
 The replay memory size is fixed to $M=10$ for Split MNIST, FashionMNIST, and notMNIST, and $M=100$ for Permuted MNIST, Split CIFAR-100, and Split miniImagenet. Uniform sampling is used as the memory selection method for all methods in this experiment.
 For the 5-task datasets, we provide the optimal replay schedule found from a breadth-first search (BFS) over all 1050 possible replay schedules in our action space (which corresponds to a tree with depth of 4) as an upper bound for RS-MCTS. As the search space grows fast with the number of tasks, BFS becomes computationally infeasible when we have 10 or more tasks.
-%For the 5-task datasets, we provide the optimal replay schedule found from a breadth-first search (BFS) over all possible replay schedules in our action space as an upper bound for RS-MCTS. 
-
-%As the search space grows fast with the number of tasks, it will even with only 5 continual learning tasks (which corresponds to a tree with depth of 4) yield a tree with 1050 leaf nodes. Thus, BFS becomes computationally infeasible when we have 10 or more tasks.
 
 
 Figure \ref{fig:mcts_best_rewards} shows the progress of ACC over %the MCTS
-iterations by RS-MCTS for all datasets. We also show the best ACC metrics for Random, ETS, Heuristic, and BFS (where appropriate) as straight lines. We observe that RS-MCTS outperforms Random and ETS successively with more iterations. Furthermore, RS-MCTS approaches the upper limit of BFS on the 5-task datasets. For Permuted MNIST and Split CIFAR-100, the Heuristic baseline and RS-MCTS perform on par after 50 iterations. This shows that Heuristic with careful tuning of the validation accuracy threshold can be a strong baseline when comparing replay scheduling methods. The top row of Table \ref{tab:results_memory_selection_methods} shows the ACC for each method for this experiment. We note that RS-MCTS outperforms ETS significantly on most datasets and performs on par with Heuristic. 
+iterations by RS-MCTS for all datasets. We also show the best ACC metrics for Random, ETS, Heuristic, and BFS (where appropriate) as straight lines. 
+Furthermore, we include the ACC achieved by training on all seen datasets jointly at every task (Joint) for the 5-task datasets.
+We observe that RS-MCTS outperforms Random and ETS successively with more iterations. Furthermore, RS-MCTS approaches the upper limit of BFS on the 5-task datasets. For Permuted MNIST and Split CIFAR-100, the Heuristic baseline and RS-MCTS perform on par after 50 iterations. This shows that Heuristic with careful tuning of the validation accuracy threshold can be a strong baseline when comparing replay scheduling methods. Table \ref{tab:results_memory_selection_methods} at the rows for Uniform selection shows the ACC for each method in this experiment. We note that RS-MCTS outperforms ETS significantly on most datasets and performs on par with Heuristic. 
 
 
 

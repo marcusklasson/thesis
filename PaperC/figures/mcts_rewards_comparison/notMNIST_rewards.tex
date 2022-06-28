@@ -17,10 +17,10 @@ y grid style={white!69.0196078431373!black},
 %ylabel={Best Reward},
 ymajorgrids,
 yminorgrids, 
-ymin=0.905, ymax=0.961,
+ymin=0.905, ymax=0.968,%0.961,
 ytick style={color=black},
-ytick={0.9, 0.91, 0.93, 0.95 },
-yticklabels={90, 91, 93, 95}
+ytick={0.9, 0.92, 0.94, 0.96, 0.98 },%{0.9, 0.91, 0.93, 0.95 },
+yticklabels={90, 92, 94, 96, 98 }%{90, 91, 93, 95}
 ]
 \addplot [line width=1.5pt, color0]
 table {%
@@ -150,3 +150,9 @@ table {%
 100 0.95536152
 };
 %\addlegendentry{BFS}
+\addplot [line width=1.5pt, color5]
+table {%
+	1 0.96119168
+	100 0.96119168
+};
+%\addlegendentry{Joint}

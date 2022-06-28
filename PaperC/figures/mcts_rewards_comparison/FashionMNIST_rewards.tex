@@ -16,7 +16,7 @@ xticklabels={-25,0,50,100,125},%xticklabels={-25,0,25,50,75,100,125},
 y grid style={white!69.0196078431373!black},
 %ylabel={Best Reward},
 ymajorgrids,
-ymin=0.955, ymax=0.991,
+ymin=0.955, ymax=1.0,%0.991,
 ytick style={color=black},
 ytick={0.92,0.94,0.96,0.97,0.98,0.99,1.0},
 yticklabels={92,94,96,97,98,99,100},
@@ -149,3 +149,9 @@ table {%
 100 0.98508
 };
 %\addlegendentry{BFS}
+\addplot [line width=1.5pt, color5]
+table {%
+	1 0.99336
+	100 0.99336
+};
+%\addlegendentry{Joint}

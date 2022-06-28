@@ -1,16 +1,153 @@
 
-\section{Task Split Tables}\label{paperD:app:task_split_tables}
+\section{Task Splits in Test Environments in Policy Generalization Experiments}\label{paperD:app:task_split_tables}
 
-Here, we provide tables of the task splits for Split FashionMNIST and split CIFAR-10. 
-We provide the random seeds that we used for shuffling the label splits as well as the class names for the datasets concerned. 
+Here, we provide the task splits of the test environments used in the policy generalization experiments in Section \ref{paperD:sec:results_on_policy_generalization}. We evaluated all methods using 10 test environments in all experiments.
+The test environments in the New Task Order experiments were generated with seeds 10-19. We show the task splits for the Split MNIST, Split FashionMNIST, and Split CIFAR-10 environments in Table \ref{tab:task_splits_mnist_new_task_orders_experiment}, \ref{tab:task_splits_fashionmnist_new_task_orders_experiment}, and \ref{tab:task_splits_cifar10_new_task_order_dataset} respectively. 
+The test environments in the New Dataset experiments were generated with seeds 0-9. We show the task splits for the Split notMNIST and Split FashionMNIST environments in Table \ref{tab:task_splits_notmnist_new_dataset_experiment} and \ref{tab:task_splits_fashionmnist_new_dataset_experiment} respectively. 
+
 
 
 \begin{table}[h]
     \centering
-    \caption{Split FashionMNIST task splits with their corresponding seed. }
+    \small
+    \caption{Task splits with their corresponding seed for test environments of Split MNIST datasets in the {\bf New Task Orders} experiments in Section \ref{paperD:sec:results_on_policy_generalization}. }
+    %\resizebox{1.0\textwidth}{!}{
+    \begin{tabular}{l c c c c c}
+        \toprule %\toprule
+         {\bf Seed} & {\bf Task 1} & {\bf Task 2} & {\bf Task 3} & {\bf Task 4} & {\bf Task 5} \\
+        \midrule
+        10 & 8, 2 & 5, 6 & 3, 1 & 0, 7 & 4, 9   \\ \midrule 
+        11 & 7, 8 & 2, 6 & 4, 5 & 1, 3 & 0, 9  \\ \midrule 
+        12 & 5, 8 & 7, 0 & 4, 9 & 3, 2 & 1, 6  \\ \midrule 
+        13 & 3, 5 & 6, 1 & 4, 7 & 8, 9 & 0, 2  \\ \midrule
+        14 & 3, 9 & 0, 5 & 4, 2 & 1, 7 & 6, 8  \\ \midrule 
+        15 & 2, 6 & 1, 3 & 7, 0 & 9, 4 & 5, 8   \\ \midrule
+        16 & 6, 2 & 0, 7 & 8, 4 & 3, 1 & 5, 9   \\ \midrule
+        17 & 7, 2 & 5, 3 & 4, 0 & 9, 8 & 6, 1  \\ \midrule 
+        18 & 7, 9 & 0, 4 & 2, 1 & 6, 5 & 8, 3  \\ \midrule
+        19 & 1, 7 & 9, 6 & 8, 4 & 3, 0 & 2, 5   \\
+        \bottomrule %\bottomrule
+    \end{tabular}
+    %}
+    \label{tab:task_splits_mnist_new_task_orders_experiment}
+\end{table}
+
+
+\begin{table}[h]
+    \centering
+    \small
+    \caption{Task splits with their corresponding seed for test environments of Split FashionMNIST datasets in the {\bf New Task Orders} experiments in Section \ref{paperD:sec:results_on_policy_generalization}. }
+    \resizebox{\textwidth}{!}{
+    \begin{tabular}{l c c c c c}
+        \toprule %\toprule
+         {\bf Seed} & {\bf Task 1} & {\bf Task 2} & {\bf Task 3} & {\bf Task 4} & {\bf Task 5} \\
+        \midrule
+        10 & Bag, Pullover & Sandal, Shirt & Dress, Trouser & T-shirt/top, Sneaker & Coat, Ankle boot   \\ \midrule 
+        11 & Sneaker, Bag & Pullover, Shirt & Coat, Sandal & Trouser, Dress & T-shirt/top, Ankle boot  \\ \midrule 
+        12 & Sandal, Bag & Sneaker, T-shirt/top & Coat, Ankle boot & Dress, Pullover & Trouser, Shirt  \\ \midrule 
+        13 & Dress, Sandal & Shirt, Trouser & Coat, Sneaker & Bag, Ankle boot & T-shirt/top, Pullover  \\ \midrule
+        14 & Dress, Ankle boot & T-shirt/top, Sandal & Coat, Pullover & Trouser, Sneaker & Shirt, Bag  \\ \midrule 
+        15 & Pullover, Shirt & Trouser, Dress & Sneaker, T-shirt/top & Ankle boot, Coat & Sandal, Bag   \\ \midrule
+        16 & Shirt, Pullover & T-shirt/top, Sneaker & Bag, Coat & Dress, Trouser & Sandal, Ankle boot   \\ \midrule
+        17 & Sneaker, Pullover & Sandal, Dress & Coat, T-shirt/top & Ankle boot, Bag & Shirt, Trouser  \\ \midrule 
+        18 & Sneaker, Ankle boot & T-shirt/top, Coat & Pullover, Trouser & Shirt, Sandal & Bag, Dress  \\ \midrule
+        19 & Trouser, Sneaker & Ankle boot, Shirt & Bag, Coat & Dress, T-shirt/top & Pullover, Sandal   \\
+        \bottomrule %\bottomrule
+    \end{tabular}
+    }
+    \label{tab:task_splits_fashionmnist_new_task_orders_experiment}
+\end{table}
+
+
+
+
+\begin{table}[h]
+    \centering
+    \caption{Task splits with their corresponding seed for test environments of Split CIFAR-10 datasets in the {\bf New Task Orders} experiments in Section \ref{paperD:sec:results_on_policy_generalization}. }
     \resizebox{1.0\textwidth}{!}{
     \begin{tabular}{l c c c c c}
-        \toprule \toprule
+        \toprule %\toprule
+         {\bf Seed} & {\bf Task 1} & {\bf Task 2} & {\bf Task 3} & {\bf Task 4} & {\bf Task 5} \\
+        \midrule
+        %0 & Airplane, Automobile & Bird, Cat & Deer, Dog & Frog, Horse & Ship, Truck \\
+        %\midrule
+        %1 & Bird, Truck & Frog, Deer & Airplane, Cat & Automobile, Horse & Ship, Dog \\
+        %\midrule
+        %2 & Deer, Automobile & Dog, Airplane & Horse, Bird & Cat, Frog & Truck, Ship \\
+        %\midrule
+        %3 & Dog, Deer & Automobile, Bird & Truck, Frog & Horse, Airplane & Cat, Ship \\ 
+        %\midrule
+        %4 & Cat, Ship & Deer, Truck & Bird, Frog & Airplane, Automobile & Dog, Horse \\ 
+        %\midrule
+        %5 & Truck, Dog & Bird, Deer & Horse, Automobile & Airplane, Ship & Frog, Cat \\ 
+        %\midrule
+        %6 & Ship, Automobile & Horse, Airplane & Frog, Dog & Bird, Deer & Cat, Truck \\ 
+        %\midrule
+        %7 & Ship, Dog & Airplane, Bird & Automobile, Truck & Horse, Cat & Frog, Deer \\ 
+        %\midrule
+        %8 & Ship, Frog & Truck, Airplane & Bird, Dog & Horse, Automobile & Deer, Cat \\ 
+        %\midrule
+        %9 & Ship, Deer & Horse, Bird & Automobile, Truck & Cat, Airplane & Frog, Dog \\ 
+        %\midrule
+        10 & Ship, Bird & Dog, Frog & Cat, Automobile & Airplane, Horse & Deer, Truck \\ 
+        \midrule
+        11 & Horse, Ship & Bird, Frog & Deer, Dog & Automobile, Cat & Airplane, Truck \\ 
+        \midrule
+        12 & Dog, Ship & Horse, Airplane & Deer, Truck & Cat, Bird & Automobile, Frog \\ 
+        \midrule
+        13 & Cat, Dog & Frog, Automobile & Deer, Horse & Ship, Truck & Airplane, Bird \\ 
+        \midrule
+        14 & Cat, Truck & Airplane,  Dog & Deer, Bird & Automobile, Horse & Frog, Ship \\
+        \midrule
+        15 & Bird, Frog & Automobile, Cat & Horse, Airplane & Truck, Deer & Dog, Ship \\ 
+        \midrule
+        16 & Frog, Bird & Airplane, Horse & Ship, Deer & Cat, Automobile & Dog, Truck \\ 
+        \midrule
+        17 & Horse, Bird & Dog, Cat & Deer, Airplane & Truck, Ship & Frog, Automobile \\ 
+        \midrule
+        18 & Horse, Truck & Airplane, Deer & Bird, Automobile & Frog, Dog & Ship, Cat  \\
+        \midrule
+        19 & Automobile, Horse & Truck, Frog & Ship, Deer & Cat, Airplane & Bird, Dog  \\
+        \bottomrule %\bottomrule
+    \end{tabular}
+    }
+    \label{tab:task_splits_cifar10_new_task_order_dataset}
+\end{table}
+
+
+
+
+\begin{table}[h]
+    \centering
+    \small
+    \caption{Task splits with their corresponding seed for test environments of Split notMNIST datasets in the {\bf New Dataset} experiments in Section \ref{paperD:sec:results_on_policy_generalization}. }
+    %\resizebox{1.0\textwidth}{!}{
+    \begin{tabular}{l c c c c c}
+        \toprule %\toprule
+         {\bf Seed} & {\bf Task 1} & {\bf Task 2} & {\bf Task 3} & {\bf Task 4} & {\bf Task 5} \\
+        \midrule
+        0 & A, B & C, D & E, F & G, H & I, J  \\ \midrule 
+        1 & C, J & G, E & A, D & B, H & I, F  \\ \midrule 
+        2 & E, B & F, A & H, C & D, G & J, I  \\ \midrule 
+        3 & F, E & B, C & J, G & H, A & D, I  \\ \midrule
+        4 & D, I & E, J & C, G & A, B & F, H  \\ \midrule 
+        5 & J, F & C, E & H, B & A, I & G, D  \\ \midrule
+        6 & I, B & H, A & G, F & C, E & D, J  \\ \midrule
+        7 & I, F & A, C & B, J & H, D & G, E  \\ \midrule 
+        8 & I, G & J, A & C, F & H, B & E, D  \\ \midrule
+        9 & I, E & H, C & B, J & D, A & G, F  \\
+        \bottomrule %\bottomrule
+    \end{tabular}
+    %}
+    \label{tab:task_splits_notmnist_new_dataset_experiment}
+\end{table}
+
+\begin{table}[h]
+    \centering
+    \caption{Task splits with their corresponding seed for test environments of Split FashionMNIST datasets in the {\bf New Dataset} experiments in Section \ref{paperD:sec:results_on_policy_generalization}. }
+    \resizebox{1.0\textwidth}{!}{
+    \begin{tabular}{l c c c c c}
+        \toprule %\toprule
          {\bf Seed} & {\bf Task 1} & {\bf Task 2} & {\bf Task 3} & {\bf Task 4} & {\bf Task 5} \\
         \midrule
         0 & T-shirt/top, Trouser & Pullover, Dress & Coat, Sandal & Shirt, Sneaker & Bag, Ankle boot \\ \midrule 
@@ -23,64 +160,8 @@ We provide the random seeds that we used for shuffling the label splits as well 
         7 & Bag, Sandal & T-shirt/top, Pullover & Trouser, Ankle boot & Sneaker, Dress & Shirt, Coat \\ \midrule 
         8 & Bag, Shirt & Ankle boot, T-shirt/top & Pullover, Sandal & Sneaker, Trouser & Coat, Dress \\ \midrule
         9 & Bag, Coat & Sneaker, Pullover & Trouser, Ankle boot & Dress, T-shirt/top & Shirt, Sandal \\
-        \bottomrule \bottomrule
+        \bottomrule %\bottomrule
     \end{tabular}
     }
-    \label{tab:label_splits_fashionmnist}
+    \label{tab:task_splits_fashionmnist_new_dataset_experiment}
 \end{table}
-
-
-
-\begin{table}[h]
-    \centering
-    \caption{Split CIFAR-10 task splits with their corresponding seed. }
-    \resizebox{1.0\textwidth}{!}{
-    \begin{tabular}{l c c c c c}
-        \toprule \toprule
-         {\bf Seed} & {\bf Task 1} & {\bf Task 2} & {\bf Task 3} & {\bf Task 4} & {\bf Task 5} \\
-        \midrule
-        0 & Airplane, Automobile & Bird, Cat & Deer, Dog & Frog, Horse & Ship, Truck \\
-        \midrule
-        1 & Bird, Truck & Frog, Deer & Airplane, Cat & Automobile, Horse & Ship, Dog \\
-        \midrule
-        2 & Deer, Automobile & Dog, Airplane & Horse, Bird & Cat, Frog & Truck, Ship \\
-        \midrule
-        3 & Dog, Deer & Automobile, Bird & Truck, Frog & Horse, Airplane & Cat, Ship \\ 
-        \midrule
-        4 & Cat, Ship & Deer, Truck & Bird, Frog & Airplane, Automobile & Dog, Horse \\ 
-        \midrule
-        5 & Truck, Dog & Bird, Deer & Horse, Automobile & Airplane, Ship & Frog, Cat \\ 
-        \midrule
-        6 & Ship, Automobile & Horse, Airplane & Frog, Dog & Bird, Deer & Cat, Truck \\ 
-        \midrule
-        7 & Ship, Dog & Airplane, Bird & Automobile, Truck & Horse, Cat & Frog, Deer \\ 
-        \midrule
-        8 & Ship, Frog & Truck, Airplane & Bird, Dog & Horse, Automobile & Deer, Cat \\ 
-        \midrule
-        9 & Ship, Deer & Horse, Bird & Automobile, Truck & Cat, Airplane & Frog, Dog \\ 
-        \midrule
-        10 & Ship, Bird & Dog, Frog & Cat, Automobile & Airplane, Horse & Deer, Truck \\ 
-        \midrule
-        11 & Horse, Ship & Bird, Frog & Deer, Dog & Automobile, Cat & Airplane, Truck \\ 
-        \midrule
-        12 & Dog, Ship & Horse, Airplane & Deer, Truck & Cat, Bird & Automobile, Frog \\ 
-        \midrule
-        13 & Cat, Dog & Frog, Automobile & Deer, Horse & Ship, Truck & Airplane, Bird \\ 
-        \midrule
-        14 & Cat, Truck & Airplane,  Dog & Deer, Bird & Automobile, Horse & Frog, Ship \\ 
-        \midrule
-        15 & Bird, Frog & Automobile, Cat & Horse, Airplane & Truck, Deer & Dog, Ship \\ 
-        \midrule
-        16 & Frog, Bird & Airplane, Horse & Ship, Deer & Cat, Automobile & Dog, Truck \\ 
-        \midrule
-        17 & Horse, Bird & Dog, Cat & Deer, Airplane & Truck, Ship & Frog, Automobile \\ 
-        \midrule
-        18 & Horse, Truck & Airplane, Deer & Bird, Automobile & Frog, Dog & Ship, Cat  \\ 
-        \midrule
-        19 & Automobile, Horse & Truck, Frog & Ship, Deer & Cat, Airplane & Bird, Dog  \\
-        \bottomrule \bottomrule
-    \end{tabular}
-    }
-    \label{tab:label_splits_cifar10}
-\end{table}
-
