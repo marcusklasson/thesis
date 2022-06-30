@@ -1,6 +1,20 @@
 \begin{abstract}
-	
-\noindent In recent years, computer vision-based assistive systems have enabled visually impaired people to use automatic visual recognition on their mobile phones. 
+
+\noindent In recent years, computer vision-based assistive technologies have enabled visually impaired people to use automatic visual recognition on their mobile phones. 
+These systems should be capable of recognizing objects on fine-grained levels to provide the user with accurate predictions. Additionally, the user should have the option to update the system continuously to recognize new objects of interest. 
+However, there are several challenges that need to be tackled to enable such features with assistive vision systems in real and highly-varying environments. 
+For instance, fine-grained image recognition usually requires large amounts of labeled data to be robust. %, and
+Moreover, image classifiers struggle with retaining performance of previously learned abilities when they are adapted %adapting 
+to new tasks. 
+This thesis is divided into two parts where we address these challenges. 
+First, we focus on the application of using assistive vision systems for grocery shopping, where items are naturally structured based on fine-grained details.  
+We demonstrate how image classifiers can be trained with a combination of natural images and web-scraped information about the groceries to obtain more accurate classification performance compared to only using natural images for training. 
+Thereafter, we bring forward a new approach for continual learning called replay scheduling, where we select which tasks to replay at different times to improve memory retention. 
+Furthermore, we propose a novel framework for learning replay scheduling policies that can generalize to new continual learning scenarios for mitigating the catastrophic forgetting effect in image classifiers. 
+This thesis provides insights on practical challenges that need to be addressed to enhance the usefulness of computer vision for assisting the visually impaired in real-world scenarios. 
+
+\begin{comment}
+\noindent In recent years, computer vision-based assistive technologies have enabled visually impaired people to use automatic visual recognition on their mobile phones. 
 These systems should be capable of recognizing objects on fine-grained levels to provide the user with accurate predictions. Additionally, the user should have the option to update the system continuously to recognize new objects of interest.  %Moreover, a valuable feature would be if they could be updated to recognize new object classes. 
 However, there are several challenges that need to be tackled to enable such features with assistive vision systems in real and highly-varying environments. 
 For instance, fine-grained image recognition usually requires large amounts of labeled data to be robust, and image classifiers struggle with retaining performance of previously learned abilities when adapting to new tasks. 
@@ -11,6 +25,8 @@ Secondly, we bring forward a new approach for continual learning called replay s
 Furthermore, we propose a novel framework for learning replay scheduling policies that can generalize to new continual learning scenarios for mitigating the catastrophic forgetting effect in image classifiers. 
 This %To summarize, this 
 thesis provides insights on practical challenges that need to be addressed to enhance the usefulness of computer vision for assisting the visually impaired in real-world scenarios. 
+\end{comment}
+
 
 
 %To address these challenges, 
