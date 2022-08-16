@@ -141,7 +141,7 @@ This design choice enables each filter to extract important features at any posi
 	\resizebox{0.39\textwidth}{!}{
 		\input{Chapter2/tikz/rnn}
 	}
-	\captionsetup{width=.9\linewidth}
+	\captionsetup{width=.95\linewidth}
 	\caption{Graphical representation of RNN.}
 	\vspace{-3mm}
 	\label{fig:rnn}
@@ -162,7 +162,7 @@ Similar to CNNs, RNNs apply parameter sharing across time steps to enable extrac
 	\resizebox{0.39\textwidth}{!}{
 		\input{Chapter2/tikz/autoencoder}
 	}
-	\captionsetup{width=.9\linewidth}
+	\captionsetup{width=.95\linewidth}
 	\caption{Illustration of an autoencoder network.}
 	\label{fig:autoencoder}
 	\vspace{-3mm}
@@ -171,18 +171,32 @@ A common network architecture for learning latent representations of high-dimens
 
 
 
+\begin{comment}
 
 \begin{figure}[t]
 	\centering
 	\resizebox{0.6\textwidth}{!}{
 		\input{Chapter2/tikz/multimodal_autoencoder}
 	}
-	\caption{Illustration of multimodal autoencoder network for learning joint representation $\vz$ from the different but related data types $\vx$ and $\vy$. 
+	\caption{Illustration of multimodal autoencoder network for learning joint representation $\vz$ from the different but related data types $\vx$ and $\vy$. The joint representation $\vz$ is obtained by combining the intermediate representations $\vh_{\vx}$ and $\vh_{\vy}$. %Illustration of multimodal autoencoder network for learning joint representation $\vz$ from the different but related data types $\vx$ and $\vy$. 
+	}
+	\label{fig:multimodal_autoencoder1}
+	\vspace{-3mm}
+\end{figure}
+\end{comment}
+
+\begin{wrapfigure}{r}{0.59\textwidth}
+	\centering
+	%\vspace{-3mm}
+	\resizebox{0.54\textwidth}{!}{
+		\input{Chapter2/tikz/multimodal_autoencoder}
+	}
+	\captionsetup{width=.95\linewidth}
+	\caption{Illustration of a multimodal autoencoder network for learning a joint representation $\vz$ from the different but related data types $\vx$ and $\vy$. The joint representation $\vz$ is obtained by combining the intermediate representations $\vh_{\vx}$ and $\vh_{\vy}$.
 	}
 	\label{fig:multimodal_autoencoder}
 	\vspace{-3mm}
-\end{figure}
-
+\end{wrapfigure}
 \paragraph{Multimodal Autoencoders.} Autoencoders can easily be extended to handling multiple types of data. The goal here is usually to learn one joint latent representation for capturing correspondences between the data types~\cite{baltruvsaitis2018multimodal}. Consider the multimodal dataset $\gD = \{(\vx_i, \vy_i)\}_{i=1}^{N}$ where $\vx$ and $\vy$ originate from two different data views (real-world images, web images) or modalities (visual signals, text descriptions) that share some high-level information. For example, $\vx$ could be an image of a living room and $\vy$ is a text sentence describing the appearance of the room, where objects are located etc. 
 Figure \ref{fig:multimodal_autoencoder} shows an illustration of the network architecture. The input $\vx$ and $\vy$ have two separate encoders, $g_{\vphi_{\vx}}(\vx)$ and $g_{\vphi_{\vy}}(\vy)$, that extracts the intermediate latent representations $\vh_{\vx}$ and $\vh_{\vy}$ respectively. The intermediate representations are then combined into the joint latent representation $\vz$, often through some element-wise operation (addition, multiplication) or concatenation. The joint multimodal representation $\vz$ is then passed through two separate decoder networks, $f_{\vtheta_{\vx}}(\vz)$ and $f_{\vtheta_{\vy}}(\vz)$, for predicting the original input data separately. 
 Combining different modalities, such as image and video, natural language, and audio signals, with autoencoders for learning more rich representations of data has been studied frequently the last decade~\cite{owens2018audio, ngiam2011multimodal, silberer2014learning, lee2020making} [Add REFs]. One advantage is that the network architecture can be trained in an trained end-to-end fashion to be used for both learning representations and making predictions of the used data types.
