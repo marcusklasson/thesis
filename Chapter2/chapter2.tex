@@ -199,7 +199,9 @@ A common network architecture for learning latent representations of high-dimens
 \end{wrapfigure}
 \paragraph{Multimodal Autoencoders.} Autoencoders can easily be extended to handling multiple types of data. The goal here is usually to learn one joint latent representation for capturing correspondences between the data types~\cite{baltruvsaitis2018multimodal}. Consider the multimodal dataset $\gD = \{(\vx_i, \vy_i)\}_{i=1}^{N}$ where $\vx$ and $\vy$ originate from two different data views (real-world images, web images) or modalities (visual signals, text descriptions) that share some high-level information. For example, $\vx$ could be an image of a living room and $\vy$ is a text sentence describing the appearance of the room, where objects are located etc. 
 Figure \ref{fig:multimodal_autoencoder} shows an illustration of the network architecture. The input $\vx$ and $\vy$ have two separate encoders, $g_{\vphi_{\vx}}(\vx)$ and $g_{\vphi_{\vy}}(\vy)$, that extracts the intermediate latent representations $\vh_{\vx}$ and $\vh_{\vy}$ respectively. The intermediate representations are then combined into the joint latent representation $\vz$, often through some element-wise operation (addition, multiplication) or concatenation. The joint multimodal representation $\vz$ is then passed through two separate decoder networks, $f_{\vtheta_{\vx}}(\vz)$ and $f_{\vtheta_{\vy}}(\vz)$, for predicting the original input data separately. 
-Combining different modalities, such as image and video, natural language, and audio signals, with autoencoders for learning more rich representations of data has been studied frequently the last decade~\cite{owens2018audio, ngiam2011multimodal, silberer2014learning, lee2020making} [Add REFs]. One advantage is that the network architecture can be trained in an trained end-to-end fashion to be used for both learning representations and making predictions of the used data types.
+Combining different modalities, such as images, natural language, and audio signals, with autoencoders for learning more rich representations of data has been studied frequently the last decade~\cite{baltruvsaitis2018multimodal,ngiam2011multimodal,wang2015deep,vedantam2017generative,wu2018multimodal,owens2018audio}
+%Combining different modalities, such as image and video, natural language, and audio signals, with autoencoders for learning more rich representations of data has been studied frequently the last decade~\cite{owens2018audio, ngiam2011multimodal, silberer2014learning, lee2020making} [Add REFs]. 
+One advantage is that the network architecture can be trained in an trained end-to-end fashion to be used for both learning representations and making predictions of the used data types.
 However, a major challenge is how to handle scenarios where some data types could be missing. An option here is to learn a joint representation by using a single encoder for the data type that is available at both training and test phases that is used for predicting each data type~\cite{ngiam2011multimodal}. 
 %We can also  handle missing modalities for the encoders which enables cross-modal data generation between the modalities.
 
@@ -220,7 +222,9 @@ However, a major challenge is how to handle scenarios where some data types coul
 \subsubsection{Variational Autoencoders}\label{sec:variational_autoencoders}
 
 In this section, we give an overview of the variational autoencoder (VAE)~\cite{kingma2013auto, kingma2019introduction} that we apply for representation learning in Paper \ref{paperA} and \ref{paperB}. 
-The VAE is a deep generative model that enable learns representations of data by combining ideas from deep learning and probabilistic graphical models~\cite{koller2009probabilistic}. As commonly done in unsupervised learning, VAEs aim to learn a parametric distribution $p_{\vtheta}(\vx)$ that approximates the data distribution $p_{data}$ given a dataset $\gD = {\vx_i}_{i=1}^{N}$ where $\vx_i \sim p_{data}$. We frame the problem of learning $p_{\vtheta}(\vx)$ by expressing the distribution using latent variables $\vz$, such that
+The VAE is a deep generative model that enable learning of data representations %learns representations of data 
+by combining ideas from deep learning and probabilistic graphical models~\cite{koller2009probabilistic}. 
+As commonly done in unsupervised learning, VAEs aim to learn a parametric distribution $p_{\vtheta}(\vx)$ that approximates the data distribution $p_{data}$ given a dataset $\gD = \{\vx^{(i)}\}_{i=1}^{N}$ where $\vx^{(i)} \sim p_{data}$. We frame the problem of learning $p_{\vtheta}(\vx)$ by expressing the distribution using latent variables $\vz$, such that
 \begin{equation}\label{eq:px}
 	p_{\vtheta}(\vx) = \int p_{\vtheta}(\vx, \vz) \, d\vz = \int p_{\vtheta}(\vx | \vz) p(\vz) \, d\vz,
 \end{equation}
@@ -231,16 +235,21 @@ where the joint distribution $p_{\vtheta}(\vx, \vz)$ is the model which factoriz
 \end{enumerate}
 
 \vspace{-3mm}
-\paragraph{The Evidence Lower Bound.} The problem with learning the parameters $\vtheta$ that maximizes $p_{\vtheta}(\vx)$ is that the integral in Equation \ref{eq:px} is almost always intractable due to the immense amount of values for $\vz$ that needs to be evaluated. Instead, we can compute $p_{\vtheta}(\vx)$ using Bayes' rule 
+\paragraph{The Evidence Lower Bound.} The problem with learning the parameters $\vtheta$ that maximize $p_{\vtheta}(\vx)$ is that the integral in Equation \ref{eq:px} is almost always intractable due to the 
+prohibitively large number of values for $\vz$ that need to be evaluated. %immense amount of values for $\vz$ that needs to be evaluated. 
+Instead, we can reformulate the problem using Bayes' rule %compute $p_{\vtheta}(\vx)$ using Bayes' rule 
 \begin{equation}
 	p_{\vtheta}(\vx) = \frac{p_{\vtheta}(\vx | \vz) p(\vz) }{p_{\vtheta}(\vz | \vx)},
 \end{equation}
-where the posterior distribution $p_{\vtheta}(\vz | \vx)$ can facilitate faster learning by inferring the latents $\vz$ from data $\vx$. However, we need to resort to approximating the posterior using variational inference~\cite{zhang2018advances,blei2017variational} since the posterior needs access to $p_{\vtheta}(\vx)$ to be computed. We then define an approximate posterior distribution $q_{\vphi}(\vz | \vx)$ parameterized by $\vphi$ to infer the latents $\vz$. This allows us to a form lower bound on the marginal log-likelihood $\log p_{\vtheta}(\vx)$ given by 
+where $p_{\vtheta}(\vz | \vx)$ is the posterior of $\vz$ given $\vx$ and $p_{\vtheta}(\vx | \vz)$ is the likelihood of $\vx$ given $\vz$. The posterior needs to be approximated using variational inference~\cite{zhang2018advances,blei2017variational}, where we define an approximate posterior distribution $q_{\vphi}(\vz | \vx)$ parameterized by $\vphi$ to infer the latents $\vz$.  
+%where the posterior distribution $p_{\vtheta}(\vz | \vx)$ can facilitate faster learning by inferring the latents $\vz$ from data $\vx$. However, we need to resort to approximating the posterior using variational inference~\cite{zhang2018advances,blei2017variational} since the posterior needs access to $p_{\vtheta}(\vx)$ to be computed. We then define an approximate posterior distribution $q_{\vphi}(\vz | \vx)$ parameterized by $\vphi$ to infer the latents $\vz$. 
+This allows us to form a lower bound on the marginal log-likelihood $\log p_{\vtheta}(\vx)$ given by 
 \begin{align}\label{eq:elbo}
 	\log p_{\vtheta}(\vx) \geq \E_{z \sim q_{\vphi}(\vz | \vx)}[\log p_{\vtheta}(\vx | \vz)] - \KL[q_{\vphi}(\vz |  \vx) \, || \, p(\vz)] ,
 \end{align}
-which is called the evidence lower bound (ELBO). The expected value over $\log p_{\vtheta}(\vx | \vz)$ can be estimated with Monte Carlo sampling using $q_{\vphi}(\vz | \vx)$, and the Kullback-Leibler (KL) divergence between $q_{\vphi}(\vz |  \vx)$ and $p(\vz)$ can be computed analytically depending on how we choose these distributions. Commonly, the approximate posterior is selected to be Gaussian distribution $q_{\vphi}(\vz | \vx) = \gN(\vz; \vmu_{\vphi}(\vx), \text{diag}(\vsigma_{\vphi}(\vx)))$ where the parameters $\vphi$ are used for computing the mean $\vmu_{\vphi}(\vx)$ and standard deviation $\vsigma_{\vphi}(\vx)$ of the approximate posterior given $\vx$, and $\text{diag}(\cdot)$ is for constraining the covariance matrix to be a diagonal matrix. The prior distribution is also selected to be a zero-mean, standard Gaussian distribution $p(\vz) = \gN(\vz; \mathbf{0}, \mathbf{I})$ where $\mathbf{I}$ is the identity matrix. 
+which is called the evidence lower bound (ELBO). The expected value over $\log p_{\vtheta}(\vx | \vz)$ can be estimated with Monte Carlo sampling using $q_{\vphi}(\vz | \vx)$, and the Kullback-Leibler (KL) divergence between $q_{\vphi}(\vz |  \vx)$ and $p(\vz)$ can be computed analytically depending on how we choose these distributions. Commonly, the approximate posterior is selected to be a Gaussian distribution $q_{\vphi}(\vz | \vx) = \gN(\vz; \vmu_{\vphi}(\vx), \text{diag}(\vsigma_{\vphi}(\vx)))$ where the parameters $\vphi$ are used for computing the mean $\vmu_{\vphi}(\vx)$ and standard deviation $\vsigma_{\vphi}(\vx)$ of the approximate posterior given $\vx$, and $\text{diag}(\cdot)$ is for constraining the covariance matrix to be a diagonal matrix. The prior distribution is also selected to be a zero-mean, standard Gaussian distribution $p(\vz) = \gN(\vz; \mathbf{0}, \mathbf{I})$ where $\mathbf{I}$ is the identity matrix. 
 
+\begin{comment}
 \begin{figure}[t]
 	\centering
 	\resizebox{0.6\textwidth}{!}{
@@ -248,11 +257,26 @@ which is called the evidence lower bound (ELBO). The expected value over $\log p
 	}
 	\caption{Illustration of a VAE. 
 	}
-	\label{fig:vae}
+	\label{fig:vae1}
 	\vspace{-3mm}
-\end{figure}
+\end{figure}	
+\end{comment}
+
 
 \vspace{-3mm}
+\begin{wrapfigure}{r}{0.48\textwidth}
+	\centering
+	\vspace{-2mm}
+	\resizebox{0.45\textwidth}{!}{
+		\input{Chapter2/tikz/vae}
+	}
+	\vspace{-2mm}
+	\captionsetup{width=.95\linewidth}
+	\caption{Illustration of a variational autoencoder with the reparameterization trick equation.  
+	}
+	\label{fig:vae}
+	\vspace{-3mm}
+\end{wrapfigure}
 \paragraph{Network Architecture.} The VAE architecture resembles a standard autoencoder where the encoder and decoder networks are probabilistic in the sense that they output parameters of probability distributions. In contrast to autoencoders that learn latent representations $\vz$ that minimizes the reconstruction error on the data, VAEs learns an approximate posterior $q_{\vphi}(\vz | \vx)$ that maximizes the likelihood of $p_{\vtheta}(\vx)$. Similar to autoencoders, we can extract latent representations of the data with the probabilistic encoder. However, VAEs can also estimate the likelihood of unseen data points under the learned model, as well as generate new data by decoding latents sampled from the prior. 
 Figure \ref{fig:vae} shows an illustration of a VAE architecture. The encoder represents the approximate posterior $q_{\vphi}(\vz | \vx)$ which outputs the mean $\vmu_{\vphi}(\vx)$ and standard deviation $\vsigma_{\vphi}(\vx)$ of a Gaussian distribution over $\vz$, which is the standard choice for $q_{\vphi}$~\cite{kingma2013auto}. The latent vector is sampled using the "reparametrization trick"~\cite{rezende2014stochastic, kingma2013auto} by computing 
 \begin{equation}
@@ -261,7 +285,8 @@ Figure \ref{fig:vae} shows an illustration of a VAE architecture. The encoder re
 where $\odot$ denotes element-wise multiplication. The reparametrization enables computing gradients of the expectation $\E_{z \sim q_{\vphi}(\vz | \vx)}[\log p_{\vtheta}(\vx | \vz)]$ in Equation \ref{eq:elbo} with the backpropagation algorithm. The decoder represents the likelihood $p_{\vtheta}(\vx | \vz)$ that can be used to generate data $\vx$ from sampled latents $\vz$, where the distributional form depends on the data type of $\vx$. 
 
 \vspace{3mm}
-VAEs have been used in various applications for modeling images, text, and audio data [Add REFs]. Furthermore, they have been extended to modeling data from different modalities due to their capability of handling missing modalities to enable cross-modal data generation~\cite{wang2016deep, wu2018multimodal, shi2019variational, vedantam2017generative, suzuki2016joint}. In Paper \ref{paperA} and \ref{paperB}, we employ Variational Canonical Correlation Analysis (VCCA)~\cite{wang2016deep} for learning joint representations of natural images and web-scraped information of grocery items to facilitate learning image classifiers. 
+VAEs have been used in various applications for modeling images, text, and audio data~\cite{gregor2015draw, mansimov2015generating, pu2016variational, razavi2019generating, chung2015recurrent, serban2017hierarchical, li2018disentangled}.
+ Furthermore, they have been extended to modeling data from different modalities due to their capability of handling missing modalities to enable cross-modal data generation~\cite{wang2016deep, wu2018multimodal, shi2019variational, vedantam2017generative, suzuki2016joint}. In Paper \ref{paperA} and \ref{paperB}, we employ Variational Canonical Correlation Analysis (VCCA)~\cite{wang2016deep} for learning joint representations of natural images and web-scraped information of grocery items to facilitate learning image classifiers. 
 
 
 
