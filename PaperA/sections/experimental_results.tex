@@ -32,6 +32,7 @@ We experiment with three different pretrained CNN architectures, namely AlexNet 
         \hline
     \end{tabular} }
     \label{tab:results-fine-grained}
+    \vspace{-3mm}
 \end{table}
 
 \begin{comment}
@@ -90,13 +91,13 @@ We experiment with three different pretrained CNN architectures, namely AlexNet 
 
 The following setups were used in the experiments: 
 
-\vspace{-2mm}
+\vspace{-3mm}
 \paragraph{Setup 1.} Train an SVM on extracted off-the-shelf features from a pretrained CNN, which is denoted as SVM in the results. We also fine-tune the CNN by replacing the final layer with a new softmax layer and denote these results as Fine-tune. We denote training an SVM on extracted finetuned feature vectors as SVM-ft.
 
-\vspace{-2mm}
+\vspace{-3mm}
 \paragraph{Setup 2.} Extract feature vectors with a pretrained CNN of the natural images and learn a latent representation $\mathbf{z}$ with a VAE. Then the data is encoded into the latent space and we train an SVM with these latent representations, which used for classification. We denote the results as VAE+SVM when using off-the-shelf feature vectors, whereas using the fine-tuned feature vectors are denoted as VAE+SVM-ft. In all experiments with the VAE, we used the architecture from \citeA{paperA:sohn2015conditionalvae}, i.e. the latent layer having 200 hidden units and both encoder and decoder consisting of two FC layers with 1,000 hidden units each.
 
-\vspace{-2mm}
+\vspace{-3mm}
 \paragraph{Setup 3.} Each natural image is paired with its corresponding iconic image. We train VAE-CCA similarly as the VAE, but instead, we learn a joint latent representation that is used to reconstruct the extracted feature vectors $\mathbf{x}$ and the iconic images $\mathbf{y}$. The classification is performed with the same steps as in Setup 2 and denotes the results similarly with VAE-CCA+SVM and VAE-CCA+SVM-ft. Our VAE-CCA model takes the feature vectors $\mathbf{x}$ as input and encodes them into a latent layer with 200 hidden units. The encoder and the feature vector decoder uses the same architecture, i.e. two FC layers with 512 hidden units, whereas the iconic image decoder uses the DCGAN \citeA{paperA:radford2015unsupervised} architecture.
 
 Figure \ref{fig:classification-methods} displays the three experimental setups described above. We report both fine-grained and coarse-grained classification results with an SVM in Table \ref{tab:results-fine-grained} and \ref{tab:results-coarse-grained} respectively. In Table \ref{tab:results-finetuned-cnn}, we report the fine-grained classification results from fine-tuned CNNs.
@@ -154,90 +155,92 @@ The VAE and VAE-CCA models are trained for 50 epochs with Adam \citeA{paperA:kin
 				\hline %\Xhline{3\arrayrulewidth}
 		\end{tabular} }
 	}
+	\vspace{-3mm}
 \end{table}
 
 \subsection{Results}
 
 \begin{figure}[t]
 	\centering
-	\begin{subfigure}[b]{0.18\textwidth}
+	\begin{subfigure}[b]{0.14\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{PaperA/decoded-image-figure/Royal-Gala-Apple_003.jpg}
 		%\vspace{-7mm}
 		\caption{}
 		\label{subfig:royal-gala-natural}
-	\end{subfigure} ~
-	\begin{subfigure}[b]{0.18\textwidth}
+	\end{subfigure} %~
+	\begin{subfigure}[b]{0.14\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{PaperA/decoded-image-figure/densenet_nov11/Royal-Gala-Apple_decoded.png}
 		%\vspace{-7mm}
 		\caption{}
 		\label{subfig:royal-gala-decoded}
-	\end{subfigure} ~~~
-	\begin{subfigure}[b]{0.18\textwidth}
+	\end{subfigure} %~
+	\begin{subfigure}[b]{0.14\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{PaperA/decoded-image-figure/Mushroom-Brown-Cap_027.jpg}
 		%\vspace{-7mm}
 		\caption{}
 		\label{subfig:brown-cap-natural}
-	\end{subfigure} ~
-	\begin{subfigure}[b]{0.18\textwidth}
+	\end{subfigure} %~
+	\begin{subfigure}[b]{0.14\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{PaperA/decoded-image-figure/densenet_nov11/Mushroom-Brown-Cap_decoded.png}
 		%\vspace{-7mm}
 		\caption{}
 		\label{subfig:brown-cap-decoded}
-	\end{subfigure} \\[1mm]
-	\begin{subfigure}[b]{0.18\textwidth}
+	\end{subfigure} %~
+	\begin{subfigure}[b]{0.14\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{PaperA/decoded-image-figure/Oatly-Natural-Yoghurt_007.jpg}
 		%\vspace{-7mm}
 		\caption{}
 		\label{subfig:oatgurt-natural}
-	\end{subfigure} ~
-	\begin{subfigure}[b]{0.18\textwidth}
+	\end{subfigure} %~
+	\begin{subfigure}[b]{0.14\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{PaperA/decoded-image-figure/densenet_nov11/Oatly-Natural-Yoghurt_decoded.png}
 		%\vspace{-7mm}
 		\caption{}
 		\label{subfig:oatgurt-decoded}
-	\end{subfigure} ~~~
-	\begin{subfigure}[b]{0.18\textwidth}
+	\end{subfigure} 
+	\\[1mm] 
+	\begin{subfigure}[b]{0.14\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{PaperA/decoded-image-figure/Orange_056.jpg}
 		%\vspace{-7mm}
 		\caption{}
 		\label{subfig:orange-natural}
-	\end{subfigure} ~
-	\begin{subfigure}[b]{0.18\textwidth}
+	\end{subfigure} %~
+	\begin{subfigure}[b]{0.14\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{PaperA/decoded-image-figure/densenet_nov11/Orange_decoded.png}
 		%\vspace{-7mm}
 		\caption{}
 		\label{subfig:orange-decoded}
-	\end{subfigure} \\[1mm]
-	\begin{subfigure}[b]{0.18\textwidth}
+	\end{subfigure} % ~~~
+	\begin{subfigure}[b]{0.14\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{PaperA/decoded-image-figure/Yellow-Onion_030.jpg}
 		%\vspace{-7mm}
 		\caption{}
 		\label{subfig:onion-natural}
-	\end{subfigure} ~
-	\begin{subfigure}[b]{0.18\textwidth}
+	\end{subfigure} %~
+	\begin{subfigure}[b]{0.14\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{PaperA/decoded-image-figure/densenet_nov11/Yellow-Onion_decoded.png}
 		%\vspace{-7mm}
 		\caption{}
 		\label{subfig:onion-decoded}
-	\end{subfigure} ~~~
-	\begin{subfigure}[b]{0.18\textwidth}
+	\end{subfigure} %~~~
+	\begin{subfigure}[b]{0.14\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{PaperA/decoded-image-figure/Arla-Natural-Yoghurt_014.jpg}
 		%\vspace{-7mm}
 		\caption{}
 		\label{subfig:yogurt-natural}
-	\end{subfigure} ~
-	\begin{subfigure}[b]{0.18\textwidth}
+	\end{subfigure} %~
+	\begin{subfigure}[b]{0.14\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{PaperA/decoded-image-figure/densenet_nov11/Arla-Natural-Yoghurt_decoded.png}
 		%\vspace{-7mm}
@@ -250,29 +253,12 @@ The VAE and VAE-CCA models are trained for 50 epochs with Adam \citeA{paperA:kin
 	We show the natural image and corresponding decoded iconic image next to each other. The classes for all images are (a, b) Royal Gala Apple, (c, d) Brown Cap Mushroom, (e, f) Oatly Oatgurt, (g, h) Orange, (i, j) Onion, and (k, l) Arla Natural Yogurt.
 	%Examples of natural images in the test set that have been decoded into product iconic images by the iconic image decoder. This result is obtained with the fine-tuned DenseNet-169 features, which corresponds to VAE-CCA+SVM-ft in Table \ref{tab:results-fine-grained}. 
 	%Subfigures (a), (c), (e), (g), (i) and (k) show the example input image from the test set, and Subfigures (b), (d), (f), (h), (j) and (l) show the decoded iconic image from the decoder $p_{\boldsymbol{\theta^{(2)}}}(\mathbf{y}\,|\,\mathbf{z})$ using VAE-CCA model as in Figure \ref{subfig:vae-cca}.
-} 
+	} 
 	\label{fig:decoded-images}
+	\vspace{-3mm}
 \end{figure}
 
-\begin{comment}
-	
-\begin{figure}[t]
-\centering
-\subfigure[Royal Gala]{\label{subfig:royal-gala-natural}\includegraphics[width=0.33\columnwidth]{PaperA/decoded-image-figure/Royal-Gala-Apple_003.jpg}}~
-\subfigure[Decoded Royal Gala]{\label{subfig:royal-gala-decoded}\includegraphics[width=0.33\columnwidth]{PaperA/decoded-image-figure/densenet_nov11/Royal-Gala-Apple_decoded.png}}~
-\subfigure[Brown Cap]{\label{subfig:brown-cap-natural}\includegraphics[width=0.33\columnwidth]{PaperA/decoded-image-figure/Mushroom-Brown-Cap_027.jpg}}~
-\subfigure[Decoded\,Brown\,Cap]{\label{subfig:brown-cap-decoded}\includegraphics[width=0.33\columnwidth]{PaperA/decoded-image-figure/densenet_nov11/Mushroom-Brown-Cap_decoded.png}}~
-\subfigure[Oatgurt]{\label{subfig:oatgurt-natural}\includegraphics[width=0.33\columnwidth]{PaperA/decoded-image-figure/Oatly-Natural-Yoghurt_007.jpg}}~
-\subfigure[Decoded Oatgurt]{\label{subfig:oatgurt-decoded}\includegraphics[width=0.33\columnwidth]{PaperA/decoded-image-figure/densenet_nov11/Oatly-Natural-Yoghurt_decoded.png}}~ \\
-\subfigure[Orange]{\label{subfig:orange-natural}\includegraphics[width=0.33\columnwidth]{PaperA/decoded-image-figure/Orange_056.jpg}}~
-\subfigure[Decoded Orange]{\label{subfig:orange-decoded}\includegraphics[width=0.33\columnwidth]{PaperA/decoded-image-figure/densenet_nov11/Orange_decoded.png}}~
-\subfigure[Onion]{\label{subfig:onion-natural}\includegraphics[width=0.33\columnwidth]{PaperA/decoded-image-figure/Yellow-Onion_030.jpg}}~
-\subfigure[Decoded Onion]{\label{subfig:onion-decoded}\includegraphics[width=0.33\columnwidth]{PaperA/decoded-image-figure/densenet_nov11/Yellow-Onion_decoded.png}}~
-\subfigure[Yogurt]{\label{subfig:yogurt-natural}\includegraphics[width=0.33\columnwidth]{PaperA/decoded-image-figure/Arla-Natural-Yoghurt_014.jpg}}~
-\subfigure[Decoded Yogurt]{\label{subfig:yogurt-decoded}\includegraphics[width=0.33\columnwidth]{PaperA/decoded-image-figure/densenet_nov11/Arla-Natural-Yoghurt_decoded.png}}~
-\caption{ Examples of natural images in the test set that have been decoded into product iconic images by the iconic image decoder. This result is obtained with the fine-tuned DenseNet-169 features, which corresponds to VAE-CCA+SVM-ft in Table \ref{tab:results-fine-grained}. Subfigures (a), (c), (e), (g), (i) and (k) show the example input image from the test set, and Subfigures (b), (d), (f), (h), (j) and (l) show the decoded iconic image from the decoder $p_{\boldsymbol{\theta^{(2)}}}(\mathbf{y}\,|\,\mathbf{z})$ using VAE-CCA model as in Figure \ref{subfig:vae-cca}.} \label{fig:decoded-images}
-\end{figure}
-\end{comment}
+
 
 The fine-grained classification results for all methods using an SVM as classifier are shown in Table \ref{tab:results-fine-grained}. We also provide coarse-grained classification results for some of the methods in Table \ref{tab:results-coarse-grained} to demonstrate the possibility of hierarchical evaluation that our labeling of the data provides (see Figure \ref{fig:examples}). The accuracies in the coarse-grained classification are naturally higher than the accuracies in the corresponding columns in Table \ref{tab:results-fine-grained}. Table \ref{tab:results-finetuned-cnn} shows fine-grained classification accuracies from a softmax classifier in the fine-tuned CNNs. We note that fine-tuning the networks gives consistently better results than training an SVM on off-the-shelf features (see Table \ref{tab:results-fine-grained}).
 
