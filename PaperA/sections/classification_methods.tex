@@ -37,28 +37,27 @@ In the following method, we describe how to make use of the iconic images while 
 		\centering
 		\includegraphics[width=\textwidth]{PaperA/figures/cnn.pdf}
 		%\vspace{-7mm}
-		\caption{}
+		\caption{CNN}
 		\label{subfig:cnn}
 	\end{subfigure} ~
 	\begin{subfigure}[b]{0.6\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{PaperA/figures/cnn+vae.pdf}
 		%\vspace{-7mm}
-		\caption{}
+		\caption{VAE}
 		\label{subfig:cnn+vae}
 	\end{subfigure} \\
 	\begin{subfigure}[b]{0.7\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{PaperA/figures/vae-cca.pdf}
 		%\vspace{-7mm}
-		\caption{}
+		\caption{VAE-CCA}
 		\label{subfig:vae-cca}
 	\end{subfigure}
-	%\subfigure[CNN]{\label{subfig:cnn}\includegraphics[width=0.35\textwidth]{PaperA/figures/cnn.pdf}} 
-	%\subfigure[VAE]{\label{subfig:cnn+vae}\includegraphics[width=0.6\textwidth]{PaperA/figures/cnn+vae.pdf}}
-	%\subfigure[VAE-CCA]{\label{subfig:vae-cca}\includegraphics[width=0.7\textwidth]{PaperA/figures/vae-cca.pdf}}
+	\vspace{-2mm}
 	\caption{The architectures for the classification methods described in Section \ref{paperA:sec:classification_methods}. In this paper, we use either a pretrained AlexNet, VGG16 or DenseNet-169 as the CNN feature extractor, but it may be replaced with any CNN architecture. Note that the pretrained CNN can be fine-tuned. The encoder and decoder of the VAE in \ref{subfig:cnn+vae} consist of two fully-connected layers. VAE-CCA in \ref{subfig:vae-cca} uses the DCGAN architecture as an iconic image decoder and the same encoder and feature vector decoder as the VAE.   }
 	\label{fig:classification-methods}
+	\vspace{-3mm}
 \end{figure}
 
 \vspace{-3mm}
