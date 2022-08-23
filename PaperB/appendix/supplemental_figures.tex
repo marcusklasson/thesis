@@ -1,217 +1,143 @@
 
 
-\section*{Supplemental Figures}
+\section{Supplemental Figures}
 \label{paperB:supp:supplemental_figures}
 
+
+\begin{figure}[h!]
+	\centering
+	\resizebox{0.8\textwidth}{!}{
+		\begin{minipage}[t]{\textwidth}
+			%\centering
+			\begin{subfigure}[t]{0.21\textwidth}
+				\centering
+				\input{PaperB/appendix/figures/tikz_figures/vae_x}
+				%\includegraphics[width=\textwidth]{PaperB/appendix/figures/tikz_figures/vae_x}
+				\caption{VAE$_{x}$}
+				\label{fig:tikz_vae_x}
+			\end{subfigure} \hspace{2mm}
+			\begin{subfigure}[t]{0.21\textwidth}
+				\centering
+				\input{PaperB/appendix/figures/tikz_figures/vae_xy}
+				%\includegraphics[width=\textwidth]{PaperB/appendix/figures/tikz_figures/vae_x}
+				\caption{VCCA$_{x y}$}
+				\label{fig:tikz_vcca_xy}
+			\end{subfigure} \hspace{2mm}
+			\begin{subfigure}[t]{0.21\textwidth}
+				\centering
+				\input{PaperB/appendix/figures/tikz_figures/vcca_xi}
+				%\includegraphics[width=\textwidth]{PaperB/appendix/figures/tikz_figures/vae_x}
+				\caption{VCCA$_{x i}$}
+				\label{fig:tikz_vcca_xi}
+			\end{subfigure} \hspace{2mm}
+			\begin{subfigure}[t]{0.21\textwidth}
+				\centering
+				\input{PaperB/appendix/figures/tikz_figures/vcca_xiy}
+				%\includegraphics[width=\textwidth]{PaperB/appendix/figures/tikz_figures/vae_x}
+				\caption{VCCA$_{x i y}$}
+				\label{fig:tikz_vcca_xiy}
+			\end{subfigure} 
+			\\[3mm]
+			\begin{subfigure}[t]{0.20\textwidth}
+				\centering
+				\input{PaperB/appendix/figures/tikz_figures/vcca_xw}
+				\caption{VCCA$_{x w}$}
+				\label{fig:tikz_vcca_xw}
+			\end{subfigure} \hspace{2mm}
+			\begin{subfigure}[t]{0.20\textwidth}
+				\centering
+				\input{PaperB/appendix/figures/tikz_figures/vcca_xwy}
+				%\includegraphics[width=\textwidth]{PaperB/appendix/figures/tikz_figures/vae_x}
+				\caption{VCCA$_{x w y}$}
+				\label{fig:tikz_vcca_xwy}
+			\end{subfigure} \hspace{2mm}
+			\begin{subfigure}[t]{0.20\textwidth}
+				\centering
+				\input{PaperB/appendix/figures/tikz_figures/vcca_xiw}
+				%\includegraphics[width=\textwidth]{PaperB/appendix/figures/tikz_figures/vae_x}
+				\caption{VCCA$_{x i w}$}
+				\label{fig:tikz_vcca_xiw}
+			\end{subfigure} \hspace{2mm}
+			\begin{subfigure}[t]{0.20\textwidth}
+				\centering
+				\input{PaperB/appendix/figures/tikz_figures/vcca_xiwy}
+				%\includegraphics[width=\textwidth]{PaperB/appendix/figures/tikz_figures/vae_x}
+				\caption{VCCA$_{x i w y}$}
+				\label{fig:tikz_vcca_xiwy}
+			\end{subfigure}
+			\\[3mm]
+			\begin{subfigure}[t]{0.21\textwidth}
+				\centering
+				\input{PaperB/appendix/figures/tikz_figures/vcca_private_xi}
+				\caption{VCCA-private$_{x i}$}
+				\label{fig:tikz_vcca_private_xi}
+			\end{subfigure} \hspace{2mm}
+			\begin{subfigure}[t]{0.21\textwidth}
+				\centering
+				\input{PaperB/appendix/figures/tikz_figures/vcca_private_xiy}
+				%\includegraphics[width=\textwidth]{PaperB/appendix/figures/tikz_figures/vae_x}
+				\caption{VCCA-private$_{x i y}$}
+				\label{fig:tikz_vcca_private_xiy}
+			\end{subfigure} \hspace{2mm}
+			\begin{subfigure}[t]{0.21\textwidth}
+				\centering
+				\input{PaperB/appendix/figures/tikz_figures/vcca_private_xw}
+				%\includegraphics[width=\textwidth]{PaperB/appendix/figures/tikz_figures/vae_x}
+				\caption{VCCA-private$_{x w}$}
+				\label{fig:tikz_vcca_private_xw}
+			\end{subfigure} \hspace{2mm}
+			\begin{subfigure}[t]{0.21\textwidth}
+				\centering
+				\input{PaperB/appendix/figures/tikz_figures/vcca_private_xwy}
+				%\includegraphics[width=\textwidth]{PaperB/appendix/figures/tikz_figures/vae_x}
+				\caption{VCCA-private$_{x w y}$}
+				\label{fig:tikz_vcca_private_xwy}
+			\end{subfigure}
+		\end{minipage}
+		}
+	\vspace{-1mm}
+	\caption{ The graphical models of the VAE, VCCA, and VCCA-private, where nodes represent random variables and edges indicate possible dependence. Grey nodes are observed random variables, while white nodes are latent random variables. The joint distribution is given by the product of the conditional distributions of nodes given their parents. Abbreviations: VAE, Variational Autoencoder; VCCA, Variational Canonical Correlation Analysis.}
+	\label{fig:graphical_models}
+	\vspace{-3mm}
+\end{figure}
+
+
 \begin{figure}[ht!]
-    \centering
-    \begin{minipage}{0.95\textwidth}
-        \centering
-        \begin{subfigure}[t]{0.82\linewidth}
-        	\centering
-        	\includegraphics[width=\textwidth]{PaperB/appendix/figures/class_distributions_histogram/class_dist_train.png}
-        	%\vspace{-7mm}
-        	\caption{Histogram for the training split.}
-        	\label{fig:class_distribution_train}
-        \end{subfigure} \\
-        \begin{subfigure}[t]{0.82\linewidth}
+	\centering
+	\begin{minipage}{0.95\textwidth}
+		\centering
+		\begin{subfigure}[t]{0.82\linewidth}
+			\centering
+			\includegraphics[width=\textwidth]{PaperB/appendix/figures/class_distributions_histogram/class_dist_train.png}
+			%\vspace{-7mm}
+			\caption{Histogram for the training split.}
+			\label{fig:class_distribution_train}
+		\end{subfigure} \\
+		\begin{subfigure}[t]{0.82\linewidth}
 			\centering
 			\includegraphics[width=\textwidth]{PaperB/appendix/figures/class_distributions_histogram/class_dist_test.png}
 			%\vspace{-7mm}
 			\caption{Histogram for the test split.}
 			\label{fig:class_distribution_test}
 		\end{subfigure} \\
-        \begin{subfigure}[t]{0.82\linewidth}
+		\begin{subfigure}[t]{0.82\linewidth}
 			\centering
 			\includegraphics[width=\textwidth]{PaperB/appendix/figures/class_distributions_histogram/class_dist_val.png}
 			%\vspace{-7mm}
 			\caption{Histogram for the validation split.}
 			\label{fig:class_distribution_val}
 		\end{subfigure} 
-    \end{minipage}
-    \caption{Histograms of natural images for every class in the training (a), test (b), and validation (c) splits of the Grocery Store dataset. We also show with different colors on the bins if the class is either a Fruit, Vegetable, or Package item.}
-    \label{fig:histograms}
-\end{figure}
-\clearpage
-%\pagebreak
-
-\begin{figure}[t] 
-\centering
-\begin{subfigure}[t]{0.48\textwidth}
-	\centering
-	\includegraphics[width=\textwidth]{PaperB/appendix/figures/kl_divergence/kl_vcca_private_xw.png}
-	\caption{VCCA-private$_{x w}$}
-	\label{subfig:kl_divergence_vcca_private_xw}
-\end{subfigure}~
-\begin{subfigure}[t]{0.48\textwidth}
-	\centering
-	\includegraphics[width=\textwidth]{PaperB/appendix/figures/kl_divergence/kl_vcca_private_xwy.png}
-	\caption{VCCA-private$_{x w y}$}
-	\label{subfig:kl_divergence_vcca_private_xwy}
-\end{subfigure}
-\caption{The measured KL divergences $\KL(q_{\phi_{z}}(z|x)\,||\,p(z))$ (red), $\KL(q_{\phi_{x}}(u_{x}|x)\,||\,p(u_{x}))$ (green), and $\KL(q_{\phi_{w}}(u_{w} |w)\,||\,p(u_{w}))$ (blue) over epochs. We increased the number of epochs from 200 to 500 to demonstrate that the KL divergence for the private latent variable $u_{w}$ goes to zero. The number of words $T=24$ is the same for both models. The likelihood weights are set to $\lambda_{w} = 1000$ and $\lambda_{y} = 100$. Abbreviations: VCCA, Variational Canonical Correlation Analysis; KL, Kullback-Leibler.
-}
-\label{fig:kl_divergence_vcca_private}
-\end{figure}
-
-\begin{figure}[t] 
-\centering
-\begin{subfigure}[t]{0.48\textwidth}
-	\centering
-	\includegraphics[width=\textwidth]{PaperB/appendix/figures/kl_divergence/kl_div_vcca_private_xi.png}
-	\caption{VCCA-private$_{x i}$}
-	\label{subfig:kl_divergence_vcca_private_xi}
-\end{subfigure}~
-\begin{subfigure}[t]{0.48\textwidth}
-	\centering
-	\includegraphics[width=\textwidth]{PaperB/appendix/figures/kl_divergence/kl_div_vcca_private_xiy.png}
-	\caption{VCCA-private$_{x i y}$}
-	\label{subfig:kl_divergence_vcca_private_xiy}
-\end{subfigure}
-\caption{The measured KL divergences $\KL(q_{\phi_{z}}(z|x)\,||\,p(z))$ (red), $\KL(q_{\phi_{x}}(u_{x}|x)\,||\,p(u_{x}))$ (green), and $\KL(q_{\phi_{i}}(u_{i} |i)\,||\,p(u_{i}))$ (blue) over epochs. We increased the number of epochs from 200 to 500 to demonstrate that the KL divergence for the private latent variable $u_{i}$ goes to zero. The likelihood weights are set to $\lambda_{i} = 10$ and $\lambda_{y} = 1000$. Abbreviations: VCCA, Variational Canonical Correlation Analysis; KL, Kullback-Leibler. 
-}
-\label{fig:kl_divergence_vcca_private_with_iconic_image}
+	\end{minipage}
+	\caption{Histograms of natural images for every class in the training (a), test (b), and validation (c) splits of the Grocery Store dataset. We also show with different colors on the bins if the class is either a Fruit, Vegetable, or Package item.}
+	\label{fig:histograms}
 \end{figure}
 
 
 \clearpage
 %\pagebreak
 
-\begin{figure}[p]
-    \centering
-    \begin{minipage}{\textwidth}
-        \centering
-        \begin{subfigure}[t]{0.48\textwidth}
-        	\centering
-        	\includegraphics[width=\textwidth]{PaperB/appendix/figures/vcca_private_xi/pca_vcca_xi.png}
-        	\caption{$\mu_{z}$ from VCCA$_{x i}$}
-        	\label{fig:pca_vcca_xi_z}
-        \end{subfigure}~
-        \begin{subfigure}[t]{0.48\textwidth}
-    		\centering
-    		\includegraphics[width=\textwidth]{PaperB/appendix/figures/vcca_private_xi/pca_z_vcca_private_xi_seed1.png}
-    		\caption{$\mu_{z}$ from VCCA-private$_{x i}$}
-    		\label{fig:pca_vcca_private_xi_z}
-    	\end{subfigure}
-        %\subfigure[$\mu_{z}$ from VCCA$_{x i}$ ]{\label{fig:pca_vcca_xi_z}\includegraphics[width=0.45\textwidth]{PaperB/appendix/figures/vcca_private_xi/pca_vcca_xi.png}}~
-        %\subfigure[$\mu_{z}$ from VCCA-private$_{x i}$]{\label{fig:pca_vcca_private_xi_z}\includegraphics[width=0.45\textwidth]{PaperB/appendix/figures/vcca_private_xi/pca_z_vcca_private_xi_seed1.png}}\\ 
-    \end{minipage}
-    \begin{minipage}{0.8\textwidth}
-        \centering
-        \begin{subfigure}[t]{0.6\textwidth}
-        	\centering
-        	\includegraphics[width=\textwidth]{PaperB/appendix/figures/vcca_private_xi/vcca_private_xi_ux_space.pdf}
-        	\caption{$\mu_{u_{x}}$ from VCCA-private$_{x i}$}
-        	\label{fig:pca_vcca_private_xi_ux}
-        \end{subfigure} \\
-        \begin{subfigure}[t]{0.75\textwidth}
-	    	\centering
-	    	\includegraphics[width=\textwidth]{PaperB/appendix/figures/vcca_private_xi/vcca_private_xi_ui_space.pdf}
-	    	\caption{$\mu_{u_{i}}$ from VCCA-private$_{x i}$}
-	    	\label{fig:pca_vcca_private_xi_ui}
-	    \end{subfigure}
-    \end{minipage}
-    \caption{Visualizations of the latent representations $\mu_{z}(x)$ from VCCA$_{x i}$ and VCCA-private$_{x i}$ on the first row followed by $\mu_{u_{x}}(x)$ and $\mu_{u_{i}}(i)$ for VCCA-private$_{x i}$. Abbreviations: VCCA, Variational Canonical Correlation Analysis.}
-    \label{fig:2d_visualizations_pca_vcca_private_xi}
-\end{figure}
 
-\clearpage
 
-%\resizebox{\textwidth}{!}{
-\begin{figure}[t!]
-    \centering
-    %\resizebox{\textwidth}{!}{
-    \begin{minipage}[t]{\textwidth}
-        %\centering
-        \begin{subfigure}[t]{0.21\textwidth}
-        	\centering
-        	\input{PaperB/appendix/figures/tikz_figures/vae_x}
-        	%\includegraphics[width=\textwidth]{PaperB/appendix/figures/tikz_figures/vae_x}
-        	\caption{VAE$_{x}$}
-        	\label{fig:tikz_vae_x}
-        \end{subfigure} \hspace{2mm}
-    	\begin{subfigure}[t]{0.21\textwidth}
-    		\centering
-    		\input{PaperB/appendix/figures/tikz_figures/vae_xy}
-    	%\includegraphics[width=\textwidth]{PaperB/appendix/figures/tikz_figures/vae_x}
-    	\caption{VCCA$_{x y}$}
-    	\label{fig:tikz_vcca_xy}
-    	\end{subfigure} \hspace{2mm}
-        \begin{subfigure}[t]{0.21\textwidth}
-	    	\centering
-	    	\input{PaperB/appendix/figures/tikz_figures/vcca_xi}
-		    %\includegraphics[width=\textwidth]{PaperB/appendix/figures/tikz_figures/vae_x}
-		    \caption{VCCA$_{x i}$}
-		    \label{fig:tikz_vcca_xi}
-		\end{subfigure} \hspace{2mm}
-		\begin{subfigure}[t]{0.21\textwidth}
-			\centering
-			\input{PaperB/appendix/figures/tikz_figures/vcca_xiy}
-			%\includegraphics[width=\textwidth]{PaperB/appendix/figures/tikz_figures/vae_x}
-			\caption{VCCA$_{x i y}$}
-			\label{fig:tikz_vcca_xiy}
-		\end{subfigure} 
-		\\[3mm]
-        \begin{subfigure}[t]{0.20\textwidth}
-         	\centering
-         	\input{PaperB/appendix/figures/tikz_figures/vcca_xw}
-         	\caption{VCCA$_{x w}$}
-         	\label{fig:tikz_vcca_xw}
-         \end{subfigure} \hspace{2mm}
-         \begin{subfigure}[t]{0.20\textwidth}
-         	\centering
-         	\input{PaperB/appendix/figures/tikz_figures/vcca_xwy}
-         	%\includegraphics[width=\textwidth]{PaperB/appendix/figures/tikz_figures/vae_x}
-         	\caption{VCCA$_{x w y}$}
-         	\label{fig:tikz_vcca_xwy}
-         \end{subfigure} \hspace{2mm}
-         \begin{subfigure}[t]{0.20\textwidth}
-         	\centering
-         	\input{PaperB/appendix/figures/tikz_figures/vcca_xiw}
-         	%\includegraphics[width=\textwidth]{PaperB/appendix/figures/tikz_figures/vae_x}
-         	\caption{VCCA$_{x i w}$}
-         	\label{fig:tikz_vcca_xiw}
-         \end{subfigure} \hspace{2mm}
-         \begin{subfigure}[t]{0.20\textwidth}
-         	\centering
-         	\input{PaperB/appendix/figures/tikz_figures/vcca_xiwy}
-         	%\includegraphics[width=\textwidth]{PaperB/appendix/figures/tikz_figures/vae_x}
-         	\caption{VCCA$_{x i w y}$}
-         	\label{fig:tikz_vcca_xiwy}
-         \end{subfigure}
-     	\\[3mm]
-     	\begin{subfigure}[t]{0.21\textwidth}
-     		\centering
-     		\input{PaperB/appendix/figures/tikz_figures/vcca_private_xi}
-     		\caption{VCCA-private$_{x i}$}
-     		\label{fig:tikz_vcca_private_xi}
-     	\end{subfigure} \hspace{2mm}
-     	\begin{subfigure}[t]{0.21\textwidth}
-     		\centering
-     		\input{PaperB/appendix/figures/tikz_figures/vcca_private_xiy}
-     		%\includegraphics[width=\textwidth]{PaperB/appendix/figures/tikz_figures/vae_x}
-     		\caption{VCCA-private$_{x i y}$}
-     		\label{fig:tikz_vcca_private_xiy}
-     	\end{subfigure} \hspace{2mm}
-     	\begin{subfigure}[t]{0.21\textwidth}
-     		\centering
-     		\input{PaperB/appendix/figures/tikz_figures/vcca_private_xw}
-     		%\includegraphics[width=\textwidth]{PaperB/appendix/figures/tikz_figures/vae_x}
-     		\caption{VCCA-private$_{x w}$}
-     		\label{fig:tikz_vcca_private_xw}
-     	\end{subfigure} \hspace{2mm}
-     	\begin{subfigure}[t]{0.21\textwidth}
-     		\centering
-     		\input{PaperB/appendix/figures/tikz_figures/vcca_private_xwy}
-     		%\includegraphics[width=\textwidth]{PaperB/appendix/figures/tikz_figures/vae_x}
-     		\caption{VCCA-private$_{x w y}$}
-     		\label{fig:tikz_vcca_private_xwy}
-     	\end{subfigure}
-    \end{minipage}
-	%}
-    \caption{ The graphical models of the VAE, VCCA, and VCCA-private, where nodes represent random variables and edges indicate possible dependence. Grey nodes are observed random variables, while white nodes are latent random variables. The joint distribution is given by the product of the conditional distributions of nodes given their parents. Abbreviations: VAE, Variational Autoencoder; VCCA, Variational Canonical Correlation Analysis.}
-    \label{fig:graphical_models}
-\end{figure}
 
 \clearpage
 
