@@ -11,7 +11,7 @@ Each memory composition in the action space corresponds to a node that can be vi
 At task $t$, the node $v_t$ is related to a task proportions $\va_{t}$ used for retrieving a replay memory from the historical data. 
 We store the related task proportion $\va_t$ from every visited node $v_t$ in the replay schedule $S$. 
 The final replay schedule is then used for constructing the replay memories at each task during the CL training.  
-Next, we briefly outline the MCTS steps for performing the replay schedule search (more details in Appendix \ref{app:rs_mcts_algorithm}):
+Next, we briefly outline the MCTS steps for performing the replay schedule search (more details in Appendix \ref{paperC:app:rs_mcts_algorithm}):
 
 \vspace{-1mm}
 \begin{itemize}[leftmargin=*, topsep=0pt, noitemsep, label={}]

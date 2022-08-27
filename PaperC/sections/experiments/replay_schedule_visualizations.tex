@@ -4,6 +4,23 @@
 \subsection{Replay Schedule Visualizations}
 \label{paperC:sec:replay_schedule_visualization}
 
+
+
+%\input{PaperC/sections/experiments/figures/replay_schedule_visualization}
+\begin{wrapfigure}{r}{0.52\textwidth}
+	%\centering
+  	\setlength{\figwidth}{0.56\textwidth}
+	\setlength{\figheight}{.42\textwidth}
+	\vspace{-3mm}
+	\input{PaperC/figures/replay_schedule_visualizations/cifar100/rs_bubble_plot_seed3}
+	\vspace{-3mm}
+	%\captionsetup{width=.85\linewidth}
+	\caption{Replay schedule learned from Split CIFAR-100 visualized as a bubble plot. %Visualization using a bubble plot of a replay schedule learned from Split CIFAR-100. %The color of the circles corresponds to a historical task and its size represents the task proportion that is replayed. The memory size is $M=100$ and the results are from 1 seed. 
+		The task proportions vary dynamically over time which would be hard to replace by a heuristic method. 
+	}
+	%\vspace{-4mm}
+	\label{fig:replay_schedule_vis_cifar100}
+\end{wrapfigure}
 We visualize a learned replay schedule from Split CIFAR-100 with memory size $M=100$ to gain insights into the behavior of the scheduling policy from RS-MCTS. Figure \ref{fig:replay_schedule_vis_cifar100} shows a bubble plot of the task proportions that are used for filling the replay memory at every task. 
 Each circle color corresponds to a historical task and the circle size represents its proportion of replay samples at the current task.
 %Each color of the circles corresponds to a historical task and its size represents the proportion of examples that are replayed at the current task. 
