@@ -27,7 +27,7 @@ This supplementary material is structured as follows:
 
 \input{PaperC/appendix/heuristic_scheduling_baseline}
 
-%\clearpage 
+
 
 
 \input{PaperC/appendix/additional_experimental_results}
@@ -36,20 +36,6 @@ This supplementary material is structured as follows:
 
 %-------------------------------------------------------------------------
 \input{PaperC/appendix/rs_mcts_algorithm}
-
-\section{Additional Figures}\label{paperC:app:additional_figures}
-
-\paragraph{Memory usage.} We visualize the memory usage for Permuted MNIST and the 20-task datasets Split CIFAR-100 and Split miniImagenet in Figure \ref{fig:memory_usage_10_and_20task_datasets} for our method and the baselines used in the experiment in Section \ref{paperC:sec:efficiency_of_replay_scheduling}. Our method uses a fixed memory size of $M=50$ samples for replay on all three datasets. The memory size capacity for our method is reached after learning task 6 and task 11 on the Permuted MNIST and the 20-task datasets respectively, while the baselines continue incrementing their replay memory size.
-
-\begin{figure}[h]
-  \centering
-  \setlength{\figwidth}{0.79\textwidth}
-  \setlength{\figheight}{.22\textheight}
-  \input{PaperC/appendix/figures/memory_usage/groupplot}
-  %\vspace{-3mm}
-  \caption{Number of replayed samples per task for 10-task Permuted MNIST (top) and the 20-task datasets in the experiment in Section \ref{paperC:sec:efficiency_of_replay_scheduling}. The fixed memory size $M=50$ for our method is reached after learning task 6 and task 11 on the Permuted MNIST and the 20-task datasets respectively, while the baselines continue incrementing their number of replay samples per task.}
-  \label{fig:memory_usage_10_and_20task_datasets}
-\end{figure}
 
 \clearpage
 
