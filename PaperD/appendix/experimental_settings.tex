@@ -5,42 +5,44 @@ In this section, we describe the full details of the experimental settings used 
 
 
 
-\vspace{-2mm}
+\vspace{-3mm}
 \paragraph{Datasets.}
 We generate CL environments with four datasets commonly used in the CL literature. 
 Split MNIST~\citeD{D:zenke2017continual} is a variant of the MNIST~\citeD{D:lecun1998gradient} dataset where the classes have been divided into 5 tasks incoming in the order 0/1, 2/3, 4/5, 6/7, and 8/9. Split FashionMNIST~\citeD{D:xiao2017fashion} is of similar size to MNIST and consists of grayscale images of different clothes, where the classes have been divided into the 5 tasks T-shirt/Trouser, Pullover/Dress, Coat/Sandals, Shirt/Sneaker, and Bag/Ankle boots. Similar to MNIST, Split notMNIST~\citeD{D:bulatov2011notMNIST} consists of 10 classes of the letters A-J with various fonts, where the classes are divided into the 5 tasks A/B, C/D, E/F, G/H, and I/J. We use training/test split provided by \citeD{D:ebrahimi2020adversarial} for Split notMNIST. 
 In Split CIFAR-10~\citeD{D:krizhevsky2009learning}, the 10 classes are divided into 5 tasks with 2 classes for each task. 
 
-\vspace{-2mm}
+\vspace{-3mm}
 \paragraph{CL Network Architectures.} We use a 2-layer MLP with 256 hidden units and ReLU activation for Split MNIST, Split FashionMNIST, and Split notMNIST. For Split CIFAR-10, we use the ConvNet architecture used in \citeD{D:adel2019continual, D:schwarz2018progress, D:vinyals2016matching}, which consists of four 3x3 convolutional blocks, i.e. convolutional layer followed by batch normalization~\citeD{D:ioffe2015batch}, with 64 filters, ReLU activations, and 2x2 Max-pooling. We use a multi-head output layer for each dataset and assume task labels are available at test time for selecting the correct output head related to the task. 
 
-\vspace{-2mm}
+\vspace{-3mm}
 \paragraph{CL Hyperparameters.} We train all networks with the Adam optimizer~\citeD{D:kingma2014adam} with learning rate $\eta = 0.001$ and hyperparameters $\beta_1 = 0.9$ and $\beta_2 = 0.999$. Note that the learning rate for Adam is not reset before training on a new task. Next, we give details on number of training epochs and batch sizes specific for each dataset:
-\begin{itemize}[topsep=1pt]
+\begin{itemize}[topsep=1pt,noitemsep]
     \item Split MNIST: 10 epochs/task, batch size 128.
     \item Split FashionMNIST: 10 epochs/task, batch size 128.
     \item Split notMNIST: 20 epochs/task, batch size 128.
     \item Split CIFAR-100: 20 epochs/task, batch size 256.
 \end{itemize}
 
-\vspace{-2mm}
+\vspace{-3mm}
 \paragraph{Generating CL Environments.} We generate multiple CL environments with pre-set random seeds for initializing the network parameters $\vphi$ and shuffling the task order. The pre-set random seeds are in the range $0-49$, such that we have 50 environments for each dataset. We shuffle the task order by permuting the class order and then split the classes into 5 pairs (tasks) with 2 classes/pair. For environments with seed $0$, we keep the original task order in the dataset. 
 Taking a step at task $t$ in the CL environments involves training the CL network on the $t$-th dataset with a replay memory $\gM_t$ from the discrete action space described in Section \ref{paperD:app:action_space}. Therefore, to speed up the experiments with the RL algorithms, we run a breadth-first search (BFS) through the discrete action space and save the classification results for re-use during policy learning. Note that the action space has 1050 possible paths of replay schedules for the datasets with $T=5$ tasks, which makes the environment generation time-consuming. Hence, we only generate environments where the replay memory size $M=10$ have been used, and leave analysis of different memory sizes as future work. The CL environments that we used will be provided in the public code. 
 
-\vspace{-2mm}
+\vspace{-3mm}
 \paragraph{Computational Cost.} 
 All experiments were performed on one NVIDIA GeForce RTW 2080Ti on an internal GPU cluster. Generating a CL environment for one seed with Split MNIST took on around 9.5 hours averaged over 10 runs of BFS. Similarly for Split CIFAR-10, generating one CL environment took on average 16.1 hours. Note that BFS runs 1050 iterations in total for all 5-task datasets. The wall clock time for ETS on Split MNIST was around 1.5 minutes. 
 
 
-\vspace{-2mm}
+\vspace{-3mm}
 \paragraph{DQN and A2C Architectures.}
-The input layer has size $T-1$ where each unit is inputting the task performances since the states are represented by the validation accuracies $s_t = [A_{t, 1}^{(val)}, ..., A_{t, t}^{(val)}, 0, ..., 0]$. The current task can therefore be determined by the number of non-zero state inputs. The output layer has 35 units representing the possible actions at $T=5$ with the discrete action space we have constructed in Section \ref{paperD:sec:replay_scheduling_in_continual_learning}. We use action masking on the output units to prevent the network from selection invalid actions for constructing the replay memory at the current task. The DQN is a 2-layer MLP with 512 hidden units and ReLU activations. For A2C, we use separate networks for parameterizing the policy and the value function, where both networks are 2-layer MLPs with 64 hidden units of Tanh activations. 
+The input layer has size $T-1$ where each unit is inputting the task performances since the states are represented by the validation accuracies $s_t = [A_{t, 1}^{(val)}, ..., A_{t, t}^{(val)}, 0, ..., 0]$. The current task can therefore be determined by the number of non-zero state inputs. 
+The output layer has 35 units representing the possible actions at $T=5$ with the discrete action space we have constructed in Appendix \ref{paperD:app:action_space}. %Section \ref{paperD:sec:methodology}. 
+We use action masking on the output units to prevent the network from selection invalid actions for constructing the replay memory at the current task. The DQN is a 2-layer MLP with 512 hidden units and ReLU activations. For A2C, we use separate networks for parameterizing the policy and the value function, where both networks are 2-layer MLPs with 64 hidden units of Tanh activations. 
 
-\vspace{-2mm}
+\vspace{-3mm}
 \paragraph{DQN and A2C Hyperparameters.}
 We provide the hyperparameters for the both DQN and A2C in Table \ref{tab:dqn_hyperparameters_new_task_orders}-\ref{tab:a2c_hyperparameters_new_dataset}. Table \ref{tab:dqn_hyperparameters_new_task_orders} and \ref{tab:a2c_hyperparameters_new_task_orders} includes the hyperparameters on the New Task Order experiment for DQN and A2C respectively, while Table \ref{tab:dqn_hyperparameters_new_dataset} and \ref{tab:a2c_hyperparameters_new_dataset} includes the hyperparameters on the New Dataset experiment for DQN and A2C respectively. Regarding the training environments in Table \ref{tab:dqn_hyperparameters_new_dataset} and \ref{tab:a2c_hyperparameters_new_dataset}, we use two different datasets in the training environments to increase the diversity. When Spit notMNIST is for testing, half the amount of training environments are using Split MNIST and the other half uses Split FashionMNIST. For example, in Table \ref{tab:a2c_hyperparameters_new_dataset}, A2C uses 10 training environments which means that there are 5 Split MNIST environments and 5 Split FashionMNIST environments. Similarly, half the amount of training environments are using Split MNIST and the other half uses Split notMNIST when the testing environments uses Split FashionMNIST.   
 
-\vspace{-2mm}
+\vspace{-3mm}
 \paragraph{Implementations.} 
 The code for DQN was adapted from OpenAI baselines~\citeD{D:dhariwal2017baselines} and the PyTorch~\citeD{D:paszke2019pytorch} tutorial on DQN {\small \url{https://pytorch.org/tutorials/intermediate/reinforcement_q_learning.html}}. For A2C, we followed the implementations released by Kostrikov~\citeD{D:kostrikov2018pytorchrl} and Igl \etal~\citeD{D:igl2020transient}. We make the code publicly available upon acceptance. 
 
@@ -51,6 +53,7 @@ The code for DQN was adapted from OpenAI baselines~\citeD{D:dhariwal2017baseline
 \centering
 \caption{DQN hyperparameters for the experiments on {\bf New Task Orders} in Section \ref{paperD:sec:results_on_policy_generalization}.  
 }
+\vspace{-2mm}
 \label{tab:dqn_hyperparameters_new_task_orders}
 \resizebox{0.99\textwidth}{!}{
 \begin{tabular}{l c c c}
@@ -78,6 +81,7 @@ The code for DQN was adapted from OpenAI baselines~\citeD{D:dhariwal2017baseline
 \centering
 \caption{A2C hyperparameters for the experiments on {\bf New Task Orders} in Section \ref{paperD:sec:results_on_policy_generalization}.  
 }
+\vspace{-2mm}
 \label{tab:a2c_hyperparameters_new_task_orders}
 \begin{tabular}{l c c c}
 \toprule
@@ -102,6 +106,7 @@ The code for DQN was adapted from OpenAI baselines~\citeD{D:dhariwal2017baseline
 \centering
 \caption{DQN hyperparameters for the experiments on {\bf New Dataset} in Section \ref{paperD:sec:results_on_policy_generalization}. Split notMNIST and Split FashionMNIST indicate the dataset used in the test environments. 
 }
+\vspace{-2mm}
 \label{tab:dqn_hyperparameters_new_dataset}
 \begin{tabular}{l c c}
 \toprule
@@ -127,6 +132,7 @@ The code for DQN was adapted from OpenAI baselines~\citeD{D:dhariwal2017baseline
 \centering
 \caption{A2C hyperparameters for the experiments on {\bf New Dataset} in Section \ref{paperD:sec:results_on_policy_generalization}. Split notMNIST and Split FashionMNIST indicate the dataset used in the test environments. 
 }
+\vspace{-2mm}
 \label{tab:a2c_hyperparameters_new_dataset}
 \begin{tabular}{l c c c}
 \toprule
@@ -152,7 +158,7 @@ The code for DQN was adapted from OpenAI baselines~\citeD{D:dhariwal2017baseline
 \subsection*{Heuristic Scheduling Baselines}\label{paperD:app:heuristic_scheduling_baselines}
 
 We implemented three heuristic scheduling baselines to compare against our proposed methods. These heuristics are based on the intuition of re-learning tasks when they have been forgotten. We keep a validation set for each task to determine whether any task should be replayed by comparing the validation accuracy against a hand-tuned threshold. If the validation accuracy is below the threshold, then the corresponding task is replayed. Let $A_{t, i}^{(val)}$ be the validation accuracy for task $t$ evaluated at time step $i$. The threshold is set differently in each of the baselines:
-\begin{itemize}[leftmargin=*, topsep=0pt]
+\begin{itemize}[topsep=1pt,noitemsep]%[leftmargin=*, topsep=0pt]
     \item {\bf Heuristic Global Drop (Heur-GD).} Heuristic policy that replays tasks  
     with validation accuracy below a certain threshold proportional to the best achieved validation accuracy on the task. The best achieved validation accuracy for task $i$ is given by $A_{t, i}^{(best)} = \max\{(A_{1, i}^{(val)}, \dots, A_{t, i}^{(val)})\}$. Task $i$ is replayed if $A_{t, i}^{(val)} < \tau A_{t, i}^{(best)}$ where $\tau \in [0, 1]$ is a ratio representing the degree of how much the validation accuracy of a task is allowed to drop. 
 
@@ -164,7 +170,7 @@ We implemented three heuristic scheduling baselines to compare against our propo
 The replay memory is filled with $M/k$ samples from each selected task, where $k$ is the number of tasks that need to be replayed according to their decrease in validation accuracy. We skip replaying any tasks if no tasks are selected for replay, i.e., $k=0$. 
 
 
-\vspace{-1mm}
+\vspace{-3mm}
 \paragraph{Grid search for $\tau$.}
 We performed a grid search for the parameter $\tau$ for the three heuristic scheduling baselines for each experiment to compare against the learned replay scheduling policies. The validation set consists of 15\% of the training data and is identical to the validation set used for learning the RL policies. 
 We select the parameter based on ACC scores achieved in the same number of training environments used by either DQN or A2C. The search range we use is $\tau \in \{0.90, 0.95, 0.999\}$. In Table \ref{tab:grid_search_heuristics_multiple_cl_environments}, we show the selected parameter value of $\tau$ and the number of environments used for selecting the value for each method and experiment in Section \ref{sec:results_on_policy_generalization}. The same parameters are used to generate the results on the heuristics in Table \ref{tab:average_ranking_rl_experiment}. 
@@ -174,6 +180,7 @@ We select the parameter based on ACC scores achieved in the same number of train
 \centering
 \caption{The threshold parameter $\tau$ used in the heuristic scheudling baselines Heuristic Global Drop (Heur-GD), Heuristic Local Drop (Heur-LD), and Heuristic Accuracy Threshold (Heur-AT). The search range is $\tau \in \{0.90, 0.95, 0.999\}$ for all methods and we display the number of environments used for selecting the parameter used at test time.  
 }
+\vspace{-2mm}
 \label{tab:grid_search_heuristics_multiple_cl_environments}
 \resizebox{\textwidth}{!}{
 \begin{tabular}{l c c c c c c c c c c}

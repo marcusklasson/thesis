@@ -1,9 +1,9 @@
 
 \section{Additional Methodology}\label{paperD:app:methodology}
 
-We provide additional information on the construction of the action space with task proportions in Appendix \ref{paperD:app:action_space}, and outline the training procedure of the replay scheduling policy in Section \ref{paperD:app:rl_framework_algorithm}. 
+We provide additional information on the construction of the action space with task proportions in Appendix \ref{paperD:app:action_space}, and outline the training procedure of the replay scheduling policy in Appendix \ref{paperD:app:rl_framework_algorithm}. 
 
-\subsection*{Discrete Action Space with Task Proportions}\label{paperD:app:action_space}
+\subsection{Discrete Action Space with Task Proportions}\label{paperD:app:action_space}
 
 We show the procedure for creating the discrete action space of task proportions in Algorithm \ref{alg:action_space_discretization_paperD} which was used in~\citeD{D:klasson2021learn}. At task $i$, we have $i-1$ historical tasks that we can choose from. We then generate all possible bin vectors $\vb_i = [b_1, \dots, b_{i}] \in \gB_i$ of size $i$ where each element are a task index $1, ..., i$. We sort all bin vectors by the order of task indices and only keep the unique bin vectors. For example, at $i=2$, the unique choices of vectors are $[1,1], [1,2], [2,2]$, where $[1,1]$ indicates that all samples in the replay memory should be from task 1, $[1,2]$ indicates that half memory is from task 1 and the other half are from task etc. The task proportions are then computed by counting the number of occurrences of each task index in $\vb_i$ and dividing by $i$, such that $\vp_i = \texttt{bincount}(\vb_i) / (i)$. From this specification, we have built a tree $\gT$ with different task proportions that can be selected at different time steps. We construct a replay schedule $S$ by traversing through $\gT$ and select a task proportion on every level to append to $S$. We can then evaluate the replay schedule $S$ by training a network on the CL task sequence and use $S$ to compose the replay memory to use for mitigating catastrophic forgetting at every task. 
 
@@ -30,7 +30,7 @@ We show the procedure for creating the discrete action space of task proportions
 
 
 
-\subsection*{RL Framework Algorithm}\label{paperD:app:rl_framework_algorithm}
+\subsection{RL Framework Algorithm}\label{paperD:app:rl_framework_algorithm}
 %In this section, we outline the training procedure of the replay scheduling policy. 
 
 We provide pseudo-code for the RL-based framework for learning the replay scheduling policy with either DQN~\citeD{D:mnih2013playing} or A2C~\citeD{D:mnih2016asynchronous} in Algorithm \ref{alg:rl_framework_for_learning_replay_scheduling_policy}. The procedure collects experience from all training environments in $\gE^{(train)}$ at every time step $t$. The datasets and classifiers are specific for each environment $E_i \in \gE^{(train)}$. At $t=1$, we obtain the initial state $s_1^{(i)}$ by evaluating the classifier on the validation set $\gD_1^{(val)}$ after training the classifier on the task 1. Next, we get the replay memory for mitigating catastrophic forgetting when learning the next task $t+1$ by 1) taking action $a_t^{(i)}$ under policy $\pi_{\vtheta}$, 2) converting action $a_t^{(i)}$ into the task proportion $\vp_{t}$, and 3) sampling the replay memory $\gM_t$ from the historical datasets given the selected proportion. We then obtain the reward $r_t$ and the next state $s_{t+1}$ by evaluating the classifier on the validation sets $\gD_{1:t+1}^{(val)}$ after learning task $t+1$. The collected experience from each time step is stored in the experience buffer $\gB$ for both DQN and A2C. In $\textsc{UpdatePolicy}(\cdot)$, we outline the steps for updating the policy parameters $\vtheta$ with either DQN or A2C. 

@@ -1,10 +1,12 @@
 
-\section{Methodology: Policy Learning Framework for Replay Scheduling}\label{paperD:sec:methodology}
+\section[Methodology]{Methodology: Policy Learning Framework for Replay Scheduling}\label{paperD:sec:methodology}
 
 In this section, we present an RL-based framework for learning replay scheduling policies that generalize across different CL scenarios. Our intuition is that there may exist general patterns regarding the replay scheduling, e.g., tasks that are harder or have been forgotten should be replayed more often. Moreover, the policy may non-trivially take task properties into consideration. Therefore, we aim to learn policies that select which tasks to replay from states representing the current task performance in the CL environments. The policy can then be applied for mitigating catastrophic forgetting in new CL scenarios. 
 
 
-We model the CL environments with MDPs represented by tuples $E_i = (\gS_i, \gA, P_i, R_i, \mu_i, \gamma)$ sampled from a distribution of CL environments, such that $E_i \sim p(E)$ for $i=1, ..., K$. We let the policy interact with a fixed set of environments $\gE^{(train)} = \{E_1, \dots, E_K\}$ sampled from the distribution $p(E)$ for training. 
+The CL environments are modeled using MDPs represented as tuples $E_i = (\gS_i, \gA, P_i, R_i, \mu_i, \gamma)$ sampled from a distribution of environments, such that $E_i \sim p(E)$ for $i=1, ..., K$. 
+%We model the CL environments with MDPs represented by tuples $E_i = (\gS_i, \gA, P_i, R_i, \mu_i, \gamma)$ sampled from a distribution of CL environments, such that $E_i \sim p(E)$ for $i=1, ..., K$. 
+We let the policy interact with a fixed set of environments $\gE^{(train)} = \{E_1, \dots, E_K\}$ sampled from the distribution $p(E)$ for training. 
 Each environment $E_i$ contains of network $f_{\vphi}$ and $T$ datasets $\gD_{1:T}$ where the $t$-th dataset is learned at time step $t$. To generate diverse CL environments, we get environments with different network initializations of $f_{\vphi}$ and shuffled task orders in the dataset when we sample environments from $p(E)$. 
 We define the state $s_t$ of the environment as the validation accuracies $A_{t, 1:t}^{val}$ on each seen task $1, ..., t$ from $f_{\vphi}$ at task $t$, i.e., $s_t = [A_{t, 1}, ..., A_{t, t}, 0, ..., 0]$, where we use zero-padding on future tasks. The action space $\gA$ is constructed as described in Appendix \ref{paperD:app:action_space}, such that the $a_t \in \gA$ corresponds to a task proportion $\vp_t$ used for sampling the replay memory $\gM_t$. We use a dense reward based on the average validation accuracies at task $t$, i.e., $r_{t} = \frac{1}{t}\sum_{i=1}^{t} A_{t, i}^{val}$. The state transition distribution $P_i(s' | s, a)$ represents the dynamics of the environment, which depend on the initialization of $f_{\vphi}$ and also the task order in the dataset. 
 
