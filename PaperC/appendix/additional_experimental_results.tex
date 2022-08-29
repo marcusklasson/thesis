@@ -48,14 +48,38 @@ We present the hyperparameters used for each method in Table \ref{tab:hyperparam
 	\item {\bf DER.} $\alpha$: loss coefficient for memory logits 
 	\item {\bf DER++.} $\alpha$: loss coefficient for memory logits, $\beta$: loss coefficient for memory labels
 \end{itemize}
-For the experiments, we used the same architectures and hyperparameters as described in Appendix \ref{paperC:app:experimental_settings} for all datasets if not mentioned otherwise. We used the Adam optimizer with learning rate $\eta=0.001$ for MER, DER, and DER++. For HAL, we used the SGD optimizer since using Adam made the model diverge in our experiments. 
+We %For the experiments, we 
+used the same architectures and hyperparameters as described in Appendix \ref{paperC:app:experimental_settings} for all datasets, except for the optimizer in HAL where we used the SGD optimizer since using Adam made the model diverge in our experiments. %if not mentioned otherwise. 
+We used the Adam optimizer with learning rate $\eta=0.001$ for MER, DER, and DER++. 
+%For HAL, we used the SGD optimizer since using Adam made the model diverge in our experiments. 
 
-\begin{table}[h]
+
+
+\section{Additional Figures}\label{paperC:app:additional_figures}
+
+\paragraph{Memory usage.} We visualize the memory usage for Permuted MNIST and the 20-task datasets Split CIFAR-100 and Split miniImagenet in Figure \ref{fig:memory_usage_10_and_20task_datasets} for our method and the baselines used in the experiment in Section \ref{paperC:sec:efficiency_of_replay_scheduling}. Our method uses a fixed memory size of $M=50$ samples for replay on all three datasets. The memory size capacity for our method is reached after learning task 6 and task 11 on the Permuted MNIST and the 20-task datasets respectively, while the baselines continue incrementing their replay memory size.
+
+\begin{figure}[h]
+	\centering
+	\vspace{-1mm}
+	\setlength{\figwidth}{0.75\textwidth}
+	\setlength{\figheight}{.20\textheight}
+	\input{PaperC/appendix/figures/memory_usage/groupplot}
+	\vspace{-3mm}
+	\caption{Number of replayed samples per task for 10-task Permuted MNIST (top) and the 20-task datasets in the experiment in Section \ref{paperC:sec:efficiency_of_replay_scheduling}. The fixed memory size $M=50$ for our method is reached after learning task 6 and task 11 on the Permuted MNIST and the 20-task datasets respectively, while the baselines continue incrementing their number of replay samples per task.}
+	\label{fig:memory_usage_10_and_20task_datasets}
+\end{figure}
+
+%%% TABLE
+\input{PaperC/appendix/tables/table_bwt_alternative_memory_selection}
+
+\begin{table}[t]
 	%\scriptsize
 	\centering
 	\caption{
-		Hyperparameters for replay-based methods HAL, MER, DER and DER++ used in experiments on applying MCTS to recent replay-based methods in Section \ref{paperC:sec:applying_scheduling_to_recent_replay_methods}.
+		Hyperparameters for replay-based methods HAL, MER, DER and DER++ used in experiments on applying RS-MCTS to recent replay-based methods in Section \ref{paperC:sec:applying_scheduling_to_recent_replay_methods}.
 	}
+	\vspace{-3mm}
 	\resizebox{0.95\textwidth}{!}{
 		\begin{tabular}{l c c c c c c c}
 			\toprule
@@ -78,18 +102,18 @@ For the experiments, we used the same architectures and hyperparameters as descr
 			& $\beta$ & 1.0 & 1.0 & 1.0 & 1.0 & 1.0 & 1.0 \\
 			\bottomrule
 		\end{tabular}
-		}
-	\vspace{-5mm}
+	}
+	\vspace{-2mm}
 	\label{tab:hyperparameters_applying_scheduling_to_recent_replay_methods}
 \end{table}
 
 
-%%% TABLE
-\input{PaperC/appendix/tables/table_bwt_alternative_memory_selection}
+
+
+\input{PaperC/appendix/tables/table_apply_scheduling_to_recent_replay_methods}
 
 \input{PaperC/appendix/tables/table_bwt_efficiency_replay_scheduling}
 
-\input{PaperC/appendix/tables/table_apply_scheduling_to_recent_replay_methods}
 
 %\clearpage
 %\clearpage
