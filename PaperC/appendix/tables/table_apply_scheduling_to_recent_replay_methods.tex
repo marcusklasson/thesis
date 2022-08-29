@@ -1,13 +1,13 @@
 
 \begin{table}[t]
-    \footnotesize
+    %\footnotesize
     \centering
     \caption{
     Performance comparison with ACC and BWT metrics between scheduling methods RS-MCTS (Ours), Random, ETS, and Heuristic when combining them with replay-based methods Hindsight Anchor Learning (HAL), Meta Experience Replay (MER), Dark Experience Replay (DER), and DER++. 
     Replay memory sizes are $M=10$ and $M=100$ for the 5-task and 10/20-task datasets respectively. We report the mean and standard deviation averaged over 5 seeds. Results on Heuristic where some seed did not converge is denoted by $^{*}$. Applying RS-MCTS to each method can enhance the performance compared to using the baseline schedules. 
     }
-    %\vspace{-3mm}
-    \resizebox{\textwidth}{!}{ 
+    \vspace{-3mm}
+    \resizebox{0.95\textwidth}{!}{ 
     \begin{tabular}{l l c c c c c c}
         \toprule
          & & \multicolumn{2}{c}{{\bf Split MNIST} } & \multicolumn{2}{c}{{\bf Split FashionMNIST} } & \multicolumn{2}{c}{{\bf Split notMNIST} } \\
@@ -34,8 +34,8 @@
          & ETS & 97.98 ($\pm$ 0.52) & -2.24 ($\pm$ 0.66) & 98.12 ($\pm$ 0.40) & -1.59 ($\pm$ 0.52) & 94.53 ($\pm$ 1.02) & -1.82 ($\pm$ 1.02) \\
          & Heuristic & 92.35 ($\pm$ 2.42) & -8.83 ($\pm$ 2.99) & $^{*}$67.31 ($\pm$ 21.20) & -24.86 ($\pm$ 16.34) & 93.88 ($\pm$ 1.33) & -2.86 ($\pm$ 1.49) \\
          & Ours & 98.84 ($\pm$ 0.21)  & -1.14 ($\pm$ 0.26)  & 98.38 ($\pm$ 0.43) & -1.17 ($\pm$ 0.51) & 94.73 ($\pm$ 0.20) & -1.21 ($\pm$ 1.12) \\
-        \bottomrule
-        \toprule
+        \midrule
+        \midrule
          & & \multicolumn{2}{c}{{\bf Permuted MNIST} } & \multicolumn{2}{c}{{\bf Split CIFAR-100} } & \multicolumn{2}{c}{{\bf Split miniImagenet} } \\
          \cmidrule{3-4} \cmidrule{5-6} \cmidrule{7-8} %\cline{3-8}
          {\bf Method} & {\bf Schedule} & ACC(\%)$\uparrow$ & BWT(\%)$\uparrow$ & ACC(\%)$\uparrow$ & BWT(\%)$\uparrow$ & ACC(\%)$\uparrow$ & BWT(\%)$\uparrow$ \\
@@ -62,7 +62,7 @@
         \bottomrule
     \end{tabular}
     }
-    \vspace{-3mm}
+    \vspace{-2mm}
     \label{tab:bwt_sota_models_applied_to_rsmcts}
 \end{table}
 

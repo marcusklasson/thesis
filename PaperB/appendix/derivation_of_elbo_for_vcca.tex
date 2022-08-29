@@ -1,5 +1,5 @@
 
-\subsection*{Derivation of the ELBO for VCCA}
+\subsection{Derivation of the ELBO for VCCA}
 \label{paperB:app:derivation_of_elbo_for_vcca}
 
 Let $x_{1:M}$ denote the all observed data, i.e., $x_{1:M} = x_1, \dots, x_M$, for $M$ different views. We derive the ELBO for VCCA by introducing the approximate posterior $q_{\phi}(z | x_m)$, where $x_m$ is the only view that we use to infer the latent variable $z$. We now derive the ELBO from the marginal log-likelihood $ \log p_{{\theta}}(x_{1:M})$ as 
@@ -19,7 +19,8 @@ We use the factorization property of the joint distribution $p_{\theta}(x_{1:M})
     \begin{split}
         \mathcal{L}(\theta, \phi; x_{1:M}) = & \E_{q_{\phi}(z | x_m)}\left[ \log \frac{p_{{\theta}_1}(x_1 |  z) \cdots p_{{\theta}_M}(x_M |  z) p(z)}{q_{\phi}(z | x_m)} \right] \\
         = & \E_{q_{\phi}(z | x_m)}\left[ \log p_{{\theta}_1}(x_1 |  z) + ... + \log p_{{\theta}_M}(x_M |  z) + \log \frac{p(z)}{q_{\phi}(z | x_m)} \right] \\
-        = & \E_{q_{\phi}(z | x_m)}\left[ \log p_{{\theta}_1}(x_1 |  z) \right] + ... + \E_{q_{\phi}(z | x_m)}\left[ \log p_{{\theta}_M}(x_M |  z) \right] -\KL(q_{\phi}(z | x_m) \,||\, p(z))
+        = & \E_{q_{\phi}(z | x_m)}\left[ \log p_{{\theta}_1}(x_1 |  z) \right] + ... + \E_{q_{\phi}(z | x_m)}\left[ \log p_{{\theta}_M}(x_M |  z) \right] \\ 
+        & -\KL(q_{\phi}(z | x_m) \,||\, p(z))
     \end{split}
 \end{align*}
 It may be necessary to balance the terms in the ELBO with some constant for every term, especially when the dimensions and magnitudes differ between the modalities. Thus, we introduce the likelihood weights $\lambda_1, ..., \lambda_M$, such that the ELBO will be written as 

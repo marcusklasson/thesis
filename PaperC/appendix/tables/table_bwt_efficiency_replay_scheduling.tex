@@ -1,12 +1,12 @@
 
 \begin{table}[t]
-    \footnotesize
+    %\footnotesize
     \centering
     \caption{
     Performance comparison with ACC and BWT metrics for all datasets between RS-MCTS and the baselines in the setting where only 1 sample per class can be replayed. The memory sizes are set to $M=10$ and $M=100$ for the 5-task and 10/20-task datasets respectively. We report the mean and standard deviation of ACC and BWT, where all results have been averaged over 5 seeds. RS-MCTS performs on par with the best baselines for both metrics on all datasets except S-CIFAR-100.
     }
-    %\vspace{-3mm}
-    \resizebox{\textwidth}{!}{
+    \vspace{-3mm}
+    \resizebox{0.95\textwidth}{!}{
     \begin{tabular}{l c c c c c c}
         \toprule
          & \multicolumn{2}{c}{{\bf Split MNIST} } & \multicolumn{2}{c}{{\bf Split FashionMNIST} } & \multicolumn{2}{c}{{\bf Split notMNIST} } \\
@@ -19,8 +19,10 @@
         Uniform & 95.77 ($\pm$ 1.12) & -5.02 ($\pm$ 1.39) & 97.12 ($\pm$ 1.57) & -2.79 ($\pm$ 1.98) & 92.14 ($\pm$ 1.45) & -4.90 ($\pm$ 1.41) \\ 
         \midrule 
         RS-MCTS (Ours) & 96.07 ($\pm$ 1.60) & -4.59 ($\pm$ 2.01) & 97.17 ($\pm$ 0.78) & -2.64 ($\pm$ 0.99) & 93.41 ($\pm$ 1.11) & -3.36 ($\pm$ 1.56)  \\ 
-        \bottomrule
-        \toprule
+        \midrule 
+        \midrule 
+        %\bottomrule
+        %\toprule
          & \multicolumn{2}{c}{{\bf Permuted MNIST} } & \multicolumn{2}{c}{{\bf Split CIFAR-100} } & \multicolumn{2}{c}{{\bf Split miniImagenet} } \\
          \cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7} %\cline{2-7}
          {\bf Method} & ACC(\%)$\uparrow$ & BWT(\%)$\uparrow$ & ACC(\%)$\uparrow$ & BWT(\%)$\uparrow$ & ACC(\%)$\uparrow$ & BWT(\%)$\uparrow$ \\
@@ -34,7 +36,7 @@
         \bottomrule
     \end{tabular}
     }
-    \vspace{-3mm}
+    \vspace{-2mm}
     \label{tab:bwt_efficiency_of_replay_scheduling}
 \end{table}
 

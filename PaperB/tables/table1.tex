@@ -1,9 +1,10 @@
 
-\renewcommand{\arraystretch}{1.05}
-\begin{table}[th!]
+%\renewcommand{\arraystretch}{1.05}
+\begin{table}[t]
 \centering
 \caption{Classification accuracies on the test set for all models in percentage (\%) along for each model. The subscript letters in the model names indicate the data views used in the model. The column Accuracy corresponds to the fine-grained classification accuracy. The column Coarse Accuracy corresponds to the classifying a class within the correct parent class. Results are averaged using 10 different random seeds and we report both means and standard deviations. Abbreviations: AE, Autoencoder; VAE, Variational Autoencoder; SplitAE, Split Autoencoder; VCCA, Variational Canonical Correlation Analysis.
 }
+\vspace{-2mm}
 \begin{tabular}{l c c} 
     \hline 
     Model & Accuracy (\%) & Coarse Accuracy (\%) \\ 
@@ -50,4 +51,5 @@
     \hline 
 \end{tabular}
 \label{tab:classification_results_on_test_set}
+\vspace{-2mm}
 \end{table}

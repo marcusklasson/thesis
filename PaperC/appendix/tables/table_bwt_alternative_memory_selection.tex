@@ -1,14 +1,14 @@
 
 
 \begin{table}[t]
-    \footnotesize
+    %\footnotesize
     \centering
     \caption{
     Performance comparison with ACC and BWT metrics for all datasets between MCTS (Ours) and the baselines with various memory selection methods. We provide the metrics for training on all seen task datasets jointly (Joint) as an upper bound. Furthermore, we include the results from a breadth-first search (BFS) with Uniform memory selection for the 5-task datasets. 
 	The memory size is set to $M=10$ and $M=100$ for the 5-task and 10/20-task datasets respectively. We report the mean and standard deviation of ACC and BWT, where all results have been averaged over 5 seeds. MCTS performs better or on par than the baselines on most datasets and selection methods, where MoF yields the best performance in general.
     }
-    %\vspace{-3mm}
-    \resizebox{\textwidth}{!}{
+    \vspace{-3mm}
+    \resizebox{0.95\textwidth}{!}{
     \begin{tabular}{l l c c c c c c}
         \toprule
          & & \multicolumn{2}{c}{{\bf Split MNIST} } & \multicolumn{2}{c}{{\bf Split FashionMNIST} } & \multicolumn{2}{c}{{\bf Split notMNIST} } \\
@@ -67,7 +67,7 @@
         \bottomrule
     \end{tabular}
     }
-    \vspace{-3mm}
+    \vspace{-2mm}
     \label{tab:bwt_alternative_memory_selection}
 \end{table}
 
