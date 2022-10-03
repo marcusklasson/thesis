@@ -158,10 +158,10 @@
   \hbox{}\vfill
   \rmfamily
   \noindent\begin{tabular}[b]{@{}l@{}}
-    \@ifundefined{thetrita}{}{\thetrita\\}%
     \@ifundefined{theissn}{}{\theissn\\}%
     \@ifundefined{theisrn}{}{\theisrn\\}%
     \@ifundefined{theisbn}{}{\theisbn\\}%
+    \@ifundefined{thetrita}{}{\thetrita\\}%
   \end{tabular}
   \hfill
   \noindent\begin{tabular}[b]{@{}r@{}}
@@ -171,25 +171,33 @@
   \if@kthesis@blurb
     \if@kthesis@babel
       \begin{otherlanguage}{swedish}
-        \noindent Akademisk avhandling som med tillst\aa nd
-        av Kungl Tekniska h\"{o}gskolan framl\"{a}gges till
-        offentlig granskning f\"{o}r avl\"aggande av
-        \theexamen\space \thedisputationsdatum\space i
-        \thedisputationslokal.\par
+        \noindent \textbf{Public Defense:} \\
+        \thedisputationsdatum \\
+        \thedisputationslokal \\
+        \theexamen \par
+        %\noindent Akademisk avhandling som med tillst\aa nd
+        %av Kungl Tekniska h\"{o}gskolan framl\"{a}gges till
+        %offentlig granskning f\"{o}r avl\"aggande av
+        %\theexamen\space \thedisputationsdatum\space i
+        %\thedisputationslokal.\par
       \end{otherlanguage}
     \else
-      \noindent Aka\-de\-misk av\-hand\-ling som med
-      till\-st\aa nd av Kungl Tek\-niska h\"{o}g\-skolan
-      fram\-l\"{a}g\-ges till of\-fent\-lig gransk\-ning
-      f\"{o}r av\-l\"ag\-gande av \theexamen\space
-      \thedisputationsdatum\space i \thedisputationslokal.\par
+      \noindent \textbf{Public Defense:} \\
+      \thedisputationsdatum \\
+      \thedisputationslokal \\
+      \theexamen \par
+      %\noindent Aka\-de\-misk av\-hand\-ling som med
+      %till\-st\aa nd av Kungl Tek\-niska h\"{o}g\-skolan
+      %fram\-l\"{a}g\-ges till of\-fent\-lig gransk\-ning
+      %f\"{o}r av\-l\"ag\-gande av \theexamen\space
+      %\thedisputationsdatum\space i \thedisputationslokal.\par
     \fi
     \bigskip
   \fi
   \noindent
   \copyright \space \theauthor, \thedate
   \par\bigskip\noindent
-  Tryck: \thepublisher\par
+  Printed by: \thepublisher\par
   \cleardoublepage
   \endgroup
 }
