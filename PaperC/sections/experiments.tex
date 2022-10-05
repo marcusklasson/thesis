@@ -29,25 +29,7 @@ Full details on experimental settings are in Appendix \ref{paperC:app:experiment
 The Heuristic baseline replays the tasks which accuracy on the validation set is below a certain threshold proportional to the best achieved validation accuracy on the task. Here, the replay memory is filled with $M/k$ samples per task where $k$ is the number of selected tasks. If $k=0$, then we skip applying replay at the current task.  
 See Appendix \ref{paperC:app:heuristic_scheduling_baseline} for more details on the Heuristic baseline. 
 
-%%% Table 1, put it here for placement
 
-\begin{table}[t]
-	\footnotesize
-	\centering
-	\caption{
-		Performance comparison with ACC between MCTS (Ours), Random scheduling (Random), Equal Task Schedule (ETS), and Heuristic Scheduling (Heuristic) with various memory selection methods evaluated across all datasets. We provide the metrics for training on all seen task datasets jointly (Joint) as an upper bound, as well as include the results from a breadth-first search (BFS) with Uniform memory selection for the 5-task datasets. 
-		%We use 'S' and 'P' as short for 'Split' and 'Permuted' for the datasets. 
-		Replay memory sizes are $M=10$ and $M=100$ for the 5-task and 10/20-task datasets respectively. We report the mean and standard deviation averaged over 5 seeds. Ours performs better or on par with the baselines on most datasets and selection methods, where MoF yields the best results %performance 
-		in general.
-	}
-	\vspace{-3mm}
-	%\setlength{\tabcolsep}{5pt}
-	\resizebox{0.98\textwidth}{!}{ %\scalebox{0.87}{
-	\input{PaperC/tables/memory_selection_methods}
-	}
-\vspace{-3mm}
-\label{tab:results_memory_selection_methods}
-\end{table}
 
 %\input{PaperC/sections/experiments/tables/table_memory_selection_methods}
 
@@ -55,7 +37,13 @@ See Appendix \ref{paperC:app:heuristic_scheduling_baseline} for more details on 
 \paragraph{Architectures.} We use a multi-head output layer for all datasets except for Permuted MNIST where the network uses single-head output. We use a 2-layer MLP with 256 hidden units for Split MNIST, Split FashionMNIST, Split notMNIST, and Permuted MNIST. For Split CIFAR-100, we use the CNN architecture used in \citeC{C:vinyals2016matching,C:schwarz2018progress}. For Split miniImagenet, we apply the reduced ResNet-18 from \citeC{C:lopez2017gradient}. 
 
 \vspace{-3mm}
-\paragraph{Evaluation Metric.} We use the average test accuracy over all tasks after learning the final task, i.e., $\text{ACC} = \frac{1}{T} \sum_{i=1}^{T} A_{T, i}^{(test)}$ where $A_{T, i}^{(test)}$ is the test accuracy of task $i$ after learning task $T$. We report means and standard deviations of ACC using 5 different seeds on all datasets. 
+\paragraph{Evaluation Metric.} 
+We use ACC as the average test accuracy over all tasks after learning the final task and BWT for measuring forgetting~\citeC{C:lopez2017gradient}, i.e.,
+\begin{align}
+	\textnormal{ACC} = \frac{1}{T} \sum_{i=1}^{T} A_{T, i}, \quad \textnormal{BWT} = \frac{1}{T-1} \sum_{i=1}^{T-1} A_{T, i} - A_{i, i},
+\end{align}
+where $A_{t, i}$ is the test accuracy for task $i$ after learning task $t$. We report means and standard deviations of ACC and BWT using 5 different seeds on all datasets. 
+%We use the average test accuracy over all tasks after learning the final task, i.e., $\text{ACC} = \frac{1}{T} \sum_{i=1}^{T} A_{T, i}^{(test)}$ where $A_{T, i}^{(test)}$ is the test accuracy of task $i$ after learning task $T$. We report means and standard deviations of ACC using 5 different seeds on all datasets. 
 
 
 
@@ -71,7 +59,7 @@ For the 5-task datasets, we provide the optimal replay schedule found from a bre
 Figure \ref{fig:mcts_best_rewards} shows the progress of ACC over %the MCTS
 iterations by MCTS for all datasets. We also show the best ACC metrics for Random, ETS, Heuristic, and BFS (where appropriate) as straight lines. 
 Furthermore, we include the ACC achieved by training on all seen datasets jointly at every task (Joint) for the 5-task datasets.
-We observe that MCTS outperforms Random and ETS successively with more iterations. Furthermore, MCTS approaches the upper limit of BFS on the 5-task datasets. For Permuted MNIST and Split CIFAR-100, the Heuristic baseline and MCTS perform on par after 50 iterations. This shows that Heuristic with careful tuning of the validation accuracy threshold can be a strong baseline when comparing replay scheduling methods. Table \ref{tab:results_memory_selection_methods} at the rows for Uniform selection shows the ACC for each method in this experiment. We note that MCTS outperforms ETS significantly on most datasets and performs on par with Heuristic.
+We observe that MCTS outperforms Random and ETS successively with more iterations. Furthermore, MCTS approaches the upper limit of BFS on the 5-task datasets. For Permuted MNIST and Split CIFAR-100, the Heuristic baseline and MCTS perform on par after 50 iterations. This shows that Heuristic with careful tuning of the validation accuracy threshold can be a strong baseline when comparing replay scheduling methods. %Table \ref{tab:results_memory_selection_methods} at the rows for Uniform selection shows the ACC for each method in this experiment. We note that MCTS outperforms ETS significantly on most datasets and performs on par with Heuristic.
 
 
 %%% Visualizations
@@ -91,7 +79,7 @@ We observe that MCTS outperforms Random and ETS successively with more iteration
 	\caption{Replay schedule learned from Split CIFAR-100 visualized as a bubble plot. %Visualization using a bubble plot of a replay schedule learned from Split CIFAR-100. %The color of the circles corresponds to a historical task and its size represents the task proportion that is replayed. The memory size is $M=100$ and the results are from 1 seed. 
 		The task proportions vary dynamically over time which would be hard to replace by a heuristic method. 
 	}
-	%\vspace{-4mm}
+	\vspace{-4mm}
 	\label{fig:replay_schedule_vis_cifar100}
 \end{wrapfigure}
 We visualize a learned replay schedule from Split CIFAR-100 with memory size $M=100$ to gain insights into the behavior of the scheduling policy from MCTS. Figure \ref{fig:replay_schedule_vis_cifar100} shows a bubble plot of the task proportions that are used for filling the replay memory at every task. 
@@ -104,36 +92,63 @@ The sum of all points from all circles at each column is fixed at the different 
 
 
 %%% Results on memory selection methods
+%%% Table 1, put it here for placement
+
+\begin{table}[t]
+	\footnotesize
+	\centering
+	\caption{
+		Performance comparison with ACC between MCTS (Ours), Random scheduling (Random), Equal Task Schedule (ETS), and Heuristic Scheduling (Heuristic) with various memory selection methods evaluated across all datasets. We provide the metrics for training on all seen task datasets jointly (Joint) as an upper bound, as well as include the results from a breadth-first search (BFS) with Uniform memory selection for the 5-task datasets. 
+		%We use 'S' and 'P' as short for 'Split' and 'Permuted' for the datasets. 
+		Replay memory sizes are $M=10$ and $M=100$ for the 5-task and 10/20-task datasets respectively. We report the mean and standard deviation averaged over 5 seeds. Ours performs better or on par with the baselines on most datasets and selection methods, where MoF yields the best results %performance 
+		in general.
+	}
+	\vspace{-3mm}
+	%\setlength{\tabcolsep}{5pt}
+	\resizebox{0.98\textwidth}{!}{ %\scalebox{0.87}{
+			\input{PaperC/tables/memory_selection_methods}
+		}
+		\vspace{-3mm}
+		\label{tab:results_memory_selection_methods}
+	\end{table}
+
 %\input{PaperC/sections/experiments/alternative_memory_selection_methods}
-\subsection{Alternative Memory Selection Methods}
+\subsection{Combine with Different Memory Selection Methods}
 \label{paperC:sec:alternative_memory_selection_methods}
 
 We show that our method can be combined with any memory selection method for storing replay samples. In addition to uniform sampling, we apply various memory selection methods commonly used in the CL literature, namely $k$-means clustering, $k$-center clustering~\citeC{C:nguyen2017variational}, and Mean-of-Features (MoF)~\citeC{C:rebuffi2017icarl}. We compare our method and ETS combined with these different selection methods. 
 The replay memory sizes are $M=10$ for the 5-task datasets and $M=100$ for the 10- and 20-task datasets.  
 Table \ref{tab:results_memory_selection_methods} shows the results across all datasets. 
-We note that using the replay schedule from MCTS outperforms the baselines when using the alternative selection methods, where MoF performs the best on most datasets. 
+We note that using the replay schedule from MCTS mostly outperforms the baselines when using the alternative selection methods, where MoF performs the best on most datasets. 
+
+
+%%% Table 2, put it here for placement
+%\input{PaperC/sections/experiments/tables/table_applying_scheduling_to_recent_replay_methods}
+\begin{table}[t]
+	%\footnotesize
+	\centering
+	\caption{
+		Performance comparison with ACC and BWT between scheduling methods MCTS (Ours), Random, ETS, and Heuristic combined with replay-based methods HAL, MER, DER, and DER++. %such as Hindsight Anchor Learning (HAL), Meta Experience Replay (MER), Dark Experience Replay (DER), and DER++. 
+		Replay memory sizes are $M=10$ and $M=100$ for the 5-task and 10/20-task datasets respectively. We report the mean and standard deviation averaged over 5 seeds. Results on Heuristic where some seed did not converge is denoted by $^{*}$. Applying MCTS to each method can enhance the performance compared to using the baseline schedules. 
+	}
+	\vspace{-3mm}
+	%\setlength{\tabcolsep}{5pt}
+	\resizebox{0.98\textwidth}{!}{ %\scalebox{0.87}{
+			\input{PaperC/tables/applying_scheduling_to_recent_replay_methods}
+		}
+		\vspace{-3mm}
+		\label{tab:results_applying_scheduling_to_recent_replay_methods}
+	\end{table}
+	
+	%%% Results on applying replay scheduling to recent replay methods
+	%\input{PaperC/sections/experiments/applying_scheduling_to_recent_replay_methods}
+	\subsection{Applying Scheduling to Recent Replay Methods}\label{paperC:sec:applying_scheduling_to_recent_replay_methods}
+	
+	In this experiment, we show that replay scheduling can be combined with any replay method to enhance the CL performance. We combine MCTS with Hindsight Anchor Learning (HAL)~\citeC{C:chaudhry2021using}, Meta-Experience Replay (MER)~\citeC{C:riemer2018learning}, Dark Experience Replay (DER)~\citeC{C:buzzega2020dark}, and DER++. 
+	We provide the hyperparameter settings in Appendix \ref{paperC:app:apply_scheduling_to_recent_replay_methods}. Table \ref{tab:results_applying_scheduling_to_recent_replay_methods} shows the performance comparison between our proposed replay scheduling against using Random, ETS, and Heuristic schedules for each method. The results confirm that replay scheduling is important for the final performance given the same memory constraints and it can benefit any existing CL framework. 
 
 
 %%% Figure Acc over memory size
-%\input{PaperC/sections/experiments/figures/accs_over_memory_size}
-\begin{comment}
-\begin{figure}[t]
-	\centering
-	\setlength{\figwidth}{0.35\textwidth}
-	\setlength{\figheight}{.16\textheight}%{.12\textheight}
-	\input{PaperC/figures/acc_over_memory_size_100iters/acc_over_memory_size_groupplot}
-	\vspace{-3mm}
-	\caption{Average test accuracies over tasks after learning the final task (ACC) over different replay memory sizes $M$ for the MCTS (Ours) and the Random, ETS, and Heuristic baselines on all datasets.
-		All results have been averaged over 5 seeds. The results show that replay scheduling can outperform replaying with random and ETS schedules, %equal task proportions,
-		especially for small $M$, on both small and large datasets across different backbone choices. Furthermore, our method requires less careful tuning than the Heuristic baseline as $M$ increases.
-	}
-	\vspace{-3mm}
-	\label{fig:acc_over_replay_memory_size}
-\end{figure}
-
-\end{comment}
-
-
 \begin{figure}[t]
 	\centering
 	\setlength{\figwidth}{0.35\textwidth}
@@ -153,7 +168,7 @@ We note that using the replay schedule from MCTS outperforms the baselines when 
 		\label{fig:acc_over_memory_size_class_il}
 	\end{subfigure}
 	\vspace{-1mm}
-	\caption{Performance comparison over various memory sizes for the methods, where (a) shows results in the Task- and Domain-Incremental Learning (IL) settings, and (b) in the Class-IL setting. The results have been averaged over 5 seeds. The results show that replay scheduling can outperform the baselines on both small and large datasets across different backbone choices in the different CL settings. 
+	\caption{Performance comparison with ACC over various memory sizes for the methods, where (a) shows results in the Task- and Domain-Incremental Learning (IL) settings, and (b) in the Class-IL setting. All results have been averaged over 5 seeds. These results show that replay scheduling can outperform the baselines on both small and large datasets across different backbone choices in the different CL settings. 
 	}
 	%\vspace{-3mm}
 	\label{fig:acc_over_replay_memory_size}
@@ -173,31 +188,7 @@ Figure \ref{fig:acc_over_memory_size_class_il} shows that ETS approaches MCTS wh
 
 
 
-%%% Table 2, put it here for placement
-%\input{PaperC/sections/experiments/tables/table_applying_scheduling_to_recent_replay_methods}
-\begin{table}[t]
-	%\footnotesize
-	\centering
-	\caption{
-    Performance comparison with ACC between scheduling methods MCTS (Ours), Random, ETS, and Heuristic combined with replay-based methods HAL, MER, and DER. %, and DER++. %such as Hindsight Anchor Learning (HAL), Meta Experience Replay (MER), Dark Experience Replay (DER), and DER++. 
-	Replay memory sizes are $M=10$ and $M=100$ for the 5-task and 10/20-task datasets respectively. We report the mean and standard deviation averaged over 5 seeds. Results on Heuristic where some seed did not converge is denoted by $^{*}$. Applying MCTS to each method can enhance the performance compared to using the baseline schedules. 
-	}
-	\vspace{-3mm}
-	%\setlength{\tabcolsep}{5pt}
-	\resizebox{0.98\textwidth}{!}{ %\scalebox{0.87}{
-			\input{PaperC/tables/applying_scheduling_to_recent_replay_methods}
-		}
-		\vspace{-3mm}
-		\label{tab:results_applying_scheduling_to_recent_replay_methods}
-	\end{table}
 
-%%% Results on applying replay scheduling to recent replay methods
-%\input{PaperC/sections/experiments/applying_scheduling_to_recent_replay_methods}
-\subsection{Applying Scheduling to Recent Replay Methods}\label{paperC:sec:applying_scheduling_to_recent_replay_methods}
-
-In this experiment, we show that replay scheduling can be combined with any replay method to enhance the CL performance. We combine MCTS with Hindsight Anchor Learning (HAL)~\citeC{C:chaudhry2021using}, Meta-Experience Replay (MER)~\citeC{C:riemer2018learning}, Dark Experience Replay (DER)~\citeC{C:buzzega2020dark}. %, and DER++. 
-We provide the hyperparameter settings in Appendix \ref{paperC:app:apply_scheduling_to_recent_replay_methods}. Table \ref{tab:results_applying_scheduling_to_recent_replay_methods} shows the performance comparison between our proposed replay scheduling against using Random, ETS, and Heuristic schedules for each method. The results confirm that replay scheduling %learning the time to learn 
-is important for the final performance given the same memory constraints and it can benefit any existing CL framework. 
 
 
 %%% Efficiency of Replay Scheduling
@@ -206,7 +197,7 @@ is important for the final performance given the same memory constraints and it 
 \label{paperC:sec:efficiency_of_replay_scheduling}
 
 %Here, we 
-\begin{wrapfigure}[12]{r}{0.36\textwidth}
+\begin{wrapfigure}[12]{r}{0.35\textwidth}
 	\centering
 	\setlength{\figwidth}{0.33\textwidth}
 	\setlength{\figheight}{.14\textheight}
@@ -215,7 +206,7 @@ is important for the final performance given the same memory constraints and it 
 	\vspace{-3mm}
 	\captionsetup{width=.9\linewidth}
 	\caption{
-		Number of replayed samples per task for the 5-task datasets in the tiny memory setting. Ours use $M=2$ samples for replay, while the baselines increment their memory per task.
+		Number of replayed samples/task for the 5-task datasets in the tiny memory setting. Ours use $M=2$ samples for replay, while the baselines increment their memory per task.
 	}
 	%\vspace{-4mm}
 	\label{fig:tiny_memory_experiment_memory_usage}
@@ -229,18 +220,18 @@ Additionally, we compare to using random replay schedules (Random) with the same
 We visualize the memory usage for our method and the baselines when training on a 5-task dataset in Figure \ref{fig:tiny_memory_experiment_memory_usage}. 
 Figure \ref{fig:memory_usage_10_and_20task_datasets} in Appendix \ref{paperC:app:additional_figures} shows the memory usage for the other datasets. 
 
-Table \ref{tab:efficiency_of_replay_scheduling_all_datasets} shows the ACC for each method across all datasets. Despite using significantly fewer samples for replay, MCTS performs better or on par with the best baselines on all datasets except Split CIFAR-100. 
-These results indicate that replay scheduling is an important research direction in CL as storing 1 sample/class in the memory could be inefficient in settings with large number of tasks.
+Table \ref{tab:efficiency_of_replay_scheduling_all_datasets} shows the ACC for each method across all datasets. Despite using significantly fewer samples for replay, MCTS performs on par with the best baselines and outperforms them on Permuted MNIST.  
+These results indicate that replay scheduling is an important research direction in CL, since storing every seen class in the memory could be inefficient in settings with large number of tasks. 
+
+
 
 \begin{table}[t]
-	%\scriptsize
 	\centering
 	\caption{
-		Performance comparison with ACC averaged over 5 seeds in the 1 ex/class %example per class 
-		memory setting evaluated across all datasets. %We use 'S' and 'P' as short for 'Split' and 'Permuted' for the datasets. 
-		MCTS (Ours) has replay memory size $M=2$ and $M=50$ for the 5-task and 10/20-task datasets respectively. The baselines replay all available memory samples. 
-		%We report the mean and standard deviation averaged over 5 seeds. 
-		MCTS performs on par with the best baselines on all datasets except S-CIFAR-100.
+		Performance comparison with ACC and BWT averaged over 5 seeds in the 1 sample/class %example per class 
+		memory setting evaluated across all datasets. 
+		MCTS (Ours) has  memory size $M=2$ and $M=50$ for the 5-task and 10/20-task datasets respectively. The baselines replay all available memory samples. 
+		MCTS performs on par with the best baselines and outperforms them on Permuted MNIST. 
 	}
 	\vspace{-3mm}
 	\resizebox{0.98\textwidth}{!}{
