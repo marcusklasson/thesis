@@ -1,0 +1,27 @@
+\begin{tabular}{llcccc}
+\toprule
+\textbf{}               &                  & \multicolumn{2}{c}{\textbf{Split CIFAR-100}} & \multicolumn{2}{c}{\textbf{Split miniImagenet}} \\
+\cmidrule(lr){3-4} \cmidrule(lr){5-6}
+\textbf{Memory size}    & \textbf{Methods} & $t$                  & $p$                     & $t$                    & $p$                      \\
+\midrule
+\multirow{3}{*}{M=95}   & MCTS vs Random  & 5.56     & \textbf{0.001}    & 3.15       & \textbf{0.029}     \\
+                        & MCTS vs ETS     & 8.11     & \textbf{0.000}    & 2.23       & 0.088              \\
+                        & MCTS vs Heuristic & 3.27     & \textbf{0.025}    & 4.24       & \textbf{0.012}     \\
+\midrule
+\multirow{3}{*}{M=285}  & MCTS vs Random  & 1.62     & 0.159             & 0.11       & 0.918              \\
+                        & MCTS vs ETS     & 6.76     & \textbf{0.000}    & 4.14       & \textbf{0.014}     \\
+                        & MCTS vs Heuristic & 5.87     & \textbf{0.003}    & 4.13       & \textbf{0.014}     \\
+\midrule
+\multirow{3}{*}{M=475}  & MCTS vs Random  & 3.05     & \textbf{0.025}    & 0.68       & 0.525              \\
+                        & MCTS vs ETS     & 7.78     & \textbf{0.000}    & 0.73       & 0.496              \\
+                        & MCTS vs Heuristic & 5.07     & \textbf{0.006}    & 4.28       & \textbf{0.012}     \\
+\midrule
+\multirow{3}{*}{M=950}  & MCTS vs Random  & 3.25     & \textbf{0.013}    & -0.09      & 0.929              \\
+                        & MCTS vs ETS     & 5.51     & \textbf{0.001}    & 2.25       & 0.058              \\
+                        & MCTS vs Heuristic & 3.85     & \textbf{0.017}    & 4.62       & \textbf{0.009}     \\
+\midrule
+\multirow{3}{*}{M=1900} & MCTS vs Random  & 1.08     & 0.317             & 1.41       & 0.203              \\
+                        & MCTS vs ETS     & 4.53     & \textbf{0.003}    & 2.34       & 0.052              \\
+                        & MCTS vs Heuristic & 5.05     & \textbf{0.007}    & 4.47       & \textbf{0.007}    \\
+\bottomrule
+\end{tabular}

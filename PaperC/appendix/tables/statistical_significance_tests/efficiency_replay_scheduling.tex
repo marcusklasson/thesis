@@ -1,0 +1,19 @@
+\begin{tabular}{lcccccc}
+\toprule
+                   & \multicolumn{2}{c}{\textbf{Split MNIST}} & \multicolumn{2}{c}{\textbf{Split FashionMNIST}} & \multicolumn{2}{c}{\textbf{Split notMNIST}} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7}
+\textbf{Methods}   & $t$                 & $p$                    & $t$                    & $p$                        & $t$                  & $p$                      \\ \midrule
+MCTS vs Random     & 2.12            & 0.077           & 2.32               & 0.076               & 1.89             & 0.122             \\
+MCTS vs A-GEM      & 1.00            & 0.347           & 4.08               & \textbf{0.004}               & 1.41             & 0.195             \\
+MCTS vs ER-Ring    & 1.01            & 0.342           & 1.18               & 0.292               & 2.11             & 0.076             \\
+MCTS vs Uniform & 0.30            & 0.770           & 0.07               & 0.950               & 1.39             & 0.203            \\
+\bottomrule \toprule
+                   & \multicolumn{2}{c}{\textbf{Permuted MNIST}} & \multicolumn{2}{c}{\textbf{Split CIFAR-100}} & \multicolumn{2}{c}{\textbf{Split miniImagenet}} \\
+\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7}
+\textbf{Methods}   & $t$                  & $p$                      & $t$                   & $p$                      & $t$                     & $p$                       \\ \midrule
+MCTS vs Random     & 2.72             & \textbf{0.044}             & 3.67              & \textbf{0.007}             & 2.48                & 0.054              \\
+MCTS vs A-GEM      & 8.40             & \textbf{0.001}             & 7.60              & \textbf{0.000}             & 19.52               & \textbf{0.000}              \\
+MCTS vs ER-Ring    & 4.46             & \textbf{0.005}             & -2.96             & \textbf{0.018}             & 0.99                & 0.369              \\
+MCTS vs Uniform & 4.68             & \textbf{0.003}             & -1.13             & \textbf{0.296}             & 0.23                & 0.824             \\
+\bottomrule
+\end{tabular}

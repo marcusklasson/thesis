@@ -204,7 +204,7 @@ Figure \ref{fig:acc_over_memory_size_class_il} shows that ETS approaches MCTS wh
 	\vspace{-3mm}
 	\input{PaperC/sections/experiments/figures/tiny_memory/memory_usage_barplot}
 	\vspace{-3mm}
-	\captionsetup{width=.9\linewidth}
+	\captionsetup{width=.98\linewidth}
 	\caption{
 		Number of replayed samples/task for the 5-task datasets in the tiny memory setting. Ours use $M=2$ samples for replay, while the baselines increment their memory per task.
 	}
@@ -220,7 +220,7 @@ Additionally, we compare to using random replay schedules (Random) with the same
 We visualize the memory usage for our method and the baselines when training on a 5-task dataset in Figure \ref{fig:tiny_memory_experiment_memory_usage}. 
 Figure \ref{fig:memory_usage_10_and_20task_datasets} in Appendix \ref{paperC:app:additional_figures} shows the memory usage for the other datasets. 
 
-Table \ref{tab:efficiency_of_replay_scheduling_all_datasets} shows the ACC for each method across all datasets. Despite using significantly fewer samples for replay, MCTS performs on par with the best baselines and outperforms them on Permuted MNIST.  
+Table \ref{tab:efficiency_of_replay_scheduling_all_datasets} shows the ACC for each method across all datasets. Despite using fewer samples for replay, MCTS performs on par with the best baselines and outperforms them on Permuted MNIST.  
 These results indicate that replay scheduling is an important research direction in CL, since storing every seen class in the memory could be inefficient in settings with large number of tasks. 
 
 

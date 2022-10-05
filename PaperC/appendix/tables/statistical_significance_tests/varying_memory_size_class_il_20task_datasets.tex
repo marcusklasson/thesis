@@ -1,0 +1,27 @@
+\begin{tabular}{llcccc}
+\toprule
+                        &                  & \multicolumn{2}{c}{\textbf{Split CIFAR-100}} & \multicolumn{2}{c}{\textbf{Split miniImagenet}} \\
+\cmidrule(lr){3-4} \cmidrule(lr){5-6}
+\textbf{Memory size}    & \textbf{Methods} & $t$                  & $p$                     & $t$                    & $p$                      \\
+\midrule
+\multirow{3}{*}{M=100}  & MCTS vs Random  & 2.35     & 0.065             & 1.03       & 0.335              \\
+                        & MCTS vs ETS     & 1.38     & 0.208             & 1.20       & 0.266              \\
+                        & MCTS vs Heuristic & 0.87     & 0.410             & 1.86       & 0.103              \\
+\midrule
+\multirow{3}{*}{M=200}  & MCTS vs Random  & 5.95     & \textbf{0.000}    & 4.34       & \textbf{0.003}     \\
+                        & MCTS vs ETS     & 8.07     & \textbf{0.000}    & 4.35       & \textbf{0.003}     \\
+                        & MCTS vs Heuristic & 5.72     & \textbf{0.000}    & 1.51       & 0.182              \\
+\midrule
+\multirow{3}{*}{M=400}  & MCTS vs Random  & 7.15     & \textbf{0.000}    & 7.06       & \textbf{0.000}     \\
+                        & MCTS vs ETS     & 11.98    & \textbf{0.000}    & 9.22       & \textbf{0.000}     \\
+                        & MCTS vs Heuristic & 2.01     & 0.101             & 1.29       & 0.232              \\
+\midrule
+\multirow{3}{*}{M=800}  & MCTS vs Random  & 5.05     & \textbf{0.003}    & 3.75       & \textbf{0.006}     \\
+                        & MCTS vs ETS     & 18.79    & \textbf{0.000}    & 6.32       & \textbf{0.001}     \\
+                        & MCTS vs Heuristic & 2.77     & \textbf{0.033}    & 3.60       & \textbf{0.007}     \\
+\midrule
+\multirow{3}{*}{M=1600} & MCTS vs Random  & 5.08     & \textbf{0.002}    & 2.50       & 0.059              \\
+                        & MCTS vs ETS     & 13.60    & \textbf{0.000}    & 4.49       & \textbf{0.008}     \\
+                        & MCTS vs Heuristic & 2.04     & 0.104             & 10.04      & \textbf{0.000}     \\
+\bottomrule
+\end{tabular}

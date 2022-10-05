@@ -34,4 +34,74 @@ We conduct experiments on six datasets commonly used in the continual learning l
 \vspace{-3mm}
 \paragraph{Experimental Settings for Single Task Replay Memory Experiment.} We motivated the need for replay scheduling in continual learning with Figure \ref{fig:single_task_replay_with_M10} in Section \ref{paperC:sec:introduction}. This simple experiment was performed on Split MNIST where the replay memory only contains samples from the first task, i.e., learning the classes 0/1. Furthermore, the memory can only be replayed at one point in time and we show the performance on each task when the memory is replayed at different time steps. We set the memory size to $M=10$ samples such that the memory holds 5 samples from both classes. We use the same network architecture and hyperparameters as described above for Split MNIST. The ACC metric above each subfigure corresponds to the ACC for training a network with the single task memory replay at different tasks. We observe that choosing different time points to replay the same memory leads to noticeably different results in the final performance, and in this example, the best final performance is achieved when the memory is used when learning task 5. Therefore, we argue that finding the proper schedule of what tasks to replay at what time in the fixed memory situation can be critical for continual learning. 
 
+\subsection{Heuristic Scheduling Baseline}\label{paperC:app:heuristic_scheduling_baseline}
 
+We implemented a heuristic scheduling baseline to compare against MCTS. The baseline keeps a validation set for the old tasks and replays the tasks which validation accuracy is below a certain threshold. We set the threshold in the following way: Let $A_{t, i}$ be the validation accuracy for task $t$ evaluated at time step $i$. The best evaluated validation accuracy for task $t$ at time $i$ is given by $A_{t, i}^{(best)} = \max(\{A_{t, 1}, ..., A_{t, i} \})$. The condition for replaying task $t$ on the next time step is then $A_{t, i} < \tau A_{t, i}^{(best)}$, where $\tau \in [0, 1]$ is a ratio controlling how much the current accuracy on task $t$ is allowed to decrease w.r.t. the best accuracy. The replay memory is filled with $M/k$, where $k$ is the number of tasks that need to be replayed according to their decrease in validation accuracy. This heuristic scheduling corresponds to the intuition of re-learning when a task has been forgotten. Training on the current task is performed without replay if the accuracy on all old tasks is above their corresponding threshold.       
+
+\vspace{-3mm}
+\paragraph{Grid search for $\tau$.} We performed a coarse-to-fine grid search for the ratio $\tau$ on each dataset. The best value for $\tau$ is selected according to the highest mean accuracy on the validation set averaged over 5 seeds. The validation set consists of 15\% of the training data and is the same for MCTS. We use the same experimental settings as described in Appendix \ref{paperC:app:experimental_settings}. The memory sizes are set to $M=10$ and $M=100$ for the 5-task datasets and the 10/20-task datasets respectively, and we apply uniform sampling as the memory selection method. We provide the ranges for $\tau$ that was used on each dataset and put the best value in \textbf{bold}:
+\begin{itemize}[topsep=1pt,noitemsep]
+	\item Split MNIST: $\tau =$ [0.9, 0.93, 0.95, \textbf{0.96}, 0.97, 0.98, 0.99]
+	\item Split FashionMNIST: $\tau =$ [0.9, 0.93, 0.95, 0.96, \textbf{0.97}, 0.98, 0.99]
+	\item Split notMNIST: $\tau =$ [0.9, 0.93, 0.95, 0.96, 0.97, \textbf{0.98}, 0.99]
+	\item Permuted MNIST: $\tau =$ [0.5, 0.55, 0.6, 0.65, 0.7, \textbf{0.75}, 0.8, 0.9, 0.95, 0.97, 0.99]
+	\item Split CIFAR-100: $\tau =$ [0.3, 0.4, 0.45, \textbf{0.5}, 0.55, 0.6, 0.65, 0.7, 0.8, 0.9, 0.95, 0.97, 0.99]
+	\item  Split miniImagenet: $\tau =$ [0.5, 0.6, 0.65, 0.7, \textbf{0.75}, 0.8, 0.85, 0.9, 0.95, 0.97, 0.99]
+\end{itemize}
+Note that we use these values for $\tau$ on all experiments with Heuristic for the corresponding datasets. The performance for this heuristic highly depends on careful tuning for the ratio $\tau$ when the memory size or memory selection method changes, as can be seen in in Figure \ref{fig:acc_over_replay_memory_size} and Table \ref{tab:results_memory_selection_methods}. We also provide the ranges for $\tau$ that was used on each dataset in the Class Incremental Learning setting and put the best value in \textbf{bold}:
+\begin{itemize}[topsep=1pt,noitemsep]
+	\item Split MNIST: $\tau =$ \{0.2, 0.3, 0.5, \textbf{0.75}, 0.9\}
+	\item Split FashionMNIST: $\tau =$ \{0.2, 0.3, \textbf{0.5},  0.75, 0.9\}
+	\item Split notMNIST:  $\tau =$ \{0.2, 0.3, \textbf{0.5},  0.75, 0.9\}
+	\item Split CIFAR-100: $\tau =$ \{\textbf{0.01}, 0.025, 0.05, 0.1, 0.25, 0.5\}
+	\item  Split miniImagenet: $\tau =$ \{\textbf{0.01}, 0.025, 0.05, 0.1, 0.25, 0.5\}
+\end{itemize}
+
+
+
+\subsection{Hyperparameters for Recent Replay Methods}
+\label{paperC:app:apply_scheduling_to_recent_replay_methods}
+
+In Section \ref{paperC:sec:applying_scheduling_to_recent_replay_methods}, we showed that MCTS can be applied to any replay method. We combined MCTS together with four recent replay methods, namely Hindsight Anchor Learning (HAL)~\citeC{C:chaudhry2021using}, Meta Experience Replay (MER)~\citeC{C:riemer2018learning}, and Dark Experience Replay (DER)~\citeC{C:buzzega2020dark}. Table \ref{tab:results_applying_scheduling_to_recent_replay_methods} shows the ACC and BWT for all methods combined with the scheduling from Random, ETS, Heuristic, and MCTS. We observe that MCTS can further improve the performance for each of the replay methods across the different datasets.  
+
+We present the hyperparameters used for each method in Table \ref{tab:hyperparameters_applying_scheduling_to_recent_replay_methods}. The hyperparameters for each method are denoted as
+\begin{itemize}[topsep=0pt, noitemsep]
+	\item {\bf HAL.} $\eta$: learning rate, $\lambda$: regularization, $\gamma$: mean embedding strength, $\beta$: decay rate, $k$: gradient steps on anchors   
+	\item {\bf MER.} $\gamma$: across batch meta-learning rate, $\beta$: within batch meta-learning rate 
+	\item {\bf DER.} $\alpha$: loss coefficient for memory logits 
+	\item {\bf DER++.} $\alpha$: loss coefficient for memory logits, $\beta$: loss coefficient for memory labels
+\end{itemize}
+We %For the experiments, we 
+used the same architectures and hyperparameters as described in Appendix \ref{paperC:app:experimental_settings} for all datasets, except for the optimizer in HAL where we used the SGD optimizer since using Adam made the model diverge in our experiments. We used the Adam optimizer with learning rate $\eta=0.001$ for MER, DER, and DER++. 
+
+
+\begin{table}[t]
+	%\scriptsize
+	\centering
+	\caption{
+		Hyperparameters for replay-based methods HAL, MER, DER and DER++ used in experiments on applying MCTS to recent replay-based methods in Section \ref{paperC:sec:applying_scheduling_to_recent_replay_methods}.
+	}
+	\vspace{-3mm}
+	\resizebox{0.95\textwidth}{!}{
+		\input{PaperC/appendix/tables/hyperparameters_recent_replay_methods}
+	}
+	\vspace{-2mm}
+	\label{tab:hyperparameters_applying_scheduling_to_recent_replay_methods}
+\end{table}
+
+
+
+\subsection{Memory Usage in Efficiency of Replay Scheduling Experiment}\label{paperC:app:additional_figures}
+
+We visualize the memory usage for Permuted MNIST and the 20-task datasets Split CIFAR-100 and Split miniImagenet in Figure \ref{fig:memory_usage_10_and_20task_datasets} for our method and the baselines used in the experiment in Section \ref{paperC:sec:efficiency_of_replay_scheduling}. Our method uses a fixed memory size of $M=50$ samples for replay on all three datasets. The memory size capacity for our method is reached after learning task 6 and task 11 on the Permuted MNIST and the 20-task datasets respectively, while the baselines continue incrementing their replay memory size.
+
+\begin{figure}[h]
+	\centering
+	\vspace{-1mm}
+	\setlength{\figwidth}{0.75\textwidth}
+	\setlength{\figheight}{.20\textheight}
+	\input{PaperC/appendix/figures/memory_usage/groupplot}
+	\vspace{-3mm}
+	\caption{Number of replayed samples per task for 10-task Permuted MNIST (top) and the 20-task datasets in the experiment in Section \ref{paperC:sec:efficiency_of_replay_scheduling}. The fixed memory size $M=50$ for our method is reached after learning task 6 and task 11 on the Permuted MNIST and the 20-task datasets respectively, while the baselines continue incrementing their number of replay samples per task.}
+	\label{fig:memory_usage_10_and_20task_datasets}
+\end{figure}
