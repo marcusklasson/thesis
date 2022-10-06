@@ -1,0 +1,60 @@
+
+\begin{tabular}{lcccccccccc}
+	\toprule 
+	& \multicolumn{2}{c}{\textbf{Test Env. Seed 10}} & \multicolumn{2}{c}{\textbf{Test Env. Seed 11}} & \multicolumn{2}{c}{\textbf{Test Env. Seed 12}} & \multicolumn{2}{c}{\textbf{Test Env. Seed 13}} & \multicolumn{2}{c}{\textbf{Test Env. Seed 14}} \\
+	\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7} \cmidrule(lr){8-9} \cmidrule(lr){10-11}
+	\textbf{Methods} &$t$               &$p$                          &$t$               &$p$                          &$t$               &$p$                          &$t$               &$p$                          &$t$               &$p$                          \\
+	\midrule 
+	DQN vs Random    & 0.50           & 0.636                  & 1.77           & 0.117                  & 0.62           & 0.560                  & 1.62           & 0.152                  & 2.32           & \textbf{0.049}         \\
+	DQN vs ETS       & 8.30           & \textbf{0.001}         & 0.36           & 0.740                  & 1.99           & 0.117                  & 1.05           & 0.352                  & 2.44           & 0.071                  \\
+	DQN vs Heur-GD   & 0.08           & 0.942                  & 3.13           & \textbf{0.035}         & -2.57          & 0.062                  & 1.53           & 0.201                  & 6.21           & \textbf{0.003}         \\
+	DQN vs Heur-LD:  & -1.64          & 0.175                  & 3.13           & \textbf{0.035}         & 1.63           & 0.177                  & 3.97           & \textbf{0.017}         & 6.21           & \textbf{0.003}         \\
+	DQN vs Heur-AT   & 0.08           & 0.942                  & 3.13           & \textbf{0.035}         & -2.57          & 0.062                  & 1.53           & 0.201                  & 5.49           & \textbf{0.005}         \\
+	DQN vs A2C       & -1.08          & 0.341                  & -2.65          & 0.056                  & -0.83          & 0.455                  & 0.06           & 0.957                  & 0.92           & 0.391                  \\
+	DQN vs SAC       & -0.15          & 0.883                  & -1.93          & 0.120                  & 0.29           & 0.782                  & 1.80           & 0.123                  & -1.12          & 0.309                  \\
+	\midrule 
+	A2C vs Random    & 1.01           & 0.369                  & 6.32           & \textbf{0.003}         & 1.20           & 0.298                  & 1.85           & 0.138                  & 0.72           & 0.499                  \\
+	A2C vs ETS       & inf            & \textbf{0.000}         & 28.80          & \textbf{0.000}         & inf            & \textbf{0.000}         & inf            & \textbf{0.000}         & 0.30           & 0.778                  \\
+	A2C vs Heur-GD   & inf            & \textbf{0.000}         & 55.32          & \textbf{0.000}         & -inf           & \textbf{0.000}         & inf            & \textbf{0.000}         & 2.40           & 0.075                  \\
+	A2C vs Heur-LD   & -inf           & \textbf{0.000}         & 55.32          & \textbf{0.000}         & inf            & \textbf{0.000}         & inf            & \textbf{0.000}         & 2.40           & 0.075                  \\
+	A2C vs Heur-AT   & inf            & \textbf{0.000}         & 55.32          & \textbf{0.000}         & -inf           & \textbf{0.000}         & inf            & \textbf{0.000}         & 2.00           & 0.117                  \\
+	A2C vs DQN       & 1.08           & 0.341                  & 2.65           & 0.056                  & 0.83           & 0.455                  & -0.06          & 0.957                  & -0.92          & 0.391                  \\
+	A2C vs SAC       & 1.00           & 0.372                  & 2.75           & \textbf{0.035}         & 2.49           & 0.068                  & 1.98           & 0.119                  & -1.68          & 0.159                  \\
+	\midrule 
+	SAC vs Random    & 0.59           & 0.579                  & 5.26           & \textbf{0.004}         & 0.51           & 0.635                  & -0.35          & 0.737                  & 3.97           & \textbf{0.009}         \\
+	SAC vs ETS       & 9.73           & \textbf{0.001}         & 10.26          & \textbf{0.001}         & 3.62           & \textbf{0.022}         & -1.49          & 0.210                  & 8.12           & \textbf{0.001}         \\
+	SAC vs Heur-GD   & 0.32           & 0.765                  & 22.50          & \textbf{0.000}         & -6.27          & \textbf{0.003}         & -1.26          & 0.277                  & 16.46          & \textbf{0.000}         \\
+	SAC vs Heur-LD   & -1.65          & 0.174                  & 22.50          & \textbf{0.000}         & 2.85           & \textbf{0.046}         & -0.07          & 0.950                  & 16.46          & \textbf{0.000}         \\
+	SAC vs Heur-AT   & 0.32           & 0.765                  & 22.50          & \textbf{0.000}         & -6.27          & \textbf{0.003}         & -1.26          & 0.277                  & 14.87          & \textbf{0.000}         \\
+	SAC vs DQN       & 0.15           & 0.883                  & 1.93           & 0.120                  & -0.29          & 0.782                  & -1.80          & 0.123                  & 1.12           & 0.309                  \\
+	SAC vs A2C       & -1.00          & 0.372                  & -2.75          & \textbf{0.035}         & -2.49          & 0.068                  & -1.98          & 0.119                  & 1.68           & 0.159                  \\
+	\midrule 
+	& \multicolumn{2}{c}{\textbf{Test Env. Seed 15}} & \multicolumn{2}{c}{\textbf{Test Env. Seed 16}} & \multicolumn{2}{c}{\textbf{Test Env. Seed 17}} & \multicolumn{2}{c}{\textbf{Test Env. Seed 18}} & \multicolumn{2}{c}{\textbf{Test Env. Seed 19}} \\
+	\cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7} \cmidrule(lr){8-9} \cmidrule(lr){10-11}
+	\textbf{Methods} &$t$               &$p$                          &$t$               &$p$                          &$t$               &$p$                          &$t$               &$p$                          &$t$               &$p$                          \\
+	\midrule 
+	DQN vs Random    & -0.21          & 0.844                  & 6.01           & \textbf{0.002}         & -1.09          & 0.332                  & -0.82          & 0.452                  & -4.76          & \textbf{0.002}         \\
+	DQN vs ETS       & -2.60          & 0.060                  & 22.75          & \textbf{0.000}         & -0.95          & 0.396                  & -6.48          & \textbf{0.003}         & -9.17          & \textbf{0.001}         \\
+	DQN vs Heur-GD   & -4.22          & \textbf{0.013}         & 2.98           & \textbf{0.041}         & 1.12           & 0.324                  & 5.10           & \textbf{0.007}         & 0.77           & 0.484                  \\
+	DQN vs Heur-LD:  & -4.57          & \textbf{0.010}         & 2.98           & \textbf{0.041}         & 1.12           & 0.324                  & 5.10           & \textbf{0.007}         & 0.77           & 0.484                  \\
+	DQN vs Heur-AT   & -4.22          & \textbf{0.013}         & 2.98           & \textbf{0.041}         & 1.12           & 0.324                  & 5.10           & \textbf{0.007}         & 0.77           & 0.484                  \\
+	DQN vs A2C       & -1.24          & 0.283                  & 2.36           & \textbf{0.047}         & -1.50          & 0.205                  & -3.63          & \textbf{0.022}         & 1.07           & 0.315                  \\
+	DQN vs SAC       & -2.86          & \textbf{0.043}         & 1.51           & 0.169                  & -1.70          & 0.159                  & 2.00           & 0.104                  & 1.35           & 0.219                  \\
+	\midrule 
+	A2C vs Random    & 0.38           & 0.722                  & 5.00           & \textbf{0.005}         & 1.60           & 0.164                  & 0.24           & 0.824                  & -5.67          & \textbf{0.001}         \\
+	A2C vs ETS       & -inf           & \textbf{0.000}         & 23.87          & \textbf{0.000}         & 5.56           & \textbf{0.005}         & -inf           & \textbf{0.000}         & -10.39         & \textbf{0.000}         \\
+	A2C vs Heur-GD   & -inf           & \textbf{0.000}         & -0.10          & 0.925                  & 26.08          & \textbf{0.000}         & inf            & \textbf{0.000}         & -0.75          & 0.498                  \\
+	A2C vs Heur-LD   & -inf           & \textbf{0.000}         & -0.10          & 0.925                  & 26.08          & \textbf{0.000}         & inf            & \textbf{0.000}         & -0.75          & 0.498                  \\
+	A2C vs Heur-AT   & -inf           & \textbf{0.000}         & -0.10          & 0.925                  & 26.08          & \textbf{0.000}         & inf            & \textbf{0.000}         & -0.75          & 0.498                  \\
+	A2C vs DQN       & 1.24           & 0.283                  & -2.36          & \textbf{0.047}         & 1.50           & 0.205                  & 3.63           & \textbf{0.022}         & -1.07          & 0.315                  \\
+	A2C vs SAC       & -9.78          & \textbf{0.001}         & -0.64          & 0.538                  & -0.93          & 0.389                  & 3.31           & \textbf{0.030}         & 0.08           & 0.939                  \\
+	\midrule 
+	SAC vs Random    & 1.20           & 0.296                  & 5.17           & \textbf{0.003}         & 1.98           & 0.084                  & -2.05          & 0.075                  & -6.55          & \textbf{0.000}         \\
+	SAC vs ETS       & 1.80           & 0.146                  & 19.47          & \textbf{0.000}         & 3.60           & \textbf{0.023}         & -4.25          & \textbf{0.013}         & -15.70         & \textbf{0.000}         \\
+	SAC vs Heur-GD   & -7.74          & \textbf{0.001}         & 0.74           & 0.500                  & 13.08          & \textbf{0.000}         & -0.42          & 0.697                  & -1.26          & 0.277                  \\
+	SAC vs Heur-LD   & -9.80          & \textbf{0.001}         & 0.74           & 0.500                  & 13.08          & \textbf{0.000}         & -0.42          & 0.697                  & -1.26          & 0.277                  \\
+	SAC vs Heur-AT   & -7.74          & \textbf{0.001}         & 0.74           & 0.500                  & 13.08          & \textbf{0.000}         & -0.42          & 0.697                  & -1.26          & 0.277                  \\
+	SAC vs DQN       & 2.86           & \textbf{0.043}         & -1.51          & 0.169                  & 1.70           & 0.159                  & -2.00          & 0.104                  & -1.35          & 0.219                  \\
+	SAC vs A2C       & 9.78           & \textbf{0.001}         & 0.64           & 0.538                  & 0.93           & 0.389                  & -3.31          & \textbf{0.030}         & -0.08          & 0.939         \\
+	\bottomrule         
+\end{tabular}
