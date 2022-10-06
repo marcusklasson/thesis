@@ -38,7 +38,7 @@ Hence, we only generate environments where the replay memory size $M=10$ have be
 		\label{fig:rewards_cifar10_2envs}
 	\end{subfigure}
 	\vspace{-2mm}
-	\caption{Performance progress measured in ACC (\%) for all methods in the 2 test environments with (a) {\bf Split MNIST} and (b) {\bf Split CIFAR-10} in the New Task Orders experiment. We plot the performance progress for A2C and DQN for 100 evaluation steps equidistantly distributed over the training episodes. The performance for the Random, ETS, and Heuristic scheduling baselines are plotted as straight lines.  }
+	\caption{Performance progress measured in ACC (\%) for all methods in the 2 test environments with (a) {\bf Split MNIST} and (b) {\bf Split CIFAR-10} in the New Task Orders experiment. We plot the performance progress for the RL algorithms for 100 evaluation steps equidistantly distributed over the training episodes. The performance for the Random, ETS, and Heuristic scheduling baselines are plotted as straight lines.  }
 	\label{fig:rewards_new_task_orders_2envs}
 	\vspace{-2mm}
 \end{figure}
@@ -151,20 +151,20 @@ We provide further insights in the benefits of learning the replay scheduling po
 	\setlength{\figheight}{.14\textheight}
 	\begin{subfigure}[t]{0.48\textwidth}
 		\centering
-		\input{PaperD/figures/rewards_notmnist_new_dataset/groupplot}
-		\vspace{-4mm} % hack to get captions aligned...
-		\caption{Split notMNIST}
-		\label{fig:rewards_notmnist_2envs}
-	\end{subfigure}%
-	\begin{subfigure}[t]{0.48\textwidth}
-		\centering
 		\input{PaperD/figures/rewards_fashionmnist_new_dataset/groupplot}
+		\vspace{-4mm} % hack to get captions aligned..
 		%\vspace{-2mm}
 		\caption{Split FashionMNIST}
 		\label{fig:rewards_fashionmnist_2envs}
+	\end{subfigure}%
+	\begin{subfigure}[t]{0.48\textwidth}
+		\centering
+		\input{PaperD/figures/rewards_notmnist_new_dataset/groupplot}
+		\caption{Split notMNIST}
+		\label{fig:rewards_notmnist_2envs}
 	\end{subfigure}
 	\vspace{-1mm}
-	\caption{Performance progress measured in ACC (\%) for all methods in the 2 test environments with (a) {\bf Split notMNIST} and (b) {\bf Split FashionMNIST} in the New Dataset experiment. We plot the performance progress for A2C and DQN for 100 evaluation steps equidistantly distributed over the training episodes. The performance for the Random, ETS, and Heuristic scheduling baselines are plotted as straight lines.  }
+	\caption{Performance progress measured in ACC (\%) for all methods in the 2 test environments with (a) {\bf Split FashionMNIST} and (b) {\bf Split notMNIST} in the New Dataset experiment. We plot the performance progress for the RL algorithms for 100 evaluation steps equidistantly distributed over the training episodes. The performance for the Random, ETS, and Heuristic scheduling baselines are plotted as straight lines.  }
 	\label{fig:rewards_new_dataset_2envs}
 	\vspace{-2mm}
 \end{figure}
