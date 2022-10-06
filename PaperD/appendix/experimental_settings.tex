@@ -49,127 +49,203 @@ Table \ref{tab:time_cost_dqn_mnist} shows a time-cost ablation experiment w/ or 
 
 
 \vspace{-3mm}
-\paragraph{DQN and A2C Architectures.}
+\paragraph{RL Architectures.}
 The input layer has size $T-1$ where each unit is inputting the task performances since the states are represented by the validation accuracies $s_t = [A_{t, 1}^{(val)}, ..., A_{t, t}^{(val)}, 0, ..., 0]$. The current task can therefore be determined by the number of non-zero state inputs. 
-The output layer has 35 units representing the possible actions at $T=5$ with the discrete action space we have constructed in Appendix \ref{paperD:app:action_space}. %Section \ref{paperD:sec:methodology}. 
-We use action masking on the output units to prevent the network from selection invalid actions for constructing the replay memory at the current task. The DQN is a 2-layer MLP with 512 hidden units and ReLU activations. For A2C, we use separate networks for parameterizing the policy and the value function, where both networks are 2-layer MLPs with 64 hidden units of Tanh activations. 
+The output layer has 35 units representing the possible actions at $T=5$ with the discrete action space from Klasson \etal~\citeD{D:klasson2021learn}. 
+For DQN and A2C, we use a Categorical policy with action masking on the output units to prevent the network from selection invalid actions for constructing the replay memory at the current task. The DQN is a 2-layer MLP with 512 hidden units and ReLU activations. For A2C, we use separate networks for parameterizing the policy and the value function, where both networks are 2-layer MLPs with 64 hidden units and Tanh activations. 
+For SAC, we use a Dirichlet policy which uses masking to prevent selecting action values along the invalid dimensions. We clamp the logarithmic output values of the policy network between $[-20, 2]$ to stabilize learning the concentration parameters of the Dirichlet distribution, and we ensure that the parameters are $>1$. The policy and value networks are 2-layer MLPs with 256 hidden units and ReLU activations. 
+
 
 \vspace{-3mm}
-\paragraph{DQN and A2C Hyperparameters.}
-We provide the hyperparameters for the both DQN and A2C in Table \ref{tab:dqn_hyperparameters_new_task_orders}-\ref{tab:a2c_hyperparameters_new_dataset}. Table \ref{tab:dqn_hyperparameters_new_task_orders} and \ref{tab:a2c_hyperparameters_new_task_orders} includes the hyperparameters on the New Task Order experiment for DQN and A2C respectively, while Table \ref{tab:dqn_hyperparameters_new_dataset} and \ref{tab:a2c_hyperparameters_new_dataset} includes the hyperparameters on the New Dataset experiment for DQN and A2C respectively. Regarding the training environments in Table \ref{tab:dqn_hyperparameters_new_dataset} and \ref{tab:a2c_hyperparameters_new_dataset}, we use two different datasets in the training environments to increase the diversity. When Spit notMNIST is for testing, half the amount of training environments are using Split MNIST and the other half uses Split FashionMNIST. For example, in Table \ref{tab:a2c_hyperparameters_new_dataset}, A2C uses 10 training environments which means that there are 5 Split MNIST environments and 5 Split FashionMNIST environments. Similarly, half the amount of training environments are using Split MNIST and the other half uses Split notMNIST when the testing environments uses Split FashionMNIST.   
+\paragraph{RL Hyperparameters.}
+We provide the hyperparameters for DQN, A2C, and SAC in Table \ref{tab:dqn_hyperparameters}, \ref{tab:a2c_hyperparameters}, and \ref{tab:sac_hyperparameters} respectively.
+%We provide the hyperparameters for the both DQN and A2C in Table \ref{tab:dqn_hyperparameters_new_task_orders}-\ref{tab:a2c_hyperparameters_new_dataset}. Table \ref{tab:dqn_hyperparameters_new_task_orders} and \ref{tab:a2c_hyperparameters_new_task_orders} includes the hyperparameters on the New Task Order experiment for DQN and A2C respectively, while Table \ref{tab:dqn_hyperparameters_new_dataset} and \ref{tab:a2c_hyperparameters_new_dataset} includes the hyperparameters on the New Dataset experiment for DQN and A2C respectively. 
+Regarding the training environments in the tables for the \textbf{New Datasets} experiment, we use two different datasets in the training environments to increase the diversity. When Spit notMNIST is for testing, half the amount of training environments are using Split MNIST and the other half uses Split FashionMNIST. For example, in Table \ref{tab:a2c_hyperparameters_new_dataset}, A2C uses 10 training environments which means that there are 5 Split MNIST environments and 5 Split FashionMNIST environments when the testing environments uses Split notMNIST. Similarly, half the amount of training environments are using Split MNIST and the other half uses Split notMNIST when the testing environments uses Split FashionMNIST.   
 
 \vspace{-3mm}
 \paragraph{Implementations.} 
-The code for DQN was adapted from OpenAI baselines~\citeD{D:dhariwal2017baselines} and the PyTorch~\citeD{D:paszke2019pytorch} tutorial on DQN {\small \url{https://pytorch.org/tutorials/intermediate/reinforcement_q_learning.html}}. For A2C, we followed the implementations released by Kostrikov~\citeD{D:kostrikov2018pytorchrl} and Igl \etal~\citeD{D:igl2020transient}. We make the code publicly available upon acceptance. 
+The code for DQN was adapted from OpenAI baselines~\citeD{D:dhariwal2017baselines} and the PyTorch~\citeD{D:paszke2019pytorch} tutorial on DQN {\small \url{https://pytorch.org/tutorials/intermediate/reinforcement_q_learning.html}}. For A2C, we followed the implementations released by Kostrikov~\citeD{D:kostrikov2018pytorchrl} and Igl \etal~\citeD{D:igl2020transient}. For SAC, we adapt the implementation from Ball and Roberts~\citeD{D:ball2021offcon}. 
+%We make the code publicly available upon acceptance. 
 
 %\clearpage
 
-\begin{table}[h]
-\small
-\centering
-\caption{DQN hyperparameters for the experiments on {\bf New Task Orders} in Section \ref{paperD:sec:results_on_policy_generalization}.  
-}
-\vspace{-2mm}
-\label{tab:dqn_hyperparameters_new_task_orders}
-\resizebox{0.99\textwidth}{!}{
-\begin{tabular}{l c c c}
-\toprule
- {\bf Hyperparameters} & {\bf Split MNIST} & {\bf Split FashionMNIST} & {\bf Split CIFAR-10} \\
- \midrule
- Training Environments & 30 & 20 & 10 \\
- Learning Rate  & 0.0001 & 0.0003 & 0.0003 \\
- Optimizer      & Adam & Adam & Adam \\
- Buffer Size    & 10k & 10k & 10k  \\
- Target Update per step  & 500 & 500 & 500 \\
- Batch Size     & 32 & 32 & 32 \\
- Discount Factor $\gamma$ & 1.0 & 1.0 & 1.0 \\
- Exploration Start $\epsilon_{start}$ & 1.0 & 1.0 & 1.0 \\
- Exploration Final $\epsilon_{final}$ & 0.02 & 0.02 & 0.02 \\
- Exploration Annealing (episodes) & 2.5k & 2.5k & 2.5k \\
- Training Episodes & 10k & 10k & 10k \\
-\bottomrule
-\end{tabular}
-}
-\end{table}
 
 \begin{table}[h]
-\small
-\centering
-\caption{A2C hyperparameters for the experiments on {\bf New Task Orders} in Section \ref{paperD:sec:results_on_policy_generalization}.  
-}
-\vspace{-2mm}
-\label{tab:a2c_hyperparameters_new_task_orders}
-\begin{tabular}{l c c c}
-\toprule
- {\bf Hyperparameters} & {\bf Split MNIST} & {\bf Split FashionMNIST} & {\bf Split CIFAR-10} \\
- \midrule
- Training Environments & 10 & 10 & 10 \\
- Learning Rate  & 0.0001 & 0.0003 & 0.00003 \\
- Optimizer      & RMSProp & RMSProp & RMSProp \\
- Gradient Clipping & 0.5 & 0.5 & 0.5 \\
- GAE parameter $\lambda$ & 0.95 & 0.95 & 0.95 \\
- VF coefficient & 0.5 & 0.5 & 0.5 \\
- Entropy coefficient & 0.01 & 0.01 & 0.01 \\
- Number of steps $n_{steps}$ & 5 & 5 & 5 \\
- Discount Factor $\gamma$ & 1.0 & 1.0 & 1.0 \\
- Training Episodes & 100k & 100k & 100k \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{table}[h]
-\small
-\centering
-\caption{DQN hyperparameters for the experiments on {\bf New Dataset} in Section \ref{paperD:sec:results_on_policy_generalization}. Split notMNIST and Split FashionMNIST indicate the dataset used in the test environments. 
-}
-\vspace{-2mm}
-\label{tab:dqn_hyperparameters_new_dataset}
-\begin{tabular}{l c c}
-\toprule
- {\bf Hyperparameters} & {\bf Split notMNIST} & {\bf Split FashionMNIST}  \\
- \midrule
- Training Environments & 30 & 30  \\
- Learning Rate  & 0.0001 & 0.0001  \\
- Optimizer      & Adam & Adam  \\
- Buffer Size    & 10k & 10k   \\
- Target Update per step  & 500 & 500  \\
- Batch Size     & 32 & 32  \\
- Discount Factor $\gamma$ & 1.0 & 1.0  \\
- Exploration Start $\epsilon_{start}$ & 1.0 & 1.0 \\
- Exploration Final $\epsilon_{final}$ & 0.02 & 0.02  \\
- Exploration Annealing (episodes) & 2.5k & 2.5k  \\
- Training Episodes & 10k & 10k  \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{table}[h]
-\small
-\centering
-\caption{A2C hyperparameters for the experiments on {\bf New Dataset} in Section \ref{paperD:sec:results_on_policy_generalization}. Split notMNIST and Split FashionMNIST indicate the dataset used in the test environments. 
-}
-\vspace{-2mm}
-\label{tab:a2c_hyperparameters_new_dataset}
-\begin{tabular}{l c c c}
-\toprule
- {\bf Hyperparameters} & {\bf Split notMNIST} & {\bf Split FashionMNIST}  \\
- \midrule
- Training Environments & 10 & 10  \\
- Learning Rate  & 0.0001 & 0.0003  \\
- Optimizer      & RMSProp & RMSProp  \\
- Gradient Clipping & 0.5 & 0.5  \\
- GAE parameter $\lambda$ & 0.95 & 0.95  \\
- VF coefficient & 0.5 & 0.5 \\
- Entropy coefficient & 0.01 & 0.01  \\
- Number of steps $n_{steps}$ & 5 & 5  \\
- Discount Factor $\gamma$ & 1.0 & 1.0  \\
- Training Episodes & 100k & 100k  \\
-\bottomrule
-\end{tabular}
+	\centering 
+	\caption{DQN hyperparameters for the experiments on (a) {\bf New Task Orders} and (b) {\bf New Datasets} in Section \ref{paperD:sec:results_on_policy_generalization}. (a) shows have differing values between datasets placed within $\{\cdot\}$ with the order Split MNIST, Split FashionMNIST, Split notMNIST, and Split CIFAR-10. Hyperparameter values in (b) are the same for both Split FashionMNIST and Split notMNIST. }
+	\vspace{-1mm}
+	\begin{subtable}{.6\textwidth}
+		\centering
+		\caption{{\bf New Task Orders}.}
+		\vspace{-2mm}
+		\resizebox{0.95\textwidth}{!}{
+		\begin{tabular}{l c}
+			\toprule
+			{\bf Hyperparameters} & {\bf Values} \\
+			\midrule
+			Training Environments & \{30, 20, 30, 10\}  \\
+			Learning Rate  & \{0.0001, 0.0003, 0.0001, 0.0003\} \\
+			Optimizer      & Adam  \\
+			Buffer Size    & 10k  \\
+			Target Update per step  & 500  \\
+			Batch Size     & 32  \\
+			Discount Factor $\gamma$ & 1.0  \\
+			Exploration Start $\epsilon_{start}$ & 1.0  \\
+			Exploration Final $\epsilon_{final}$ & 0.02  \\
+			Exploration Annealing (episodes) & 2.5k  \\
+			Training Episodes & 10k  \\
+			\bottomrule
+		\end{tabular}
+		}
+		\label{tab:dqn_hyperparameters_new_task_orders}
+	\end{subtable}% \quad
+	\begin{subtable}{.4\textwidth}
+		\centering
+		\caption{{\bf New Dataset}.}
+		\vspace{-2mm}
+		\resizebox{0.95\textwidth}{!}{
+			\begin{tabular}{l c}
+				\toprule
+				{\bf Hyperparameters} & {\bf Values}   \\
+				\midrule
+				Training Environments & 30  \\
+				Learning Rate  & 0.0001   \\
+				Optimizer      & Adam   \\
+				Buffer Size    & 10k    \\
+				Target Update per step  & 500   \\
+				Batch Size     & 32   \\
+				Discount Factor $\gamma$ & 1.0   \\
+				Exploration Start $\epsilon_{start}$ & 1.0  \\
+				Exploration Final $\epsilon_{final}$ & 0.02   \\
+				Exploration Annealing (episodes) & 2.5k   \\
+				Training Episodes & 10k   \\
+				\bottomrule
+			\end{tabular}
+		}
+		\label{tab:dqn_hyperparameters_new_datasets}
+	\end{subtable} 
+	\label{tab:dqn_hyperparameters}
 \end{table}
 
 
-%\clearpage
+\begin{table}[h]
+	\centering 
+	\caption{A2C hyperparameters for the experiments on (a) {\bf New Task Orders} and (b) {\bf New Datasets} in Section \ref{paperD:sec:results_on_policy_generalization}. Both (a) and (b) shows have differing values between datasets placed within $\{\cdot\}$, with the order Split MNIST, Split FashionMNIST, Split notMNIST, and Split CIFAR-10 for (a), and the order Split FashionMNIST and Split notMNIST for (b). }
+	\vspace{-1mm}
+	\begin{subtable}{.6\textwidth}
+		\centering
+		\caption{{\bf New Task Orders}.}
+		\vspace{-2mm}
+		\resizebox{0.95\textwidth}{!}{
+		\begin{tabular}{l c }
+			\toprule
+			{\bf Hyperparameters} & {\bf Values} \\
+			\midrule
+			Training Environments & 10  \\
+			Learning Rate  & \{0.0001, 0.0003, 0.0001, 0.0003\}  \\
+			Optimizer      & RMSProp  \\
+			Gradient Clipping & 0.5  \\
+			GAE parameter $\lambda$ & 0.95  \\
+			VF coefficient & 0.5  \\
+			Entropy coefficient & 0.01  \\
+			Number of steps $n_{steps}$ & 5  \\
+			Discount Factor $\gamma$ & 1.0  \\
+			Training Episodes & 100k  \\
+			\bottomrule
+		\end{tabular}
+		}
+		%\vspace{-5mm}
+		\label{tab:a2c_hyperparameters_new_task_orders}
+	\end{subtable}% \quad
+	\begin{subtable}{.4\textwidth}
+		\centering
+		\caption{{\bf New Dataset}.}
+		\vspace{-2mm}
+		\resizebox{0.95\textwidth}{!}{
+		\begin{tabular}{l c }
+			\toprule
+			{\bf Hyperparameters} & {\bf Values}   \\
+			\midrule
+			Training Environments & 10   \\
+			Learning Rate  & \{0.0003, 0.0001\}   \\
+			Optimizer      & RMSProp   \\
+			Gradient Clipping & 0.5   \\
+			GAE parameter $\lambda$ & 0.95   \\
+			VF coefficient & 0.5  \\
+			Entropy coefficient & 0.01  \\
+			Number of steps $n_{steps}$ & 5   \\
+			Discount Factor $\gamma$ & 1.0   \\
+			Training Episodes & 100k   \\
+			\bottomrule
+		\end{tabular}
+		}
+		\label{tab:a2c_hyperparameters_new_datasets}
+	\end{subtable} 
+	\label{tab:a2c_hyperparameters}
+\end{table}
+
+\begin{table}[h]
+	\centering 
+	\caption{SAC hyperparameters for the experiments on (a) {\bf New Task Orders} and (b) {\bf New Datasets} in Section \ref{paperD:sec:results_on_policy_generalization}. Both (a) and (b) shows have differing values between datasets placed within $\{\cdot\}$, with the order Split MNIST, Split FashionMNIST, Split notMNIST, and Split CIFAR-10 for (a), and the order Split FashionMNIST and Split notMNIST for (b). }
+	\vspace{-1mm}
+	\begin{subtable}{.55\textwidth}
+		\centering
+		\caption{{\bf New Task Orders}.}
+		\vspace{-2mm}
+		\resizebox{0.95\textwidth}{!}{
+			\begin{tabular}{l c }
+				\toprule
+				{\bf Hyperparameters} & {\bf Values} \\
+				\midrule
+				Training Environments & 10  \\
+				Learning Rate  & \{0.0003, 0.0003, 0.0001, 0.0001\}  \\
+				Optimizer      & Adam  \\
+				Buffer Size & 100k \\
+				Batch Size     & 256  \\
+				Target Entropy & -dim($\gA$) (i.e. $T-1=4$) \\
+				Target Smoothing Coefficient $\tau$ & 0.005 \\
+				Target Update Interval & 1 \\
+				Gradient Steps & 1 \\ 
+				Gradient Clipping & 0.5  \\
+				Discount Factor $\gamma$ & 1.0  \\
+				Training Episodes & 20k  \\
+				\bottomrule
+			\end{tabular}
+		}
+		%\vspace{-5mm}
+		\label{tab:sac_hyperparameters_new_task_orders}
+	\end{subtable}% \quad
+	\begin{subtable}{.45\textwidth}
+		\centering
+		\caption{{\bf New Dataset}.}
+		\vspace{-2mm}
+		\resizebox{0.95\textwidth}{!}{
+			\begin{tabular}{l c }
+				\toprule
+				{\bf Hyperparameters} & {\bf Values} \\
+				\midrule
+				Training Environments & 10  \\
+				Learning Rate  & \{0.0003, 0.0001\}  \\
+				Optimizer      & Adam  \\
+				Buffer Size & 100k \\
+				Batch Size     & 256  \\
+				Target Entropy & -dim($\gA$) (i.e. $T-1=4$) \\
+				Target Smoothing Coefficient $\tau$ & 0.005 \\
+				Target Update Interval & 1 \\
+				Gradient Steps & 1 \\ 
+				Gradient Clipping & 0.5  \\
+				Discount Factor $\gamma$ & 1.0  \\
+				Training Episodes & 20k  \\
+				\bottomrule
+			\end{tabular}
+		}
+		\label{tab:sac_hyperparameters_new_datasets}
+	\end{subtable} 
+	\label{tab:sac_hyperparameters}
+\end{table}
+
+
+\clearpage 
 
 \subsection*{Heuristic Scheduling Baselines}\label{paperD:app:heuristic_scheduling_baselines}
 
@@ -191,33 +267,33 @@ The replay memory is filled with $M/k$ samples from each selected task, where $k
 We performed a grid search for the parameter $\tau$ for the three heuristic scheduling baselines for each experiment to compare against the learned replay scheduling policies. The validation set consists of 15\% of the training data and is identical to the validation set used for learning the RL policies. 
 We select the parameter based on ACC scores achieved in the same number of training environments used by either DQN or A2C. The search range we use is $\tau \in \{0.90, 0.95, 0.999\}$. In Table \ref{tab:grid_search_heuristics_multiple_cl_environments}, we show the selected parameter value of $\tau$ and the number of environments used for selecting the value for each method and experiment in Section \ref{sec:results_on_policy_generalization}. The same parameters are used to generate the results on the heuristics in Table \ref{tab:average_ranking_rl_experiment}. 
 
-\begin{table}[t]
+\begin{table}[h]
 %\footnotesize%\small
 \centering
 \caption{The threshold parameter $\tau$ used in the heuristic scheudling baselines Heuristic Global Drop (Heur-GD), Heuristic Local Drop (Heur-LD), and Heuristic Accuracy Threshold (Heur-AT). The search range is $\tau \in \{0.90, 0.95, 0.999\}$ for all methods and we display the number of environments used for selecting the parameter used at test time.  
 }
 \vspace{-2mm}
 \label{tab:grid_search_heuristics_multiple_cl_environments}
-\resizebox{\textwidth}{!}{
-\begin{tabular}{l c c c c c c c c c c}
+\resizebox{0.99\textwidth}{!}{
+\begin{tabular}{l c c c c c c c c c c c c}
 \toprule %\toprule
  & \multicolumn{6}{c}{ {\bf New Task Order}} & \multicolumn{4}{c}{ {\bf New Dataset}}\\
- \cmidrule(lr){2-7}  \cmidrule(lr){8-11}
+ \cmidrule(lr){2-9}  \cmidrule(lr){10-13}
  %{\bf Method} & S-MNIST & S-FashionMNIST & S-CIFAR-10 & S-notMNIST & S-FashionMNIST  \\
-  & \multicolumn{2}{c}{ {\bf S-MNIST}} & \multicolumn{2}{c}{ {\bf S-FashionMNIST}} & \multicolumn{2}{c}{ {\bf S-CIFAR-10}} & \multicolumn{2}{c}{ {\bf S-notMNIST}} & \multicolumn{2}{c}{ {\bf S-FashionMNIST}}   \\
- \cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7} \cmidrule(lr){8-9} \cmidrule(lr){10-11} 
- {\bf Method} & $\tau$ & \#Envs & $\tau$ & \#Envs & $\tau$ & \#Envs & $\tau$ & \#Envs & $\tau$ &  \#Envs \\
+  & \multicolumn{2}{c}{ {\bf S-MNIST}} & \multicolumn{2}{c}{ {\bf S-FashionMNIST}} & \multicolumn{2}{c}{ {\bf S-notMNIST}} & \multicolumn{2}{c}{ {\bf S-CIFAR-10}} & \multicolumn{2}{c}{ {\bf S-notMNIST}} & \multicolumn{2}{c}{ {\bf S-FashionMNIST}}   \\
+ \cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7} \cmidrule(lr){8-9} \cmidrule(lr){10-11} \cmidrule(lr){12-13} 
+ {\bf Method} & $\tau$ & \#Envs & $\tau$ & \#Envs & $\tau$ & \#Envs & $\tau$ & \#Envs & $\tau$ &  \#Envs & $\tau$ &  \#Envs \\
  \midrule
-    Heur-GD & 0.9 & 10 & 0.95  & 20 & 0.9   & 10 & 0.9  & 10 & 0.9   & 10 \\ 
-    Heur-LD & 0.9 & 10 & 0.999 & 20 & 0.999 & 10 & 0.95 & 10 & 0.999 & 10 \\ 
-    Heur-AT & 0.9 & 10 & 0.999 & 20 & 0.9   & 10 & 0.9 & 10 & 0.95  & 10 \\
+    Heur-GD & 0.9 & 10 & 0.95  & 20 & 0.999   & 10 & 0.9   & 10 & 0.9  & 10 & 0.9   & 10 \\ 
+    Heur-LD & 0.9 & 10 & 0.999 & 20 & 0.999 & 10 & 0.999 & 10 & 0.95 & 10 & 0.999 & 10 \\ 
+    Heur-AT & 0.9 & 10 & 0.999 & 20 & 0.999   & 10 & 0.9 & 10 & 0.9 & 10 & 0.95  & 10 \\
     %Heur-GD        & \{0.90, 0.95, 0.999\} & \{0.90, 0.95, 0.999\} & \{0.90, 0.95, 0.999\} & \{0.90, 0.95, 0.999\} & \{0.90, 0.95, 0.999\} \\
     %Heur-LD        & \{0.90, 0.95, 0.999\} & \{0.90, 0.95, 0.999\} & \{0.90, 0.95, 0.999\} & \{0.90, 0.95, 0.999\} & \{0.90, 0.95, 0.999\} \\
     %Heur-AT        & \{0.90, 0.95, 0.999\} & \{0.90, 0.95, 0.999\} & \{0.90, 0.95, 0.999\} & \{0.90, 0.95, 0.999\} & \{0.90, 0.95, 0.999\} \\
 \bottomrule %\bottomrule
 \end{tabular}
 } 
-%\vspace{-3mm}
+\vspace{-3mm}
 \end{table}
 
 
