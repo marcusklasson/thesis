@@ -64,7 +64,7 @@ The heuristics are based on the intuition that forgotten tasks should be replaye
 To assess generalization capability, we use a ranking method based on the $\ACC$ between the methods in every test environment for comparison (see Appendix \ref{paperD:app:ranking_method} for more details). 
 
 
-
+\begin{comment}
 \begin{table}[t]
 	\footnotesize%\small
 	\centering
@@ -92,6 +92,19 @@ To assess generalization capability, we use a ranking method based on the $\ACC$
 		\end{tabular}
 		%}
 	\vspace{-2mm}
+\end{table}
+\end{comment}
+
+
+\begin{table}[t]
+	\centering
+	\caption{Average ranking (lower is better) across methods in the policy generalization experiments. The best and second-best ranks are colored in \textcolor{forestgreen}{green} and \textcolor{orange}{orange} respectively.}
+	\vspace{-3mm}
+	\resizebox{0.98\textwidth}{!}{
+	\input{PaperD/tables/ranking_results_table.tex}
+	}
+	\label{tab:average_ranking_rl_experiment}
+	\vspace{-3mm}
 \end{table}
 
 

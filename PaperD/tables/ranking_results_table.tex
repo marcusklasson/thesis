@@ -1,0 +1,18 @@
+\begin{tabular}{lcccccc}
+\toprule	
+	& \multicolumn{4}{c}{\textbf{New Task Order}}        & \multicolumn{2}{c}{\textbf{New Dataset}} \\
+	\cmidrule(lr){2-5} \cmidrule(lr){6-7}
+	\textbf{Method} & S-MNIST & S-FashionMNIST & S-notMNIST & S-CIFAR-10 & S-FashionMNIST        & S-notMNIST       \\
+	\midrule
+	Random          & 4.58    & \textcolor{orange}{3.9}            & 4.14       & 5.57       & 4.53                  & 4.62             \\
+	ETS             & 4.5     & 5.24           & 5.0          & 6.2        & \textcolor{orange}{4.14}                  & 4.76             \\
+	\midrule
+	Heur-GD         & 5.07    & 4.91           & \textcolor{forestgreen}{3.74}       & 4.63       & \textcolor{forestgreen}{3.26}                  & 5.31             \\
+	Heur-LD         & 5.27    & 4.17           & 4.38       & 4.21       & 5.68                  & 5.68             \\
+	Heur-AT         & 4.92    & 4.6            & 6.28       & 3.89       & 4.21                  & 4.97             \\
+	\midrule 
+	DQN (Ours)      & \textcolor{orange}{4.0}       & 4.26           & 3.97       & 4.47       & 4.97                  & 4.08             \\
+	A2C (Ours)      & \textcolor{forestgreen}{3.56}    & 5.23           & \textcolor{orange}{3.84}       & \textcolor{forestgreen}{3.21}       & 4.76                  & \textcolor{orange}{3.38}             \\
+	SAC (Ours)      & 4.1     & \textcolor{forestgreen}{3.69}           & 4.65       & \textcolor{orange}{3.82}       & 4.45                  & \textcolor{forestgreen}{3.2} \\
+	\bottomrule             
+\end{tabular}
