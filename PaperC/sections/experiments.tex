@@ -34,7 +34,8 @@ See Appendix \ref{paperC:app:heuristic_scheduling_baseline} for more details on 
 %\input{PaperC/sections/experiments/tables/table_memory_selection_methods}
 
 \vspace{-3mm}
-\paragraph{Architectures.} We use a multi-head output layer for all datasets except for Permuted MNIST where the network uses single-head output. We use a 2-layer MLP with 256 hidden units for Split MNIST, Split FashionMNIST, Split notMNIST, and Permuted MNIST. For Split CIFAR-100, we use the CNN architecture used in \citeC{C:vinyals2016matching,C:schwarz2018progress}. For Split miniImagenet, we apply the reduced ResNet-18 from \citeC{C:lopez2017gradient}. 
+\paragraph{Architectures.}  
+We use multi-head output layers and assume task labels are available at test time unless stated otherwise, except for Permuted MNIST where single-head output layer is used. We use a 2-layer MLP with 256 hidden units for Split MNIST, Split FashionMNIST, Split notMNIST, and Permuted MNIST. For Split CIFAR-100, we use the CNN architecture used in \citeC{C:vinyals2016matching,C:schwarz2018progress}. For Split miniImagenet, we apply the reduced ResNet-18 from \citeC{C:lopez2017gradient}. 
 
 \vspace{-3mm}
 \paragraph{Evaluation Metric.} 
