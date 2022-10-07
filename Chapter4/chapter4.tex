@@ -158,7 +158,7 @@ Figure \ref{fig:mcts_outline} shows an illustration of the procedure for executi
 	\input{Chapter4/imgs/mcts_outline}
 	\caption{Outline of MCTS when searching for replay schedules. }
 	\label{fig:mcts_outline}
-	\vspace{-2mm}
+	\vspace{-3mm}
 \end{figure}
 
 \begin{itemize}[topsep=1pt, itemsep=1pt, label={}, leftmargin=*]
@@ -280,7 +280,7 @@ We show that the learned policies can efficiently mitigate catastrophic forgetti
 
 \subsection{Results on Replay Scheduling with Monte Carlo Tree Search}
 
-Here, we provide a selection of the experimental results from Paper \ref{paperC}. Our approach has been named Replay Scheduling MCTS (RS-MCTS). 
+Here, we provide a selection of the experimental results from Paper \ref{paperC}. %Our approach has been named Replay Scheduling MCTS (RS-MCTS). 
 We evaluate the CL performance of RS-MCTS for varying memory sizes to illustrate the importance of replay scheduling. Moreover, we show that replay scheduling can benefit any replay-based method by combining scheduling with three recent CL methods, namely, HAL~\cite{chaudhry2021using}, MER~\cite{riemer2018learning}, and DER~\cite{buzzega2020dark}. Finally, we demonstrate the efficiency benefits of replay scheduling in settings when the memory size is smaller than the number of classes. We give an overview of the experimental settings, see Paper \ref{paperC} for the full experimental results and hyperparameter settings. 
 
 \vspace{-3mm}
@@ -315,20 +315,20 @@ where $A_{T, j}^{test}$ is the accuracy of task $j$ after learning the final tas
 	}
 	\vspace{-7mm}
 	\captionsetup{width=.9\linewidth}
-	\caption{Performance comparisons with ACC over different replay memory sizes $M$ for RS-MCTS (Ours) and the baselines. All results have been averaged over 5 seeds. %The results show that replay scheduling can outperform replaying with random and ETS schedules, %equal task proportions,
+	\caption{Performance comparisons with ACC over different replay memory sizes $M$ for MCTS (Ours) and the baselines. All results have been averaged over 5 seeds. %The results show that replay scheduling can outperform replaying with random and ETS schedules, %equal task proportions,
 		%especially for small $M$, on both small and large datasets across different backbone choices. %Furthermore, our method requires less careful tuning than the Heuristic baseline as $M$ increases.
 	}
 	%\end{minipage}
 	\vspace{-3mm}
 	\label{fig:acc_over_memory_size}
 \end{wrapfigure}
-\paragraph{Varying Memory Size.} We show that the replay schedules found by MCTS improves the CL performance across different memory sizes. In Figure \ref{fig:acc_over_memory_size}, we observe that RS-MCTS obtains better task accuracies than ETS, especially for small memory sizes. Both RS-MCTS and ETS perform better than Heuristic as $M$ increases showing that Heuristic requires careful tuning of the validation accuracy threshold. These results show that replay scheduling can outperform the baselines, especially for small $M$, on both small and large datasets across different backbone choices.
+\paragraph{Varying Memory Size.} We show that the replay schedules found by MCTS improves the CL performance across different memory sizes. In Figure \ref{fig:acc_over_memory_size}, we observe that MCTS obtains better task accuracies than ETS, especially for small memory sizes. Both MCTS and ETS perform better than Heuristic as $M$ increases showing that Heuristic requires careful tuning of the validation accuracy threshold. These results show that replay scheduling can outperform the baselines, especially for small $M$, on both small and large datasets across different backbone choices.
 
 \input{Chapter4/figures/table_applying_scheduling_to_recent_replay_methods}
 
 \vspace{-3mm}
 \paragraph{Applying Scheduling to Recent Replay Methods.} We show that replay scheduling can be combined with any memory-based CL method to enhance the performance. %We combine replay scheduling with three recent memory-based CL methods called Hindsight Anchor Learning (HAL)~\cite{chaudhry2021using}, Meta-Experience Replay (MER)~\cite{riemer2018learning}, Dark Experience Replay (DER)~\cite{buzzega2020dark}. 
-Table \ref{tab:results_applying_scheduling_to_recent_methods} shows the performance comparison between our RS-MCTS against using Random, ETS, and Heuristic schedules for each method. Especially for HAL and DER, the schedule found by RS-MCTS mostly outperforms the other schedules across the different datasets. For MER, the Heuristic baseline performs better than RS-MCTS and Permuted-MNIST and Split miniImagenet which could potentially be adjusted with more hyperparameter searches. Furthermore, the Heuristic baseline occasionally did not converge for some seeds which could indicate that this scheduling method is more sensitive to the settings than the other scheduling methods. These results confirm that replay scheduling is important for the final performance given the same memory constraints and it can benefit any existing CL framework. 
+Table \ref{tab:results_applying_scheduling_to_recent_methods} shows the performance comparison between our MCTS against using Random, ETS, and Heuristic schedules for each method. Especially for HAL and DER, the schedule found by MCTS mostly outperforms the other schedules across the different datasets. For MER, the Heuristic baseline performs better than MCTS and Permuted-MNIST and Split miniImagenet which could potentially be adjusted with more hyperparameter searches. Furthermore, the Heuristic baseline occasionally did not converge for some seeds which could indicate that this scheduling method is more sensitive to the settings than the other scheduling methods. These results confirm that replay scheduling is important for the final performance given the same memory constraints and it can benefit any existing CL framework. 
 
 
 
@@ -338,9 +338,9 @@ Table \ref{tab:results_applying_scheduling_to_recent_methods} shows the performa
 Our goal is to investigate if scheduling over which tasks to replay can be more efficient in situations where the memory size is even smaller than the number of classes. 
 To this end, we set the replay memory size for our method
 to $M=2$ for the 5-task datasets. We then compare against the most memory efficient CL baselines, namely A-GEM~\cite{chaudhry2018efficient}, ER-Ring~\cite{chaudhry2019tiny} which have shown promising results with 1 sample/class for replay, as well as with uniform memory selection as reference. 
-Additionally, we compare to using random replay schedules (Random) with the same memory setting as for RS-MCTS.
+Additionally, we compare to using random replay schedules (Random) with the same memory setting as for MCTS.
 We visualize the memory usage for our method and the baselines when training on a 5-task dataset in Figure \ref{fig:tiny_memory_usage_5task_datasets}. %In Paper \ref{paperC}, we provide results for similar experiments with the larger datasets Permuted MNIST, Split CIFAR-100, and Split miniImagenet. 
-Table \ref{tab:efficiency_of_replay_scheduling_5task_datasets} shows the ACC for each method across the 5-task datasets. Despite using significantly fewer samples for replay, RS-MCTS performs better or on par with the best baselines on each dataset. These results show that replay scheduling can be even more efficient than the common memory efficient replay-based methods, which indicate that learning the time to learn is an important research direction in CL.
+Table \ref{tab:efficiency_of_replay_scheduling_5task_datasets} shows the ACC for each method across the 5-task datasets. Despite using significantly fewer samples for replay, MCTS performs better or on par with the best baselines on each dataset. These results show that replay scheduling can be even more efficient than the common memory efficient replay-based methods, which indicate that learning the time to learn is an important research direction in CL.
 
 \begin{figure} % necessary to add figure environment for setting up right captions
 \begin{minipage}{\textwidth}
@@ -350,7 +350,7 @@ Table \ref{tab:efficiency_of_replay_scheduling_5task_datasets} shows the ACC for
 		\setlength{\figheight}{.15\textheight}
 		\input{Chapter4/figures/memory_usage_barplot}
 		\vspace{-3mm}
-		\caption{Number of replayed samples per task for the 5-task datasets for RS-MCTS (Ours) and the baselines in the tiny memory setting.}
+		\caption{Number of replayed samples per task for the 5-task datasets for MCTS (Ours) and the baselines in the tiny memory setting.}
 		\label{fig:tiny_memory_usage_5task_datasets}
 	\end{minipage}
 	\hfill
@@ -375,7 +375,7 @@ Table \ref{tab:efficiency_of_replay_scheduling_5task_datasets} shows the ACC for
 		\end{tabular} }
 		\vspace{-3mm}
 		\captionsetup{type=table, width=.94\linewidth}
-		\caption{Performance comparison with ACC averaged over 5 seeds in the 1 ex/class memory setting. RS-MCTS (Ours) has replay memory size $M=2$, while the baselines replay all available memory samples. }
+		\caption{Performance comparison with ACC averaged over 5 seeds in the 1 ex/class memory setting. MCTS (Ours) has replay memory size $M=2$, while the baselines replay all available memory samples. }
 		\label{tab:efficiency_of_replay_scheduling_5task_datasets}
 	\end{minipage}
 \end{minipage}
@@ -447,129 +447,20 @@ Table \ref{tab:average_rankings_generalization} shows the average ranking for DQ
 The policy may exhibit state transition dynamics which has not been experienced during training, which makes generalization difficult for both DQN and A2C.
 Potentially, the performance could be improved by generating more training environments for the agent to exhibit more variations in the CL scenarios or by using other advanced RL methods which may generalize better~\cite{igl2019generalization}.
 
-
 \begin{table}[t]
-	\footnotesize%\small
 	\centering
-	\caption{Average ranking (lower is better) for experiments on generalizing policies to environments with new task orders or a new dataset. %'S' stands for 'Split'%We train the DQN on 30 training Split MNIST environments and evaluate on 10 test environments. 
-		We average the results over 10 test environments. %as well as 3 seeds for DQN and A2C.
-	}
+	\caption{Average ranking (lower is better) across methods in the policy generalization experiments. The best and second-best ranks are colored in \textcolor{forestgreen}{green} and \textcolor{orange}{orange} respectively. We average the results over 10 test environments.}
 	\vspace{-3mm}
+	\resizebox{0.98\textwidth}{!}{
+		\input{PaperD/tables/ranking_results_table.tex}
+	}
 	\label{tab:average_rankings_generalization}
-	\resizebox{0.9\textwidth}{!}{
-		\begin{tabular}{l c c c c c}
-			\toprule %\toprule
-			& \multicolumn{3}{c}{ {\bf New Task Order}} & \multicolumn{2}{c}{ {\bf New Dataset}}\\
-			\cmidrule(lr){2-4}  \cmidrule(lr){5-6}
-			{\bf Method} & S-MNIST & S-FashionMNIST & S-CIFAR-10 & S-notMNIST & S-FashionMNIST  \\ 
-			\midrule
-			Random         & 4.23   & 3.60 & 5.03 & 3.87 & 3.95\\ 
-			ETS            & 3.80 & 4.57 & 5.37 & 4.27 & 3.63 \\
-			\midrule 
-			Heur-GD        & 4.48 & 4.25 & 3.98 & 4.58 & {\bf 2.77} \\
-			Heur-LD        & 4.65 & 3.65 & 3.75 & 4.97 & 5.10 \\
-			Heur-AT        & 4.33 & 3.87 & 3.43 & 4.28 & 3.72 \\
-			\midrule
-			DQN (Ours)     & {\bf 3.23} & {\bf 3.55} & 3.68 & 3.20 & 4.37 \\
-			A2C (Ours)     & 3.27 & 4.52 & {\bf 2.75} & {\bf 2.83} & 4.47 \\
-			\bottomrule %\bottomrule
-		\end{tabular}
-		}
 	\vspace{-3mm}
 \end{table}
 
 
 
-\begin{comment}
-In Paper \ref{paperD}, we perform two experiments to evaluate how well the learned replay scheduling policy can generalize to new CL scenarios. First, we investigate whether the policy can be applied to environments with new dataset task splits which are different from the splits that the policy was trained on. Secondly, we study if the policy can be applied to environments with new datasets than it was originally trained on. Finally, we visualize the learned policy and compare it against one of the heuristic baselines to bring further insights into the advantages of learning the replay scheduling policy.
 
-We run experiments on CL datasets of $T=5$ tasks to have a discrete action space of reasonable size. The replay memory size is set to $M=10$ in all experiments. We use 15\% of the training set for validation for the DQN and the Heuristic baselines. The Random and ETS baselines use the validation set for training since these policies are fixed.  
-We use three different heuristic rules for scheduling, namely
-\begin{itemize}[itemsep=0em,topsep=1pt]
-	\item \textbf{Heuristic Global Drop (Heur-GD)}: Replay task when the validation accuracy has dropped below threshold of the highest achieved validation accuracy across all previous time steps.
-	
-	\item \textbf{Heuristic Local Drop (Heur-LD)}: Replay task when the validation accuracy has dropped below threshold of the achieved validation accuracy at the previous time step.
-	
-	\item \textbf{Heuristic Accuracy Threshold (Heur-AT)}: Replay task when the validation accuracy has dropped below threshold of the minimum allowed validation task accuracy. 
-\end{itemize}
-The thresholds are found from grid searches and we provide the used values in Paper \ref{paperD}. 
-
-\vspace{-2mm}
-\begin{wraptable}{r}{0.35\textwidth}
-	\footnotesize
-	\vspace{-5mm}
-	\captionsetup{width=.84\linewidth}
-	%\hspace{-3mm}
-	\caption{Average rankings for generalizing to Split MNIST environments with new task orders. 
-		%Results are averaged over 10 environments and 3 DQN seeds.
-	}
-	\label{tab:avg_ranking_split_mnist_new_task_orders}
-	\vspace{-7mm}
-	\begin{tabular}{l c} \\
-		\toprule  
-		{\bf Method} & {\bf Avg. Rank} \\ 
-		\midrule
-		Random 		& 3.77 \\
-		ETS 		& 3.27 \\
-		Heur-GD 	& 4.47 \\
-		Heur-LD 	& 3.27 \\
-		Heur-AT 	& 3.37 \\
-		\midrule
-		DQN (Ours)		& {\bf 2.87} \\
-		\bottomrule
-	\end{tabular}
-\end{wraptable} 
-\paragraph{Generalization to New Task Orders.} In this experiment, we evaluate the performance of each scheduling method when generalizing to environments of Split MNIST with new task orders unseen during training. The DQN uses 30 environments for training and we average its results over 3 seeds for parameter initialization. Table \ref{tab:avg_ranking_split_mnist_new_task_orders} shows the average ranking over 10 test environments for all methods. We observe that the DQN achieves the best average ranking compared to the baselines. These results indicate that learning the replay scheduling policy is  more beneficial than creating heuristic scheduling rules and fixed policies such as ETS. 
-
-
-
-\vspace{-2mm}
-\begin{wraptable}{r}{0.35\textwidth}
-	\footnotesize
-	\vspace{-5mm}
-	\captionsetup{width=.84\linewidth}
-	%\hspace{-3mm}
-	\caption{Average rankings for generalizing to Split notMNIST environments from training on Split MNIST and FashionMNIST. 
-	}
-	\label{tab:avg_ranking_split_notmnist_new_dataset}
-	\vspace{-7mm}
-	\begin{tabular}{l c} \\
-		\toprule  
-		{\bf Method} 	& {\bf Avg. Rank} \\ 
-		\midrule
-		Random 			& 3.27 \\
-		ETS 			& 3.60 \\
-		Heur-GD 		& 4.53 \\
-		Heur-LD 		& 4.10 \\
-		Heur-AT 		& 2.80 \\
-		\midrule
-		DQN (Ours)		& {\bf 2.70} \\
-		\bottomrule
-	\end{tabular}
-\end{wraptable} 
-\paragraph{Generalization to New Datasets.} Here, we evaluate the performance of each scheduling method when generalizing to environments of Split notMNIST datasets while the methods have only been trained on environments of Split MNIST and Split FashionMNIST datasets. The DQN uses 30 environments in total for training (15 Split MNIST + 15 Split FashionMNIST) and we average its results over 3 seeds for parameter initialization. Table \ref{tab:avg_ranking_split_notmnist_new_dataset} shows the average ranking over 10 Split notMNIST environments for all methods. We observe again that the DQN achieves the best average ranking compared to the baselines, where Heur-AT performs almost on par with the DQN. These results further shows that the it is indeed possible to learn general scheduling policies that are capable of performing in new environments without additional computational time and training. 
-
-
-%TO-DO: Update this part when I have new results for NeurIPS paper!
-\vspace{-3mm}
-\paragraph{Visualization of Learned Policy.}
-We visualize the learned policies for the DQN to bring further insights into the advantages of learning the replay scheduling policy. We analyze the task accuracy progress and the replay schedule used for mitigating catastrophic forgetting by visualizing the schedule as a bubble plot. In the bubble plots shown in Figure \ref{fig:mnist_policy_illustration_dqn_vs_heuristic2}, the x- and y-axis shows the current and replay task respectively, and the bubbles represent the proportion of the replayed task in the replay memory at the current task. Each color of the circles corresponds to a seen task that is being replayed at the current task. The sum of all points in the circles at a current task column is fixed since the replay memory size is constant. 
-
-Figure \ref{fig:mnist_policy_illustration_dqn_vs_heuristic2} shows the task accuracy progression and replay schedules from the DQN and Heur-LD in one test environment with Split MNIST. Using the replay schedule from the DQN gives higher ACC since the DQN manages to mitigate forgetting tasks 1 and 2 better than Heur-LD. The DQN decides to replay task 1 and task 2 as soon as these tasks have been learned. At task 4, the DQN decides to replay both tasks 1 and 2 which helps the classifier to retain its knowledge of task 2. However, as the classifier forgets task 1, the DQN selects to only replay task 1 at task 5 which makes the classifier improve its performance on task 1. 
-The heuristic baseline Heur-LD enables replay on tasks 3 and 5 according to its rule since the performance of task 1 and 2 has decreased below its threshold at those time steps, but the classifier forgets these tasks more than when using the learned replay schedule from the DQN. This example shows creating a good heuristic for replay scheduling can be difficult which is why learning such a policy is preferable. 
-
-\begin{figure}[t]
-	\centering
-	\setlength{\figwidth}{0.26\textwidth}
-	\setlength{\figheight}{.15\textheight}
-	\input{Chapter4/figures/policy_illustrations/mnist/data_seed10/groupplot}
-	\vspace{-3mm}
-	\caption{ Comparison of test classification accuracies for tasks 1-5 on Split MNIST from using the replay schedules from the DQN and the Heuristic Local Drop (Heur-LD) scheduling baseline from 1 seed. We visualize the corresponding replay schedule used by both methods as a bubble plots. The learned policy (DQN) remembers tasks 1 and 2 better than when replaying based on this heuristic. 
-	}
-	\vspace{-3mm}
-	\label{fig:mnist_policy_illustration_dqn_vs_heuristic2}
-\end{figure}
-\end{comment}
 
 
 \section{Discussion}\label{chap4:sec:discussion}
