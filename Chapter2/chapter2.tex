@@ -331,13 +331,18 @@ Multimodal autoencoders have frequently been extended to deep generative models,
 In this section, we give a brief overview RL to provide some preliminaries for Paper \ref{paperD}. The RL setup considers a learning agent that interacts with an environment $E$ over a number of discrete time steps~\cite{sutton2018reinforcement}. The environment is modeled with a Markov Decision Process (MDP)~\cite{bellman1957markovian} represented as a tuple $E = (\gS, \gA, P, R, \mu, \gamma)$ consisting of the state space $\gS$, action space $\gA$, state transition probability $P(s' | s, a)$, reward function $R(s, a)$, initial state distribution $\mu(s_1)$, and discount factor $\gamma$. At each time step $t$, the agent receives a state $s_t$ from the environment, selects an action $a_t \in \gA$ using a policy $\pi(a | s)$, and enters the next state $s_{t+1}$ with transition probability $P(s_{t+1} | s_t, a_t)$ and receives a numerical reward following $r_t$ from the environment. This procedure is repeated until the agent reaches a terminal state in which the procedure can be restarted. The return $G_t = \sum_{k=0}^{\infty} \gamma^{k} r_{t+k}$ is the discounted accumulated reward from time step $t$. The goal for the agent is to learns policy that maximizes the expected return. 
 
 The value function $V^{\pi}(s) = \E[G_t | s_t=s]$ defines the expected return following policy $\pi$ from state $s$. Value functions are essential for learning as they can be used for comparing policies, such that $\pi \geq \pi'$ if and only if $V^{\pi}(s) \geq V^{\pi'}(s)$~\cite{sutton2018reinforcement}. An optimal policy $\pi^{*}$ is defined as a policy that is better than or equal to all other policies. There may exist several optimal policies $\pi^{*}$ that share the same optimal value function given by $V^{*}(s) = \max_{\pi} V^{\pi}(s)$ for all states $s \in \gS$. 
-Similar to the value function, we also have the action value function $Q^{\pi}(s, a) = \E[G_t | s_t=s, a_t=a]$ which is the expected return for selecting action $a$ in state $s$ and following policy $\pi$. Optimal policis also share the same action value function given by $Q^{*}(s, a) = \max_{\pi} Q^{\pi}(s, a)$ for all states $s \in \gS$ and actions $a \in \gA$. The optimal action value function $Q^{*}$ can be written in terms of the optimal value function $V^{*}$ as
+Similar to the value function, we also have the action value function $Q^{\pi}(s, a) = \E[G_t | s_t=s, a_t=a]$ which is the expected return for selecting action $a$ in state $s$ and following policy $\pi$. Optimal policies also share the same action value function given by $Q^{*}(s, a) = \max_{\pi} Q^{\pi}(s, a)$ for all states $s \in \gS$ and actions $a \in \gA$. The optimal action value function $Q^{*}$ can be written in terms of the optimal value function $V^{*}$ as
 \begin{align}
 	Q^{*}(s, a) = \E[r_{t+1} + \gamma V^{*}(s) | s_t=s, a_t=a]. 
 \end{align}
-This means that if we have access to $Q^{*}$, we can directly obtain the optimal action $a*$ in state $s$ by using $a^{*} = \argmax_{a} Q^{*}(s, a)$ to maximize the expected return. 
+This means that if we have access to $Q^{*}$, we can directly obtain the optimal action $a^*$ in state $s$ by using $a^{*} = \argmax_{a} Q^{*}(s, a)$ to maximize the expected return. 
+
+In this thesis, we focus on model-free RL algorithms which have been popular in past years. The alternative is model-based RL algorithms which allows the agent to plan ahead when interacting with the environment by having access to a function that predicts the next states and rewards. However, having access to the ground truth of such function is impossible in many RL problems. Model-free RL algorithms can be divided into Q-learning and policy optimization methods. Q-learning methods, such as Deep Q-Networks (DQNs)~\cite{mnih2013playing, mnih2015human}, aims to approximate the optimal action value function $Q^{*}(s, a)$ with parametric function $Q_{\vtheta}(s, a)$ by minimizing objective functions based on the Bellman equation. The optimization is often performed off-policy, such that the agent can be updated using data collected from the environment at any point in time. The actions are selected with $a_t = \argmax_{a} Q^{*}(s, a)$ through the connection between the action value function and the policy.  
+Policy optimization methods, such as Advantage Actor-Critic (A2C)~\cite{mnih2016asynchronous},  represent the policy in a parametric form $\pi_{\vtheta}(a | s)$. The optimization is often performed on-policy meaning that the policy is only updated using data collected in the environment by the most recent policy. Policy optimization methods tends to be more stable than Q-learning methods. However, as Q-learning methods can reuse collected data for updating the policy, these methods tends to be more sample efficient than policy optimization methods.
 
 
+
+\begin{comment}
 \vspace{-3mm}
 \paragraph{Deep Q-Networks.} The Deep Q-Network (DQN)~\cite{mnih2013playing, mnih2015human} is a value-based RL algorithm which aims to approximate the optimal action value function as $Q^{*}(s, a) \approx Q_{\vtheta}(s, a)$ with a neural network $Q_{\vtheta}$ parameterized by $\vtheta$. For learning the function $Q_{\vtheta}$, we collect data from the environment with by using an epsilon-greedy policy, i.e., $a_t = \argmax_a Q_{\vtheta}(s_t, a)$, in state $s_t$. For estimating $Q_{\vtheta}$, we minimize the following loss based on the Bellman equation:
 \begin{align}
@@ -358,94 +363,4 @@ where $\hat{A}(s, a)$ is an estimate of the advantage function, which describes 
 where $k$ can vary depending on if we reached a terminal state from $s_t$ and is upper-bounded by the number of steps between updates $t_{max}$~\cite{mnih2016asynchronous}. A popular actor-critic method is Proximal Policy Optimization~\cite{schulman2017proximal} that incorporates constraints on the policy updates, as well as mini-batches and epochs of learning between each interaction with the environment. 
 
 
-\begin{comment}
-The RL setup considers an agent interacting with an environment $\gE$ over a number of discrete time steps. The environment is modeled with a Markov Decision Process~\cite{bellman1957markovian} represented as a tuple $(\gS, \gA, P, R, \gamma)$, where $\gS$ is the state space, $\gA$ an action space, $P(s' | s, a)$ is the state-to-state transition probability distribution with $s, s' \in \gS$, $R(s, a)$ is the reward function, and $\gamma \in [0, 1)$ is the discount factor. At each time step $t$, the agent receives a state $s_t$ from the environment, selects an action $a_t \in \gA$ using a policy $\pi(a | s)$, and enters the next state $s_{t+1}$ with transition probability $P(s_{t+1} | s_t, a_t)$ and receives a numerical reward following $r_t$ from the environment. This procedure is repeated until the agent reaches a terminal state in which the procedure can be restarted. The return $G_t = \sum_{k=0}^{\infty} \gamma^{k} r_{t+k}$ is the discounted accumulated reward from time step $t$. The goal of the agent is to maximize the expected return from every state $s_t$. 
-
-The action value $Q^{\pi}(s, a) = \E[G_t | s_t=s, a]$  is the expected return for selecting action $a$ in state $s$ and following policy $\pi$. The optimal action value $Q^{*}(s, a) = \max_{\pi} Q^{\pi}(s, a)$
-is defined as the maximum action value for state $s$ and action $a$ for any given policy $\pi$. Similarly,
-the value function $V^{\pi}(s) = \E[G_t | s_t=s]$ defines the expected return following policy $\pi$ from state $s$. In value-based RL methods, the action value function $Q_{\vtheta}(s, a)$ is represented using function approximators, such as neural networks, parameterized by $\vtheta$. A popular algorithm for updating the parameters $\vtheta$ is Q-learning~\cite{watkins1992q} where the goal is to directly approximate the optimal action value function as $Q^{*}(s, a) \approx Q_{\vtheta}(s, a)$. The parameters $\vtheta$ are learned by iteratively minimizing the loss
-\begin{align}
-	\gL(\vtheta_i) = \left( r + \max_{a'} Q_{\vtheta_{i-1}}(s', a') - Q_{\vtheta_{i}}(s, a) \right)^2 .
-\end{align}
-Next, we briefly introduce some popular algorithms in deep RL. 
-
-\paragraph{Deep Q-Networks.} The Deep Q-Network~\cite{mnih2013playing, mnih2015human} (DQN) is common algorithm for RL problems with discrete action spaces and high-dimensional state spaces where the Q-function is parameterized by a neural network. This method requires some additional steps for stabilizing the learning process, including the usage of target networks~\cite{mnih2013playing}, applying L1-smoothing to the loss, and using experience replay~\cite{lin1992self} to sample training data stored in a replay buffer. Furthermore, the DQN can incorporate extensions that are also helpful for stable learning such as correcting the action value estimates~\cite{van2016deep} and imrpoving generalization across actions~\cite{wang2016dueling}. The DQN uses a greedy action selection strategy where the policy is given by $\pi(a|s) = \argmax_{a'} Q_{\vtheta}(s, a')$. 
-
-\paragraph{Policy-based Methods.} The optimal policy can be estimated directly by using a parameterized form of the policy as $\pi_{\vtheta}(a | s)$, where the parameters $\vtheta$ represent a neural network in deep RL. The network takes a state $s_t$ as input and outputs a distribution over the possible actions $a_t$. The agent collects experiences with the current policy to use for learning by interacting with the environment. The policy parameters are updated by minimizing the loss 
-\begin{align}
-	\gL(\vtheta) = \E[\log \pi_{\vtheta}(a | s) \hat{A}(s_t, a_t)],
-\end{align}
-where $\hat{A}_{\vtheta_v}(s_t, a_t)$ is an estimate of the advantage function given by $\sum_{i=0}^{k-1} = \gamma^{i} r_i + \gamma^{k} V_{\vtheta_v}(s_{t+k}) - V_{\vtheta_v}(s_{t})$. The value function here is estimated with a neural network parameterized by $\vtheta_v$, which usually share the parameters $\vtheta$ with the policy. The policy and value function are updated after $t_{max}$ actions or when a terminal state is reached~\cite{mnih2016asynchronous}. A popular variant of policy-based methods is Proximal Policy Optimization~\cite{schulman2017proximal} that incorporates constraints on the policy updates, as well as mini-batches and epochs of learning between each interaction with the environment. 
-
-The RL setup considers an agent interacting with an environment $E$ over a number of discrete time steps~\cite{sutton2018reinforcement}. The environment is modeled with a Markov Decision Process (MDP)~\cite{bellman1957markovian} represented as a tuple $E = (\gS, \gA, P, R, \mu, \gamma)$ consisting of the state space $\gS$, action space $\gA$, state transition probability $P(s' | s, a)$, reward function $R(s, a)$, initial state distribution $\mu(s_1)$, and discount factor $\gamma$. At each time step $t$, the agent receives a state $s_t$ from the environment, selects an action $a_t \in \gA$ using a policy $\pi(a | s)$, and enters the next state $s_{t+1}$ with transition probability $P(s_{t+1} | s_t, a_t)$ and receives a numerical reward following $r_t$ from the environment. This procedure is repeated until the agent reaches a terminal state in which the procedure can be restarted. The return $G_t = \sum_{k=0}^{\infty} \gamma^{k} r_{t+k}$ is the discounted accumulated reward from time step $t$. The goal for the agent is to learns  policy that maximizes the expected return.
 \end{comment}
-
-%The action value $Q^{\pi}(s, a) = \E[G_t | s_t=s, a]$  is the expected return for selecting action $a$ in state $s$ and following policy $\pi$. The optimal action value $Q^{*}(s, a) = \max_{\pi} Q^{\pi}(s, a)$ is defined as the maximum action value for state $s$ and action $a$ for any given policy $\pi$. Deep Q-Networks (DQNs)~\cite{mnih2013playing, mnih2015human} is a value-based RL algorithm which aims to approximate the optimal action value function as $Q^{*}(s, a) \approx Q_{\vtheta}(s, a)$ with a neural network $Q_{\vtheta}$ parameterized by $\vtheta$. For learning the function $Q_{\vtheta}$, we collect data from the environment with by using an epsilon-greedy policy~\cite{sutton2018reinforcement} to estimate $Q_{\vtheta}$ by minimizing the loss $\gL_{\DQN}(\vtheta) = (y_t - Q_{\vtheta}(s_t, a_t))^2$ with $y_t = r_t + \gamma \max_{a'} Q_{\vtheta^{-}}(s_{t+1}, a')$, where $\vtheta^{-}$ is a previous copy of the network $\vtheta$ referred to as the target network. In addition to the introduction of target networks, several methods have been proposed for stabilizing the learning process, such as using experience replay~\cite{lin1992self} to sample training data stored in a replay buffer, applying L1-smoothing to the loss, and correcting the action value estimates~\cite{van2016deep}. 
-
-%An alternative to value-based RL is policy gradient methods where the optimal policy is estimated directly with a parameterized form $\pi_{\vtheta}(a | s)$ where $\vtheta$ represents the parameters of a neural network. 
-%Similar to the action value function, the value function $V^{\pi}(s) = \E[G_t | s_t=s]$ defines the expected return following policy $\pi$ from state $s$. In actor critic methods~\citep{mnih2016asynchronous, schulman2015high, schulman2017proximal, konda1999actor}, we estimate the value function with a neural network $V_{\vtheta_v}$ to reduce variance of the gradients. 
-%The policy network takes the state $s_t$ as input and outputs a distribution over the possible actions $a_t$. The agent collects experiences from the environment with the current policy to use for updating the parameters $\vtheta$ by minimizing the loss $\gL_{\text{PG}}(\vtheta) = \E[\log \pi_{\vtheta}(a | s) \hat{A}(s_t, a_t)],$, where $\hat{A}_{\vtheta_v}(s_t, a_t)$ is an estimate of the advantage function given by $\sum_{i=0}^{k-1} = \gamma^{i} r_i + \gamma^{k} V_{\vtheta_v}(s_{t+k}) - V_{\vtheta_v}(s_{t})$. The policy and value function can be updated after $t_{max}$ actions or when a terminal state is reached~\cite{mnih2016asynchronous}.
-
-
-
-
-%s unknown, so we collect data from the environment to learn a function $Q_{\vtheta}(s, a)$ parameterized by $\vtheta$ that estimates the Q-function by minimizing the loss $L(\vtheta) = (y_t - Q_{\vtheta}(s_t, a_t))^2$ where $y_t = r_t + \gamma \max_{a'} Q_{\vtheta}(s_{t+1}, a')$. The learned Q-function is parameterized by a neural network to ease the estimation in problems with high-dimensional state spaces. To stabilize the learning, DQNs use target networks from previous iterations to compute the target values $y_t$, incorporates experience replay~\citep{lin1992self}, and can apply Double Q-learning~\citep{van2016deep} to mitigate overestimation of the state-action values.  
-
-%The action is selected according to a policy $\pi$ which is a mapping from states $s_t$ to actions $a_t$. After taking action $a_t$, the agent receives the next state $s_{t+1}$ and a scalar reward $r_t$. This procedure is continued until the agent reaches a terminal state in which the procedure can be restarted.  
-
-% representing the configurations of the agent itself and its surrounding 
-
-%At each time step $t$, the agent receives a state $s_t$ and selects an action $a_t$ from a set of possible actions $\gA$. The action is selected according to a policy $\pi$ which is a mapping from states $s_t$ to actions $a_t$. After taking action $a_t$, the agent receives the next state $s_{t+1}$ and a scalar reward $r_t$. This procedure is continued until the agent reaches a terminal state in which the procedure can be restarted.  
-
-
- 
-
-
-%The tasks of interest involves estimating some probability distribution from data. In classification tasks, we are given pairs $(\vx, \vy)$ of data with an associated target label and are asked to assign one of $k$ categories to input $\vx$. Hence, our goal is to estimate the conditional probability distribution $p(\vy | \vx)$ over the target label $\vy$ given the input data $\vx$. Commonly, the distribution $p_{\vtheta}(\vy | \vx)$ is parameterized by $\vtheta$. One can also write $p_{\vtheta}(\vy | \vx)$ as a function $f_{\vtheta}(\vx): \sR \rightarrow \{1, \dots, k\}$, such that $f_{\vtheta}(\vx) = p_{\vtheta}(\vy | \vx)$, where $f$ is a function that predicts target labels $\vy$ from inputs $\vx$ by performing a mapping between the input and target spaces. Our goal is to update the parameters $\vtheta$ such that they a loss function $\gL(\vtheta)$ is minimized. A typical loss for classification tasks is the cross-entropy loss which can be minimized by taking the gradient of $\gL$ w.r.t. the parameters $\vtheta$. 
-
-
-%\MK{TO-DO: How to describe computing the loss and updating the parameters? Maybe the stanford CNN course has some nice explanations?}
-
-
-
-
-%The goal with this thesis is to provide machine learning methods for recognizing objects from images. Machine learning is a field within Artificial Intelligence where computer programs learns from experiences how to make predictions in new situations. There are three essential parts to enable the computer to make predictions with machine learning. Firstly, we need data representing the scenarios where we have objects that we wish to predict what they are. Secondly, we need a model that learns how to make the decisions based on the provided data. Thirdly, we need a learning algorithm for fitting the model to the data we have such that good and sensible decisions can be made on future data. Machine learning has proven to be successful on various types of data, including, images and video, text, and audio, and there exists many different kinds of models and algorithms for learning decision-making from data. 
-
-%One of the main goals with machine learning is to have models that generalize to unseen data and events. However, there are several challenges that has to be tackled to achieve this goal. The first challenge is to obtain datasets that represent the events that the model should make predictions for. Machine learning models often require vast amounts of examples to learn from, and also, the examples should be annotated with some information describing each example in order to ease the learning. But even if we have large datasets, we must have models that have the capacity of preserving the knowledge gained from the dataset. Furthermore, we must have algorithms that can train the model from the huge amount of data in computationally efficient both time- and processing-wise. Especially for visual data, it has become much cheaper to obtain vast amounts of images and videos from the internet. Occasionally, these can be annotated through search words or, alternatively, from crowdsourcing. Moreover, computational power has also become cheaper through smaller and more efficient micro-processors, semi-conductors, and cloud computing. Deep learning~\cite{goodfellow2016deep} is a class of machine learning models based on neural networks that are capable of learning from large and high-dimensional datasets due to their capacity. They are trained using an optimization algorithm called Stochastic Gradient Descent (SGD)~\cite{bottou2010large} which works well for large-scale data and can be applied on graphical processing units (GPUs) with recent machine learning programming libraries, such as TensorFlow, PyTorch, and Jax. However, deep learning still faces lots of challenges in generalization, especially when they are applied in environments that were not present in the training data, and it is still an open research problem on how to make them generalize better. 
-
-%There are several approaches for enabling better generalization for deep learning models. A good start is to collect datasets that are similar and represent the events in the environment where the model will be deployed. Related to this, one can also collect different data types from various modalities, such as visual signals in the form of images and video as well as natural language which can be written or spoken, if these are available in the data collection process and are sensible for the task to be solved. Multimodal machine learning opens up the possibility of learning correspondences between the different data types to gain better understanding of the phenomenon of interest~\cite{baltruvsaitis2018multimodal, xu2013survey}, which can help the model to be more accurate and robust. However, in order to enhance the utility of machine learning models, they should be capable of continuously updating their knowledge as many environments where object recognition is useful are ever-changing~\cite{delange2021continual, parisi2019continual}. We should build models that can add new objects of interest to recognize as well as delete concepts that are obsolete or non-relevant. It would also be useful if we could update models with personalized objects to recognize to narrow down the scope of items to recognize for object recognizers to make the tasks easier.  
-
-%In this chapter, we cover related works on datasets on object recognition both with image and text data in Section \ref{sec:datasets_for_object_recognition}. Next, we provide a description of machine learning, especially deep learning, models that were used in the included papers in Section \ref{sec:machine_learning} and \ref{sec:deep_learning}. In Section \ref{sec:continual_learning}, we discuss the setting of continual learning for updating the knowledge of machine learning models that is aiming to make the models capable of handling ever-changing environments as a step towards to enabling life-long learning. 
-
-%\section{Machine Learning Basics}
-
-%\section{Deep Learning}
-
-%\subsection{Autoencoders}
-
-%\section{Reinforcement Learning}
-
-%\subsection{Monte Carlo Tree Search}
-
-%Data -> Modeling -> Evaluation/Generalization
-
-% Datasets for object recognition
-%\input{Chapter2/datasets}
-
-
-
-% Machine Learning introduction
-%\input{Chapter2/ml}
-
-
-%%%% THINKING ABOUT MOVIND DATASETS TO HERE AND STARTING WITH ML BACKGROUND
-
-% Deep Learning introduction
-%\input{Chapter2/dl}
-
-% Continual Learning introduction
-%\input{Chapter2/cl}
-
-
-
-
