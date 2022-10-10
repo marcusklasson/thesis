@@ -26,7 +26,7 @@
 % my packages
 \input{packages}
 \input{math_commands}
-
+\newlength\longest %%% width for  the first dedeication
 
 \makeatletter
 %\@addtoreset{section}{part}
@@ -88,6 +88,72 @@
 	
 % Create title page using info above
 \maketitle
+
+%%% Empty page
+\thispagestyle{empty}
+\null\vfill 
+\clearpage
+
+%%% First dedication
+\clearpage
+
+\thispagestyle{empty}
+\null\vfill %% pushes text down more to middle of page
+
+%\settowidth\longest{\huge\itshape To my mother}
+\settowidth\longest{\huge\itshape the most important}
+\begin{center}
+\parbox{\longest}{%
+	\begin{center}
+	\huge\itshape To my mother,\\
+	the most important\\
+	person in my life\par\bigskip 
+	\end{center}
+}
+\end{center}
+
+\vfill\vfill
+
+\clearpage
+
+%%% Empty page
+\thispagestyle{empty}
+\null\vfill 
+\clearpage
+%%% End of First dedication
+
+
+%%% Second dedication
+\clearpage
+
+\thispagestyle{empty}
+\null\vfill %% pushes text down more to middle of page
+
+%\settowidth\longest{\huge\itshape To my mother}
+\settowidth\longest{\Large\itshape You believe it or not, I wanted to play football for the coach}
+\begin{center}
+
+\parbox{\longest}{%
+	\raggedright{\Large\itshape%
+		You know, man, when I was a young man in high school\\ 
+		You believe it or not, I wanted to play football for the coach\\
+		And all those older guys \\
+		they said that he was mean and cruel, but you know \\ 
+		I wanted to play football for the coach\par\bigskip
+	}   
+	\raggedright\MakeUppercase{Lou Reed - Coney Island Baby (1975)}\par%
+}
+\end{center}
+
+\vfill\vfill
+
+\clearpage
+
+%%% Empty page
+\thispagestyle{empty}
+\null\vfill 
+\clearpage
+%%% End of Second dedication
 
 \frontmatter % Pages i, ii, iii, iv, v etc.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
