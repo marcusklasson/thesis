@@ -1,7 +1,7 @@
 
 \section{Experimental Settings}\label{paperD:app:experimental_settings}
 
-In this section, we describe the full details of the experimental settings used in this paper. We first provide details on hyperparameter settings for the CL and RL parts, including hyperparameters for DQN~\citeD{D:mnih2013playing, D:mnih2015human} and A2C~\citeD{D:mnih2016asynchronous}, followed by description of the heuristic baselines, and the ranking method for assesing the generalization capability of the learned policy.  
+In this section, we describe the full details of the experimental settings used in this paper. We first provide details on hyperparameter settings for the CL and RL parts, including hyperparameters for DQN~\citeD{D:mnih2013playing, D:mnih2015human}, A2C~\citeD{D:mnih2016asynchronous}, and SAC~\citeD{D:haarnoja2018soft} followed by description of the heuristic baselines, and the ranking method for assesing the generalization capability of the learned policy.  
 
 
 
@@ -60,7 +60,7 @@ For SAC, we use a Dirichlet policy which uses masking to prevent selecting actio
 \paragraph{RL Hyperparameters.}
 We provide the hyperparameters for DQN, A2C, and SAC in Table \ref{tab:dqn_hyperparameters}, \ref{tab:a2c_hyperparameters}, and \ref{tab:sac_hyperparameters} respectively.
 %We provide the hyperparameters for the both DQN and A2C in Table \ref{tab:dqn_hyperparameters_new_task_orders}-\ref{tab:a2c_hyperparameters_new_dataset}. Table \ref{tab:dqn_hyperparameters_new_task_orders} and \ref{tab:a2c_hyperparameters_new_task_orders} includes the hyperparameters on the New Task Order experiment for DQN and A2C respectively, while Table \ref{tab:dqn_hyperparameters_new_dataset} and \ref{tab:a2c_hyperparameters_new_dataset} includes the hyperparameters on the New Dataset experiment for DQN and A2C respectively. 
-Regarding the training environments in the tables for the \textbf{New Datasets} experiment, we use two different datasets in the training environments to increase the diversity. When Spit notMNIST is for testing, half the amount of training environments are using Split MNIST and the other half uses Split FashionMNIST. For example, in Table \ref{tab:a2c_hyperparameters_new_dataset}, A2C uses 10 training environments which means that there are 5 Split MNIST environments and 5 Split FashionMNIST environments when the testing environments uses Split notMNIST. Similarly, half the amount of training environments are using Split MNIST and the other half uses Split notMNIST when the testing environments uses Split FashionMNIST.   
+Regarding the training environments in the tables for the \textbf{New Datasets} experiment, we use two different datasets in the training environments to increase the diversity. When Spit notMNIST is for testing, half the amount of training environments are using Split MNIST and the other half uses Split FashionMNIST. For example, in Table \ref{tab:a2c_hyperparameters_new_datasets}, A2C uses 10 training environments which means that there are 5 Split MNIST environments and 5 Split FashionMNIST environments when the testing environments uses Split notMNIST. Similarly, half the amount of training environments are using Split MNIST and the other half uses Split notMNIST when the testing environments uses Split FashionMNIST.   
 
 \vspace{-3mm}
 \paragraph{Implementations.} 

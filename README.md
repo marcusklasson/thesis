@@ -1,4 +1,8 @@
-# thesis
+# PhD Thesis
+
+Latex files for my PhD thesis at KTH named "Fine-Grained and Continual Visual Recognition for Assisting Visually Impaired People".
+
+## Notes when I used Texstudio
 
 I am using Texstudio as my editor for writing, which I installed from the website ```https://www.texstudio.org/```. 
 Check for the right Ubuntu version and install the .deb and then just click on the file, very easy and nice.
@@ -36,12 +40,7 @@ sudo apt install texlive-font-utils
 
 May 5: For some reason I had to install this package again when I had to input eps files in the replay scheduing tree in Paper C...
 
-## Using separate References using multibib package 
+### Using separate References using multibib package 
 I had many issues with fixing using separate references in each chapter.
 
-Now I have to remove all .aux files in order to get the references to work. 
-Maybe all this is works out fine in Overleaf? It seemed to do so for Taras.
-
-I think also that I should contribute to RPL with an overleaf template of this solution 
-if I can make it work with Ioanna's files and the multibib package.
-
+Now I have to remove all .aux files in order to get the references to work. Maybe all this is works out fine in Overleaf?

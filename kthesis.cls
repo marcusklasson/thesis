@@ -195,7 +195,9 @@
     \bigskip
   \fi
   \noindent
-  \copyright \space \theauthor, \thedate
+  \copyright \space \theauthor, \thedate \\
+  \copyright \space Hedvig Kjellström, Paper A, B, C, D, \thedate \\ % added by me
+  \copyright \space Cheng Zhang, Paper A, B, C, D, \thedate % added by me
   \par\bigskip\noindent
   Printed by: \thepublisher\par
   \cleardoublepage
