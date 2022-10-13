@@ -1,0 +1,35 @@
+\begin{tabular}{llcccccc}
+\toprule
+                       &                  & \multicolumn{2}{c}{\textbf{Split MNIST}} & \multicolumn{2}{c}{\textbf{Split FashionMNIST}} & \multicolumn{2}{c}{\textbf{Split notMNIST}} \\
+\cmidrule(lr){3-4} \cmidrule(lr){5-6} \cmidrule(lr){7-8}
+\textbf{Memory size}   & \textbf{Methods} & $t$                & $p$                   & $t$                    & $p$                      & $t$                  & $p$                    \\
+\midrule
+\multirow{3}{*}{M=8}   & MCTS vs Random  & 2.70   & \textbf{0.048}  & 2.70       & 0.054              & 3.41     & \textbf{0.019}   \\
+                       & MCTS vs ETS     & 3.53   & \textbf{0.016}  & 3.13       & \textbf{0.033}     & 2.94     & \textbf{0.030}   \\
+                       & MCTS vs Heuristic & 4.18   & \textbf{0.005}  & 5.12       & \textbf{0.006}     & 1.34     & 0.227            \\
+\midrule
+\multirow{3}{*}{M=24}  & MCTS vs Random  & 1.59   & 0.183           & 3.39       & \textbf{0.020}     & 3.55     & \textbf{0.014}   \\
+                       & MCTS vs ETS     & 2.15   & 0.074           & 2.14       & \textbf{0.080}     & 2.63     & \textbf{0.041}   \\
+                       & MCTS vs Heuristic & 1.26   & 0.268           & 1.90       & 0.128              & 1.72     & 0.153            \\
+\midrule
+\multirow{3}{*}{M=80}  & MCTS vs Random  & 1.47   & 0.215           & 2.18       & 0.091              & 1.26     & 0.251            \\
+                       & MCTS vs ETS     & 2.76   & \textbf{0.038}  & 1.53       & 0.191              & 0.48     & 0.645            \\
+                       & MCTS vs Heuristic & 3.26   & \textbf{0.021}  & 2.41       & 0.072              & 1.22     & 0.285            \\
+\midrule
+\multirow{3}{*}{M=120} & MCTS vs Random  & 1.07   & 0.344           & 1.95       & 0.105              & -1.01    & 0.343            \\
+                       & MCTS vs ETS     & 2.12   & 0.073           & 1.31       & 0.231              & -1.83    & 0.112            \\
+                       & MCTS vs Heuristic & 3.45   & \textbf{0.020}  & 2.22       & 0.090              & 0.70     & 0.507            \\
+\midrule
+\multirow{3}{*}{M=200} & MCTS vs Random  & 1.38   & 0.240           & 1.29       & 0.266              & 1.67     & 0.154            \\
+                       & MCTS vs ETS     & 2.06   & 0.094           & 1.69       & 0.146              & 1.11     & 0.301            \\
+                       & MCTS vs Heuristic & 2.91   & \textbf{0.042}  & 3.00       & \textbf{0.040}     & 1.53     & 0.190            \\
+\midrule
+\multirow{3}{*}{M=400} & MCTS vs Random  & 1.14   & 0.318           & 1.00       & 0.373              & 0.94     & 0.389            \\
+                       & MCTS vs ETS     & 1.25   & 0.258           & -0.42      & 0.684              & -0.47    & 0.655            \\
+                       & MCTS vs Heuristic & 2.69   & 0.054           & 1.80       & 0.146              & 2.49     & 0.061            \\
+\midrule
+\multirow{3}{*}{M=800} & MCTS vs Random  & 1.10   & 0.332           & 1.00       & 0.373              & 0.96     & 0.364            \\
+                       & MCTS vs ETS     & 0.82   & 0.435           & -0.06      & 0.955              & -0.11    & 0.912            \\
+                       & MCTS vs Heuristic & 3.05   & \textbf{0.035}  & 3.08       & \textbf{0.037}     & 0.50     & 0.636           \\
+\bottomrule
+\end{tabular}

@@ -26,6 +26,232 @@ We emphasize that even on datasets with few tasks, using learned replay schedule
   \label{fig:split_mnist_task_accuracies_and_bubble_plot}
 \end{figure}
 
+
+
+\subsection{Statistical Significance Tests}\label{paperC:app:statistical_significance_tests}
+
+We provide p-values from Welch's t-tests to show the statistical significance between the methods in the experiments on different memory selections methods (Section \ref{paperC:sec:alternative_memory_selection_methods}), applying scheduling to recent replay methods (Section \ref{paperC:sec:applying_scheduling_to_recent_replay_methods}), and efficiency of replay scheduling (Section \ref{paperC:sec:efficiency_of_replay_scheduling}).
+
+\vspace{-3mm}
+\paragraph{Memory Selection Methods.} Table \ref{tab:t_test_memory_selection_appendix} presents the statistical significance tests between MCTS and the baselines that corresponds to the performance results in Table \ref{tab:results_memory_selection_methods}. We note that our method in general achieves significantly higher ACC comparing to the baselines showing that learning the time to learn is important.
+
+
+
+\vspace{-3mm}
+\paragraph{Recent Replay Methods.} Table \ref{tab:t_test_alternative_replay_methods} presents the statistical significance tests between MCTS and the baselines that corresponds to the performance results in Table \ref{tab:results_memory_selection_methods}. We note that our method (MCTS) in general achieves significantly higher ACC compared to the scheduling baselines, which shows that replay scheduling can improve the CL performance when combined with any replay method. 
+
+
+\vspace{-3mm}
+\paragraph{Efficiency of Scheduling.} Table \ref{tab:t_test_efficiency_replay_scheduling} presents the statistical significance tests between MCTS and the baselines that corresponds to the performance results in Table \ref{tab:efficiency_of_replay_scheduling_all_datasets}. Our method (MCTS) mostly performs on par with the baselines, but is significantly better than the baselines on Permuted MNIST, despite that MCTS replays fewer samples than the baselines.
+
+
+
+
+\begin{table}[t]
+	\centering
+	\caption{Two-tailed Welch's $t$-test results for the various memory selection methods presented in Table \ref{tab:results_memory_selection_methods}. 
+	}
+	\vspace{-3mm}
+	\resizebox{0.98\textwidth}{!}{
+		\input{PaperC/appendix/tables/statistical_significance_tests/memory_selection}
+	}
+	\vspace{-3mm}
+	\label{tab:t_test_memory_selection_appendix}
+\end{table}
+
+
+\begin{table}[t]
+	\centering
+	\caption{Two-tailed Welch's $t$-test results for the alternative replay methods results presented in Table \ref{tab:results_applying_scheduling_to_recent_replay_methods}. 
+	}
+	\vspace{-3mm}
+	\resizebox{0.98\textwidth}{!}{
+		\input{PaperC/appendix/tables/statistical_significance_tests/alternative_replay_methods}
+	}
+	\vspace{-3mm}
+	\label{tab:t_test_alternative_replay_methods}
+\end{table}
+
+
+\begin{table}[t]
+	\centering
+	\caption{Two-tailed Welch's $t$-test results for efficiency of replay scheduling presented in Table \ref{tab:efficiency_of_replay_scheduling_all_datasets}. 
+	}
+	\vspace{-3mm}
+	\resizebox{0.95\textwidth}{!}{
+		\input{PaperC/appendix/tables/statistical_significance_tests/efficiency_replay_scheduling}
+	}
+	\vspace{-3mm}
+	\label{tab:t_test_efficiency_replay_scheduling}
+\end{table}
+
+
+\clearpage
+
+
+\subsection{Varying Memory Size in Different Continual Learning Setting}
+\label{paperC:app:varying_memory_size}
+
+Here, we provide the ACC and BWT metrics from the varying memory size experiments from figure \ref{fig:acc_over_replay_memory_size} in Section \ref{paperC:sec:results_with_varying_replay_memory_size}. We also provide the p-values from Welch's t-tests to show the statistical significance between the methods. 
+\begin{itemize}[topsep=0pt, noitemsep]
+	\item \textbf{Domain-IL, 10-task Permuted MNIST:} Metrics in Table \ref{tab:varying_memory_size_domain_il_permutedmnist}, t-tests in Table \ref{tab:t_test_varying_memory_size_domain_il_permutedmnist}.
+	
+	\item \textbf{Task-IL, 5-task Split MNIST/FashionMNIST/notMNIST:} Metrics in Table \ref{tab:varying_memory_size_task_il_5task_datasets}, t-tests in Table \ref{tab:t_test_varying_memory_size_task_il_5task_datasets}. 
+	
+	\item \textbf{Task-IL, 20-task Split CIFAR-100/miniImagenet:} Metrics in Table \ref{tab:varying_memory_size_task_il_20task_datasets}, t-tests in Table \ref{tab:t_test_varying_memory_size_task_il_20task_datasets}. 
+	
+	\item \textbf{Class-IL, 5-task Split MNIST/FashionMNIST/notMNIST:} Metrics in Table \ref{tab:varying_memory_size_class_il_5task_datasets}, t-tests in Table \ref{tab:t_test_varying_memory_size_class_il_5task_datasets}. 
+	
+	\item \textbf{Class-IL, 20-task Split CIFAR-100/miniImagenet:} Metrics in Table \ref{tab:varying_memory_size_class_il_20task_datasets}, t-tests in Table \ref{tab:t_test_varying_memory_size_class_il_20task_datasets}. 
+	%\vspace{-1mm}
+\end{itemize}
+We note that MCTS mostly performs significantly better than the baselines on the 10-task Permuted MNIST and, interestingly, on the 20-task Split CIFAR-100 and Split miniImagenet in both Task-IL and Clas-IL settings, which shows the importance of replay scheduling for CL datasets with long task horizons.    
+
+\begin{table}[h]
+	%\caption{Global caption}
+	
+	\begin{minipage}{.5\textwidth}
+	\centering
+	\captionsetup{width=.9\linewidth}
+	\caption{Performance comparison in the Domain Incremental Learning setting over various memory sizes for the methods on Permuted MNIST. 
+	}
+	\vspace{-3mm}
+	\resizebox{0.95\textwidth}{!}{
+	\input{PaperC/appendix/tables/varying_memory_size_domain_il_permutedmnist.tex}
+	}
+	%\vspace{-5mm}
+	\label{tab:varying_memory_size_domain_il_permutedmnist}
+	\end{minipage}% \quad
+	\begin{minipage}{.5\textwidth}
+	\centering
+	\captionsetup{width=.9\linewidth}
+	\caption{Two-tailed Welch's $t$-test results for the varying memory size experiments presented in Table \ref{tab:varying_memory_size_domain_il_permutedmnist} in the Domain Incremental Learning setting on Permuted MNIST. }
+	\vspace{-3mm}
+	\resizebox{0.95\textwidth}{!}{
+	\input{PaperC/appendix/tables/statistical_significance_tests/varying_memory_size_domain_il_permutedmnist.tex}
+	}
+	\label{tab:t_test_varying_memory_size_domain_il_permutedmnist}
+	\end{minipage} 
+\end{table}
+
+\begin{table}[h]
+
+\end{table}
+
+\begin{comment}
+
+\begin{table}[h]
+	\centering
+	\caption{Two-tailed Welch's $t$-test results for the varying memory size experiments presented in Table \ref{tab:varying_memory_size_task_il_5task_datasets} in the Domain Incremental Learning setting on Permuted MNIST. 
+	}
+	\vspace{-3mm}
+	\resizebox{0.5\textwidth}{!}{
+		\input{PaperC/appendix/tables/statistical_significance_tests/varying_memory_size_domain_il_permutedmnist.tex}
+	}
+	\label{tab:t_test_varying_memory_size_domain_il_permutedmnist}
+\end{table}
+	content...
+\end{comment}
+
+
+\begin{table}[t]
+	\centering
+	\caption{Performance comparison in the Task Incremental Learning setting over various memory sizes for the methods on the 5-task datasets. 
+	}
+	\vspace{-3mm}
+	\resizebox{0.9\textwidth}{!}{
+		\input{PaperC/appendix/tables/varying_memory_size_task_il_5task_datasets.tex}
+	}
+	\label{tab:varying_memory_size_task_il_5task_datasets}
+\end{table}
+
+
+
+\begin{table}[t]
+	\centering
+	\caption{Two-tailed Welch's $t$-test results for the varying memory size experiments presented in Table \ref{tab:varying_memory_size_task_il_5task_datasets} in the Task Incremental Learning setting on the 5-task datasets. 
+	}
+	\vspace{-3mm}
+	\resizebox{0.9\textwidth}{!}{
+		\input{PaperC/appendix/tables/statistical_significance_tests/varying_memory_size_task_il_5task_datasets.tex}
+	}
+	\label{tab:t_test_varying_memory_size_task_il_5task_datasets}
+\end{table}
+
+\begin{table}[t]
+	\centering
+	\caption{Performance comparison in the Task Incremental Learning setting over various memory sizes for the methods on the 20-task datasets. 
+	}
+	\vspace{-3mm}
+	\resizebox{0.9\textwidth}{!}{
+		\input{PaperC/appendix/tables/varying_memory_size_task_il_20task_datasets.tex}
+	}
+	\label{tab:varying_memory_size_task_il_20task_datasets}
+\end{table}
+
+
+\begin{table}[t]
+	\centering
+	\caption{Two-tailed Welch's $t$-test results for the varying memory size experiments presented in Table \ref{tab:varying_memory_size_task_il_20task_datasets} in the Task Incremental Learning setting on the 20-task datasets. 
+	}
+	\vspace{-3mm}
+	\resizebox{0.9\textwidth}{!}{
+		\input{PaperC/appendix/tables/statistical_significance_tests/varying_memory_size_task_il_20task_datasets.tex}
+	}
+	\label{tab:t_test_varying_memory_size_task_il_20task_datasets}
+\end{table}
+
+\begin{table}[t]
+	\centering
+	\caption{Performance comparison in the Class Incremental Learning setting over various memory sizes for the methods on the 5-task datasets. 
+	}
+	\vspace{-3mm}
+	\resizebox{0.95\textwidth}{!}{
+		\input{PaperC/appendix/tables/varying_memory_size_class_il_5task_datasets.tex}
+	}
+	\label{tab:varying_memory_size_class_il_5task_datasets}
+\end{table}
+
+
+\begin{table}[t]
+	\centering
+	\caption{Two-tailed Welch's $t$-test results for the varying memory size experiments presented in Table \ref{tab:varying_memory_size_class_il_5task_datasets} in the Class Incremental Learning setting on the 5-task datasets. 
+	}
+	\vspace{-3mm}
+	\resizebox{0.95\textwidth}{!}{
+		\input{PaperC/appendix/tables/statistical_significance_tests/varying_memory_size_class_il_5task_datasets.tex}
+	}
+	\label{tab:t_test_varying_memory_size_class_il_5task_datasets}
+\end{table}
+
+\begin{table}[t]
+	\centering
+	\caption{Performance comparison in the Class Incremental Learning setting over various memory sizes for the methods on the 20-task datasets. 
+	}
+	\vspace{-3mm}
+	\resizebox{0.9\textwidth}{!}{
+		\input{PaperC/appendix/tables/varying_memory_size_class_il_20task_datasets.tex}
+	}
+	\label{tab:varying_memory_size_class_il_20task_datasets}
+\end{table}
+
+
+\begin{table}[t]
+	\centering
+	\caption{Two-tailed Welch's $t$-test results for the varying memory size experiments presented in Table \ref{tab:varying_memory_size_class_il_20task_datasets} in the Class Incremental Learning setting on the 20-task datasets. 
+	}
+	\vspace{-3mm}
+	\resizebox{0.9\textwidth}{!}{
+		\input{PaperC/appendix/tables/statistical_significance_tests/varying_memory_size_class_il_20task_datasets.tex}
+	}
+	\label{tab:t_test_varying_memory_size_class_il_20task_datasets}
+\end{table}
+
+
+
+
+
+\begin{comment}
 \subsection{Analysis of Catastrophic Forgetting}\label{paperC:app:analysis_of_catastrophic_forgetting}
 
 We have compared the degree of catastrophic forgetting for our method against the baselines by measuring the backward transfer (BWT) metric from \citeC{C:lopez2017gradient}, which is given by
@@ -52,6 +278,8 @@ We %For the experiments, we
 used the same architectures and hyperparameters as described in Appendix \ref{paperC:app:experimental_settings} for all datasets, except for the optimizer in HAL where we used the SGD optimizer since using Adam made the model diverge in our experiments. %if not mentioned otherwise. 
 We used the Adam optimizer with learning rate $\eta=0.001$ for MER, DER, and DER++. 
 %For HAL, we used the SGD optimizer since using Adam made the model diverge in our experiments. 
+
+	content...
 
 
 
@@ -117,3 +345,4 @@ We used the Adam optimizer with learning rate $\eta=0.001$ for MER, DER, and DER
 
 %\clearpage
 %\clearpage
+\end{comment}

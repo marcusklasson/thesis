@@ -1,0 +1,111 @@
+
+\section{Method}\label{paperC:sec:method}
+
+In this section, we describe our new problem setting of CL where historical data are available while the processing time is limited when learning new tasks. 
+In Section \ref{paperC:sec:problem_setting} and \ref{paperC:sec:replay_scheduling_in_continual_learning}, we present the considered problem setting, as well as our idea of learning schedules over which tasks to replay at different time steps to mitigate catastrophic forgetting.
+We use MCTS~\citeC{C:coulom2006efficient} in an ideal CL environment that searches for good replay schedules to show the importance of replay scheduling in CL (Section \ref{paperC:sec:mcts_for_replay_scheduling}). 
+
+
+%\input{PaperC/sections/method/problem_setting}
+\subsection{Problem Setting}\label{paperC:sec:problem_setting}
+
+We focus on a slightly new setting, considering the needs for CL in the real-world where all historical data can be available since data storage is cheap. 
+However, as this data volume is typically huge, we are often prohibited from replaying all historical data due to processing time constraints. 
+Therefore, the goal is to determine which historical tasks to revisit and sample a small replay memory from the selected tasks to mitigate catastrophic forgetting as efficiently as possible. 
+
+\setlength{\abovedisplayskip}{0pt}
+\setlength{\belowdisplayskip}{0pt}
+\setlength{\abovedisplayshortskip}{0pt}
+\setlength{\belowdisplayshortskip}{0pt}
+
+Here, we introduce the notation of our problem setting which resembles the traditional CL setting for image classification. We let a neural network $f_{\vtheta}$, parameterized by $\vtheta$, learn $T$ tasks sequentially from the datasets $\gD_1, \dots, \gD_T$ arriving one at a time. 
+The $t$-th dataset $\gD_t = \{(\vx_{t}^{(i)}, y_{t}^{(i)})\}_{i=1}^{N_{t}}$ consists of $N_t$ samples where $\vx_{t}^{(i)}$ and $y_{t}^{(i)}$ are the $i$-th data point and class label respectively. The training objective at task $t$ is given by 
+\begin{align}
+	\underset{\vtheta}{\text{min}} \sum_{i=1}^{N_t} \ell(f_{\vtheta}(\vx_t^{(i)}), y_{t}^{(i)}),
+\end{align}
+where $\ell(\cdot)$ is the loss function, e.g., cross-entropy loss in our case. 
+When learning task $t$, the network $f_{\vtheta}$ is at risk of catastrophically forgetting the previous $t-1$ tasks. Next, we describe our method for constructing this replay memory.  
+
+We assume that historical data from old tasks are accessible at any time step $t$. 
+However, due to processing time constraints, we can only fill a small replay memory $\gM$ with $M$ historical samples for replay. 
+The challenge then becomes how to select the $M$ replay samples to efficiently retain knowledge of old tasks. We focus on selecting the samples on task-level by deciding on the task proportion $(p_1, \dots, p_{t-1})$ of samples to fetch from each task, where $p_{i} \geq 0$ is the proportion of $M$ samples from task $i$ to place in $\gM$ and $\sum_{i=1}^{t-1} p_i = 1$. To simplify the selection of which tasks to replay, we construct a discrete set of possible task proportions that can be used for constructing $\gM$.
+
+
+
+\begin{comment}
+
+ %%% RS-MCTS EXAMPLE FIGURE 
+\begin{figure}[t]
+\centering 
+\setlength{\figwidth}{.77\textwidth}
+\setlength{\figheight}{.3\textheight}
+\input{PaperC/figures/rs_mcts_tree_example2}
+\vspace{-2mm}
+\caption{Tree-shaped action space of possible replay memory compositions with size $M=8$ at every task from the discretization method described in Section \ref{sec:replay_scheduling_in_continual_learning} for Split MNIST. A replay schedule is represented as a path traversal of different replay memory compositions from task 1 to task 5. 
+}
+\vspace{-3mm}
+\label{fig:replay_scheduling_mcts_tree_example}
+\end{figure}
+	content...
+\end{comment}
+
+%\input{PaperC/sections/method/replay_scheduling_in_continual_learning}
+\subsection{Replay Scheduling in Continual Learning}\label{paperC:sec:replay_scheduling_in_continual_learning}
+
+In this section, we describe our setup for enabling the scheduling for selecting replay memories at different time steps. We define a replay schedule as a sequence $S = (\va_1, \dots, \va_{T-1})$, where the task proportions $\va_i = (a_1, \dots, a_{T-1})$ for $1 \leq i \leq T-1$ are used for determining how many samples from seen tasks with which to fill the replay memory at task $i$. We construct an action space with a discrete number of choices of task proportions that can be selected at each task: At task $t$, we have $t-1$ historical tasks that we can choose samples from. We create $t-1$ bins $\vb_t = [b_1, \dots, b_{t-1}]$ and sample a task index for each bin $b_i \in \{1, \dots, t-1\}$. The bins are treated as interchangeable and we only keep the unique choices. For example, at task 3, we have seen task 1 and 2, so the unique choices of vectors are $[1,1], [1,2], [2,2]$, where $[1,1]$ indicates that all memory samples are from task 1, $[1,2]$ indicates that half memory is from task 1 and the other half are from task etc. We count the number of occurrences of each task index in $\vb_t$ and divide by $t-1$ to obtain the task proportion, i.e., $\va_t = \texttt{bincount}(\vb_t) / (t-1)$. We round the number of replay samples from task $i$, i.e., $a_i \cdot M$, up or down accordingly to keep the memory size $M$ fixed when filling the memory. From this specification, we can build a tree of different replay schedules to evaluate with the network. We outline the steps for creating the action space in Algorithm \ref{paperC:alg:action_space_discretization} (see Appendix \ref{paperC:app:rs_mcts_algorithm}). 
+
+
+\begin{wrapfigure}{r}{0.64\textwidth}
+	\centering
+	\setlength{\figwidth}{.64\textwidth}
+	\setlength{\figheight}{.27\textheight}
+	\vspace{-3mm}
+	\input{PaperC/figures/rs_mcts_tree_example2}
+	\vspace{-5mm}
+	\caption{Tree-shaped action space of possible replay memories of size $M=8$ at every task for Split MNIST.
+		%\caption{Tree-shaped action space of possible replay memory compositions with size $M=8$ at every task from the discretization method described in Section \ref{sec:replay_scheduling_in_continual_learning} for Split MNIST. A replay schedule is represented as a path traversal of different replay memory compositions from task 1 to task 5. 
+		}
+		\vspace{-3mm}
+		\label{fig:replay_scheduling_mcts_tree_example}
+	\end{wrapfigure}
+	Figure \ref{fig:replay_scheduling_mcts_tree_example} shows an example of a replay schedule tree with Split MNIST~\citeC{C:zenke2017continual} 
+	where the memory size is $M=8$. Each level corresponds to a task to learn and we show some examples of possible replay memories in the tree that can be evaluated at each task. A replay schedule is represented as a path traversal of different replay memory compositions from task 1 to task 5. At task 1, the memory $\gM_1 = \emptyset$ is empty, while $\gM_2$ is filled with samples from task 1 at task 2. The memory $\gM_3$ can be composed with samples from either task 1 or 2, or equally fill $\gM_3$ with samples from both tasks. All possible paths in the tree are valid replay schedules. We show three examples of possible schedules in Figure \ref{fig:replay_scheduling_mcts_tree_example} for illustration: the \textcolor{blue}{blue} path represents a replay schedule where only task 1 samples are replayed. The \textcolor{red}{red} path represents using memories with equally distributed tasks, and the \textcolor{purple}{purple} path represents a schedule where the memory is only filled with samples from the most previous task.
+
+
+
+
+%\input{PaperC/sections/method/mcts_for_replay_schedules}
+\subsection{Monte Carlo Tree Search for Replay Schedules}
+\label{paperC:sec:mcts_for_replay_scheduling}
+
+In this section, we describe how we enable using MCTS for studying the benefits of replay scheduling in CL scenarios.
+The tree-shaped action space of task proportions described in Section \ref{paperC:sec:replay_scheduling_in_continual_learning} grows fast with the number of tasks, which complicates studying replay scheduling in datasets with longer task-horizons. Since the search space is too big for using exhaustive searches, 
+we need a scalable method that enables tree searches in large action spaces.
+To this end, we propose to use MCTS since it has been successful in applications with large action spaces~\citeC{C:browne2012survey, C:chaudhry2018feature, C:gelly2006modification, C:silver2016mastering}. In our case, MCTS concentrates the search for replay schedules in directions with promising CL performance in the environment. We use MCTS in an ideal CL setting, wherein multiple episodes are allowed, for demonstration purposes to show that replay scheduling can be critical for the CL performance. 
+
+Each replay memory composition in the action space corresponds to a node that MCTS can visit during a rollout. For instance, in Figure \ref{fig:replay_scheduling_mcts_tree_example}, the nodes correspond to the possible replay memories which can be visited during the MCTS rollouts. 
+At level $t$, the node $v_t$ is related to a task proportion $\vp_{t}$ used for retrieving a replay memory composition from the historical data at task $t$. One MCTS rollout corresponds to traversing through all tree levels $1, ..., T$ to select the replay schedule $S$ to use during the CL training. Each task proportion $\vp_t$ from every visited node is stored in $S$ during the rollout. When reaching level $T$, we start the CL training and use $S$ for constructing the replay memories at each task. Next, we briefly outline the MCTS steps for performing the search (details in Appendix \ref{paperC:app:rs_mcts_algorithm}):
+
+%Each memory composition in the action space corresponds to a node that can be visited by MCTS. For example, in Figure \ref{fig:replay_scheduling_mcts_tree_example}, the nodes correspond to the possible memory examples which can be visited during the MCTS rollouts. At task $t$, the node $v_t$ is related to a task proportions $\va_{t}$ used for retrieving a replay memory from the historical data. We store the related task proportion $\va_t$ from every visited node $v_t$ in the replay schedule $S$. The final replay schedule is then used for constructing the replay memories at each task during the CL training. Next, we briefly outline the MCTS steps for performing the replay schedule search (more details in Appendix \ref{paperC:app:rs_mcts_algorithm}):
+
+\vspace{-1mm}
+\begin{itemize}[leftmargin=*, topsep=0pt, noitemsep, label={}]
+	\item {\bf Selection.} During a rollout, the current node $v_t$ either moves randomly to unvisited children, or selects the next node by evaluating the Upper Confidence Tree (UCT)~\citeC{C:kocsis2006bandit} if all children has been visited earlier.
+	The child $v_{t+1}$ with the highest UCT score is selected using the function from \cite{chaudhry2018feature}:
+	\begin{align}\label{eq:uct}
+		UCT(v_t, v_{t+1}) = \text{max}(q(v_{t+1})) + C \sqrt{\frac{2 \log(n(v_{t}))}{n(v_{t+1})}},
+	\end{align}
+	where $q(\cdot)$ is the reward function, $C$ the exploration constant, and $n(\cdot)$ the number of node visits. 
+	
+	\item {\bf Expansion.} Whenever the current node $v_t$ has unvisited child nodes, the search tree is expanded with one of the unvisited child nodes $v_{t+1}$ selected with uniform sampling. 
+	
+	\item {\bf Simulation and Reward.} After expansion, the succeeding nodes are selected randomly until reaching a terminal node $v_T$. The task proportions from the visited nodes in the rollout constitutes the replay schedule $S$. After training the network using $S$ for replay, we calculate the reward for the rollout is given by $r = \frac{1}{T} \sum_{i=1}^T A_{T, i}^{(val)}$, where $A_{T, i}^{(val)}$ is the validation accuracy of task $i$ at task $T$.  
+	
+	\item {\bf Backpropagation.} Reward $r$ is backpropagated from the expanded node $v_t$ to the root $v_1$, where the reward function $q(\cdot)$ and number of visits $n(\cdot)$ are updated at each node. 
+\end{itemize}
+
+
+
+
+
+

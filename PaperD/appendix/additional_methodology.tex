@@ -1,5 +1,30 @@
 
-\section{Additional Methodology}\label{paperD:app:methodology}
+
+
+\section{Additional Methodology of RL Framework}\label{paperD:app:methodology}
+
+We provide pseudo-code for the RL-based framework for learning the replay scheduling policy 
+%with either DQN~\citeD{D:mnih2013playing} or A2C~\citeD{D:mnih2016asynchronous} 
+in Algorithm \ref{alg:rl_framework_for_learning_replay_scheduling_policy}. 
+The procedure collects experience from all training environments in $\gE^{(train)}$ at every time step $t$. The datasets and classifiers are specific for each environment $E_i \in \gE^{(train)}$. At $t=1$, we obtain the initial state $s_1^{(i)}$ by evaluating the classifier on the validation set $\gD_1^{(val)}$ after training the classifier on the task 1. Next, we get the replay memory for mitigating catastrophic forgetting when learning the next task $t+1$ by 1) taking action $a_t^{(i)}$ under policy $\pi_{\vtheta}$, 2) converting action $a_t^{(i)}$ into the task proportion $\vp_{t}$, and 3) sampling the replay memory $\gM_t$ from the historical datasets given the selected proportion. We then obtain the reward $r_t$ and the next state $s_{t+1}$ by evaluating the classifier on the validation sets $\gD_{1:t+1}^{(val)}$ after learning task $t+1$. The collected experience from each time step is stored in the experience buffer $\gB$. %for both DQN and A2C.
+See the corresponding articles on DQN~\citeD{D:mnih2013playing}, A2C~\citeD{D:mnih2016asynchronous}, and SAC~\citeD{D:haarnoja2018sac_algo} for information on how the policy updates are performed. 
+%In $\textsc{UpdatePolicy}(\cdot)$, we outline the steps for updating the policy parameters $\vtheta$ with either DQN or A2C. 
+
+%\subsection{RL Framework Algorithm}\label{paperD:app:rl_framework_algorithm}
+%In this section, we outline the training procedure of the replay scheduling policy. 
+
+%We provide pseudo-code for the RL-based framework for learning the replay scheduling policy with either DQN~\citeD{D:mnih2013playing} or A2C~\citeD{D:mnih2016asynchronous} in Algorithm \ref{alg:rl_framework_for_learning_replay_scheduling_policy}. The procedure collects experience from all training environments in $\gE^{(train)}$ at every time step $t$. The datasets and classifiers are specific for each environment $E_i \in \gE^{(train)}$. At $t=1$, we obtain the initial state $s_1^{(i)}$ by evaluating the classifier on the validation set $\gD_1^{(val)}$ after training the classifier on the task 1. Next, we get the replay memory for mitigating catastrophic forgetting when learning the next task $t+1$ by 1) taking action $a_t^{(i)}$ under policy $\pi_{\vtheta}$, 2) converting action $a_t^{(i)}$ into the task proportion $\vp_{t}$, and 3) sampling the replay memory $\gM_t$ from the historical datasets given the selected proportion. We then obtain the reward $r_t$ and the next state $s_{t+1}$ by evaluating the classifier on the validation sets $\gD_{1:t+1}^{(val)}$ after learning task $t+1$. The collected experience from each time step is stored in the experience buffer $\gB$ for both DQN and A2C. In $\textsc{UpdatePolicy}(\cdot)$, we outline the steps for updating the policy parameters $\vtheta$ with either DQN or A2C. 
+
+\begin{algorithm}[h]
+	\footnotesize
+	\caption{RL Framework for Learning Replay Scheduling Policy}
+	\label{alg:rl_framework_for_learning_replay_scheduling_policy}
+	\input{PaperD/appendix/rl_framework_algorithm.tex}
+\end{algorithm}
+
+
+
+\begin{comment}
 
 We provide additional information on the construction of the action space with task proportions in Appendix \ref{paperD:app:action_space}, and outline the training procedure of the replay scheduling policy in Appendix \ref{paperD:app:rl_framework_algorithm}. 
 
@@ -101,3 +126,6 @@ We provide pseudo-code for the RL-based framework for learning the replay schedu
 
 \end{algorithmic}
 \end{algorithm}
+
+	content...
+\end{comment}

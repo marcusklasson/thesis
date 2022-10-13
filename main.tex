@@ -26,7 +26,7 @@
 % my packages
 \input{packages}
 \input{math_commands}
-
+\newlength\longest %%% width for  the first dedeication
 
 \makeatletter
 %\@addtoreset{section}{part}
@@ -73,14 +73,14 @@
 \title{Fine-Grained and Continual Visual Recognition for Assisting Visually Impaired People}
 %\subtitle{\textbf{sub-title}}
 \author{Marcus Klasson}
-\date{date}
+\date{2022}
 \thesistype{Doctoral Thesis}
 \imprint{Stockholm, Sweden, 2022}
-\examen{Teknologie doktorexamen i datalogi}
-\disputationsdatum{tisdagen den 8 november 2022 klockan 9.00}
-\disputationslokal{Sal F3, Lindstedtsvägen 26, Kungliga Tekniska H\"{o}gskolan, Stockholm}
-\publisher{Universitetsservice US AB}
-\address{KTH Royal Institute of Technology \\School of Electrical Engineering and Computer Science\\ Division of Robotics, Perception, and Learning \\ SE-100 44 Stockholm, Sweden}
+\examen{Subject: Computer Science, Specialization: Robotics, Perception and Learning.}
+\disputationsdatum{Tuesday, November 8, 2022, 9.00}
+\disputationslokal{F3, Lindstedtsvägen 26 \& 28, KTH Campus, Stockholm}
+\publisher{Universitetsservice US-AB, Stockholm, Sweden, 2022}
+\address{Division of Robotics, Perception, and Learning \\ School of Electrical Engineering and Computer Science\\ KTH Royal Institute of Technology \\ SE-100 44 Stockholm, Sweden}
 \isbn{ISBN 978-91-8040-377-1}
 %\issn{ISSN XXX} % No longer used at KTH
 \trita{TRITA-EECS-AVL-2022:63}
@@ -88,6 +88,72 @@
 	
 % Create title page using info above
 \maketitle
+
+%%%% Empty page
+%\thispagestyle{empty}
+%\null\vfill 
+%\clearpage
+
+%%% First dedication
+\clearpage
+
+\thispagestyle{empty}
+\null\vfill %% pushes text down more to middle of page
+
+%\settowidth\longest{\huge\itshape To my mother,}
+\settowidth\longest{\huge\itshape the most important}
+\begin{center}
+\parbox{\longest}{%
+	\begin{center}
+	\huge\itshape To my mother,\\
+	the most important\\
+	person in my life\par\bigskip 
+	\end{center}
+}
+\end{center}
+
+\vfill\vfill
+
+\clearpage
+
+%%% Empty page
+\thispagestyle{empty}
+\null\vfill 
+\clearpage
+%%% End of First dedication
+
+
+%%% Second dedication
+\clearpage
+
+\thispagestyle{empty}
+\null\vfill %% pushes text down more to middle of page
+
+%\settowidth\longest{\huge\itshape To my mother}
+\settowidth\longest{\Large\itshape You believe it or not, I wanted to play football for the coach}
+\begin{center}
+
+\parbox{\longest}{%
+	\raggedright{\Large\itshape%
+		You know, man, when I was a young man in high school\\ 
+		You believe it or not, I wanted to play football for the coach\\
+		And all those older guys \\
+		they said that he was mean and cruel, but you know \\ 
+		I wanted to play football for the coach\par\bigskip
+	}   
+	\raggedright\MakeUppercase{Lou Reed - Coney Island Baby (1975)}\par%
+}
+\end{center}
+
+\vfill\vfill
+
+\clearpage
+
+%%% Empty page
+\thispagestyle{empty}
+\null\vfill 
+\clearpage
+%%% End of Second dedication
 
 \frontmatter % Pages i, ii, iii, iv, v etc.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -109,12 +175,12 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%% ACKNOWLEDGMENT %%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%\input{FrontMatter/acknowledgements}
+\input{FrontMatter/acknowledgements}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%% ACRONYMS %%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\input{FrontMatter/acronyms}
+%\input{FrontMatter/acronyms}
 
 %% MK: Add List of Figures & Tables
 
@@ -167,7 +233,7 @@
 %\setcounter{chapter}{0}  % first paper should be paper A
 \renewcommand\bibsection{\section*{\refname}}
 \setcounter{secnumdepth}{3}
-\addtocontents{toc}{\setcounter{tocdepth}{0}} % removing sections in toc
+\addtocontents{toc}{\setcounter{tocdepth}{1}} % removing sections in toc
 
 %%% Paper A %%%
 %\renewcommand*{\thepage}{A\arabic{page}}

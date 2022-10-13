@@ -3,7 +3,7 @@
 
 
 \pgfplotsset{every axis title/.append style={at={(0.5,0.85)}}}
-\pgfplotsset{every tick label/.append style={font=\scriptsize}}
+\pgfplotsset{every tick label/.append style={font=\tiny}}
 \pgfplotsset{every major tick/.append style={major tick length=2pt}}
 \pgfplotsset{every minor tick/.append style={minor tick length=1pt}}
 \pgfplotsset{every axis x label/.append style={at={(0.5,-0.22)}}}
@@ -19,10 +19,11 @@
 \definecolor{color6}{rgb}{0.890196078431372,0.466666666666667,0.76078431372549}
 
 \begin{groupplot}[group style={group size= 2 by 1, horizontal sep=1.00cm, vertical sep=1.20cm}]
+\input{PaperD/appendix/figures/policy_rewards_mnist/rewards_env2}
+\input{PaperD/appendix/figures/policy_rewards_mnist/rewards_env4}
 
-\input{PaperD/figures/rewards_cifar10/rewards_env2}
-
-\input{PaperD/figures/rewards_cifar10/rewards_env4}
+%\input{PaperD/figures/rewards_cifar10/rewards_env2}
+%\input{PaperD/figures/rewards_cifar10/rewards_env4}
 
 \end{groupplot}
 

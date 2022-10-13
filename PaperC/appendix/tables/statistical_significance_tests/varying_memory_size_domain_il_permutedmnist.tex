@@ -1,0 +1,27 @@
+\begin{tabular}{llcc}
+\toprule
+                        &                  & \multicolumn{2}{c}{\textbf{Permuted MNIST}} \\
+\cmidrule(lr){3-4}
+\textbf{Memory Size}    & \textbf{Methods} & $t$                  & $p$                    \\
+\midrule
+\multirow{3}{*}{M=90}   & MCTS vs Random   & -1.55             & 0.166            \\
+                        & MCTS vs ETS      & 0.26              & 0.806            \\
+                        & MCTS vs Heuristic  & -4.32             & \textbf{0.007}            \\
+\midrule
+\multirow{3}{*}{M=270}  & MCTS vs Random   & 0.17              & 0.872            \\
+                        & MCTS vs ETS      & 3.75              & \textbf{0.009}            \\
+                        & MCTS vs Heuristic  & 4.66              & \textbf{0.008}            \\
+\midrule
+\multirow{3}{*}{M=450}  & MCTS vs Random   & 1.13              & 0.313            \\
+                        & MCTS vs ETS      & 1.93              & 0.111            \\
+                        & MCTS vs Heuristic  & 3.31              & \textbf{0.027}            \\
+\midrule
+\multirow{3}{*}{M=900}  & MCTS vs Random   & 1.66              & 0.153            \\
+                        & MCTS vs ETS      & 2.92              & \textbf{0.019}            \\
+                        & MCTS vs Heuristic  & 5.28              & \textbf{0.006}            \\
+\midrule
+\multirow{3}{*}{M=2250} & MCTS vs Random   & 5.31              & \textbf{0.001}            \\
+                        & MCTS vs ETS      & 6.74              & \textbf{0.000}            \\
+                        & MCTS vs Heuristic  & 5.88              & \textbf{0.004}    \\
+\bottomrule
+\end{tabular}

@@ -1,0 +1,156 @@
+\nextgroupplot[title=Split notMNIST,
+height=\figheight,
+legend cell align={left},
+legend style={
+  nodes={scale=0.7},
+  fill opacity=0.8,
+  draw opacity=1,
+  text opacity=1,
+  at={(0.48,0.03)},
+  anchor=south west,
+  draw=white!80!black
+},
+minor xtick={},
+minor ytick={0.91, 0.93, 0.95, 0.97},
+tick align=outside,
+tick pos=left,
+width=\figwidth,
+x grid style={white!69.0196078431373!black},
+xmajorgrids,
+%xlabel={Memory size \(\displaystyle M\)},
+xmin=0.7, xmax=7.3,
+xtick style={color=black},
+xtick={1,2,3,4,5,6,7},
+xticklabel style={rotate=90},
+xticklabels={8,24,80,120,200,400,800},
+y grid style={white!69.0196078431373!black},
+ymajorgrids,
+yminorgrids,
+%ylabel={ACC},
+ymin=0.899, ymax=0.968037298370892,
+ytick style={color=black},
+ytick={0.9,0.92,0.94,0.96,0.98},
+yticklabels={90, 92, 94, 96, 98}
+]
+\path [fill=color0, fill opacity=0.2, line width=1pt]
+(axis cs:1,0.896013207305508)
+--(axis cs:1,0.931135192694492)
+--(axis cs:2,0.938159623242489)
+--(axis cs:3,0.950881648994029)
+--(axis cs:4,0.959366722972026)
+--(axis cs:5,0.953366381554805)
+--(axis cs:6,0.957957912748783)
+--(axis cs:7,0.956996714641506)
+--(axis cs:7,0.942492645358494)
+--(axis cs:7,0.942492645358494)
+--(axis cs:6,0.935719447251217)
+--(axis cs:5,0.925448018445195)
+--(axis cs:4,0.938790317027974)
+--(axis cs:3,0.931924351005971)
+--(axis cs:2,0.908068296757511)
+--(axis cs:1,0.896013207305508)
+--cycle;
+
+\path [fill=color1, fill opacity=0.2, line width=1pt]
+(axis cs:1,0.905642837956127)
+--(axis cs:1,0.936302282043873)
+--(axis cs:2,0.945930444061739)
+--(axis cs:3,0.952986088925952)
+--(axis cs:4,0.959824157530047)
+--(axis cs:5,0.952829054017519)
+--(axis cs:6,0.959656752670672)
+--(axis cs:7,0.962564882794123)
+--(axis cs:7,0.947773837205876)
+--(axis cs:7,0.947773837205876)
+--(axis cs:6,0.948538687329328)
+--(axis cs:5,0.942894385982481)
+--(axis cs:4,0.946525122469953)
+--(axis cs:3,0.939538551074048)
+--(axis cs:2,0.917796675938261)
+--(axis cs:1,0.905642837956127)
+--cycle;
+
+\path [fill=color2, fill opacity=0.2, line width=1pt]
+(axis cs:1,0.92575112968193)
+--(axis cs:1,0.94785415031807)
+--(axis cs:2,0.955205714329457)
+--(axis cs:3,0.958007719572493)
+--(axis cs:4,0.952085855254064)
+--(axis cs:5,0.955086757682649)
+--(axis cs:6,0.947191690371997)
+--(axis cs:7,0.964993528242304)
+--(axis cs:7,0.936188951757696)
+--(axis cs:7,0.936188951757696)
+--(axis cs:6,0.909628229628003)
+--(axis cs:5,0.922580682317351)
+--(axis cs:4,0.916396464745937)
+--(axis cs:3,0.906849720427507)
+--(axis cs:2,0.904118125670543)
+--(axis cs:1,0.92575112968193)
+--cycle;
+
+\path [fill=color3, fill opacity=0.2, line width=1pt]
+(axis cs:1,0.939071178436279)
+--(axis cs:1,0.951526403427124)
+--(axis cs:2,0.958871364593506)
+--(axis cs:3,0.954144775867462)
+--(axis cs:4,0.952358484268188)
+--(axis cs:5,0.95714259147644)
+--(axis cs:6,0.956836819648743)
+--(axis cs:7,0.9615877866745)
+--(axis cs:7,0.9475919008255)
+--(axis cs:7,0.9475919008255)
+--(axis cs:6,0.94806444644928)
+--(axis cs:5,0.94659161567688)
+--(axis cs:4,0.93076229095459)
+--(axis cs:3,0.942625343799591)
+--(axis cs:2,0.945715665817261)
+--(axis cs:1,0.939071178436279)
+--cycle;
+
+\addplot [line width=1.0pt, color0, mark=*, mark size=1, mark options={solid}]
+table {%
+1 0.9135742
+2 0.92311396
+3 0.941403
+4 0.94907852
+5 0.9394072
+6 0.94683868
+7 0.94974468
+};
+%\addlegendentry{Random}
+
+\addplot [line width=1.0pt, color1, mark=*, mark size=1, mark options={solid}]
+table {%
+1 0.92097256
+2 0.93186356
+3 0.94626232
+4 0.95317464
+5 0.94786172
+6 0.95409772
+7 0.95516936
+};
+%\addlegendentry{ETS}
+\addplot [line width=1.0pt, color2, mark=*, mark size=1, mark options={solid}]
+table {%
+1 0.93680264
+2 0.92966192
+3 0.93242872
+4 0.93424116
+5 0.93883372
+6 0.92840996
+7 0.95059124
+};
+%\addlegendentry{Heuristic}
+\addplot [line width=1.0pt, color3, mark=*, mark size=1, mark options={solid}]
+table {%
+1 0.945298790931702
+2 0.952293515205383
+3 0.948385059833527
+4 0.941560387611389
+5 0.95186710357666
+6 0.952450633049011
+7 0.95458984375
+};
+%\addlegendentry{RS-MCTS}
+

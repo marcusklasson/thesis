@@ -1,0 +1,22 @@
+
+\begin{tabular}{l c c c c c c c}
+	\toprule
+	& & \multicolumn{3}{c}{{\bf 5-task Datasets}} & \multicolumn{3}{c}{{\bf 10- and 20-task Datasets}} \\
+	\cmidrule(lr){3-5} \cmidrule(lr){6-8}
+	{\bf Method} & {\bf Hyperparam.}  & S-MNIST & S-FashionMNIST & S-notMNIST & P-MNIST & S-CIFAR-100 & S-miniImagenet \\
+	\midrule
+	\multirow{5}{*}{HAL} & $\eta$ & 0.1 & 0.1 & 0.1 & 0.1 & 0.03 & 0.03 \\
+	& $\lambda$  & 0.1 & 0.1 & 0.1 & 0.1 & 1.0 & 0.03 \\
+	& $\gamma$ & 0.5 & 0.1 & 0.1 & 0.1 & 0.1 & 0.1 \\
+	& $\beta$ & 0.7 & 0.5 & 0.5 & 0.5 & 0.5 & 0.5 \\
+	& $k$ & 100 & 100 & 100 & 100 & 100 & 100 \\
+	\midrule 
+	\multirow{2}{*}{MER} & $\gamma$ & 1.0 & 1.0 & 1.0 & 1.0 & 1.0 & 1.0  \\ 
+	& $\beta$  & 1.0 & 0.01 & 1.0 & 1.0 & 0.1 & 0.1 \\
+	\midrule 
+	\multirow{1}{*}{DER} & $\alpha$ & 0.2 & 0.2 & 0.1 & 1.0 & 1.0 & 0.1 \\ 
+	\midrule 
+	\multirow{2}{*}{DER++} & $\alpha$ & 0.2 & 0.2 & 0.1 & 1.0 & 1.0 & 0.1 \\ 
+	& $\beta$ & 1.0 & 1.0 & 1.0 & 1.0 & 1.0 & 1.0 \\
+	\bottomrule
+\end{tabular}
