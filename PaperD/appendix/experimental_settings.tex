@@ -31,129 +31,221 @@ Taking a step at task $t$ in the CL environments involves training the CL networ
 \paragraph{Computational Cost.} 
 All experiments were performed on one NVIDIA GeForce RTW 2080Ti on an internal GPU cluster. Generating a CL environment for one seed with Split MNIST took on around 9.5 hours averaged over 10 runs of BFS. Similarly for Split CIFAR-10, generating one CL environment took on average 16.1 hours. Note that BFS runs 1050 iterations in total for all 5-task datasets. The wall clock time for ETS on Split MNIST was around 1.5 minutes. 
 
+Table \ref{tab:time_cost_dqn_mnist} shows a time-cost ablation experiment w/ or w/o a DQN for selecting which tasks to replay in Split MNIST. We measured the wall clock time for training and evaluating the CL model on the 5 Split MNIST tasks w/ and w/o the DQN, and show the wall clock time averaged over 10 different DQN seeds. The time difference when w/ DQN is only 3.2 seconds, since selecting which tasks to replay is only a forward pass with the RL policy.
+
+\begin{table}[h!]
+	\centering
+	\caption{Time-cost ablation experiment w/ or w/o a DQN for replay scheduling on Split MNIST. }
+	\vspace{-3mm}
+	\begin{tabular}{lccc}
+		\toprule
+		Time Cost          & With DQN & Without DQN & Difference \\ \midrule
+		Avg. Time (in sec) & 84.6     & 81.4        & $+$3.2   \\
+		\bottomrule
+	\end{tabular}
+	\vspace{-1mm}
+	\label{tab:time_cost_dqn_mnist}
+\end{table}
+
 
 \vspace{-3mm}
-\paragraph{DQN and A2C Architectures.}
+\paragraph{RL Architectures.}
 The input layer has size $T-1$ where each unit is inputting the task performances since the states are represented by the validation accuracies $s_t = [A_{t, 1}^{(val)}, ..., A_{t, t}^{(val)}, 0, ..., 0]$. The current task can therefore be determined by the number of non-zero state inputs. 
-The output layer has 35 units representing the possible actions at $T=5$ with the discrete action space we have constructed in Appendix \ref{paperD:app:action_space}. %Section \ref{paperD:sec:methodology}. 
-We use action masking on the output units to prevent the network from selection invalid actions for constructing the replay memory at the current task. The DQN is a 2-layer MLP with 512 hidden units and ReLU activations. For A2C, we use separate networks for parameterizing the policy and the value function, where both networks are 2-layer MLPs with 64 hidden units of Tanh activations. 
+The output layer has 35 units representing the possible actions at $T=5$ with the discrete action space from Klasson \etal~\citeD{D:klasson2021learn}. 
+For DQN and A2C, we use a Categorical policy with action masking on the output units to prevent the network from selection invalid actions for constructing the replay memory at the current task. The DQN is a 2-layer MLP with 512 hidden units and ReLU activations. For A2C, we use separate networks for parameterizing the policy and the value function, where both networks are 2-layer MLPs with 64 hidden units and Tanh activations. 
+For SAC, we use a Dirichlet policy which uses masking to prevent selecting action values along the invalid dimensions. We clamp the logarithmic output values of the policy network between $[-20, 2]$ to stabilize learning the concentration parameters of the Dirichlet distribution, and we ensure that the parameters are $>1$. The policy and value networks are 2-layer MLPs with 256 hidden units and ReLU activations. 
+
 
 \vspace{-3mm}
-\paragraph{DQN and A2C Hyperparameters.}
-We provide the hyperparameters for the both DQN and A2C in Table \ref{tab:dqn_hyperparameters_new_task_orders}-\ref{tab:a2c_hyperparameters_new_dataset}. Table \ref{tab:dqn_hyperparameters_new_task_orders} and \ref{tab:a2c_hyperparameters_new_task_orders} includes the hyperparameters on the New Task Order experiment for DQN and A2C respectively, while Table \ref{tab:dqn_hyperparameters_new_dataset} and \ref{tab:a2c_hyperparameters_new_dataset} includes the hyperparameters on the New Dataset experiment for DQN and A2C respectively. Regarding the training environments in Table \ref{tab:dqn_hyperparameters_new_dataset} and \ref{tab:a2c_hyperparameters_new_dataset}, we use two different datasets in the training environments to increase the diversity. When Spit notMNIST is for testing, half the amount of training environments are using Split MNIST and the other half uses Split FashionMNIST. For example, in Table \ref{tab:a2c_hyperparameters_new_dataset}, A2C uses 10 training environments which means that there are 5 Split MNIST environments and 5 Split FashionMNIST environments. Similarly, half the amount of training environments are using Split MNIST and the other half uses Split notMNIST when the testing environments uses Split FashionMNIST.   
+\paragraph{RL Hyperparameters.}
+We provide the hyperparameters for DQN, A2C, and SAC in Table \ref{tab:dqn_hyperparameters}, \ref{tab:a2c_hyperparameters}, and \ref{tab:sac_hyperparameters} respectively.
+%We provide the hyperparameters for the both DQN and A2C in Table \ref{tab:dqn_hyperparameters_new_task_orders}-\ref{tab:a2c_hyperparameters_new_dataset}. Table \ref{tab:dqn_hyperparameters_new_task_orders} and \ref{tab:a2c_hyperparameters_new_task_orders} includes the hyperparameters on the New Task Order experiment for DQN and A2C respectively, while Table \ref{tab:dqn_hyperparameters_new_dataset} and \ref{tab:a2c_hyperparameters_new_dataset} includes the hyperparameters on the New Dataset experiment for DQN and A2C respectively. 
+Regarding the training environments in the tables for the \textbf{New Datasets} experiment, we use two different datasets in the training environments to increase the diversity. When Spit notMNIST is for testing, half the amount of training environments are using Split MNIST and the other half uses Split FashionMNIST. For example, in Table \ref{tab:a2c_hyperparameters_new_dataset}, A2C uses 10 training environments which means that there are 5 Split MNIST environments and 5 Split FashionMNIST environments when the testing environments uses Split notMNIST. Similarly, half the amount of training environments are using Split MNIST and the other half uses Split notMNIST when the testing environments uses Split FashionMNIST.   
 
 \vspace{-3mm}
 \paragraph{Implementations.} 
-The code for DQN was adapted from OpenAI baselines~\citeD{D:dhariwal2017baselines} and the PyTorch~\citeD{D:paszke2019pytorch} tutorial on DQN {\small \url{https://pytorch.org/tutorials/intermediate/reinforcement_q_learning.html}}. For A2C, we followed the implementations released by Kostrikov~\citeD{D:kostrikov2018pytorchrl} and Igl \etal~\citeD{D:igl2020transient}. We make the code publicly available upon acceptance. 
+The code for DQN was adapted from OpenAI baselines~\citeD{D:dhariwal2017baselines} and the PyTorch~\citeD{D:paszke2019pytorch} tutorial on DQN {\small \url{https://pytorch.org/tutorials/intermediate/reinforcement_q_learning.html}}. For A2C, we followed the implementations released by Kostrikov~\citeD{D:kostrikov2018pytorchrl} and Igl \etal~\citeD{D:igl2020transient}. For SAC, we adapt the implementation from Ball and Roberts~\citeD{D:ball2021offcon}. 
+%We make the code publicly available upon acceptance. 
 
 %\clearpage
 
-\begin{table}[h]
-\small
-\centering
-\caption{DQN hyperparameters for the experiments on {\bf New Task Orders} in Section \ref{paperD:sec:results_on_policy_generalization}.  
-}
-\vspace{-2mm}
-\label{tab:dqn_hyperparameters_new_task_orders}
-\resizebox{0.99\textwidth}{!}{
-\begin{tabular}{l c c c}
-\toprule
- {\bf Hyperparameters} & {\bf Split MNIST} & {\bf Split FashionMNIST} & {\bf Split CIFAR-10} \\
- \midrule
- Training Environments & 30 & 20 & 10 \\
- Learning Rate  & 0.0001 & 0.0003 & 0.0003 \\
- Optimizer      & Adam & Adam & Adam \\
- Buffer Size    & 10k & 10k & 10k  \\
- Target Update per step  & 500 & 500 & 500 \\
- Batch Size     & 32 & 32 & 32 \\
- Discount Factor $\gamma$ & 1.0 & 1.0 & 1.0 \\
- Exploration Start $\epsilon_{start}$ & 1.0 & 1.0 & 1.0 \\
- Exploration Final $\epsilon_{final}$ & 0.02 & 0.02 & 0.02 \\
- Exploration Annealing (episodes) & 2.5k & 2.5k & 2.5k \\
- Training Episodes & 10k & 10k & 10k \\
-\bottomrule
-\end{tabular}
-}
-\end{table}
 
 \begin{table}[h]
-\small
-\centering
-\caption{A2C hyperparameters for the experiments on {\bf New Task Orders} in Section \ref{paperD:sec:results_on_policy_generalization}.  
-}
-\vspace{-2mm}
-\label{tab:a2c_hyperparameters_new_task_orders}
-\begin{tabular}{l c c c}
-\toprule
- {\bf Hyperparameters} & {\bf Split MNIST} & {\bf Split FashionMNIST} & {\bf Split CIFAR-10} \\
- \midrule
- Training Environments & 10 & 10 & 10 \\
- Learning Rate  & 0.0001 & 0.0003 & 0.00003 \\
- Optimizer      & RMSProp & RMSProp & RMSProp \\
- Gradient Clipping & 0.5 & 0.5 & 0.5 \\
- GAE parameter $\lambda$ & 0.95 & 0.95 & 0.95 \\
- VF coefficient & 0.5 & 0.5 & 0.5 \\
- Entropy coefficient & 0.01 & 0.01 & 0.01 \\
- Number of steps $n_{steps}$ & 5 & 5 & 5 \\
- Discount Factor $\gamma$ & 1.0 & 1.0 & 1.0 \\
- Training Episodes & 100k & 100k & 100k \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{table}[h]
-\small
-\centering
-\caption{DQN hyperparameters for the experiments on {\bf New Dataset} in Section \ref{paperD:sec:results_on_policy_generalization}. Split notMNIST and Split FashionMNIST indicate the dataset used in the test environments. 
-}
-\vspace{-2mm}
-\label{tab:dqn_hyperparameters_new_dataset}
-\begin{tabular}{l c c}
-\toprule
- {\bf Hyperparameters} & {\bf Split notMNIST} & {\bf Split FashionMNIST}  \\
- \midrule
- Training Environments & 30 & 30  \\
- Learning Rate  & 0.0001 & 0.0001  \\
- Optimizer      & Adam & Adam  \\
- Buffer Size    & 10k & 10k   \\
- Target Update per step  & 500 & 500  \\
- Batch Size     & 32 & 32  \\
- Discount Factor $\gamma$ & 1.0 & 1.0  \\
- Exploration Start $\epsilon_{start}$ & 1.0 & 1.0 \\
- Exploration Final $\epsilon_{final}$ & 0.02 & 0.02  \\
- Exploration Annealing (episodes) & 2.5k & 2.5k  \\
- Training Episodes & 10k & 10k  \\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\begin{table}[h]
-\small
-\centering
-\caption{A2C hyperparameters for the experiments on {\bf New Dataset} in Section \ref{paperD:sec:results_on_policy_generalization}. Split notMNIST and Split FashionMNIST indicate the dataset used in the test environments. 
-}
-\vspace{-2mm}
-\label{tab:a2c_hyperparameters_new_dataset}
-\begin{tabular}{l c c c}
-\toprule
- {\bf Hyperparameters} & {\bf Split notMNIST} & {\bf Split FashionMNIST}  \\
- \midrule
- Training Environments & 10 & 10  \\
- Learning Rate  & 0.0001 & 0.0003  \\
- Optimizer      & RMSProp & RMSProp  \\
- Gradient Clipping & 0.5 & 0.5  \\
- GAE parameter $\lambda$ & 0.95 & 0.95  \\
- VF coefficient & 0.5 & 0.5 \\
- Entropy coefficient & 0.01 & 0.01  \\
- Number of steps $n_{steps}$ & 5 & 5  \\
- Discount Factor $\gamma$ & 1.0 & 1.0  \\
- Training Episodes & 100k & 100k  \\
-\bottomrule
-\end{tabular}
+	\centering 
+	\caption{DQN hyperparameters for the experiments on (a) {\bf New Task Orders} and (b) {\bf New Datasets} in Section \ref{paperD:sec:results_on_policy_generalization}. (a) shows have differing values between datasets placed within $\{\cdot\}$ with the order Split MNIST, Split FashionMNIST, Split notMNIST, and Split CIFAR-10. Hyperparameter values in (b) are the same for both Split FashionMNIST and Split notMNIST. }
+	\vspace{-1mm}
+	\begin{subtable}{.6\textwidth}
+		\centering
+		\caption{{\bf New Task Orders}.}
+		\vspace{-2mm}
+		\resizebox{0.95\textwidth}{!}{
+		\begin{tabular}{l c}
+			\toprule
+			{\bf Hyperparameters} & {\bf Values} \\
+			\midrule
+			Training Environments & \{30, 20, 30, 10\}  \\
+			Learning Rate  & \{0.0001, 0.0003, 0.0001, 0.0003\} \\
+			Optimizer      & Adam  \\
+			Buffer Size    & 10k  \\
+			Target Update per step  & 500  \\
+			Batch Size     & 32  \\
+			Discount Factor $\gamma$ & 1.0  \\
+			Exploration Start $\epsilon_{start}$ & 1.0  \\
+			Exploration Final $\epsilon_{final}$ & 0.02  \\
+			Exploration Annealing (episodes) & 2.5k  \\
+			Training Episodes & 10k  \\
+			\bottomrule
+		\end{tabular}
+		}
+		\label{tab:dqn_hyperparameters_new_task_orders}
+	\end{subtable}% \quad
+	\begin{subtable}{.4\textwidth}
+		\centering
+		\caption{{\bf New Dataset}.}
+		\vspace{-2mm}
+		\resizebox{0.95\textwidth}{!}{
+			\begin{tabular}{l c}
+				\toprule
+				{\bf Hyperparameters} & {\bf Values}   \\
+				\midrule
+				Training Environments & 30  \\
+				Learning Rate  & 0.0001   \\
+				Optimizer      & Adam   \\
+				Buffer Size    & 10k    \\
+				Target Update per step  & 500   \\
+				Batch Size     & 32   \\
+				Discount Factor $\gamma$ & 1.0   \\
+				Exploration Start $\epsilon_{start}$ & 1.0  \\
+				Exploration Final $\epsilon_{final}$ & 0.02   \\
+				Exploration Annealing (episodes) & 2.5k   \\
+				Training Episodes & 10k   \\
+				\bottomrule
+			\end{tabular}
+		}
+		\label{tab:dqn_hyperparameters_new_datasets}
+	\end{subtable} 
+	\label{tab:dqn_hyperparameters}
 \end{table}
 
 
-%\clearpage
+\begin{table}[h]
+	\centering 
+	\caption{A2C hyperparameters for the experiments on (a) {\bf New Task Orders} and (b) {\bf New Datasets} in Section \ref{paperD:sec:results_on_policy_generalization}. Both (a) and (b) shows have differing values between datasets placed within $\{\cdot\}$, with the order Split MNIST, Split FashionMNIST, Split notMNIST, and Split CIFAR-10 for (a), and the order Split FashionMNIST and Split notMNIST for (b). }
+	\vspace{-1mm}
+	\begin{subtable}{.6\textwidth}
+		\centering
+		\caption{{\bf New Task Orders}.}
+		\vspace{-2mm}
+		\resizebox{0.95\textwidth}{!}{
+		\begin{tabular}{l c }
+			\toprule
+			{\bf Hyperparameters} & {\bf Values} \\
+			\midrule
+			Training Environments & 10  \\
+			Learning Rate  & \{0.0001, 0.0003, 0.0001, 0.0003\}  \\
+			Optimizer      & RMSProp  \\
+			Gradient Clipping & 0.5  \\
+			GAE parameter $\lambda$ & 0.95  \\
+			VF coefficient & 0.5  \\
+			Entropy coefficient & 0.01  \\
+			Number of steps $n_{steps}$ & 5  \\
+			Discount Factor $\gamma$ & 1.0  \\
+			Training Episodes & 100k  \\
+			\bottomrule
+		\end{tabular}
+		}
+		%\vspace{-5mm}
+		\label{tab:a2c_hyperparameters_new_task_orders}
+	\end{subtable}% \quad
+	\begin{subtable}{.4\textwidth}
+		\centering
+		\caption{{\bf New Dataset}.}
+		\vspace{-2mm}
+		\resizebox{0.95\textwidth}{!}{
+		\begin{tabular}{l c }
+			\toprule
+			{\bf Hyperparameters} & {\bf Values}   \\
+			\midrule
+			Training Environments & 10   \\
+			Learning Rate  & \{0.0003, 0.0001\}   \\
+			Optimizer      & RMSProp   \\
+			Gradient Clipping & 0.5   \\
+			GAE parameter $\lambda$ & 0.95   \\
+			VF coefficient & 0.5  \\
+			Entropy coefficient & 0.01  \\
+			Number of steps $n_{steps}$ & 5   \\
+			Discount Factor $\gamma$ & 1.0   \\
+			Training Episodes & 100k   \\
+			\bottomrule
+		\end{tabular}
+		}
+		\label{tab:a2c_hyperparameters_new_datasets}
+	\end{subtable} 
+	\label{tab:a2c_hyperparameters}
+\end{table}
+
+\begin{table}[h]
+	\centering 
+	\caption{SAC hyperparameters for the experiments on (a) {\bf New Task Orders} and (b) {\bf New Datasets} in Section \ref{paperD:sec:results_on_policy_generalization}. Both (a) and (b) shows have differing values between datasets placed within $\{\cdot\}$, with the order Split MNIST, Split FashionMNIST, Split notMNIST, and Split CIFAR-10 for (a), and the order Split FashionMNIST and Split notMNIST for (b). }
+	\vspace{-1mm}
+	\begin{subtable}{.55\textwidth}
+		\centering
+		\caption{{\bf New Task Orders}.}
+		\vspace{-2mm}
+		\resizebox{0.95\textwidth}{!}{
+			\begin{tabular}{l c }
+				\toprule
+				{\bf Hyperparameters} & {\bf Values} \\
+				\midrule
+				Training Environments & 10  \\
+				Learning Rate  & \{0.0003, 0.0003, 0.0001, 0.0001\}  \\
+				Optimizer      & Adam  \\
+				Buffer Size & 100k \\
+				Batch Size     & 256  \\
+				Target Entropy & -dim($\gA$) (i.e. $T-1=4$) \\
+				Target Smoothing Coefficient $\tau$ & 0.005 \\
+				Target Update Interval & 1 \\
+				Gradient Steps & 1 \\ 
+				Gradient Clipping & 0.5  \\
+				Discount Factor $\gamma$ & 1.0  \\
+				Training Episodes & 20k  \\
+				\bottomrule
+			\end{tabular}
+		}
+		%\vspace{-5mm}
+		\label{tab:sac_hyperparameters_new_task_orders}
+	\end{subtable}% \quad
+	\begin{subtable}{.45\textwidth}
+		\centering
+		\caption{{\bf New Dataset}.}
+		\vspace{-2mm}
+		\resizebox{0.95\textwidth}{!}{
+			\begin{tabular}{l c }
+				\toprule
+				{\bf Hyperparameters} & {\bf Values} \\
+				\midrule
+				Training Environments & 10  \\
+				Learning Rate  & \{0.0003, 0.0001\}  \\
+				Optimizer      & Adam  \\
+				Buffer Size & 100k \\
+				Batch Size     & 256  \\
+				Target Entropy & -dim($\gA$) (i.e. $T-1=4$) \\
+				Target Smoothing Coefficient $\tau$ & 0.005 \\
+				Target Update Interval & 1 \\
+				Gradient Steps & 1 \\ 
+				Gradient Clipping & 0.5  \\
+				Discount Factor $\gamma$ & 1.0  \\
+				Training Episodes & 20k  \\
+				\bottomrule
+			\end{tabular}
+		}
+		\label{tab:sac_hyperparameters_new_datasets}
+	\end{subtable} 
+	\label{tab:sac_hyperparameters}
+\end{table}
+
+
+\clearpage 
 
 \subsection*{Heuristic Scheduling Baselines}\label{paperD:app:heuristic_scheduling_baselines}
 
@@ -175,33 +267,33 @@ The replay memory is filled with $M/k$ samples from each selected task, where $k
 We performed a grid search for the parameter $\tau$ for the three heuristic scheduling baselines for each experiment to compare against the learned replay scheduling policies. The validation set consists of 15\% of the training data and is identical to the validation set used for learning the RL policies. 
 We select the parameter based on ACC scores achieved in the same number of training environments used by either DQN or A2C. The search range we use is $\tau \in \{0.90, 0.95, 0.999\}$. In Table \ref{tab:grid_search_heuristics_multiple_cl_environments}, we show the selected parameter value of $\tau$ and the number of environments used for selecting the value for each method and experiment in Section \ref{sec:results_on_policy_generalization}. The same parameters are used to generate the results on the heuristics in Table \ref{tab:average_ranking_rl_experiment}. 
 
-\begin{table}[t]
+\begin{table}[h]
 %\footnotesize%\small
 \centering
 \caption{The threshold parameter $\tau$ used in the heuristic scheudling baselines Heuristic Global Drop (Heur-GD), Heuristic Local Drop (Heur-LD), and Heuristic Accuracy Threshold (Heur-AT). The search range is $\tau \in \{0.90, 0.95, 0.999\}$ for all methods and we display the number of environments used for selecting the parameter used at test time.  
 }
 \vspace{-2mm}
 \label{tab:grid_search_heuristics_multiple_cl_environments}
-\resizebox{\textwidth}{!}{
-\begin{tabular}{l c c c c c c c c c c}
+\resizebox{0.99\textwidth}{!}{
+\begin{tabular}{l c c c c c c c c c c c c}
 \toprule %\toprule
  & \multicolumn{6}{c}{ {\bf New Task Order}} & \multicolumn{4}{c}{ {\bf New Dataset}}\\
- \cmidrule(lr){2-7}  \cmidrule(lr){8-11}
+ \cmidrule(lr){2-9}  \cmidrule(lr){10-13}
  %{\bf Method} & S-MNIST & S-FashionMNIST & S-CIFAR-10 & S-notMNIST & S-FashionMNIST  \\
-  & \multicolumn{2}{c}{ {\bf S-MNIST}} & \multicolumn{2}{c}{ {\bf S-FashionMNIST}} & \multicolumn{2}{c}{ {\bf S-CIFAR-10}} & \multicolumn{2}{c}{ {\bf S-notMNIST}} & \multicolumn{2}{c}{ {\bf S-FashionMNIST}}   \\
- \cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7} \cmidrule(lr){8-9} \cmidrule(lr){10-11} 
- {\bf Method} & $\tau$ & \#Envs & $\tau$ & \#Envs & $\tau$ & \#Envs & $\tau$ & \#Envs & $\tau$ &  \#Envs \\
+  & \multicolumn{2}{c}{ {\bf S-MNIST}} & \multicolumn{2}{c}{ {\bf S-FashionMNIST}} & \multicolumn{2}{c}{ {\bf S-notMNIST}} & \multicolumn{2}{c}{ {\bf S-CIFAR-10}} & \multicolumn{2}{c}{ {\bf S-notMNIST}} & \multicolumn{2}{c}{ {\bf S-FashionMNIST}}   \\
+ \cmidrule(lr){2-3} \cmidrule(lr){4-5} \cmidrule(lr){6-7} \cmidrule(lr){8-9} \cmidrule(lr){10-11} \cmidrule(lr){12-13} 
+ {\bf Method} & $\tau$ & \#Envs & $\tau$ & \#Envs & $\tau$ & \#Envs & $\tau$ & \#Envs & $\tau$ &  \#Envs & $\tau$ &  \#Envs \\
  \midrule
-    Heur-GD & 0.9 & 10 & 0.95  & 20 & 0.9   & 10 & 0.9  & 10 & 0.9   & 10 \\ 
-    Heur-LD & 0.9 & 10 & 0.999 & 20 & 0.999 & 10 & 0.95 & 10 & 0.999 & 10 \\ 
-    Heur-AT & 0.9 & 10 & 0.999 & 20 & 0.9   & 10 & 0.9 & 10 & 0.95  & 10 \\
+    Heur-GD & 0.9 & 10 & 0.95  & 20 & 0.999   & 10 & 0.9   & 10 & 0.9  & 10 & 0.9   & 10 \\ 
+    Heur-LD & 0.9 & 10 & 0.999 & 20 & 0.999 & 10 & 0.999 & 10 & 0.95 & 10 & 0.999 & 10 \\ 
+    Heur-AT & 0.9 & 10 & 0.999 & 20 & 0.999   & 10 & 0.9 & 10 & 0.9 & 10 & 0.95  & 10 \\
     %Heur-GD        & \{0.90, 0.95, 0.999\} & \{0.90, 0.95, 0.999\} & \{0.90, 0.95, 0.999\} & \{0.90, 0.95, 0.999\} & \{0.90, 0.95, 0.999\} \\
     %Heur-LD        & \{0.90, 0.95, 0.999\} & \{0.90, 0.95, 0.999\} & \{0.90, 0.95, 0.999\} & \{0.90, 0.95, 0.999\} & \{0.90, 0.95, 0.999\} \\
     %Heur-AT        & \{0.90, 0.95, 0.999\} & \{0.90, 0.95, 0.999\} & \{0.90, 0.95, 0.999\} & \{0.90, 0.95, 0.999\} & \{0.90, 0.95, 0.999\} \\
 \bottomrule %\bottomrule
 \end{tabular}
 } 
-%\vspace{-3mm}
+\vspace{-3mm}
 \end{table}
 
 
@@ -278,4 +370,216 @@ where we inserted the copied values, such that $\ACC_{\ETS}^{1} = \ACC_{\ETS}^{2
 \end{align*}
 
 where A2C comes in 1st place, DQN in 2nd, Heur. in 3rd, and ETS on 4th place. We average across seeds and environments to obtain the final ranking score for each method for comparison. 
+
+
+
+
+
+\subsection*{Task Splits in Test Environments in Policy Generalization Experiments}\label{paperD:app:task_split_tables}
+
+Here, we provide the task splits of the test environments used in the policy generalization experiments in Section \ref{paperD:sec:results_on_policy_generalization}. We evaluated all methods using 10 test environments in all experiments.
+The test environments in the New Task Order experiments were generated with seeds 10-19. We show the task splits for the Split MNIST, Split FashionMNIST, and Split CIFAR-10 environments in Table \ref{tab:task_splits_mnist_new_task_orders_experiment}, \ref{tab:task_splits_fashionmnist_new_task_orders_experiment}, and \ref{tab:task_splits_cifar10_new_task_order_dataset} respectively. 
+The test environments in the New Dataset experiments were generated with seeds 0-9. We show the task splits for the Split notMNIST and Split FashionMNIST environments in Table \ref{tab:task_splits_notmnist_new_dataset_experiment} and \ref{tab:task_splits_fashionmnist_new_dataset_experiment} respectively. 
+
+
+
+\begin{table}[h]
+	%\caption{Global caption}
+	
+	\begin{minipage}{.5\textwidth}
+		\centering
+		\captionsetup{width=.9\linewidth}
+		\caption{Task splits with their corresponding seed for test environments of Split MNIST datasets in the {\bf New Task Orders} experiments in Section \ref{paperD:sec:results_on_policy_generalization}. 
+		}
+		\vspace{-3mm}
+		\resizebox{0.95\textwidth}{!}{
+		\begin{tabular}{l c c c c c}
+			\toprule %\toprule
+			{\bf Seed} & {\bf Task 1} & {\bf Task 2} & {\bf Task 3} & {\bf Task 4} & {\bf Task 5} \\
+			\midrule
+			10 & 8, 2 & 5, 6 & 3, 1 & 0, 7 & 4, 9   \\ \midrule 
+			11 & 7, 8 & 2, 6 & 4, 5 & 1, 3 & 0, 9  \\ \midrule 
+			12 & 5, 8 & 7, 0 & 4, 9 & 3, 2 & 1, 6  \\ \midrule 
+			13 & 3, 5 & 6, 1 & 4, 7 & 8, 9 & 0, 2  \\ \midrule
+			14 & 3, 9 & 0, 5 & 4, 2 & 1, 7 & 6, 8  \\ \midrule 
+			15 & 2, 6 & 1, 3 & 7, 0 & 9, 4 & 5, 8   \\ \midrule
+			16 & 6, 2 & 0, 7 & 8, 4 & 3, 1 & 5, 9   \\ \midrule
+			17 & 7, 2 & 5, 3 & 4, 0 & 9, 8 & 6, 1  \\ \midrule 
+			18 & 7, 9 & 0, 4 & 2, 1 & 6, 5 & 8, 3  \\ \midrule
+			19 & 1, 7 & 9, 6 & 8, 4 & 3, 0 & 2, 5   \\
+			\bottomrule %\bottomrule
+		\end{tabular}
+		}
+		%\vspace{-5mm}
+		\label{tab:task_splits_mnist_new_task_orders_experiment}
+	\end{minipage}% \quad
+	\begin{minipage}{.5\textwidth}
+		\centering
+		\captionsetup{width=.9\linewidth}
+		\caption{Task splits with their corresponding seed for test environments of Split notMNIST datasets in the {\bf New Dataset} experiments in Section \ref{paperD:sec:results_on_policy_generalization}.  }
+		\vspace{-3mm}
+		\resizebox{0.95\textwidth}{!}{
+		\begin{tabular}{l c c c c c}
+			\toprule %\toprule
+			{\bf Seed} & {\bf Task 1} & {\bf Task 2} & {\bf Task 3} & {\bf Task 4} & {\bf Task 5} \\
+			\midrule
+			0 & A, B & C, D & E, F & G, H & I, J  \\ \midrule 
+			1 & C, J & G, E & A, D & B, H & I, F  \\ \midrule 
+			2 & E, B & F, A & H, C & D, G & J, I  \\ \midrule 
+			3 & F, E & B, C & J, G & H, A & D, I  \\ \midrule
+			4 & D, I & E, J & C, G & A, B & F, H  \\ \midrule 
+			5 & J, F & C, E & H, B & A, I & G, D  \\ \midrule
+			6 & I, B & H, A & G, F & C, E & D, J  \\ \midrule
+			7 & I, F & A, C & B, J & H, D & G, E  \\ \midrule 
+			8 & I, G & J, A & C, F & H, B & E, D  \\ \midrule
+			9 & I, E & H, C & B, J & D, A & G, F  \\
+			\bottomrule %\bottomrule
+		\end{tabular}
+		}
+		\label{tab:task_splits_notmnist_new_dataset_experiment}
+	\end{minipage} 
+\end{table}
+
+\begin{comment}
+
+\begin{table}[h]
+	\centering
+	\small
+	\caption{Task splits with their corresponding seed for test environments of Split MNIST datasets in the {\bf New Task Orders} experiments in Section \ref{paperD:sec:results_on_policy_generalization}. }
+	\vspace{-2mm}
+	%\resizebox{1.0\textwidth}{!}{
+		\begin{tabular}{l c c c c c}
+			\toprule %\toprule
+			{\bf Seed} & {\bf Task 1} & {\bf Task 2} & {\bf Task 3} & {\bf Task 4} & {\bf Task 5} \\
+			\midrule
+			10 & 8, 2 & 5, 6 & 3, 1 & 0, 7 & 4, 9   \\ \midrule 
+			11 & 7, 8 & 2, 6 & 4, 5 & 1, 3 & 0, 9  \\ \midrule 
+			12 & 5, 8 & 7, 0 & 4, 9 & 3, 2 & 1, 6  \\ \midrule 
+			13 & 3, 5 & 6, 1 & 4, 7 & 8, 9 & 0, 2  \\ \midrule
+			14 & 3, 9 & 0, 5 & 4, 2 & 1, 7 & 6, 8  \\ \midrule 
+			15 & 2, 6 & 1, 3 & 7, 0 & 9, 4 & 5, 8   \\ \midrule
+			16 & 6, 2 & 0, 7 & 8, 4 & 3, 1 & 5, 9   \\ \midrule
+			17 & 7, 2 & 5, 3 & 4, 0 & 9, 8 & 6, 1  \\ \midrule 
+			18 & 7, 9 & 0, 4 & 2, 1 & 6, 5 & 8, 3  \\ \midrule
+			19 & 1, 7 & 9, 6 & 8, 4 & 3, 0 & 2, 5   \\
+			\bottomrule %\bottomrule
+		\end{tabular}
+		%}
+	\label{tab:task_splits_mnist_new_task_orders_experiment}
+\end{table}
+	content...
+\end{comment}
+
+
+\begin{table}[h]
+	\centering
+	\small
+	\caption{Task splits with their corresponding seed for test environments of Split FashionMNIST datasets in the {\bf New Task Orders} experiments in Section \ref{paperD:sec:results_on_policy_generalization}. }
+	\vspace{-2mm}
+	\resizebox{\textwidth}{!}{
+		\begin{tabular}{l c c c c c}
+			\toprule %\toprule
+			{\bf Seed} & {\bf Task 1} & {\bf Task 2} & {\bf Task 3} & {\bf Task 4} & {\bf Task 5} \\
+			\midrule
+			10 & Bag, Pullover & Sandal, Shirt & Dress, Trouser & T-shirt/top, Sneaker & Coat, Ankle boot   \\ \midrule 
+			11 & Sneaker, Bag & Pullover, Shirt & Coat, Sandal & Trouser, Dress & T-shirt/top, Ankle boot  \\ \midrule 
+			12 & Sandal, Bag & Sneaker, T-shirt/top & Coat, Ankle boot & Dress, Pullover & Trouser, Shirt  \\ \midrule 
+			13 & Dress, Sandal & Shirt, Trouser & Coat, Sneaker & Bag, Ankle boot & T-shirt/top, Pullover  \\ \midrule
+			14 & Dress, Ankle boot & T-shirt/top, Sandal & Coat, Pullover & Trouser, Sneaker & Shirt, Bag  \\ \midrule 
+			15 & Pullover, Shirt & Trouser, Dress & Sneaker, T-shirt/top & Ankle boot, Coat & Sandal, Bag   \\ \midrule
+			16 & Shirt, Pullover & T-shirt/top, Sneaker & Bag, Coat & Dress, Trouser & Sandal, Ankle boot   \\ \midrule
+			17 & Sneaker, Pullover & Sandal, Dress & Coat, T-shirt/top & Ankle boot, Bag & Shirt, Trouser  \\ \midrule 
+			18 & Sneaker, Ankle boot & T-shirt/top, Coat & Pullover, Trouser & Shirt, Sandal & Bag, Dress  \\ \midrule
+			19 & Trouser, Sneaker & Ankle boot, Shirt & Bag, Coat & Dress, T-shirt/top & Pullover, Sandal   \\
+			\bottomrule %\bottomrule
+		\end{tabular}
+	}
+	\label{tab:task_splits_fashionmnist_new_task_orders_experiment}
+\end{table}
+
+
+
+
+\begin{table}[h]
+	\centering
+	\caption{Task splits with their corresponding seed for test environments of Split CIFAR-10 datasets in the {\bf New Task Orders} experiments in Section \ref{paperD:sec:results_on_policy_generalization}. }
+	\vspace{-2mm}
+	\resizebox{1.0\textwidth}{!}{
+		\begin{tabular}{l c c c c c}
+			\toprule %\toprule
+			{\bf Seed} & {\bf Task 1} & {\bf Task 2} & {\bf Task 3} & {\bf Task 4} & {\bf Task 5} \\
+			\midrule
+			%0 & Airplane, Automobile & Bird, Cat & Deer, Dog & Frog, Horse & Ship, Truck \\
+			%\midrule
+			%1 & Bird, Truck & Frog, Deer & Airplane, Cat & Automobile, Horse & Ship, Dog \\
+			%\midrule
+			%2 & Deer, Automobile & Dog, Airplane & Horse, Bird & Cat, Frog & Truck, Ship \\
+			%\midrule
+			%3 & Dog, Deer & Automobile, Bird & Truck, Frog & Horse, Airplane & Cat, Ship \\ 
+			%\midrule
+			%4 & Cat, Ship & Deer, Truck & Bird, Frog & Airplane, Automobile & Dog, Horse \\ 
+			%\midrule
+			%5 & Truck, Dog & Bird, Deer & Horse, Automobile & Airplane, Ship & Frog, Cat \\ 
+			%\midrule
+			%6 & Ship, Automobile & Horse, Airplane & Frog, Dog & Bird, Deer & Cat, Truck \\ 
+			%\midrule
+			%7 & Ship, Dog & Airplane, Bird & Automobile, Truck & Horse, Cat & Frog, Deer \\ 
+			%\midrule
+			%8 & Ship, Frog & Truck, Airplane & Bird, Dog & Horse, Automobile & Deer, Cat \\ 
+			%\midrule
+			%9 & Ship, Deer & Horse, Bird & Automobile, Truck & Cat, Airplane & Frog, Dog \\ 
+			%\midrule
+			10 & Ship, Bird & Dog, Frog & Cat, Automobile & Airplane, Horse & Deer, Truck \\ 
+			\midrule
+			11 & Horse, Ship & Bird, Frog & Deer, Dog & Automobile, Cat & Airplane, Truck \\ 
+			\midrule
+			12 & Dog, Ship & Horse, Airplane & Deer, Truck & Cat, Bird & Automobile, Frog \\ 
+			\midrule
+			13 & Cat, Dog & Frog, Automobile & Deer, Horse & Ship, Truck & Airplane, Bird \\ 
+			\midrule
+			14 & Cat, Truck & Airplane,  Dog & Deer, Bird & Automobile, Horse & Frog, Ship \\
+			\midrule
+			15 & Bird, Frog & Automobile, Cat & Horse, Airplane & Truck, Deer & Dog, Ship \\ 
+			\midrule
+			16 & Frog, Bird & Airplane, Horse & Ship, Deer & Cat, Automobile & Dog, Truck \\ 
+			\midrule
+			17 & Horse, Bird & Dog, Cat & Deer, Airplane & Truck, Ship & Frog, Automobile \\ 
+			\midrule
+			18 & Horse, Truck & Airplane, Deer & Bird, Automobile & Frog, Dog & Ship, Cat  \\
+			\midrule
+			19 & Automobile, Horse & Truck, Frog & Ship, Deer & Cat, Airplane & Bird, Dog  \\
+			\bottomrule %\bottomrule
+		\end{tabular}
+	}
+	\label{tab:task_splits_cifar10_new_task_order_dataset}
+\end{table}
+
+
+
+
+
+\begin{table}[h]
+	\centering
+	\caption{Task splits with their corresponding seed for test environments of Split FashionMNIST datasets in the {\bf New Dataset} experiments in Section \ref{paperD:sec:results_on_policy_generalization}. }
+	\vspace{-2mm}
+	\resizebox{1.0\textwidth}{!}{
+		\begin{tabular}{l c c c c c}
+			\toprule %\toprule
+			{\bf Seed} & {\bf Task 1} & {\bf Task 2} & {\bf Task 3} & {\bf Task 4} & {\bf Task 5} \\
+			\midrule
+			0 & T-shirt/top, Trouser & Pullover, Dress & Coat, Sandal & Shirt, Sneaker & Bag, Ankle boot \\ \midrule 
+			1 & Pullover, Ankle boot & Shirt, Coat & T-shirt/top, Dress & Trouser, Sneaker & Bag, Sandal \\ \midrule 
+			2 & Coat, Trouser & Sandal, T-shirt/top & Sneaker, Pullover & Dress, Shirt & Ankle boot, Bag \\ \midrule 
+			3 & Sandal, Coat & Trouser, Pullover & Ankle boot, Shirt & Sneaker, T-shirt/top & Dress, Bag \\ \midrule
+			4 & Dress, Bag & Coat, Ankle boot & Pullover, Shirt & T-shirt/top, Trouser & Sandal, Sneaker\\ \midrule 
+			5 & Ankle boot, Sandal & Pullover, Coat & Sneaker, Trouser & T-shirt/top, Bag & Shirt, Dress \\ \midrule
+			6 & Bag, Trouser & Sneaker, T-shirt/top & Shirt, Sandal & Pullover, Coat & Dress, Ankle boot \\ \midrule
+			7 & Bag, Sandal & T-shirt/top, Pullover & Trouser, Ankle boot & Sneaker, Dress & Shirt, Coat \\ \midrule 
+			8 & Bag, Shirt & Ankle boot, T-shirt/top & Pullover, Sandal & Sneaker, Trouser & Coat, Dress \\ \midrule
+			9 & Bag, Coat & Sneaker, Pullover & Trouser, Ankle boot & Dress, T-shirt/top & Shirt, Sandal \\
+			\bottomrule %\bottomrule
+		\end{tabular}
+	}
+	\label{tab:task_splits_fashionmnist_new_dataset_experiment}
+\end{table}
 

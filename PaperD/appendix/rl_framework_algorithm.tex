@@ -1,0 +1,37 @@
+
+\begin{algorithmic}[1]
+\Require $\gE^{(train)}$: Training environments, $\vtheta$: Policy parameters, $\gamma$: Discount factor
+\Require $\eta$: Learning rate, $n_{episodes}$: Number of episodes, $M$: Replay memory size
+%\Require $n_{steps}$: Number of steps for A2C
+\State $\gB = \{\}$ \Comment{Initialize experience buffer}
+\For{$i = 1, \dots, n_{\text{episodes}}$}
+
+%\State $s_1 \sim \mu$ \Comment{Get initial state}
+\For{$t=1, \dots, T-1$}
+
+\For{$E_i \in \gE^{(train)}$}
+\State $\gD_{1:t+1} = \textsc{GetDatasets}(E_i, t)$ \Comment{Get datasets from environment $E_i$}
+\State $f_{\vphi}^{(i)} = \textsc{GetClassifier}(E_i)$ \Comment{Get classifier from environment $E_i$}
+\If{$t==1$}
+\State $\textsc{Train}(f_{\vphi}^{(i)}, \gD_{t}^{(train)}$ \Comment{Train classifier $f_{\vphi}^{(i)}$ on task 1}
+\State $A_{1:t}^{(val)} = \textsc{Eval}(f_{\vphi}^{(i)}, \gD_{1:t}^{(val)})$ \Comment{Evaluate classifier $f_{\vphi}^{(i)}$ on task 1}
+\State $s_{t}^{(i)} = A_{1:t}^{(val)} = [A_{1, 1}^{(val)}, 0, ..., 0]$ \Comment{Get initial state}
+\EndIf 
+
+\State $a_t^{(i)} \sim \pi_{\vtheta}(a, s_t^{(i)})$ \Comment{Take action under policy $\pi_{\vtheta}$}
+\State $\vp_t = \textsc{GetTaskProportion}(a_t^{(i)})$ %\Comment{Get task proportion from action}
+\State $\gM_t \sim \textsc{GetReplayMemory}(\gD_{1:t}^{(train)}, \vp_t, M)$ %\Comment{Sample replay memory from proportion}
+\State $\textsc{Train}(f_{\vphi}^{(i)}, \gD_{t+1}^{(train)} \cup \gM_t)$ \Comment{Train classifier $f_{\vphi}^{(i)}$}
+\State $A_{1:t+1}^{(val)} = \textsc{Eval}(f_{\vphi}^{(i)}, \gD_{1:t+1}^{(val)})$ \Comment{Evaluate classifier $f_{\vphi}^{(i)}$}
+\State $s_{t+1}^{(i)} = A_{1:t+1}^{(val)} = [A_{t+1, 1}^{(val)}, ..., A_{t+1, t+1}^{(val)}, 0, ..., 0]$ \Comment{Get next state}
+\State $r_{t}^{(i)} = \frac{1}{t+1}\sum_{j=1}^{t+1} A_{1:t+1}^{(val)}$ \Comment{Compute reward}
+\State $\gB = \gB \cup \{(s_{t}^{(i)}, a_{t}^{(i)}, r_{t}^{(i)}, s_{t+1}^{(i)})\}$ \Comment{Store transition in buffer}
+\If{time to update policy}
+\State $\vtheta, \gB = \textsc{UpdatePolicy}(\vtheta, \gB, \gamma, \eta)$ \Comment{Update policy with experience}
+%\State $\vtheta, \gB = \textsc{UpdatePolicy}(\vtheta, \gB, \gamma, \eta, n_{steps})$ \Comment{Update policy with experience}
+\EndIf 
+\EndFor
+\EndFor
+\EndFor 
+\State \Return $\vtheta$ \Comment{Return policy}	
+\end{algorithmic}

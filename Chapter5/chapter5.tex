@@ -1,7 +1,7 @@
 
 \chapter{Conclusions and Future Directions}\label{chap5}
 
-In this chapter, we provide our conclusions from the works described in this thesis (Section \ref{chap5:sec:conclusions}). Thereafter, we discuss potential future directions for work towards better computer vision methods for assisting visually impaired (VI) people (Section \ref{chap5:sec:future_directions}). 
+In this chapter, we give our conclusions from the works described in this thesis (Section \ref{chap5:sec:conclusions}). Thereafter, we discuss potential future directions for work towards better computer vision methods for assisting visually impaired (VI) people (Section \ref{chap5:sec:future_directions}), and provide some closing words to end the overview part of this thesis (Section \ref{chap5:sec:final_words}). 
 
 %In this chapter, we summarize and provide conclusions to each included paper in the thesis as well as discuss future work (Section \ref{chap5:sec:conclusions}). Finally, we discuss potential long-term future directions for this project that could be interesting for future researchers to dive into for developing computer vision methods for assisting the visually impaired (Section \ref{chap5:sec:future_directions}).
 
@@ -46,7 +46,7 @@ Here, we provide our insights around the work presented in Chapter \ref{chap3}.
 In this section, we provide our insights around the work presented in Chapter \ref{chap4}.
 
 \vspace{-3mm}
-\paragraph{Benefits of Replay Scheduling.} In Paper \ref{paperC}, we proposed a slightly new CL setting where 1) the historical is stored rather than deleted and 2) the replay memory size is limited by processing time constraints instead of storage capacity. This setting stems well with real-world needs as many major companies stores all their recorded data~\cite{bronson2015open,asta2016observability,bailis2017macrobase}. We then showed in an ideal CL environment that scheduling over which tasks to replay can significantly improve the final CL performance compared to using fixed policies, e.g., replaying all tasks equally, especially with small replay memory sizes. Consider a CL system where the number of seen classes is much larger than the number of samples that the system has time to replay. In such scenario, it becomes crucial for the system to have a policy scheduling over which tasks to replay for reducing catastrophic forgetting efficiently. Furthermore, advances in CL are critical for assistive vision devices to maintain recognition of new objects in ever-changing environments without the need for re-training the systems from scratch. As these systems could require on-device learning to maintain privacy, replay scheduling could potentially retain the previous knowledge better than fixed scheduling policies and reduce idle times when learning new abilities. 
+\paragraph{Benefits of Replay Scheduling.} In Paper \ref{paperC}, we proposed a slightly new CL setting where 1) the historical is stored rather than deleted and 2) the replay memory size is limited by processing time constraints instead of storage capacity. This setting stems well with real-world needs as many major companies stores all their recorded data~\cite{bailis2017macrobase,hazelwood2018applied}. We then showed in an ideal CL environment that scheduling over which tasks to replay can significantly improve the final CL performance compared to using fixed policies, e.g., replaying all tasks equally, especially with small replay memory sizes. Consider a CL system where the number of seen classes is much larger than the number of samples that the system has time to replay. In such scenario, it becomes crucial for the system to have a policy scheduling over which tasks to replay for reducing catastrophic forgetting efficiently. Furthermore, advances in CL are critical for assistive vision devices to maintain recognition of new objects in ever-changing environments without the need for re-training the systems from scratch. As these systems could require on-device learning to maintain privacy, replay scheduling could potentially retain the previous knowledge better than fixed scheduling policies and reduce idle times when learning new abilities. 
 
 
 %To this end, we proposed learning the time to learn where we select which tasks to replay at different times for mitigating catastrophic forgetting. We then showed in an ideal CL setting that scheduling over which tasks to replay can significantly improve the final CL performance compared to using fixed policies, e.g., replaying all tasks equally. 
@@ -122,10 +122,12 @@ tries to recognize this kind of milk package with his app. %takes photos of this
 This is enabled through updating the assistive apps using federated learning, where the central server has transmitted the current global model to Bob's app after being updated with Alice's local model.   
 %This is enabled through a central server communicating with all mobile phones with the assistive app installed for learning a global model from local updates from the connected devices in the network. Thus, after the local update of the new milk package in Alice's app has been incorporated, the server transmits the new global model to Bob's app. This is the standard procedure for federated learning which has the potential to utilize the computational resources for predictions on smartphones while maintaining the user experience and preserving privacy. 
 
-There are many interesting challenges that remains to tackle in federated learning. Li \etal~\cite{li2020federated} mentions challenges with statistical heterogeneity in the data from different users~\cite{smith2017federated, zhao2018federated}, %li2020federated}, 
-variability of the systems on each device~\cite{bonawitz2019towards}, 
-privacy concerns~\cite{geyer2017differentially}, %bhowmick2018protection}, 
-and expensive communication rounds between the server and the devices~\cite{konevcny2016federated}. 
+There are many interesting challenges that remains to tackle in federated learning. 
+Li \etal~\cite{li2020federated} mentions challenges with statistical heterogeneity in the data from different users, variability of the systems on each device, privacy concerns, and expensive communication rounds between the server and the devices. 
+%Li \etal~\cite{li2020federated} mentions challenges with statistical heterogeneity in the data from different users~\cite{smith2017federated, zhao2018federated}, 
+%variability of the systems on each device~\cite{bonawitz2019towards}, 
+%privacy concerns~\cite{mcmahan2017communication}, %~\cite{geyer2017differentially}, %bhowmick2018protection}, 
+%and expensive communication rounds between the server and the devices~\cite{konevcny2016federated}. 
 From the perspective of this thesis, it would be valuable to study robustness to heterogeneity in the data generated from different users in terms of data quality, sample frequency, and context of where the data has been recorded. 
 Here, an interesting challenge is how to maintain fairness and accuracy across different devices, since the learned models may become biased towards devices with large amounts of data as well as commonly occurring groups of devices. 
 %From the perspective of this thesis, it would be valuable to study the statistical heterogeneity as the generated data can vary immensely across different users in terms of sample frequency, data quality, and context of where the data has been recorded. Here, it may be important to consider issues regarding fairness in addition to accuracy, since the learned model may become biased towards devices with large amounts of data or to commonly occurring groups of devices.
@@ -153,7 +155,8 @@ Such challenges on fairness~\cite{barocas2019fairml, holstein2019improving, yang
 and various types of distribution shifts~\cite{wiles2021fine} %\cite{quionero2009dataset, wiles2021fine} 
 will be crucial to tackle for establishing trust-worthy image recognition systems for the practitioners.
 Additionally, preserving user privacy to avoid unintended leakages of sensitive information will be key to enhance the utility of developed computer vision systems~\cite{ahmed2015privacy, gurari2019vizwiz}. The privacy of bystanders also needs to be accounted for as they could be photographed by mobile and wearable devices for assistive vision~\cite{lee2020pedestrian, ahmed2018up}. However, for a bystander, it is non-trivial how one should approach a VI person and ask them to turn off their device for the sake of avoiding being caught on camera. 
-This matter of social acceptance between assistive vision users and bystanders need to be further studied in realistic settings to understand what requirements that the society wishes to establish on future assistive vision technologies.  
+This matter of social acceptance between assistive vision users and bystanders needs to be further studied in realistic settings to understand what requirements that the society wishes to establish on future assistive vision technologies.  
+%%% Or if we should focus on different settings, such as object recognition in home environments, since both VI and sighted people may be uncomfortable with the usage of assistive vision devices in public spaces. 
 
 
 
@@ -203,6 +206,16 @@ This matter of social acceptance between assistive vision users and bystanders n
 %There are many studies with visually impaired (VI) participants showing that they need help with object recognition in their everyday life~\cite{jayant2011supporting, gurari2018vizwiz}. It is also well-known that VI people use mobile phones cameras to take pictures~\cite{jayant2011supporting} and positive responses from VI participants in experimental studies with mobile apps for navigation and image recognition [Add refs]. Furthermore, the recent advances in computer vision in addition to the interest of deploying machine learning models on mobile devices~\cite{zhang2019deep} makes the combination of assistive technologies and computer vision a great fit. In this section, we want to highlight previous studies regarding the development of computer vision-based assistive technologies and give advice on how research could be conducted in this field. 
 
 %Applying computer vision and machine learning in situations for assisting VI people should be taken with great care. Machine learning works very well for tasks with large amounts of labeled data and where the data distribution is static, i.e., the training and test data are generated from identical distributions. However, in the real world, our surroundings are constantly changing over time and objects can appear in highly varying ways which makes it challenging to deploy machine learning models for daily usage. Several works have shown that deep learning models for computer vision tasks often suffer from biases in the data which 
+
+
+\section{Final Words}\label{chap5:sec:final_words}
+
+In this thesis, motivated from assisting people with visual impairments, we have presented two approaches for training image classifiers for fine-grained and continual visual recognition. An essential next step for evaluating the contributions would have been to deploy the methods on mobile phones for testing their performance in real-world environments. To make the future for assistive vision technologies more fruitful, it is key that the developed methods can guarantee responding to the user in real-time, and that updating the methods on new events can be performed easily with few samples. Finally, we need to further discuss where and when the technology is to be used in practice to enhance the benefits with computer vision-based assistive vision for all involved people.   
+
+
+%In this thesis, we focused on how the image recognition performance can be improved through external information, and how we can update the classifiers continually while retaining previous known abilities. Therefore, we have aimed to take a step closer to reducing the need excessive collection of real-world images, and proposed a transferable method that can be applied in new environments to train the classifiers more efficiently in continual settings. \MK{Just started}
+
+
 
 
 

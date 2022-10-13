@@ -3,9 +3,164 @@
 
 %\subsection{Complementary Experimental Results for Policy Generalization} 
 
-Here, we provide complementary results for the policy generalization experiments in Section \ref{paperD:sec:results_on_policy_generalization}. Figure \ref{fig:policy_rewards_mnist_paperD}-\ref{fig:policy_rewards_fashionmnist_new_dataset_paperD} shows the performance progress measured in ACC in the test environments during training for the DQN and A2C. We also show the ACC achieved by the scheduling baselines as straight lines as these policies are fixed. Figure \ref{fig:policy_rewards_mnist_paperD} and \ref{fig:policy_rewards_cifar10_paperD} shows the performance progress for test environments with Split MNIST and Split CIFAR-10 respectively in the New Task Orders experiment. Figure \ref{fig:policy_rewards_notmnist_new_dataset_paperD} and \ref{fig:policy_rewards_fashionmnist_new_dataset_paperD} shows the performance progress for test environments with Split notMNIST and Split FashionMNIST respectively in the New Dataset experiment. In general, we observe that DQN exhibits noisier progress of the achieved ACC in the test environments than A2C. 
+Here, we provide complementary results for the policy generalization experiments in Section \ref{paperD:sec:results_on_policy_generalization}. We provide the ACC and BWT metrics for each method averaged across 5 seeds and the average rank in every test environment. Note that the ACC and BWT from ETS and the heuristic scheduling baselines have standard deviation zero since these policies are fixed. Averaging the ranks over all test environments yields the corresponding average rank in Table \ref{tab:average_ranking_rl_experiment}. Furthermore, we provide the p-values from Welch's t-test to show whether the statistical significance of the results. 
+\begin{itemize}[topsep=0pt,noitemsep]
+	\item \textbf{New Task Order, Split MNIST:} Metrics in Table \ref{tab:environment_results_new_task_order_mnist}, and Welch's t-test in Table \ref{tab:t_test_new_task_order_mnist}.  
+	
+	\item \textbf{New Task Order, Split FashionMNIST:} Metrics in Table \ref{tab:environment_results_new_task_order_fashionmnist}, and Welch's t-test in Table \ref{tab:t_test_new_task_order_fashionmnist}.  
+	
+	\item \textbf{New Task Order, Split notMNIST:} Metrics in Table \ref{tab:environment_results_new_task_order_notmnist}, and Welch's t-test in Table \ref{tab:t_test_new_task_order_notmnist}.  
+	
+	\item \textbf{New Task Order, Split CIFAR-10:} Metrics in Table \ref{tab:environment_results_new_task_order_cifar10}, and Welch's t-test in Table \ref{tab:t_test_new_task_order_cifar10}. 
+	
+	\item \textbf{New Dataset, Split FashionMNIST:} Metrics in Table \ref{tab:environment_results_new_dataset_fashionmnist}, and Welch's t-test in Table \ref{tab:t_test_new_dataset_fashionmnist}. 
+	
+	\item \textbf{New Dataset, Split notMNIST:} Metrics in Table \ref{tab:environment_results_new_dataset_notmnist}, and Welch's t-test in Table \ref{tab:t_test_new_dataset_notmnist}. 
+\end{itemize}
+The improvement with the learned replay scheduling policies is occasionally significant, however, such behavior is common when RL is used for generalizing to new environments.
 
-In Table \ref{tab:rankings_mnist_new_task_order}-\ref{tab:rankings_fashionmnist_new_dataset}, we display the ACC and rank in every test environment that was used for generating the average rankings in Table \ref{tab:average_ranking_rl_experiment} (see Section \ref{paperD:sec:results_on_policy_generalization}). Table \ref{tab:rankings_mnist_new_task_order}, \ref{tab:rankings_fashionmnist_new_task_order}, and \ref{tab:rankings_cifar10_new_task_order} shows the ACCs and ranks for the New Task Orders experiments with datasets Split MNIST, FashionMNIST, and CIFAR-10 respectively. Table \ref{tab:rankings_notmnist_new_dataset} and \ref{tab:rankings_fashionmnist_new_dataset} shows the ACCs and ranks for the New Dataset experiments with datasets Split notMNIST and FashionMNIST respectively. The numbers for the average rankings in Table \ref{tab:average_ranking_rl_experiment} are computed by averaging over the ranks in each test environment for every method separately. 
+Figure \ref{fig:policy_rewards_mnist_paperD}-\ref{fig:policy_rewards_notmnist_new_dataset_paperD} shows the performance progress measured in ACC in the test environments during training for the RL algorithms. We also show the ACC achieved by the scheduling baselines as straight lines since these policies are fixed. Figure \ref{fig:policy_rewards_mnist_paperD} and \ref{fig:policy_rewards_cifar10_paperD} shows the performance progress for test environments with Split MNIST and Split CIFAR-10 respectively in the New Task Orders experiment. Figure \ref{fig:policy_rewards_notmnist_new_dataset_paperD} and \ref{fig:policy_rewards_fashionmnist_new_dataset_paperD} shows the performance progress for test environments with Split notMNIST and Split FashionMNIST respectively in the New Dataset experiment. In general, we observe that DQN exhibits noisier progress of the achieved ACC in the test environments than A2C and SAC. 
+
+%In Table \ref{tab:rankings_mnist_new_task_order}-\ref{tab:rankings_fashionmnist_new_dataset}, we display the ACC and rank in every test environment that was used for generating the average rankings in Table \ref{tab:average_ranking_rl_experiment} (see Section \ref{paperD:sec:results_on_policy_generalization}). Table \ref{tab:rankings_mnist_new_task_order}, \ref{tab:rankings_fashionmnist_new_task_order}, and \ref{tab:rankings_cifar10_new_task_order} shows the ACCs and ranks for the New Task Orders experiments with datasets Split MNIST, FashionMNIST, and CIFAR-10 respectively. Table \ref{tab:rankings_notmnist_new_dataset} and \ref{tab:rankings_fashionmnist_new_dataset} shows the ACCs and ranks for the New Dataset experiments with datasets Split notMNIST and FashionMNIST respectively. The numbers for the average rankings in Table \ref{tab:average_ranking_rl_experiment} are computed by averaging over the ranks in each test environment for every method separately. 
+
+
+
+
+%%%%
+
+\begin{table}[t]
+	\centering
+	\caption{Performance comparison in every test environment with seed (10-19) with with {\bf Split MNIST} for \textbf{New Task Order} experiment. Under each column named 'Test Env. Seed X', we show the mean and stddev. of ACC and BWT, and the Rank averaged over the RL seeds for the corresponding method. 
+	}
+	\vspace{-3mm}
+	\resizebox{0.85\textwidth}{!}{
+		\input{PaperD/appendix/tables/results_new_task_order_mnist}
+	}
+	\label{tab:environment_results_new_task_order_mnist}
+\end{table}
+
+\begin{table}[t]
+	\centering
+	\caption{Two-tailed Welch's $t$-test results for \textbf{Split MNIST} in \textbf{New Task Order} experiment. 
+	}
+	\vspace{-3mm}
+	\resizebox{0.99\textwidth}{!}{
+		\input{PaperD/appendix/tables/statistical_significance_tests/new_task_order_mnist}
+	}
+	\label{tab:t_test_new_task_order_mnist}
+\end{table}
+
+\begin{table}[t]
+	\centering
+	\caption{Performance comparison in every test environment with seed (10-19) with with {\bf Split FashionMNIST} for \textbf{New Task Order} experiment. Under each column named 'Test Env. Seed X', we show the mean and stddev. of ACC and BWT, and the Rank averaged over the RL seeds for the corresponding method. 
+	}
+	\vspace{-3mm}
+	\resizebox{0.85\textwidth}{!}{
+		\input{PaperD/appendix/tables/results_new_task_order_fashionmnist}
+	}
+	\label{tab:environment_results_new_task_order_fashionmnist}
+\end{table}
+
+\begin{table}[t]
+	\centering
+	\caption{Two-tailed Welch's $t$-test results for \textbf{Split FashionMNIST} in \textbf{New Task Order} experiment. 
+	}
+	\vspace{-3mm}
+	\resizebox{0.99\textwidth}{!}{
+		\input{PaperD/appendix/tables/statistical_significance_tests/new_task_order_fashionmnist}
+	}
+	\label{tab:t_test_new_task_order_fashionmnist}
+\end{table}
+
+\begin{table}[t]
+	\centering
+	\caption{Performance comparison in every test environment with seed (10-19) with with {\bf Split notMNIST} for \textbf{New Task Order} experiment. Under each column named 'Test Env. Seed X', we show the mean and stddev. of ACC and BWT, and the Rank averaged over the RL seeds for the corresponding method. 
+	}
+	\vspace{-3mm}
+	\resizebox{0.85\textwidth}{!}{
+		\input{PaperD/appendix/tables/results_new_task_order_notmnist}
+	}
+	\label{tab:environment_results_new_task_order_notmnist}
+\end{table}
+
+\begin{table}[t]
+	\centering
+	\caption{Two-tailed Welch's $t$-test results for \textbf{Split notMNIST} in \textbf{New Task Order} experiment. 
+	}
+	\vspace{-3mm}
+	\resizebox{0.99\textwidth}{!}{
+		\input{PaperD/appendix/tables/statistical_significance_tests/new_task_order_notmnist}
+	}
+	\label{tab:t_test_new_task_order_notmnist}
+\end{table}
+
+\begin{table}[t]
+	\centering
+	\caption{Performance comparison in every test environment with seed (10-19) with with {\bf Split CIFAR-10} for \textbf{New Task Order} experiment. Under each column named 'Test Env. Seed X', we show the mean and stddev. of ACC and BWT, and the Rank averaged over the RL seeds for the corresponding method. 
+	}
+	\vspace{-3mm}
+	\resizebox{0.85\textwidth}{!}{
+		\input{PaperD/appendix/tables/results_new_task_order_cifar10}
+	}
+	\label{tab:environment_results_new_task_order_cifar10}
+\end{table}
+
+\begin{table}[t]
+	\centering
+	\caption{Two-tailed Welch's $t$-test results for \textbf{Split CIFAR-10} in \textbf{New Task Order} experiment. 
+	}
+	\vspace{-3mm}
+	\resizebox{0.99\textwidth}{!}{
+		\input{PaperD/appendix/tables/statistical_significance_tests/new_task_order_cifar10}
+	}
+	\label{tab:t_test_new_task_order_cifar10}
+\end{table}
+
+
+\begin{table}[t]
+	\centering
+	\caption{Performance comparison in every test environment with seed (0-9) with with {\bf Split FashionMNIST} for \textbf{New Dataset} experiment. Under each column named 'Test Env. Seed X', we show the mean and stddev. of ACC and BWT, and the Rank averaged over the RL seeds for the corresponding method. 
+	}
+	\vspace{-3mm}
+	\resizebox{0.85\textwidth}{!}{
+		\input{PaperD/appendix/tables/results_new_dataset_fashionmnist}
+	}
+	\label{tab:environment_results_new_dataset_fashionmnist}
+\end{table}
+
+\begin{table}[t]
+	\centering
+	\caption{Two-tailed Welch's $t$-test results for \textbf{Split FashionMNIST} in \textbf{New Dataset} experiment. 
+	}
+	\vspace{-3mm}
+	\resizebox{0.99\textwidth}{!}{
+		\input{PaperD/appendix/tables/statistical_significance_tests/new_dataset_fashionmnist}
+	}
+	\label{tab:t_test_new_dataset_fashionmnist}
+\end{table}
+
+\begin{table}[t]
+	\centering
+	\caption{Performance comparison in every test environment with seed (0-9) with with {\bf Split notMNIST} for \textbf{New Dataset} experiment. Under each column named 'Test Env. Seed X', we show the mean and stddev. of ACC and BWT, and the Rank averaged over the RL seeds for the corresponding method. 
+	}
+	\vspace{-3mm}
+	\resizebox{0.85\textwidth}{!}{
+		\input{PaperD/appendix/tables/results_new_dataset_notmnist}
+	}
+	\label{tab:environment_results_new_dataset_notmnist}
+\end{table}
+
+\begin{table}[t]
+	\centering
+	\caption{Two-tailed Welch's $t$-test results for \textbf{Split notMNIST} in \textbf{New Dataset} experiment. 
+	}
+	\vspace{-3mm}
+	\resizebox{0.99\textwidth}{!}{
+		\input{PaperD/appendix/tables/statistical_significance_tests/new_dataset_notmnist}
+	}
+	\label{tab:t_test_new_dataset_notmnist}
+\end{table}
+
 
 
 \clearpage
@@ -16,7 +171,7 @@ In Table \ref{tab:rankings_mnist_new_task_order}-\ref{tab:rankings_fashionmnist_
   \setlength{\figheight}{.14\textheight}
   \input{PaperD/appendix/figures/policy_rewards_mnist/groupplot}
   \vspace{-3mm}
-  \caption{Performance progress measured in ACC (\%) for all methods in the 10 test environments for {\bf Split MNIST} in the New Task Orders experiment. We plot the performance progress for A2C and DQN for 100 evaluation steps equidistantly distributed over the training episodes. The performance for the Random, ETS, and Heuristic scheduling baselines are plotted as straight lines.  }
+  \caption{Performance progress measured in ACC (\%) for all methods in the 10 test environments for {\bf Split MNIST} in the New Task Orders experiment. We plot the performance progress for the RL algorithms and DQN for 100 evaluation steps equidistantly distributed over the training episodes. The performance for the Random, ETS, and Heuristic scheduling baselines are plotted as straight lines.  }
   \label{fig:policy_rewards_mnist_paperD}
   \vspace{-3mm}
 \end{figure}
@@ -28,7 +183,7 @@ In Table \ref{tab:rankings_mnist_new_task_order}-\ref{tab:rankings_fashionmnist_
   \setlength{\figheight}{.14\textheight}
   \input{PaperD/appendix/figures/policy_rewards_cifar10_new_task_order/groupplot}
   \vspace{-3mm}
-  \caption{Performance progress measured in ACC (\%) for all methods in the 10 test environments for {\bf Split CIFAR-10} in the New Task Orders experiment. We plot the performance progress for A2C and DQN for 100 evaluation steps equidistantly distributed over the training episodes. The performance for the Random, ETS, and Heuristic scheduling baselines are plotted as straight lines.  }
+  \caption{Performance progress measured in ACC (\%) for all methods in the 10 test environments for {\bf Split CIFAR-10} in the New Task Orders experiment. We plot the performance progress for the RL algorithms for 100 evaluation steps equidistantly distributed over the training episodes. The performance for the Random, ETS, and Heuristic scheduling baselines are plotted as straight lines.  }
   \label{fig:policy_rewards_cifar10_paperD}
   \vspace{-3mm}
 \end{figure}
@@ -36,27 +191,31 @@ In Table \ref{tab:rankings_mnist_new_task_order}-\ref{tab:rankings_fashionmnist_
 \clearpage
 
 \begin{figure}[t]
-  \centering
-  \setlength{\figwidth}{0.26\textwidth}
-  \setlength{\figheight}{.14\textheight}
-  \input{PaperD/appendix/figures/policy_rewards_notmnist_new_dataset/groupplot}
-  \vspace{-3mm}
-  \caption{Performance progress measured in ACC (\%) for all methods in the 10 test environments for {\bf Split notMNIST} in the New Dataset experiment. We plot the performance progress for A2C and DQN for 100 evaluation steps equidistantly distributed over the training episodes. The performance for the Random, ETS, and Heuristic scheduling baselines are plotted as straight lines.  }
-  \label{fig:policy_rewards_notmnist_new_dataset_paperD}
-  \vspace{-3mm}
+	\centering
+	\setlength{\figwidth}{0.26\textwidth}
+	\setlength{\figheight}{.14\textheight}
+	\input{PaperD/appendix/figures/policy_rewards_fashionmnist_new_dataset/groupplot}
+	\vspace{-3mm}
+	\caption{Performance progress measured in ACC (\%) for all methods in the 10 test environments for {\bf Split FashionMNIST} in the New Dataset experiment. We plot the performance progress for the RL algorithms for 100 evaluation steps equidistantly distributed over the training episodes. The performance for the Random, ETS, and Heuristic scheduling baselines are plotted as straight lines.  }
+	\label{fig:policy_rewards_fashionmnist_new_dataset_paperD}
+	\vspace{-3mm}
 \end{figure}
 
 \begin{figure}[t]
   \centering
   \setlength{\figwidth}{0.26\textwidth}
   \setlength{\figheight}{.14\textheight}
-  \input{PaperD/appendix/figures/policy_rewards_fashionmnist_new_dataset/groupplot}
+  \input{PaperD/appendix/figures/policy_rewards_notmnist_new_dataset/groupplot}
   \vspace{-3mm}
-  \caption{Performance progress measured in ACC (\%) for all methods in the 10 test environments for {\bf Split FashionMNIST} in the New Dataset experiment. We plot the performance progress for A2C and DQN for 100 evaluation steps equidistantly distributed over the training episodes. The performance for the Random, ETS, and Heuristic scheduling baselines are plotted as straight lines.  }
-  \label{fig:policy_rewards_fashionmnist_new_dataset_paperD}
+  \caption{Performance progress measured in ACC (\%) for all methods in the 10 test environments for {\bf Split notMNIST} in the New Dataset experiment. We plot the performance progress for the RL algorithms for 100 evaluation steps equidistantly distributed over the training episodes. The performance for the Random, ETS, and Heuristic scheduling baselines are plotted as straight lines.  }
+  \label{fig:policy_rewards_notmnist_new_dataset_paperD}
   \vspace{-3mm}
 \end{figure}
 
+
+
+
+\begin{comment}
 %%% Tables
 \clearpage
 \input{PaperD/appendix/tables/table_rankings_mnist_new_task_order}
@@ -69,5 +228,7 @@ In Table \ref{tab:rankings_mnist_new_task_order}-\ref{tab:rankings_fashionmnist_
 \clearpage
 \input{PaperD/appendix/tables/table_rankings_fashionmnist_new_dataset}
 \clearpage
+
+\end{comment}
 
 

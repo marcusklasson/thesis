@@ -26,9 +26,15 @@
 %%% Contents
 \input{PaperC/sections/introduction}
 \input{PaperC/sections/related_work}
-\input{PaperC/sections/method/method}
-\input{PaperC/sections/experiments/experiments}
+\input{PaperC/sections/method}
+\input{PaperC/sections/experiments}
 \input{PaperC/sections/conclusions}
+
+%\renewcommand*{\bibname}{References}
+\bibliographystyleC{unsrt}
+{\small
+	\bibliographyC{PaperC/refC}
+}
 
 \begin{appendices}
 	\renewcommand{\thesection}{\Roman{section}}
@@ -39,8 +45,3 @@
 %\input{PaperC/appendix/appendix}
 %\clearpage
 
-%\renewcommand*{\bibname}{References}
-\bibliographystyleC{unsrt}
-{\small
-\bibliographyC{PaperC/refC}
-}

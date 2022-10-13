@@ -1,0 +1,128 @@
+\nextgroupplot[title=Split FashionMNIST,
+height=\figheight,
+legend cell align={left},
+legend style={
+  fill opacity=0.8,
+  draw opacity=1,
+  text opacity=1,
+  at={(0.97,0.03)},
+  anchor=south east,
+  draw=white!80!black
+},
+minor xtick={},
+minor ytick={},
+tick align=outside,
+tick pos=left,
+width=\figwidth,
+x grid style={white!69.0196078431373!black},
+xlabel={},%{Memory size \(\displaystyle M\)},
+xmajorgrids,
+xmin=0.8, xmax=5.2,
+xtick style={color=black},
+xtick={1,2,3,4,5},
+xticklabel style={rotate=90},
+xticklabels={10,20,40,100,200},
+y grid style={white!69.0196078431373!black},
+ymajorgrids,
+ylabel={},%{ACC (\%)},
+ymin=0.259424595274879, ymax=0.720812421552797,
+ytick style={color=black},
+ytick={0.2, 0.3, 0.4, 0.5, 0.6, 0.7},
+yticklabels={20,30,40,50,60,70}
+]
+\path [fill=color0, fill opacity=0.2, line width=1pt]
+(axis cs:1,0.280396769196603)
+--(axis cs:1,0.335123230803398)
+--(axis cs:2,0.407187817882043)
+--(axis cs:3,0.48739351280264)
+--(axis cs:4,0.592706736474621)
+--(axis cs:5,0.663078371171996)
+--(axis cs:5,0.559201628828004)
+--(axis cs:5,0.559201628828004)
+--(axis cs:4,0.526493263525379)
+--(axis cs:3,0.42820648719736)
+--(axis cs:2,0.348852182117957)
+--(axis cs:1,0.280396769196603)
+--cycle;
+
+\path [fill=color1, fill opacity=0.2, line width=1pt]
+(axis cs:1,0.283089035628021)
+--(axis cs:1,0.330270964371979)
+--(axis cs:2,0.403394694538454)
+--(axis cs:3,0.46754458659089)
+--(axis cs:4,0.602092782062309)
+--(axis cs:5,0.672530100400932)
+--(axis cs:5,0.657589899599068)
+--(axis cs:5,0.657589899599068)
+--(axis cs:4,0.583147217937691)
+--(axis cs:3,0.44329541340911)
+--(axis cs:2,0.371885305461546)
+--(axis cs:1,0.283089035628021)
+--cycle;
+
+\path [fill=color2, fill opacity=0.2, line width=1pt]
+(axis cs:1,0.286364363477931)
+--(axis cs:1,0.349795636522069)
+--(axis cs:2,0.444960565648486)
+--(axis cs:3,0.532675570275331)
+--(axis cs:4,0.610988944594497)
+--(axis cs:5,0.550032759051677)
+--(axis cs:5,0.543687240948323)
+--(axis cs:5,0.543687240948323)
+--(axis cs:4,0.551771055405503)
+--(axis cs:3,0.50080442972467)
+--(axis cs:2,0.405359434351514)
+--(axis cs:1,0.286364363477931)
+--cycle;
+
+\path [fill=color3, fill opacity=0.2, line width=1pt]
+(axis cs:1,0.310655891895294)
+--(axis cs:1,0.364784121513367)
+--(axis cs:2,0.464605748653412)
+--(axis cs:3,0.542859613895416)
+--(axis cs:4,0.633972704410553)
+--(axis cs:5,0.699840247631073)
+--(axis cs:5,0.647799789905548)
+--(axis cs:5,0.647799789905548)
+--(axis cs:4,0.585347354412079)
+--(axis cs:3,0.483660370111465)
+--(axis cs:2,0.420714259147644)
+--(axis cs:1,0.310655891895294)
+--cycle;
+
+\addplot [line width=1.0pt, color0, mark=*, mark size=1, mark options={solid}]
+table {%
+1 0.30776
+2 0.37802
+3 0.4578
+4 0.5596
+5 0.61114
+};
+%\addlegendentry{Random}
+\addplot [line width=1.0pt, color1, mark=*, mark size=1, mark options={solid}]
+table {%
+1 0.30668
+2 0.38764
+3 0.45542
+4 0.59262
+5 0.66506
+};
+%\addlegendentry{ETS}
+\addplot [line width=1.0pt, color2, mark=*, mark size=1, mark options={solid}]
+table {%
+1 0.31808
+2 0.42516
+3 0.51674
+4 0.58138
+5 0.54686
+};
+%\addlegendentry{Heuristic GD}
+\addplot [line width=1.0pt, color3, mark=*, mark size=1, mark options={solid}]
+table {%
+1 0.33772000670433
+2 0.442660003900528
+3 0.513260006904602
+4 0.609660029411316
+5 0.673820018768311
+};
+%\addlegendentry{RS-MCTS}

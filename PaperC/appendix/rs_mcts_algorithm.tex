@@ -5,14 +5,29 @@
 %%% MCTS ALGORITHMS
 
 
-In this section, we provide more details on the methodology for replay scheduling with MCTS. Algorithm \ref{paperC:alg:action_space_discretization} outlines the steps for how we discretized the action space of task proportions to enable searching for replay schedules (Section \ref{paperC:sec:replay_scheduling_in_continual_learning}). Furthermore, we provide pseudo-code in Algorithm \ref{alg:replay_scheduling_mcts} outlining the steps for our method Replay Scheduling Monte Carlo tree search (RS-MCTS) described Section \ref{paperC:sec:mcts_for_replay_scheduling}. %in the main paper (Section \ref{paperC:sec:mcts_for_replay_scheduling}). 
+%In this section, we provide more details on the methodology for replay scheduling with MCTS. Algorithm \ref{paperC:alg:action_space_discretization} outlines the steps for how we discretized the action space of task proportions to enable searching for replay schedules (Section \ref{paperC:sec:replay_scheduling_in_continual_learning}). Furthermore, we provide pseudo-code in Algorithm \ref{alg:replay_scheduling_mcts} outlining the steps for using MCTS for replay scheduling described Section \ref{paperC:sec:mcts_for_replay_scheduling}. %in the main paper (Section \ref{paperC:sec:mcts_for_replay_scheduling}). 
 
-In Algorithm \ref{alg:replay_scheduling_mcts}, the MCTS procedure selects actions over which task proportions to fill the replay memory with at every task, where the selected task proportions are stored in the replay schedule $S$. The schedule is then passed to 
-the function \textsc{EvaluateReplaySchedule$(\cdot)$} 
-where the continual learning part executes the training with replay memories filled according to the schedule. The reward for the schedule $S$ is the average validation accuracy over all tasks after learning task $T$, i.e., ACC, which is backpropagated through the tree to update the statistics of the selected nodes. The schedule $S_{best}$ yielding the best ACC score is returned to be used for evaluation on the held-out test sets. The function $\textsc{GetReplayMemory}(\cdot)$ is the policy for retrieving the replay memory $\gM$ from the historical data given the task proportion $\va$. The number of samples per task determined by the task proportions are rounded up or down accordingly to fill $\gM$ with $M$ replay samples in total. 
-The function $\textsc{GetTaskProportion}(\cdot)$ simply returns the task proportion that is related to given node.
+%In Algorithm \ref{alg:replay_scheduling_mcts}, the MCTS procedure selects actions over which task proportions to fill the replay memory with at every task, where the selected task proportions are stored in the replay schedule $S$. The schedule is then passed to the function \textsc{EvaluateReplaySchedule$(\cdot)$} where the continual learning part executes the training with replay memories filled according to the schedule. The reward for the schedule $S$ is the average validation accuracy over all tasks after learning task $T$, i.e., ACC, which is backpropagated through the tree to update the statistics of the selected nodes. The schedule $S_{best}$ yielding the best ACC score is returned to be used for evaluation on the held-out test sets. The function $\textsc{GetReplayMemory}(\cdot)$ is the policy for retrieving the replay memory $\gM$ from the historical data given the task proportion $\va$. The number of samples per task determined by the task proportions are rounded up or down accordingly to fill $\gM$ with $M$ replay samples in total. The function $\textsc{GetTaskProportion}(\cdot)$ simply returns the task proportion that is related to given node.
+
+We provide pseudo-code in Algorithm \ref{alg:replay_scheduling_mcts} outlining the steps for our method using Monte Carlo tree search (MCTS) to find replay schedules described in the main paper (Section \ref{paperC:sec:replay_scheduling_in_continual_learning}). The MCTS procedure selects actions over which task proportions to fill the replay memory with at every task, where the selected task proportions are stored in the replay schedule $S$. The schedule is passed to \textsc{EvaluateReplaySchedule$(\cdot)$} where the continual learning part executes the training with replay memories filled according to the schedule. The reward for the schedule $S$ is the average validation accuracy over all tasks after learning task $T$, i.e., ACC, which is backpropagated through the tree to update the statistics of the selected nodes. The schedule $S_{best}$ yielding the best ACC score is returned to be used for evaluation on the held-out test sets.
+
+The function $\textsc{GetReplayMemory}(\cdot)$ is the policy for retrieving the replay memory $\gM$ from the historical data given the task proportion $\vp$. The number of samples per task determined by the task proportions are rounded up or down accordingly to fill $\gM$ with $M$ replay samples in total. 
+The function $\textsc{GetTaskProportion}(\cdot)$ simply returns the task proportion that is related to given node. 
 
 
+The following steps are performed during one MCTS rollout (or iteration):
+\begin{enumerate}[leftmargin=*, topsep=0pt]
+	\item {\bf Selection} involves either selecting an unvisited node randomly, or selecting the next node by evaluating the UCT score (see Equation \ref{eq:uct}) if all children has been visited already. In Algorithm \ref{alg:replay_scheduling_mcts}, $\textsc{TreePolicy}(\cdot)$ appends the task proportions $\vp_t$ to the replay schedule $S$ at every selected node. 
+	
+	\item {\bf Expansion} involves expanding the search tree with one of the unvisited child nodes $v_{t+1}$ selected with uniform sampling. $\textsc{Expansion}(\cdot)$ in Algorithm \ref{alg:replay_scheduling_mcts} appends the task proportions $\vp_t$ to the replay schedule $S$ of the expanded node. 
+	
+	\item {\bf Simulation} involves selecting the next nodes randomly until a terminal node $v_T$ is reached. In Algorithm \ref{alg:replay_scheduling_mcts}, $\textsc{DefaultPolicy}(\cdot)$ appends the task proportions $\vp_t$ to the replay schedule $S$ at every randomly selected node until reaching the terminal node.  
+	
+	\item {\bf Reward} The reward for the rollout is given by the ACC of the validation sets for each task. In Algorithm \ref{alg:replay_scheduling_mcts}, $\textsc{EvaluateReplaySchedule}(\cdot)$ involves learning the tasks $t= 1, \dots, T$ sequentially and using the replay schedule to sample the replay memories to use for mitigating catastrophic forgetting when learning a new task. The reward $r$ for the rollout is calculated after task $T$ has been learnt. 
+	
+	\item {\bf Backpropagation} involves updating the reward function $q(\cdot)$ and number of visits $n(\cdot)$ from the expansion node up to the root node. See $\textsc{Backrpropagate}(\cdot)$ in Algorithm \ref{alg:replay_scheduling_mcts}.
+\end{enumerate}
+Finally, in Algorithm \ref{paperC:alg:action_space_discretization}, we outline the steps for how the action space of task proportions was discretized to enable searching for replay schedules (Section \ref{paperC:sec:replay_scheduling_in_continual_learning}). 
 
 \begin{algorithm}[h!]
 	\small
@@ -35,7 +50,18 @@ The function $\textsc{GetTaskProportion}(\cdot)$ simply returns the task proport
 	\end{algorithmic}
 \end{algorithm}
 
-\input{PaperC/appendix/pseudocode_rs_mcts_algorithm_new}
+\begin{algorithm}[h!]
+	\caption{Replay Scheduling Monte Carlo tree search}
+	\label{alg:replay_scheduling_mcts}
+	\algrenewcommand\alglinenumber[1]{\tiny #1:}
+	\scriptsize
+	\input{PaperC/appendix/pseudocode_rs_mcts_algorithm_new}
+\end{algorithm}
+
+
+
+
+
 
 
 
