@@ -29,8 +29,9 @@ The following steps are performed during one MCTS rollout (or iteration):
 \end{enumerate}
 Finally, in Algorithm \ref{paperC:alg:action_space_discretization}, we outline the steps for how the action space of task proportions was discretized to enable searching for replay schedules (Section \ref{paperC:sec:replay_scheduling_in_continual_learning}). 
 
+
 \begin{algorithm}[h!]
-	\small
+	\scriptsize %\small
 	\caption{Discretization of action space with task proportions}
 	\label{paperC:alg:action_space_discretization}
 	\begin{algorithmic}[1]
@@ -48,7 +49,9 @@ Finally, in Algorithm \ref{paperC:alg:action_space_discretization}, we outline t
 		\EndFor
 		\State \Return $\gT$ \Comment{Return action sequence as discrete action space}
 	\end{algorithmic}
+
 \end{algorithm}
+
 
 \begin{algorithm}[h!]
 	\caption{Replay Scheduling Monte Carlo tree search}
