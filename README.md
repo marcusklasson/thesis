@@ -44,3 +44,17 @@ May 5: For some reason I had to install this package again when I had to input e
 I had many issues with fixing using separate references in each chapter.
 
 Now I have to remove all .aux files in order to get the references to work. Maybe all this is works out fine in Overleaf?
+
+In my KTH laptop with Ubuntu, in TexStudio, I had the user command in Build from Chris: ```txs:///pdflatex | txs:///bibtex/{/} A | txs:///pdflatex```
+and I maght have changed the command for BibTex as well.
+
+On my own laptop wth Windows, I found the answer for fixing the multibib references for the main part and the separate papers at
+```https://sourceforge.net/p/texstudio/wiki/Tips%20and%20Tricks/```. See the title "Using TXS with the multibib Package"
+
+In TexStudio configurations, I had to change the BibTex command: 
+
+Original Bibtex command: ```bibtex.exe %```
+Change to: ```bibtex ?*.aux```
+
+
+No need to use any extra user commands, like I might had tot do on the Ubuntu laptop. 
