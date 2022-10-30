@@ -46,7 +46,7 @@ I had many issues with fixing using separate references in each chapter.
 Now I have to remove all .aux files in order to get the references to work. Maybe all this is works out fine in Overleaf?
 
 In my KTH laptop with Ubuntu, in TexStudio, I had the user command in Build from Chris: ```txs:///pdflatex | txs:///bibtex/{/} A | txs:///pdflatex```
-and I maght have changed the command for BibTex as well.
+and the BibTex command has been changed to ```bibtex ?*.aux```.
 
 On my own laptop wth Windows, I found the answer for fixing the multibib references for the main part and the separate papers at
 ```https://sourceforge.net/p/texstudio/wiki/Tips%20and%20Tricks/```. See the title "Using TXS with the multibib Package"
