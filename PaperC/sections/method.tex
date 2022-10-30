@@ -91,7 +91,7 @@ At level $t$, the node $v_t$ is related to a task proportion $\vp_{t}$ used for 
 \vspace{-1mm}
 \begin{itemize}[leftmargin=*, topsep=0pt, noitemsep, label={}]
 	\item {\bf Selection.} During a rollout, the current node $v_t$ either moves randomly to unvisited children, or selects the next node by evaluating the Upper Confidence Tree (UCT)~\citeC{C:kocsis2006bandit} if all children has been visited earlier.
-	The child $v_{t+1}$ with the highest UCT score is selected using the function from \cite{chaudhry2018feature}:
+	The child $v_{t+1}$ with the highest UCT score is selected using the function from \citeC{C:chaudhry2018feature}:
 	\begin{align}\label{eq:uct}
 		UCT(v_t, v_{t+1}) = \text{max}(q(v_{t+1})) + C \sqrt{\frac{2 \log(n(v_{t}))}{n(v_{t+1})}},
 	\end{align}
