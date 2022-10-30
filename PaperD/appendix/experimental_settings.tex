@@ -25,7 +25,8 @@ In Split CIFAR-10~\citeD{D:krizhevsky2009learning}, the 10 classes are divided i
 
 \vspace{-3mm}
 \paragraph{Generating CL Environments.} We generate multiple CL environments with pre-set random seeds for initializing the network parameters $\vphi$ and shuffling the task order. The pre-set random seeds are in the range $0-49$, such that we have 50 environments for each dataset. We shuffle the task order by permuting the class order and then split the classes into 5 pairs (tasks) with 2 classes/pair. For environments with seed $0$, we keep the original task order in the dataset. 
-Taking a step at task $t$ in the CL environments involves training the CL network on the $t$-th dataset with a replay memory $\gM_t$ from the discrete action space described in Section \ref{paperD:app:action_space}. Therefore, to speed up the experiments with the RL algorithms, we run a breadth-first search (BFS) through the discrete action space and save the classification results for re-use during policy learning. Note that the action space has 1050 possible paths of replay schedules for the datasets with $T=5$ tasks, which makes the environment generation time-consuming. Hence, we only generate environments where the replay memory size $M=10$ have been used, and leave analysis of different memory sizes as future work. The CL environments that we used will be provided in the public code. 
+Taking a step at task $t$ in the CL environments involves training the CL network on the $t$-th dataset with a replay memory $\gM_t$ from the discrete action space. % described in Section \ref{paperD:app:action_space}. 
+Therefore, to speed up the experiments with the RL algorithms, we run a breadth-first search (BFS) through the discrete action space and save the classification results for re-use during policy learning. Note that the action space has 1050 possible paths of replay schedules for the datasets with $T=5$ tasks, which makes the environment generation time-consuming. Hence, we only generate environments where the replay memory size $M=10$ have been used, and leave analysis of different memory sizes as future work. The CL environments that we used will be provided in the public code. 
 
 \vspace{-3mm}
 \paragraph{Computational Cost.} 
@@ -265,7 +266,8 @@ The replay memory is filled with $M/k$ samples from each selected task, where $k
 \vspace{-3mm}
 \paragraph{Grid search for $\tau$.}
 We performed a grid search for the parameter $\tau$ for the three heuristic scheduling baselines for each experiment to compare against the learned replay scheduling policies. The validation set consists of 15\% of the training data and is identical to the validation set used for learning the RL policies. 
-We select the parameter based on ACC scores achieved in the same number of training environments used by either DQN or A2C. The search range we use is $\tau \in \{0.90, 0.95, 0.999\}$. In Table \ref{tab:grid_search_heuristics_multiple_cl_environments}, we show the selected parameter value of $\tau$ and the number of environments used for selecting the value for each method and experiment in Section \ref{sec:results_on_policy_generalization}. The same parameters are used to generate the results on the heuristics in Table \ref{tab:average_ranking_rl_experiment}. 
+We select the parameter based on ACC scores achieved in the same number of training environments used by either DQN or A2C. The search range we use is $\tau \in \{0.90, 0.95, 0.999\}$. In Table \ref{tab:grid_search_heuristics_multiple_cl_environments}, we show the selected parameter value of $\tau$ and the number of environments used for selecting the value for each method and experiment in Section \ref{paperD:sec:results_on_policy_generalization}. %\ref{sec:results_on_policy_generalization}. 
+The same parameters are used to generate the results on the heuristics in Table \ref{tab:average_ranking_rl_experiment}. 
 
 \begin{table}[h]
 %\footnotesize%\small
