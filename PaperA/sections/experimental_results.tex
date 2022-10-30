@@ -10,7 +10,7 @@ We experiment with three different pretrained CNN architectures, namely AlexNet 
 \begin{table}[t]
     \centering
     \caption{ Fine-grained classification (81 classes) accuracies with the methods described in Section \ref{subsec:experimental-setups}. Each row displays from which network architecture and layer that we extracted the feature vectors of the natural images. The columns show the result from the classifiers that we used (see Section \ref{subsec:experimental-setups}). }
-    \vspace{-3mm}
+    \vspace{-2mm}
     \resizebox{\textwidth}{!}{%
     \begin{tabular}{c c c c c c c}
         \hline
@@ -116,7 +116,7 @@ The VAE and VAE-CCA models are trained for 50 epochs with Adam \citeA{paperA:kin
 		%\captionsetup
 		\caption{Coarse-grained classification (46 classes) accuracies with an SVM for the methods described in Section \ref{subsec:experimental-setups} that uses off-the-shelf feature representations. Each row displays from network architecture and layer that we extracted the feature vectors of the natural images and the columns show the result for the classification methods. }
 		\label{tab:results-coarse-grained}
-		\vspace{-3mm}
+		\vspace{-2mm}
 		\resizebox{0.6\textwidth}{!}{%
 			\begin{tabular}{c ccc}
 				\hline %\Xhline{3\arrayrulewidth}
@@ -140,7 +140,7 @@ The VAE and VAE-CCA models are trained for 50 epochs with Adam \citeA{paperA:kin
 		\caption{Fine-grained classification accuracies from fine-tuned CNNs pretrained on ImageNet, where the column shows which architecture that has been fine-tuned. A standard softmax layer is used as the last %classification 
 			layer.}
 		\label{tab:results-finetuned-cnn}
-		\vspace{-3mm}
+		\vspace{-2mm}
 		\resizebox{0.30\textwidth}{!}{%
 			\begin{tabular}{c c}
 				\hline
@@ -260,7 +260,8 @@ The VAE and VAE-CCA models are trained for 50 epochs with Adam \citeA{paperA:kin
 
 
 
-The fine-grained classification results for all methods using an SVM as classifier are shown in Table \ref{tab:results-fine-grained}. We also provide coarse-grained classification results for some of the methods in Table \ref{tab:results-coarse-grained} to demonstrate the possibility of hierarchical evaluation that our labeling of the data provides (see Figure \ref{fig:examples}). The accuracies in the coarse-grained classification are naturally higher than the accuracies in the corresponding columns in Table \ref{tab:results-fine-grained}. Table \ref{tab:results-finetuned-cnn} shows fine-grained classification accuracies from a softmax classifier in the fine-tuned CNNs. We note that fine-tuning the networks gives consistently better results than training an SVM on off-the-shelf features (see Table \ref{tab:results-fine-grained}).
+The fine-grained classification results for all methods using an SVM as classifier are shown in Table \ref{tab:results-fine-grained}. We also provide coarse-grained classification results for some of the methods in Table \ref{tab:results-coarse-grained} to demonstrate the possibility of hierarchical evaluation that our labeling of the data provides (see Figure \ref{fig:examples_paperA}). %\ref{fig:examples}). 
+The accuracies in the coarse-grained classification are naturally higher than the accuracies in the corresponding columns in Table \ref{tab:results-fine-grained}. Table \ref{tab:results-finetuned-cnn} shows fine-grained classification accuracies from a softmax classifier in the fine-tuned CNNs. We note that fine-tuning the networks gives consistently better results than training an SVM on off-the-shelf features (see Table \ref{tab:results-fine-grained}).
 
 Fine-tuning the entire network results improves the classification performance consistently for each method in Table \ref{tab:results-fine-grained}. The performance is clearly enhanced for features extracted from fine-tuned VGG16 and DenseNet-169, which improves the classification accuracy by 10\% in most cases for SVM-ft, VAE+SVM-ft, and VAE-CCA+SVM-ft. For AlexNet and VGG16, we see that the performance drops when extracting the features from layer FC7 instead of FC6. The reason might be that the off-the-shelf features in FC7 are more difficult to transfer to other datasets since the weights are biased towards classifying objects in the ImageNet database. The performance drops also when we use fine-tuned features, which could be due to the small learning rate we use for the pretrained layers, such that the later layers are still ImageNet-specific. We might circumvent this drop by increasing the learning rate for the later pretrained layers and keeping the learning rate for earlier layers small.
  
