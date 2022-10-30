@@ -130,11 +130,22 @@ Due to the simple structure of the iconic images, we fit the GMMs with $K=2$ Gau
 Table \ref{tab:iconic_image_similarity_metrics} shows the image similarity metrics between the VCCA models using the iconic images. We also show the model classification accuracy for each model, which have been taken from Table \ref{tab:classification_results_on_test_set}. 
 The models perform on par on the image similarity metrics, which indicates that the quality of the decoded images is intact if the model extends to utilizing text descriptions and class labels in addition to the iconic images.
 
-In Figure \ref{fig:decoded_iconic_images_with_metrics}, we display five different natural images from the test set, their true corresponding iconic image, the decoded iconic image from VCCA$_{x i w y}$. 
+%In Figure \ref{fig:decoded_iconic_images_with_metrics}, 
+In Table \ref{tab:decoded_iconic_images_with_metrics}, we display five different natural images from the test set, their true corresponding iconic image, the decoded iconic image from VCCA$_{x i w y}$. 
 We also show the true and predicted labels from the class label decoder (see Pred. Label). 
 Additionally, we report the image similarity metrics PSNR, SSIM, and KL divergence between the decoded and true iconic images. For the Mango and Royal Gala images, we observe that the decoded images are visually plausible, in terms of recognized item, color, and shape, in both cases, which coheres with the high PSNR and SSIM values and low KL values.
 The third row shows a shelf with orange and green bell peppers where the decoded image has indeed been decoded into a mix of a green and orange bell pepper. In the two succeeding rows, we display failure cases where the model confuses the true class label with other grocery items. We observe that each metric drops according to the mismatch between decoded and true iconic images. The fourth row shows a basket of Anjou pears, where the model confuses the pear with a Granny Smith apple which can be seen in the decoded image. In the fifth row, there are red milk packages stacked behind a handheld sourcream package, where the decoded image becomes a blurry mix of the milk and sourcream package. Although the predicted class is incorrect, we observe that the prediction is reasonable based on the decoded iconic image.
 
 
+\begin{table}[t]
+	\centering
+	\caption{Examples of decoded iconic images from VCCA$_{\vx \vi \vw \vy}$ with their corresponding natural image and true iconic image as well as predicted labels and image similarity metrics. The column {\bf Classification} shows the true label for the natural image (True Label) and the label predicted by the model (Pred. Label). The column {\bf Metrics} shows PSNR, SSIM, and KL divergence between the decoded and true iconic images. }
+	\vspace{-2mm}
+	\resizebox{0.98\textwidth}{!}{
+		\input{PaperB/figures_and_tables/decoded_iconic_images_with_metrics.tex}
+	}
+	\label{tab:decoded_iconic_images_with_metrics}
+	\vspace{-3mm}
+\end{table}
 
-\input{PaperB/figures_and_tables/figure10_new}
+%\input{PaperB/figures_and_tables/figure10_new} %% Reported metrics in table were wrong
