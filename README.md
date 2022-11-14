@@ -40,6 +40,12 @@ sudo apt install texlive-font-utils
 
 May 5: For some reason I had to install this package again when I had to input eps files in the replay scheduing tree in Paper C...
 
+### \vspace{} is not the same for Texstudio on laptops with Windows and Ubuntu!
+I noticed when I compiled the thesis on my Windows laptop that the distance between figures and captions become a bit overlapped 
+on my Windows laptop when using ```\vspace```. `However, I have needed to use this in overleaf and in TexStudio on my Ubuntu laptop. 
+This could be something with the configurations of TexStudio on my Windows laptop. Super-annoying!
+
+
 ### Using separate References using multibib package 
 I had many issues with fixing using separate references in each chapter.
 
