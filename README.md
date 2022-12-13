@@ -1,8 +1,24 @@
 # PhD Thesis
 
-Latex files for my PhD thesis at KTH named "Fine-Grained and Continual Visual Recognition for Assisting Visually Impaired People".
+Latex files for my PhD thesis written at KTH Royal Institute of Technology, Stockholm, Sweden. 
 
-## Notes when I used Texstudio
+[Marcus Klasson](https://marcusklasson.github.io/)
+
+[Fine-Grained and Continual Visual Recognition for Assisting Visually Impaired People](https://marcusklasson.github.io/files/phdthesis_MarcusKlasson.pdf)
+
+## Citing this work
+
+If any material is used in your research/work, please consider citing the thesis and use the following:
+```
+@phdthesis{klasson2022fine,
+  title={Fine-Grained and Continual Visual Recognition for Assisting Visually Impaired People},
+  author={Klasson, Marcus},
+  year={2022},
+  school={KTH Royal Institute of Technology}
+}
+```
+
+## Notes from when I used Texstudio for compiling files
 
 I am using Texstudio as my editor for writing, which I installed from the website ```https://www.texstudio.org/```. 
 Check for the right Ubuntu version and install the .deb and then just click on the file, very easy and nice.
